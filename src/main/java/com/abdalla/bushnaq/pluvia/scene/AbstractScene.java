@@ -3,14 +3,19 @@ package com.abdalla.bushnaq.pluvia.scene;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.abdalla.bushnaq.pluvia.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
 import com.abdalla.bushnaq.pluvia.renderer.GameObject;
 import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
 import com.abdalla.bushnaq.pluvia.renderer.Text2D;
+import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -25,11 +30,13 @@ public abstract class AbstractScene {
 	private static final float		WATER_Y		= 0;
 	private static final float		WATER_Z		= 50;
 	protected static final float	CITY_SIZE	= 3;
+	protected Logger				logger		= LoggerFactory.getLogger(this.getClass());
 	protected GameEngine			gameEngine;
 	protected List<GameObject>		renderModelInstances;
 	protected Random				rand;
 	protected int					index		= 0;
 	protected Text2D				logo;
+	protected Text2D				version;
 
 	public AbstractScene(GameEngine gameEngine, Random rand, List<GameObject> renderModelInstances) {
 		this.gameEngine = gameEngine;
@@ -40,6 +47,18 @@ public abstract class AbstractScene {
 	public void create() {
 		logo = new Text2D("Pluvia", 100, Gdx.graphics.getHeight() - 200, Color.WHITE, gameEngine.renderEngine.getAtlasManager().logoFont);
 		gameEngine.renderEngine.add(logo);
+		try {
+			String				v		= MavenPropertiesProvider.getProperty("module.version");
+			final GlyphLayout	layout	= new GlyphLayout();
+			layout.setText(gameEngine.renderEngine.getAtlasManager().logoFont, "Pluvia");
+			float h1 = layout.height;
+			layout.setText(gameEngine.renderEngine.getAtlasManager().versionFont, v);
+			float h2 = layout.height;
+			version = new Text2D(v, 400 + 20, Gdx.graphics.getHeight() - 200 - (int) (h1 - h2), Color.WHITE, gameEngine.renderEngine.getAtlasManager().versionFont);
+			gameEngine.renderEngine.add(version);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 
 	protected void createFish(float minSize, float maxSize) {

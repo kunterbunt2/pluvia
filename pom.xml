@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.abdalla.bushnaq</groupId>
 	<artifactId>pluvia</artifactId>
-	<version>0.9.0</version>
+	<version>0.9.1</version>
 	<name>abdalla.bushnaq.pluvia</name>
 	<description>pluvia</description>
 
@@ -16,7 +16,94 @@
 		<module.version>${project.version}</module.version>
 		<libgdxVersion>1.11.0</libgdxVersion>
 	</properties>
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-backend-lwjgl3</artifactId>
+			<version>${libgdxVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx</artifactId>
+			<version>${libgdxVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-freetype-platform</artifactId>
+			<classifier>natives-desktop</classifier>
+			<version>${libgdxVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-platform -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-platform</artifactId>
+			<classifier>natives-desktop</classifier>
+			<version>${libgdxVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-freetype</artifactId>
+			<version>${libgdxVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-tools -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-tools</artifactId>
+			<version>${libgdxVersion}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.mgsx-dev.gdx-gltf</groupId> <!-- Different group -->
+			<artifactId>gltf</artifactId> <!-- Different artifact -->
+			<version>master-SNAPSHOT</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.7.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.11</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.crashinvaders.vfx/gdx-vfx-core -->
+		<dependency>
+			<groupId>com.crashinvaders.vfx</groupId>
+			<artifactId>gdx-vfx-core</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.crashinvaders.vfx/gdx-vfx-effects -->
+		<dependency>
+			<groupId>com.crashinvaders.vfx</groupId>
+			<artifactId>gdx-vfx-effects</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.kotcrab.vis</groupId>
+			<artifactId>vis-ui</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+
+	</dependencies>
+
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -104,6 +191,12 @@
 							<followSymlinks>false</followSymlinks>
 						</fileset>
 					</filesets>
+					<!-- 
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+					-->
 				</configuration>
 			</plugin>
 			<!-- 
@@ -153,7 +246,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-						<!-- 
+							<!-- 
 							<finalName>pluvia-${version}-${buildNumber}</finalName>
 							-->
 							<finalName>pluvia-${version}</finalName>
@@ -165,103 +258,9 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- 
-			
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
-				<configuration>
-					<filters>
-						<filter>src/assembly/assembly.properties</filter>
-					</filters>
-					<descriptors>
-						<descriptor>src/assembly/distribution.xml</descriptor>
-					</descriptors>
-				</configuration>
-			</plugin>
-			-->
 		</plugins>
 	</build>
 	<!-- Artifact Repositories -->
-	<dependencies>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl -->
-		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-backend-lwjgl3</artifactId>
-			<version>${libgdxVersion}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx -->
-		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx</artifactId>
-			<version>${libgdxVersion}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype -->
-		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-freetype-platform</artifactId>
-			<classifier>natives-desktop</classifier>
-			<version>${libgdxVersion}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-platform -->
-		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-platform</artifactId>
-			<classifier>natives-desktop</classifier>
-			<version>${libgdxVersion}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype -->
-		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-freetype</artifactId>
-			<version>${libgdxVersion}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-tools -->
-		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-tools</artifactId>
-			<version>${libgdxVersion}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.mgsx-dev.gdx-gltf</groupId> <!-- Different group -->
-			<artifactId>gltf</artifactId> <!-- Different artifact -->
-			<version>master-SNAPSHOT</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.7.1</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.2.11</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.crashinvaders.vfx/gdx-vfx-core -->
-		<dependency>
-			<groupId>com.crashinvaders.vfx</groupId>
-			<artifactId>gdx-vfx-core</artifactId>
-			<version>0.5.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.crashinvaders.vfx/gdx-vfx-effects -->
-		<dependency>
-			<groupId>com.crashinvaders.vfx</groupId>
-			<artifactId>gdx-vfx-effects</artifactId>
-			<version>0.5.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.kotcrab.vis</groupId>
-			<artifactId>vis-ui</artifactId>
-			<version>1.5.0</version>
-		</dependency>
-
-	</dependencies>
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>

@@ -23,9 +23,11 @@ public class AtlasManager {
 			new FontData("Aero-font", "assets/fonts/Aero.ttf", 128),			//
 			new FontData("logo-font", "assets/fonts/Roboto-Thin.ttf", 128),		//
 			new FontData("small-font", "assets/fonts/Roboto-Bold.ttf", 10),		//
+			new FontData("version-font", "assets/fonts/Roboto-Thin.ttf", 16),	//
 	};
 	AtlasRegion			systemTextureRegion;
 	public BitmapFont	smallFont;
+	public BitmapFont	versionFont;
 
 	public AtlasManager() {
 	}
@@ -64,6 +66,7 @@ public class AtlasManager {
 		aeroFont = fontDataList[1].font;
 		logoFont = fontDataList[2].font;
 		smallFont = fontDataList[3].font;
+		versionFont = fontDataList[4].font;
 	}
 
 	private void initTextures() {
