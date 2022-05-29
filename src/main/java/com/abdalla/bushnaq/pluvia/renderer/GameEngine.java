@@ -72,7 +72,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private GameObject			cube						= null;
 	boolean						enableProfiling				= true;
 	private boolean				followMode;
-	private BitmapFont			font;
+//	private BitmapFont			font;
 	private final List<Label>	labels						= new ArrayList<>();
 	private final Logger		logger						= LoggerFactory.getLogger(this.getClass());
 	private int					maxFramesPerSecond;
@@ -187,7 +187,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 				profiler.disable();
 			}
 			renderEngine.dispose();
-			font.dispose();
+//			font.dispose();
 			stage.dispose();
 			mainDialog.dispose();
 			scoreDialog.dispose();
@@ -428,15 +428,15 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		// labels.get(labelIndex++).setText(stringBuilder);
 		// }
 		// time
-		{
-			stringBuilder.setLength(0);
-
-			final float	time	= renderEngine.getCurrentDayTime();
-			final int	hours	= (int) time;
-			final int	minutes	= (int) (60 * ((time - (int) time) * 100) / 100);
-			stringBuilder.append(" time ").append(hours).append(":").append(minutes);
-			labels.get(labelIndex++).setText(stringBuilder);
-		}
+//		{
+//			stringBuilder.setLength(0);
+//
+//			final float	time	= renderEngine.getCurrentDayTime();
+//			final int	hours	= (int) time;
+//			final int	minutes	= (int) (60 * ((time - (int) time) * 100) / 100);
+//			stringBuilder.append(" time ").append(hours).append(":").append(minutes);
+//			labels.get(labelIndex++).setText(stringBuilder);
+//		}
 //		{
 //			stringBuilder.setLength(0);
 //			stringBuilder.append(" Camera ").append(renderEngine.getCamera().position.z);
