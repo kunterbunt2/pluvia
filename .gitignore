@@ -1,4 +1,10 @@
 jdk
 junk
-pluvia\lib
+pluvia/lib
 target
+.settings
+.classpath
+.project
+config/*.xml
+config/Bird.xml
+pluvia.log
