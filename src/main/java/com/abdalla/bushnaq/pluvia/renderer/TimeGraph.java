@@ -24,10 +24,12 @@ public class TimeGraph extends Array<Frame> {
 	private int					maxFrames;
 	ScreenViewport				viewport	= new ScreenViewport();
 	private FrameBuffer			fbo;
-	private Color				color;
+	private Color				highlightColor;
+	private Color				backgroundColor;
 
-	public TimeGraph(Color color, int width, int height) {
-		this.color = color;
+	public TimeGraph(Color highlightColor, Color backgroundColor, int width, int height) {
+		this.highlightColor = highlightColor;
+		this.backgroundColor = backgroundColor;
 		this.maxFrames = width;
 		viewport.update(width, height, true);
 		{
@@ -79,19 +81,25 @@ public class TimeGraph extends Array<Frame> {
 					final GlyphLayout	layout	= new GlyphLayout();
 					layout.setText(font, text);
 					final float width = layout.width;// contains the width of the current set text
+					batch2D.setColor(Color.RED);
 					batch2D.draw(atlasManager.systemTextureRegion, 0, y, 5, 1);
+					font.setColor(Color.RED);
 					font.draw(batch2D, text, 6, y + layout.height / 2, width, Align.left, false);
 				}
 			}
 
 			for (int i = 0; i < size; i++) {
 				Frame frame = get(i);
-				batch2D.setColor(color);
-				batch2D.draw(atlasManager.systemTextureRegion, i, 0, 1, frame.delta);
+				batch2D.setColor(highlightColor);
+				batch2D.draw(atlasManager.systemTextureRegion, i, frame.delta, 1, 1);
+				batch2D.setColor(backgroundColor);
+				if (frame.delta > 0) {
+					batch2D.draw(atlasManager.systemTextureRegion, i, 0, 1, frame.delta - 1);
+				}
 			}
-			batch2D.setColor(Color.WHITE);
 			batch2D.end();
 			fbo.end();
+			batch2D.setColor(Color.WHITE);
 		}
 	}
 

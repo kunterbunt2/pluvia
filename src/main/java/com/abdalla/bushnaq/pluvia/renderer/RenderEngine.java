@@ -199,8 +199,8 @@ public class RenderEngine {
 //		vfxManager.addEffect(new FxaaEffect());
 //		vfxManager.addEffect(new FilmGrainEffect());
 //		vfxManager.addEffect(new OldTvEffect());
-		cpuGraph = new TimeGraph(new Color(1f, 0, 0, 0.7f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
-		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 0.7f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
+		cpuGraph = new TimeGraph(new Color(1f, 0f, 0f, 1f), new Color(1f, 0, 0, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
+		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
 	}
 
 	private void createBlurEffect() {
