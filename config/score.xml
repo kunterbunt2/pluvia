@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="11.0.9.1" class="java.beans.XMLDecoder">
+ <int>4</int>
+ <string>Turtle</string>
+ <int>0</int>
+ <string>Bird</string>
+ <int>3</int>
+ <long>1653703521225</long>
+ <string>Bird</string>
+ <long>0</long>
+ <int>859</int>
+ <int>386</int>
+ <string>abdal</string>
+ <long>1653668181642</long>
+ <string>Bird</string>
+ <long>0</long>
+ <int>64</int>
+ <int>42</int>
+ <string>abdal</string>
+ <long>1653702057185</long>
+ <string>Bird</string>
+ <long>0</long>
+ <int>43</int>
+ <int>22</int>
+ <string>abdal</string>
+ <string>Rabbit</string>
+ <int>0</int>
+ <string>Dragon</string>
+ <int>0</int>
+</java>
