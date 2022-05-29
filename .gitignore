@@ -6,7 +6,7 @@ target
 .classpath
 .project
 config/*.xml
-config/Bird.xml
+config/*.xml
 pluvia.log
 
 
