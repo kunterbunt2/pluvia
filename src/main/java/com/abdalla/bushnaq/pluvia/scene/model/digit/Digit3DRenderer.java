@@ -1,9 +1,9 @@
 package com.abdalla.bushnaq.pluvia.scene.model.digit;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
-import com.abdalla.bushnaq.pluvia.renderer.ObjectRenderer;
-import com.abdalla.bushnaq.pluvia.renderer.RenderEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
+import com.abdalla.bushnaq.pluvia.engine.ObjectRenderer;
+import com.abdalla.bushnaq.pluvia.engine.RenderEngine;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;

@@ -6,8 +6,8 @@ package com.abdalla.bushnaq.pluvia.game.model.stone;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.Renderable;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.Renderable;
 import com.abdalla.bushnaq.pluvia.util.RcBoolean;
 
 /**

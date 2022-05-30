@@ -3,10 +3,10 @@ package com.abdalla.bushnaq.pluvia.scene;
 import java.util.List;
 import java.util.Random;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
-import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
-import com.abdalla.bushnaq.pluvia.renderer.Text2D;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
+import com.abdalla.bushnaq.pluvia.engine.ModelManager;
+import com.abdalla.bushnaq.pluvia.engine.Text2D;
 import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

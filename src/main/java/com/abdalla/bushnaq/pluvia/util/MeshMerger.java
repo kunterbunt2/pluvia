@@ -4,7 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;

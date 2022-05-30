@@ -3,9 +3,9 @@ package com.abdalla.bushnaq.pluvia.scene;
 import java.util.List;
 import java.util.Random;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
-import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
+import com.abdalla.bushnaq.pluvia.engine.ModelManager;
 import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Material;

@@ -6,10 +6,10 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
-import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
-import com.abdalla.bushnaq.pluvia.renderer.Text2D;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
+import com.abdalla.bushnaq.pluvia.engine.ModelManager;
+import com.abdalla.bushnaq.pluvia.engine.Text2D;
 import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;

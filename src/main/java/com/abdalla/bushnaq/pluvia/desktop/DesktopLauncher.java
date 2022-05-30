@@ -3,7 +3,7 @@ package com.abdalla.bushnaq.pluvia.desktop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;

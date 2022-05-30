@@ -3,7 +3,7 @@
  */
 package com.abdalla.bushnaq.pluvia.scene.model.rain;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.util.TimeUnit;
 import com.badlogic.gdx.math.Vector3;

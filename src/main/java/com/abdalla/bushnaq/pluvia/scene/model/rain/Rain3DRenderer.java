@@ -3,9 +3,9 @@ package com.abdalla.bushnaq.pluvia.scene.model.rain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
-import com.abdalla.bushnaq.pluvia.renderer.ObjectRenderer;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
+import com.abdalla.bushnaq.pluvia.engine.ObjectRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.Vector3;

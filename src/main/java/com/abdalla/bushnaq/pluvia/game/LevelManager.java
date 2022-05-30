@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
 import com.abdalla.bushnaq.pluvia.scene.AbstractScene;
 import com.abdalla.bushnaq.pluvia.scene.BubblesScene;
 import com.abdalla.bushnaq.pluvia.scene.DeepSeaScene;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.RenderEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.RenderEngine;
 import com.abdalla.bushnaq.pluvia.util.TimeStatistic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;

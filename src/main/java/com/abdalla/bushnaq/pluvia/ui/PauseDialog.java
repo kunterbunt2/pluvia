@@ -1,6 +1,6 @@
 package com.abdalla.bushnaq.pluvia.ui;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

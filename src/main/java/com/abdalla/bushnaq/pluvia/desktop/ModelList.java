@@ -2,8 +2,8 @@ package com.abdalla.bushnaq.pluvia.desktop;
 
 import java.util.ArrayList;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.Renderable;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.Renderable;
 
 public class ModelList<T extends Renderable> extends ArrayList<T> {
 	public void destroy(GameEngine gameEngine) {

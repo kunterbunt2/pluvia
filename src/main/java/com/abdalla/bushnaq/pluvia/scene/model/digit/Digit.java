@@ -5,10 +5,10 @@ package com.abdalla.bushnaq.pluvia.scene.model.digit;
 
 import java.util.List;
 
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameObject;
+import com.abdalla.bushnaq.pluvia.engine.Renderable;
 import com.abdalla.bushnaq.pluvia.game.Level;
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.GameObject;
-import com.abdalla.bushnaq.pluvia.renderer.Renderable;
 
 public class Digit extends Renderable {
 	float						x		= 0;

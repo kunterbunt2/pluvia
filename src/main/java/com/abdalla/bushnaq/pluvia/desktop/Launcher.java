@@ -3,7 +3,7 @@ package com.abdalla.bushnaq.pluvia.desktop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;
 import com.abdalla.bushnaq.pluvia.util.TimeUnit;
 

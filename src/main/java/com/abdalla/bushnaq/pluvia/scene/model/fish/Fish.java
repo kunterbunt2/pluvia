@@ -5,8 +5,8 @@ package com.abdalla.bushnaq.pluvia.scene.model.fish;
 
 import java.awt.Graphics2D;
 
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
-import com.abdalla.bushnaq.pluvia.renderer.Renderable;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.engine.Renderable;
 import com.abdalla.bushnaq.pluvia.util.TimeUnit;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;

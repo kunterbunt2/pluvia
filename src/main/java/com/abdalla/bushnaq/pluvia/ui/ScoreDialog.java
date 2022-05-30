@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.Score;
 import com.abdalla.bushnaq.pluvia.game.ScoreList;
-import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
