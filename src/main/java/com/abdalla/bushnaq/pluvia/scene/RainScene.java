@@ -47,7 +47,7 @@ public class RainScene extends AbstractScene {
 	protected void createRain(float minSize, float maxSize) {
 		Vector3	min	= gameEngine.renderEngine.sceneBox.min;
 		Vector3	max	= gameEngine.renderEngine.sceneBox.max;
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 500); i++) {
 			int			type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_RAIN_MODELS);
 			float		size	= minSize + (float) Math.random() * (maxSize - minSize);
 			BoundingBox	b		= new BoundingBox(new Vector3(min.x + 10f, size / 2, min.z + 25), new Vector3(max.x - 10f, 4f, 0));

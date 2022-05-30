@@ -32,18 +32,31 @@ These controls are only valid in debug mode
 # Configuration
 Pluvia can be configured usign the config/pluvia.propertries file.
 
-| Property |      Default      |  Example | Description |
-|----------|------------- |------                  |--------                          |
-|pluvia.foregroundFPS |60   |pluvia.foregroundFPS=160  |frames per second to try to match |
-|pluvia.monitor       |0    |pluvia.monitor=1          |monitor to use, if more than one are connected, 0 is promary |
-|pluvia.vsync         |true |pluvia.vsync=false        |virtual syn with monitor refresh rate |
-|pluvia.debugMode     |false|pluvia.debugMode=true     |debug mode enabled, allows to pan the camera and see various fbos| 
-|pluvia.shadowMapSize |4096 |pluvia.shadowMapSize=8192 |the bigger, the better, but you need enough video card ram|
-|pluvia.showFps       |false|pluvia.showFps=true       |display frames per second in lower left corner|
-|pluvia.showGraphs    |false|pluvia.showGraphs=true    |cpu/gpu graphs can be displayed using F6|
-|pluvia.fullscreenMode|true|pluvia.fullscreenMode=false|window mode or full screen mode|
-|pluvia.pluvia.pbrMode|true|pluvia.pluvia.pbrMode=false|enable/disable phisical based rendering|
-|pluvia.maxPointLights|20|pluvia.maxPointLights=10     |configure maximum number of point lights the engine tries to render, this has a big impact on performance|
+| Property             |Default|Example                    | Description |
+|----------|-------------      |------                     |--------                          |
+|pluvia.foregroundFPS  |60     |pluvia.foregroundFPS=160   |frames per second to try to match |
+|pluvia.monitor        |0      |pluvia.monitor=1           |monitor to use, if more than one are connected, 0 is promary |
+|pluvia.vsync          |true   |pluvia.vsync=false         |virtual syn with monitor refresh rate |
+|pluvia.debugMode      |false  |pluvia.debugMode=true      |debug mode enabled, allows to pan the camera and see various fbos| 
+|pluvia.shadowMapSize  |4096   |pluvia.shadowMapSize=8192  |the bigger, the better, but you need enough video card ram|
+|pluvia.showFps        |false  |pluvia.showFps=true        |display frames per second in lower left corner|
+|pluvia.showGraphs     |false  |pluvia.showGraphs=true     |cpu/gpu graphs can be displayed using F6|
+|pluvia.fullscreenMode |true   |pluvia.fullscreenMode=false|window mode or full screen mode|
+|pluvia.pluvia.pbrMode |true   |pluvia.pluvia.pbrMode=false|enable/disable phisical based rendering|
+|pluvia.maxPointLights |20     |pluvia.maxPointLights=10   |configure maximum number of point lights the engine tries to render, this has a big impact on performance|
+|pluvia.graphicsQuality|3      |pluvia.graphicsQuality=1   |1=slow computer, 4=latest hardware|
+
+# Graphics Quality
+With the pluvia.graphicsQuality setting following other settings are overwritten
+
+| Graphics Quality |pluvia.maxPointLights|pluvia.shadowMapSize|pluvia.msaaSamples|pluvia.maxSceneObjects|
+|---               |-------------        |------              |--------          |-----                 |
+|1                 |0                    |128                 |0                 |0                     |
+|2                 |5                    |2024                |4                 |100                   |
+|3                 |20                   |4096                |16                |200                   |
+|4                 |500                  |8192                |16                |500                   |
+|5                 |customizable         |customizable        |customizable      |customizable          |
+
 
 
 # How To Report a Bug

@@ -51,7 +51,7 @@ public class FlyScene extends AbstractScene {
 	protected void createFly(float minSize, float maxSize) {
 		Vector3	min	= gameEngine.renderEngine.sceneBox.min;
 		Vector3	max	= gameEngine.renderEngine.sceneBox.max;
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 500); i++) {
 			int			type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_FLY_MODELS);
 			float		size	= minSize + (float) Math.random() * (maxSize - minSize);
 			BoundingBox	b		= new BoundingBox(new Vector3(min.x + 4f, size / 2, min.z + 5), new Vector3(max.x - 4f, 4f, 0));

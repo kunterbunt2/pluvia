@@ -65,7 +65,7 @@ public abstract class AbstractScene {
 		Vector3		min	= gameEngine.renderEngine.sceneBox.min;
 		Vector3		max	= gameEngine.renderEngine.sceneBox.max;
 		BoundingBox	b	= new BoundingBox(new Vector3(min.x, -5f, min.z), new Vector3(max.x, 0f, 0));
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 100); i++) {
 			int		type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_FISH_MODELS);
 			float	size	= minSize + (float) Math.random() * (maxSize - minSize);
 			Fish	fish	= new Fish(gameEngine, type, size, b);
@@ -207,7 +207,7 @@ public abstract class AbstractScene {
 	protected void createTurtles(float minSize, float maxSize) {
 		Vector3	min	= gameEngine.renderEngine.sceneBox.min;
 		Vector3	max	= gameEngine.renderEngine.sceneBox.max;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 10); i++) {
 			int			type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_TURTLE_MODELS);
 			float		size	= minSize + (float) Math.random() * (maxSize - minSize);
 			BoundingBox	b		= new BoundingBox(new Vector3(min.x, size / 2, min.z), new Vector3(max.x, size / 2, 0));
