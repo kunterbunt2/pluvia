@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.game.Game;
-import com.abdalla.bushnaq.pluvia.model.bubble.Bubble;
-import com.abdalla.bushnaq.pluvia.model.digit.Digit;
-import com.abdalla.bushnaq.pluvia.model.firefly.Firefly;
-import com.abdalla.bushnaq.pluvia.model.fish.Fish;
-import com.abdalla.bushnaq.pluvia.model.fly.Fly;
-import com.abdalla.bushnaq.pluvia.model.rain.Rain;
-import com.abdalla.bushnaq.pluvia.model.stone.Stone;
-import com.abdalla.bushnaq.pluvia.model.turtle.Turtle;
+import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
+import com.abdalla.bushnaq.pluvia.scene.model.bubble.Bubble;
+import com.abdalla.bushnaq.pluvia.scene.model.digit.Digit;
+import com.abdalla.bushnaq.pluvia.scene.model.firefly.Firefly;
+import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
+import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
+import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
+import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.ui.AboutDialog;
 import com.abdalla.bushnaq.pluvia.ui.MainDialog;
 import com.abdalla.bushnaq.pluvia.ui.PauseDialog;
@@ -52,49 +52,49 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 	}
 
-	public static final Color	FACTORY_COLOR				= Color.DARK_GRAY;							// 0xff000000;
-	public static final float	FACTORY_HEIGHT				= 1.2f;
-	public static final float	FACTORY_WIDTH				= 2.4f;
-	public static final int		FONT_SIZE					= 9;
-	public static final Color	NOT_PRODUCING_FACTORY_COLOR	= Color.RED;								// 0xffFF0000;
-	public static final int		RAYS_NUM					= 128;
-	private static final float	SCROLL_SPEED				= 0.2f;
-	public static final Color	SELECTED_PLANET_COLOR		= Color.BLUE;
-	public static final Color	SELECTED_TRADER_COLOR		= Color.RED;								// 0xffff0000;
-	public static final float	SIM_HEIGHT					= 0.3f;
-	public static final float	SIM_WIDTH					= 0.3f;
-	public static final float	SOOM_SPEED					= 8.0f * 10;
-	public static final float	SPACE_BETWEEN_OBJECTS		= 0.1f / Context.WORLD_SCALE;
-	public static final Color	TEXT_COLOR					= Color.WHITE;								// 0xffffffff;
-	private float				centerXD;
-	private float				centerYD;
-	private float				centerZD;
-	private GameObject			cube						= null;
-	boolean						enableProfiling				= true;
-	private boolean				followMode;
+	public static final Color		FACTORY_COLOR				= Color.DARK_GRAY;							// 0xff000000;
+	public static final float		FACTORY_HEIGHT				= 1.2f;
+	public static final float		FACTORY_WIDTH				= 2.4f;
+	public static final int			FONT_SIZE					= 9;
+	public static final Color		NOT_PRODUCING_FACTORY_COLOR	= Color.RED;								// 0xffFF0000;
+	public static final int			RAYS_NUM					= 128;
+	private static final float		SCROLL_SPEED				= 0.2f;
+	public static final Color		SELECTED_PLANET_COLOR		= Color.BLUE;
+	public static final Color		SELECTED_TRADER_COLOR		= Color.RED;								// 0xffff0000;
+	public static final float		SIM_HEIGHT					= 0.3f;
+	public static final float		SIM_WIDTH					= 0.3f;
+	public static final float		SOOM_SPEED					= 8.0f * 10;
+	public static final float		SPACE_BETWEEN_OBJECTS		= 0.1f / Context.WORLD_SCALE;
+	public static final Color		TEXT_COLOR					= Color.WHITE;								// 0xffffffff;
+	private float					centerXD;
+	private float					centerYD;
+	private float					centerZD;
+	private GameObject				cube						= null;
+	boolean							enableProfiling				= true;
+	private boolean					followMode;
 //	private BitmapFont			font;
-	private final List<Label>	labels						= new ArrayList<>();
-	private final Logger		logger						= LoggerFactory.getLogger(this.getClass());
-	private int					maxFramesPerSecond;
-	public ModelManager			modelManager;
-	private GLProfiler			profiler;
-	public RenderEngine			renderEngine;
-	private Stage				stage;
-	private StringBuilder		stringBuilder;
-	private boolean				takeScreenShot;
-	public final Context		context;
-	private boolean				vsyncEnabled				= true;
-	private MainDialog			mainDialog;
-	private AboutDialog			aboutDialog;
-	private PauseDialog			pauseDialog;
-	private ScoreDialog			scoreDialog;
-	private boolean				showFps;
+	private final List<VisLabel>	labels						= new ArrayList<>();
+	private final Logger			logger						= LoggerFactory.getLogger(this.getClass());
+	private int						maxFramesPerSecond;
+	public ModelManager				modelManager;
+	private GLProfiler				profiler;
+	public RenderEngine				renderEngine;
+	private Stage					stage;
+	private StringBuilder			stringBuilder;
+	private boolean					takeScreenShot;
+	public final Context			context;
+	private boolean					vsyncEnabled				= true;
+	private MainDialog				mainDialog;
+	private AboutDialog				aboutDialog;
+	private PauseDialog				pauseDialog;
+	private ScoreDialog				scoreDialog;
+	private boolean					showFps;
 
 	public GameEngine(final Context context) throws Exception {
 		this.context = context;
 //		universe.setScreenListener(this);
 		modelManager = new ModelManager();
-		showFps = context.getShowFpsProperty(false);
+		showFps = context.getShowFpsProperty();
 	}
 
 	@Override
@@ -108,6 +108,11 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			profiler.setListener(new MyGLErrorListener());
 			if (enableProfiling) {
 				profiler.enable();
+			}
+			try {
+				context.setSelected(profiler, false);
+			} catch (final Exception e) {
+				logger.error(e.getMessage(), e);
 			}
 			renderEngine = new RenderEngine(context, this);
 			modelManager.create(renderEngine.isPbr());
@@ -221,55 +226,70 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		switch (keycode) {
 		case Input.Keys.A:
 		case Input.Keys.LEFT:
-			centerXD = -SCROLL_SPEED;
+			if (context.isDebugMode()) {
+				centerXD = -SCROLL_SPEED;
+			}
 			return true;
 		case Input.Keys.D:
 		case Input.Keys.RIGHT:
-			centerXD = SCROLL_SPEED;
+			if (context.isDebugMode()) {
+				centerXD = SCROLL_SPEED;
+			}
 			return true;
 		case Input.Keys.Q:
-			centerYD = SCROLL_SPEED;
+			if (context.isDebugMode()) {
+				centerYD = SCROLL_SPEED;
+			}
 			return true;
 		case Input.Keys.W:
 		case Input.Keys.UP:
-			centerZD = -SCROLL_SPEED;
+			if (context.isDebugMode()) {
+				centerZD = -SCROLL_SPEED;
+			}
 			return true;
 		case Input.Keys.E:
-			centerYD = -SCROLL_SPEED;
+			if (context.isDebugMode()) {
+				centerYD = -SCROLL_SPEED;
+			}
 			return true;
 		case Input.Keys.S:
 		case Input.Keys.DOWN:
-			centerZD = SCROLL_SPEED;
+			if (context.isDebugMode()) {
+				centerZD = SCROLL_SPEED;
+			}
 			return true;
 		case Input.Keys.ESCAPE:
 			togglePause();
 			return true;
 		case Input.Keys.PRINT_SCREEN:
-			queueScreenshot();
+			if (context.isDebugMode()) {
+				queueScreenshot();
+			}
 			return true;
 //		case Input.Keys.NUM_1:
 //			renderEngine.setAlwaysDay(!renderEngine.isAlwaysDay());
 //			return true;
-		case Input.Keys.V:
-			vsyncEnabled = !vsyncEnabled;
-			Gdx.graphics.setVSync(vsyncEnabled);
+//		case Input.Keys.V:
+//			vsyncEnabled = !vsyncEnabled;
+//			Gdx.graphics.setVSync(vsyncEnabled);
+//			return true;
+		case Input.Keys.I:
+			if (context.isDebugMode()) {
+				renderEngine.getInfo().setVisible(!renderEngine.getInfo().isVisible());
+			}
 			return true;
-		case Input.Keys.M:
-			renderEngine.getInfo().setVisible(!renderEngine.getInfo().isVisible());
-			return true;
-		case Input.Keys.N:
-			break;
+//		case Input.Keys.N:
+//			break;
 		case Input.Keys.SPACE:
 			context.levelManager.nextRound();
 			break;
-		case Input.Keys.TAB:
-			try {
-				context.setSelected(profiler, false);
-			} catch (final Exception e) {
-				logger.error(e.getMessage(), e);
-			}
-
-			return true;
+//		case Input.Keys.TAB:
+//			try {
+//				context.setSelected(profiler, false);
+//			} catch (final Exception e) {
+//				logger.error(e.getMessage(), e);
+//			}
+//			return true;
 //		case Input.Keys.NUM_1:
 //		case Input.Keys.NUM_2:
 //		case Input.Keys.NUM_3:
@@ -416,7 +436,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		if (showFps) {
 			stringBuilder.setLength(0);
 			stringBuilder.append(" FPS ").append(Gdx.graphics.getFramesPerSecond());
-			labels.get(labelIndex++).setText(stringBuilder);
+			labels.get(labelIndex).setColor(context.levelManager.getInfoColor());
+			labels.get(labelIndex).setText(stringBuilder);
+			labelIndex++;
 		}
 		// audio sources
 		// {

@@ -3,7 +3,7 @@
  */
 package com.abdalla.bushnaq.pluvia.game;
 
-import com.abdalla.bushnaq.pluvia.model.stone.Stone;
+import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.util.sound.Tools;
 
 public class Game {

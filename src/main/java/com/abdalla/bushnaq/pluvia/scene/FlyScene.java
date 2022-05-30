@@ -3,10 +3,10 @@ package com.abdalla.bushnaq.pluvia.scene;
 import java.util.List;
 import java.util.Random;
 
-import com.abdalla.bushnaq.pluvia.model.fly.Fly;
 import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
 import com.abdalla.bushnaq.pluvia.renderer.GameObject;
 import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
+import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -60,6 +60,10 @@ public class FlyScene extends AbstractScene {
 //			fish.setAccellerationDistance(5f);
 			gameEngine.context.fireflyList.add(firefly);
 		}
+	}
+	@Override
+	public Color getInfoColor() {
+		return Color.BLACK;
 	}
 
 

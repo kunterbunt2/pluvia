@@ -10,8 +10,8 @@ public class MyShader extends DefaultShader {
 	private static Plane	clippingPlane;
 	public final int		u_clippingPlane	= register("u_clippingPlane");
 
-	public MyShader(final Renderable renderable, final Config config) {
-		super(renderable, config);
+	public MyShader(final Renderable renderable, final Config config, final String prefix) {
+		super(renderable, config, prefix);
 	}
 
 	@Override
@@ -24,6 +24,8 @@ public class MyShader extends DefaultShader {
 	@Override
 	public boolean canRender(final Renderable renderable) {
 		if (renderable.material.id.equals("water")) {
+			return false;
+		} else if (renderable.material.id.equals("mirror")) {
 			return false;
 		} else if (renderable.material.id.equals("post")) {
 			return false;

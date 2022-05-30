@@ -3,10 +3,10 @@ package com.abdalla.bushnaq.pluvia.scene;
 import java.util.List;
 import java.util.Random;
 
-import com.abdalla.bushnaq.pluvia.model.firefly.Firefly;
 import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
 import com.abdalla.bushnaq.pluvia.renderer.GameObject;
 import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
+import com.abdalla.bushnaq.pluvia.scene.model.firefly.Firefly;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -57,6 +57,10 @@ public class FireflyScene extends AbstractScene {
 			Firefly		fly		= new Firefly(gameEngine, type, size, b);
 			gameEngine.context.flyList.add(fly);
 		}
+	}
+	@Override
+	public Color getInfoColor() {
+		return Color.BLACK;
 	}
 
 }

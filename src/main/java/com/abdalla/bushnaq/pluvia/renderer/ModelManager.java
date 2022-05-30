@@ -4,14 +4,14 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.IntAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 import net.mgsx.gltf.loaders.glb.GLBLoader;
@@ -68,8 +68,8 @@ public class ModelManager {
 
 	public void create(boolean isPbr) throws Exception {
 
-		final Texture		texture			= new Texture(Gdx.files.internal("assets/tiles.png"));
-		final ModelBuilder	modelBuilder	= new ModelBuilder();
+//		final Texture		texture			= new Texture(Gdx.files.internal("assets/tiles.png"));
+		final ModelBuilder modelBuilder = new ModelBuilder();
 //		final ModelCreator	modelCreator	= new ModelCreator();
 		createStoneModels(isPbr);
 		createBuildingModels(isPbr, modelBuilder);
@@ -79,9 +79,9 @@ public class ModelManager {
 		createBubbleModels(isPbr, modelBuilder);
 		createTutleModels(isPbr);
 		createRainModels(isPbr, modelBuilder);
-		createLevelModels(texture, modelBuilder);
-		createWaterModel(texture, modelBuilder);
-		createMirrorModel(texture, modelBuilder);
+		createLevelModels(isPbr, modelBuilder);
+		createWaterModel(modelBuilder);
+		createMirrorModel(modelBuilder);
 		createSquareModel(modelBuilder);
 		createBackPlateModel(modelBuilder);
 	}
@@ -126,16 +126,21 @@ public class ModelManager {
 		Color[] colors = new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD, Color.MAGENTA, Color.YELLOW, Color.BLACK };
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_FLY_MODELS; i++) {
-				firelyModelPbr[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/fly.glb")));
+				firelyModelPbr[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/firefly.glb")));
 				Material m = firelyModelPbr[i].scene.model.materials.get(0);
 				m.set(PBRColorAttribute.createBaseColorFactor(colors[i]));
 			}
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_FLY_MODELS; i++) {
-				firelyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/fly.glb")));
-				ColorAttribute	color	= ColorAttribute.createDiffuse(Color.BLACK);
-				Material		m		= firelyModel[i].scene.model.materials.get(0);
-				m.set(color);
+				firelyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/firefly.glb")));
+				removePbrNature(firelyModel[i]);
+				Material m = firelyModel[i].scene.model.materials.get(0);
+				m.set(ColorAttribute.createDiffuse(colors[i]));
+				m.set(ColorAttribute.createSpecular(Color.WHITE));
+				m.set(FloatAttribute.createShininess(16f));
+//				ColorAttribute	color	= ColorAttribute.createDiffuse(Color.RED);
+//				Material		m		= firelyModel[i].scene.model.materials.get(0);
+//				m.set(color);
 			}
 		}
 	}
@@ -153,6 +158,10 @@ public class ModelManager {
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_RAIN_MODELS; i++) {
 				rainModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/rain.glb")));
+				removePbrNature(rainModel[i]);
+				Material		m			= rainModel[i].scene.model.materials.get(0);
+				final Attribute	blending	= new BlendingAttribute(0.3f);				// opacity is set by pbrMetallicRoughness below
+				m.set(blending);
 			}
 		}
 	}
@@ -161,14 +170,15 @@ public class ModelManager {
 //		Color[] colors = new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD, Color.MAGENTA, Color.YELLOW, Color.BLACK };
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_FIRELY_MODELS; i++) {
-				flyModelPbr[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/firefly.glb")));
+				flyModelPbr[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/fly.glb")));
 //				Material m = flyModelPbr[i].scene.model.materials.get(0);
 //				m.set(PBRColorAttribute.createBaseColorFactor(colors[i]));
 			}
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_FIRELY_MODELS; i++) {
 
-				flyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/firefly.glb")));
+				flyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/fly.glb")));
+				removePbrNature(flyModel[i]);
 				ColorAttribute	color	= ColorAttribute.createDiffuse(Color.BLACK);
 				Material		m		= flyModel[i].scene.model.materials.get(0);
 				m.set(color);
@@ -190,9 +200,13 @@ public class ModelManager {
 			for (int i = 0; i < MAX_NUMBER_OF_BUBBLE_MODELS; i++) {
 
 				bubbleModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/bubble.glb")));
-				ColorAttribute	color	= ColorAttribute.createDiffuse(Color.BLACK);
-				Material		m		= bubbleModel[i].scene.model.materials.get(0);
-				m.set(color);
+				removePbrNature(bubbleModel[i]);
+				Material m = bubbleModel[i].scene.model.materials.get(0);
+				m.set(ColorAttribute.createDiffuse(colors[i]));
+				m.set(ColorAttribute.createSpecular(Color.WHITE));
+				m.set(FloatAttribute.createShininess(16f));
+				final Attribute blending = new BlendingAttribute(0.03f); // opacity is set by pbrMetallicRoughness below
+				m.set(blending);
 			}
 		}
 	}
@@ -216,19 +230,23 @@ public class ModelManager {
 		}
 	}
 
-	private void createLevelModels(final Texture texture, final ModelBuilder modelBuilder) {
-		{
+	private void createLevelModels(boolean isPbr, final ModelBuilder modelBuilder) {
+		if (isPbr) {
 			final Attribute	color		= new PBRColorAttribute(PBRColorAttribute.BaseColorFactor, Color.WHITE);
 			final Attribute	metallic	= PBRFloatAttribute.createMetallic(0.5f);
 			final Attribute	roughness	= PBRFloatAttribute.createRoughness(0.5f);
 			final Material	material	= new Material(metallic, roughness, color);
 			levelCubePbr = modelBuilder.createBox(1f, 1f, 1f, material, Usage.Position | Usage.Normal);
-		}
-		{
-			final ColorAttribute	diffuseColor	= ColorAttribute.createDiffuse(Color.WHITE);
-			final TextureAttribute	diffuseTexture	= TextureAttribute.createDiffuse(texture);
-			final Material			material		= new Material(diffuseColor, diffuseTexture);
-			levelCube = createSquare(modelBuilder, 0.5f, 0.5f, material);
+		} else {
+//			final ColorAttribute	diffuseColor	= ColorAttribute.createDiffuse(Color.LIGHT_GRAY);
+//			final ColorAttribute	specularColor	= ColorAttribute.createSpecular(Color.LIGHT_GRAY);
+//			IntAttribute			cullFace		= IntAttribute.createCullFace(1);
+//			final Material			material		= new Material(diffuseColor, specularColor, cullFace);
+//			levelCube = createSquare(modelBuilder, 0.5f, 0.5f, material);
+
+			final ColorAttribute	diffuseColor	= ColorAttribute.createDiffuse(Color.GRAY);
+			final Material			material		= new Material(diffuseColor);
+			levelCube = modelBuilder.createBox(1f, 1f, 1f, material, Usage.Position | Usage.Normal);
 		}
 	}
 
@@ -245,8 +263,9 @@ public class ModelManager {
 			squarePbr = createSquare(modelBuilder, 0.5f, 0.5f, material);
 		}
 		{
-			final ColorAttribute	diffuseColor	= ColorAttribute.createDiffuse(Color.WHITE);
-			final Material			material		= new Material(diffuseColor);
+			final ColorAttribute	diffuseColor	= ColorAttribute.createDiffuse(Color.LIGHT_GRAY);
+//			final ColorAttribute	specularColor	= ColorAttribute.createSpecular(Color.WHITE);
+			final Material			material		= new Material(diffuseColor/* , specularColor */);
 			square = createSquare(modelBuilder, 0.5f, 0.5f, material);
 		}
 	}
@@ -273,10 +292,27 @@ public class ModelManager {
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_STONE_MODELS; i++) {
 				stone[i] = new GLBLoader().load(Gdx.files.internal(cubes[i].gltfModel));
-				ColorAttribute	color	= ColorAttribute.createDiffuse(cubes[i].color);
-				Material		m		= stone[i].scene.model.materials.get(0);
-				m.set(color);
+				removePbrNature(stone[i]);
+				for (Material m : stone[i].scene.model.materials) {
+					if (m.id.equals("Frame")) {
+						m.set(ColorAttribute.createSpecular(Color.WHITE));
+					}
+					if (m.id.equals("Faces")) {
+						ColorAttribute attribute = (ColorAttribute) m.get(ColorAttribute.Diffuse);
+						m.set(ColorAttribute.createSpecular(attribute.color));
+					}
+				}
 			}
+		}
+	}
+
+	private void removePbrNature(SceneAsset sceneAsset) {
+		for (Material m : sceneAsset.scene.model.materials) {
+			PBRColorAttribute ca = (PBRColorAttribute) m.get(PBRColorAttribute.BaseColorFactor);
+			m.set(ColorAttribute.createDiffuse(ca.color));
+			m.remove(PBRColorAttribute.BaseColorFactor);
+			m.remove(PBRFloatAttribute.Metallic);
+			m.remove(PBRFloatAttribute.Roughness);
 		}
 	}
 
@@ -289,22 +325,27 @@ public class ModelManager {
 			}
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_TURTLE_MODELS; i++) {
+				turtleCube[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/turtle.glb")));
+				removePbrNature(turtleCube[i]);
+//				Material			m	= turtleCube[i].scene.model.materials.get(0);
+//				PBRColorAttribute	ca	= (PBRColorAttribute) m.get(PBRColorAttribute.BaseColorFactor);
+//				m.set(ColorAttribute.createDiffuse(ca.color));
 			}
 		}
 	}
 
-	private void createWaterModel(final Texture texture, final ModelBuilder modelBuilder) {
+	private void createWaterModel(final ModelBuilder modelBuilder) {
 		final ColorAttribute	diffuseColor	= ColorAttribute.createDiffuse(Color.WHITE);
-		final TextureAttribute	diffuseTexture	= TextureAttribute.createDiffuse(texture);
-		final Material			material		= new Material(diffuseColor, diffuseTexture);
+//		final TextureAttribute	diffuseTexture	= TextureAttribute.createDiffuse(texture);
+		final Material			material		= new Material(diffuseColor/* , diffuseTexture */);
 		material.id = "water";
 		water = createSquare(modelBuilder, 0.5f, 0.5f, material);
 	}
 
-	private void createMirrorModel(final Texture texture, final ModelBuilder modelBuilder) {
+	private void createMirrorModel(final ModelBuilder modelBuilder) {
 		final ColorAttribute	diffuseColor	= ColorAttribute.createDiffuse(Color.WHITE);
-		final TextureAttribute	diffuseTexture	= TextureAttribute.createDiffuse(texture);
-		final Material			material		= new Material(diffuseColor, diffuseTexture);
+//		final TextureAttribute	diffuseTexture	= TextureAttribute.createDiffuse(texture);
+		final Material			material		= new Material(diffuseColor/* , diffuseTexture */);
 		material.id = "mirror";
 		mirror = createSquare(modelBuilder, 0.5f, 0.5f, material);
 	}

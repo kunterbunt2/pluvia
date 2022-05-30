@@ -3,10 +3,10 @@ package com.abdalla.bushnaq.pluvia.scene;
 import java.util.List;
 import java.util.Random;
 
-import com.abdalla.bushnaq.pluvia.model.bubble.Bubble;
 import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
 import com.abdalla.bushnaq.pluvia.renderer.GameObject;
 import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
+import com.abdalla.bushnaq.pluvia.scene.model.bubble.Bubble;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -52,6 +52,11 @@ public class BubblesScene extends AbstractScene {
 			Bubble		bubble	= new Bubble(gameEngine, type, size, b);
 			gameEngine.context.bubbleList.add(bubble);
 		}
+	}
+
+	@Override
+	public Color getInfoColor() {
+		return Color.BLACK;
 	}
 
 }

@@ -7,14 +7,14 @@ import java.util.zip.Deflater;
 import org.lwjgl.opengl.GL30C;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
-import com.abdalla.bushnaq.pluvia.model.digit.Digit;
-import com.abdalla.bushnaq.pluvia.model.stone.Stone;
+import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.renderer.camera.MovingCamera;
 import com.abdalla.bushnaq.pluvia.renderer.camera.MyCameraInputController;
 import com.abdalla.bushnaq.pluvia.renderer.shader.GameSettings;
 import com.abdalla.bushnaq.pluvia.renderer.shader.MercatorPbrShaderProvider;
 import com.abdalla.bushnaq.pluvia.renderer.shader.MercatorShaderProvider;
 import com.abdalla.bushnaq.pluvia.renderer.shader.MercatorShaderProviderInterface;
+import com.abdalla.bushnaq.pluvia.scene.model.digit.Digit;
 import com.abdalla.bushnaq.pluvia.shader.mirror.Mirror;
 import com.abdalla.bushnaq.pluvia.shader.water.Water;
 import com.abdalla.bushnaq.pluvia.ui.InfoDialog;
@@ -136,7 +136,7 @@ public class RenderEngine {
 	public MercatorShaderProviderInterface	mercatorShaderProvider;
 	private SceneSkybox						nightSkyBox;
 	private float							northDirectionDegree				= 90;
-	private boolean							pbr									= true;
+	private boolean							pbr;
 	private final PointLightsAttribute		pointLights							= new PointLightsAttribute();
 	private final Vector3					position							= new Vector3();
 	private FrameBuffer						postFbo;
@@ -185,13 +185,14 @@ public class RenderEngine {
 
 	public RenderEngine(final Context context, final InputProcessor inputProcessor) throws Exception {
 		this.context = context;
+		pbr = context.getPbrModeProperty();
 		createFrameBuffer();
 		createEnvironment();
 		createCamera();
 		createShader();
 		createInputProcessor(inputProcessor);
 		createStage();
-		createRayCube();
+//		createRayCube();
 		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
 //		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
 //		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
@@ -310,7 +311,7 @@ public class RenderEngine {
 //		}
 //	}
 
-	void createCoordinates() {
+	private void createCoordinates() {
 		final Vector3	position	= new Vector3(0, 0, 0);
 		final Vector3	xVector		= new Vector3(1, 0, 0);
 		final Vector3	yVector		= new Vector3(0, 1, 0);
@@ -336,11 +337,11 @@ public class RenderEngine {
 		shadowLight.intensity = 1.0f;
 		environment.add(shadowLight);
 		// setup IBL (image based lighting)
-//		setupImageBasedLightingByFaceNames("ruins", "jpg", "png", "jpg", 10);
-		setupImageBasedLightingByFaceNames("clouds", "jpg", "jpg", "jpg", 10);
-//		setupImageBasedLightingByFaceNames("moonless_golf_2k", "jpg", "jpg", "jpg", 10);
-		// setup skybox
 		if (isPbr()) {
+//			setupImageBasedLightingByFaceNames("ruins", "jpg", "png", "jpg", 10);
+			setupImageBasedLightingByFaceNames("clouds", "jpg", "jpg", "jpg", 10);
+//			setupImageBasedLightingByFaceNames("moonless_golf_2k", "jpg", "jpg", "jpg", 10);
+			// setup skybox
 			daySkyBox = new SceneSkybox(environmentDayCubemap);
 			nightSkyBox = new SceneSkybox(environmentNightCubemap);
 			environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
@@ -468,17 +469,17 @@ public class RenderEngine {
 			final PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
 			config.numBones = 0;
 			config.numDirectionalLights = 1;
-			config.numPointLights = 20;
+			config.numPointLights = context.getMaxPointLights();
 			config.numSpotLights = 0;
-			mercatorShaderProvider = MercatorPbrShaderProvider.createDefault(config, water, getMirror());
+			mercatorShaderProvider = MercatorPbrShaderProvider.createDefault(config, water, mirror);
 			return mercatorShaderProvider;
 		} else {
 
 			DefaultShader.Config config = new Config();
-			config.numDirectionalLights = 1;
-			config.numPointLights = 20;
-			config.numSpotLights = 0;
-			mercatorShaderProvider = MercatorShaderProvider.createDefault(config, water, getMirror());
+//			config.numDirectionalLights = 2;
+//			config.numPointLights = context.getMaxPointLights();
+//			config.numSpotLights = 0;
+			mercatorShaderProvider = MercatorShaderProvider.createDefault(config, water, mirror);
 			return mercatorShaderProvider;
 		}
 	}
@@ -540,11 +541,13 @@ public class RenderEngine {
 		batch.dispose();
 		batch2D.dispose();
 		depthBatch.dispose();
-		diffuseCubemap.dispose();
-		environmentNightCubemap.dispose();
-		environmentDayCubemap.dispose();
-		specularCubemap.dispose();
-		brdfLUT.dispose();
+		if (isPbr()) {
+			diffuseCubemap.dispose();
+			environmentNightCubemap.dispose();
+			environmentDayCubemap.dispose();
+			specularCubemap.dispose();
+			brdfLUT.dispose();
+		}
 	}
 
 	public void end() {
@@ -686,11 +689,11 @@ public class RenderEngine {
 	}
 
 	public boolean isWaterPresent() {
-		return water.isPresent() && isPbr();
+		return water.isPresent() /* && isPbr() */;
 	}
 
 	public boolean isMirrorPresent() {
-		return mirror.isPresent() && isPbr();
+		return mirror.isPresent() /* && isPbr() */;
 	}
 
 //	public void postProcessRender() throws Exception {

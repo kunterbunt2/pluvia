@@ -38,17 +38,17 @@ public class DesktopLauncher {
 	private Lwjgl3ApplicationConfiguration createConfig(Context context) {
 		int	monitor			= 0;
 		int	foregroundFPS	= 60;
-		monitor = context.getMonitorProperty(monitor);
+		monitor = context.getMonitorProperty();
 		foregroundFPS = context.getForegroundFPSProperty(foregroundFPS);
 		Lwjgl3ApplicationConfiguration config;
 		config = new Lwjgl3ApplicationConfiguration();
-		config.useVsync(context.getVsyncProperty(true));
+		config.useVsync(context.getVsyncProperty());
 		config.setForegroundFPS(foregroundFPS);
 		config.setResizable(true);
 //		config.useOpenGL3(true, 3, 2);
 		config.setOpenGLEmulation(GLEmulation.GL30, 3, 2);
-		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 16);
-		config.setTitle("Mercator");
+		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, context.getMSAASamples());
+		config.setTitle("PLuvia");
 		config.setAutoIconify(false);
 		final Monitor[] monitors = Lwjgl3ApplicationConfiguration.getMonitors();
 		if (monitor < 0 || monitor >= monitors.length) {
@@ -56,7 +56,7 @@ public class DesktopLauncher {
 			logger.error(String.format("pluvia.monitiro=%d cannot be negative or higher than the number of monitors %d.", monitor, monitors.length));
 		}
 		final DisplayMode	primaryMode		= Lwjgl3ApplicationConfiguration.getDisplayMode(monitors[monitor]);
-		boolean				fullScreenMode	= context.getFullscreenModeProperty(true);
+		boolean				fullScreenMode	= context.getFullscreenModeProperty();
 		if (fullScreenMode)
 			config.setFullscreenMode(primaryMode);
 		config.setWindowPosition(0, 0);

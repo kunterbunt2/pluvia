@@ -16,7 +16,6 @@ precision highp float;
 #define varying out
 #endif
 uniform vec4 u_clippingPlane; //clipping plane for water refraction and reflections
-//const vec4 u_clippingPlane=vec4(0.0,1.0,0.0,8.0); //clipping plane for water refraction and reflections
 
 varying vec3 v_position;
 

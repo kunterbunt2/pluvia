@@ -36,6 +36,10 @@ public class NightFishScene extends AbstractScene {
 		createCity(gameEngine, 0, 0, -CITY_SIZE * 5, false, 2f);
 		createFish(0.2f, 0.2f);
 	}
+	@Override
+	public Color getInfoColor() {
+		return Color.WHITE;
+	}
 
 
 }

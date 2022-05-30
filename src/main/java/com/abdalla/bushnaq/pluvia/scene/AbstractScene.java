@@ -6,12 +6,12 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.abdalla.bushnaq.pluvia.model.fish.Fish;
-import com.abdalla.bushnaq.pluvia.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
 import com.abdalla.bushnaq.pluvia.renderer.GameObject;
 import com.abdalla.bushnaq.pluvia.renderer.ModelManager;
 import com.abdalla.bushnaq.pluvia.renderer.Text2D;
+import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
+import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -81,7 +81,9 @@ public abstract class AbstractScene {
 			m.set(PBRColorAttribute.createBaseColorFactor(Color.BLACK));
 			return go;
 		} else {
-			final GameObject go = new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[0]), null);
+			final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[0]), null);
+			Material			m	= go.instance.model.materials.get(0);
+			m.set(ColorAttribute.createDiffuse(Color.GRAY));
 			return go;
 		}
 
@@ -155,9 +157,9 @@ public abstract class AbstractScene {
 						final float			zs		= iteration * scaleZ * twinFactorZs - screetSize;
 						// System.out.println(String.format(" xx=%f zz=%f xs=%f", xx, zz, xs));
 						if (up)
-							inst.instance.transform.setToTranslationAndScaling(xx, y + ys / 2 - 0.2f, zz, xs, ys, zs);
+							inst.instance.transform.setToTranslationAndScaling(xx, y + ys / 2 + 0.1f, zz, xs, ys, zs);
 						else
-							inst.instance.transform.setToTranslationAndScaling(xx, y - ys / 2 - 0.2f, zz, xs, ys, zs);
+							inst.instance.transform.setToTranslationAndScaling(xx, y - ys / 2 - 0.1f, zz, xs, ys, zs);
 						inst.update();
 //						gameEngine.renderEngine.addStatic(inst);
 						renderModelInstances.add(inst);
@@ -171,11 +173,11 @@ public abstract class AbstractScene {
 	protected void createMirror(Color color) {
 		if (gameEngine.renderEngine.isMirrorPresent()) {
 			Model model;
-			if (gameEngine.renderEngine.isPbr()) {
-				model = gameEngine.modelManager.mirror;
-			} else {
-				model = gameEngine.modelManager.square;
-			}
+//			if (gameEngine.renderEngine.isPbr()) {
+			model = gameEngine.modelManager.mirror;
+//			} else {
+//				model = gameEngine.modelManager.square;
+//			}
 			GameObject cube = new GameObject(new ModelInstanceHack(model), null);
 			cube.instance.materials.get(0).set(ColorAttribute.createDiffuse(color));
 			cube.instance.transform.setToTranslationAndScaling(0f, WATER_Y, -15f, WATER_X, 0.1f, WATER_Z);
@@ -199,6 +201,11 @@ public abstract class AbstractScene {
 					model = gameEngine.modelManager.square;
 				}
 				GameObject cube = new GameObject(new ModelInstanceHack(model), null);
+				if (gameEngine.renderEngine.isPbr()) {
+					cube.instance.materials.get(0).set(PBRColorAttribute.createBaseColorFactor(Color.BLUE));
+				} else {
+					cube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.BLUE));
+				}
 				cube.instance.transform.setToTranslationAndScaling(0f, -10f, 0f, 100f, 0.1f, 100f);
 				renderModelInstances.add(cube);
 			}
@@ -230,5 +237,7 @@ public abstract class AbstractScene {
 		cube.instance.transform.setToTranslationAndScaling(0f, WATER_Y, -15f, WATER_X, 0.1f, WATER_Z);
 		renderModelInstances.add(cube);
 	}
+
+	public abstract Color getInfoColor();
 
 }

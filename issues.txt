@@ -1,0 +1,29 @@
+BUGS
+- do not create more pointlights than allowed
+
+
+Partly done
+- copyright
+- readme including thank you and libraries
+- remove all unneeded resources
+- vanish sound should be more like a pop
+- test
+	switching screen (ok)
+	minimize window (ok)
+	on vm
+
+
+ToDo
+- help popping up after inactivity explaining space bar and right/left mouse klick
+- create version for linux
+- installer
+	add picture
+- encapsulate engine
+- help screen
+- number of total games played
+- level seed
+- show seed in score
+- can we incorporate shadertoy
+- move code to github
+- performance debugging
+

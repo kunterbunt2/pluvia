@@ -17,7 +17,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.abdalla.bushnaq.pluvia.model.stone.Stone;
+import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.util.RcBoolean;
 import com.abdalla.bushnaq.pluvia.util.sound.Tools;
 

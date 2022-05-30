@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.abdalla.bushnaq.pluvia.model.digit.Digit;
-import com.abdalla.bushnaq.pluvia.model.digit.DigitType;
-import com.abdalla.bushnaq.pluvia.model.stone.Stone;
+import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.renderer.GameEngine;
 import com.abdalla.bushnaq.pluvia.renderer.GameObject;
 import com.abdalla.bushnaq.pluvia.scene.AbstractScene;
@@ -23,7 +21,10 @@ import com.abdalla.bushnaq.pluvia.scene.FlyScene;
 import com.abdalla.bushnaq.pluvia.scene.NightFishScene;
 import com.abdalla.bushnaq.pluvia.scene.RainScene;
 import com.abdalla.bushnaq.pluvia.scene.TurtlesScene;
+import com.abdalla.bushnaq.pluvia.scene.model.digit.Digit;
+import com.abdalla.bushnaq.pluvia.scene.model.digit.DigitType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Model;
 
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
@@ -35,6 +36,7 @@ public class LevelManager extends Level implements Serializable {
 	final List<GameObject>		renderModelInstances	= new ArrayList<>();
 	protected Font				TextFont				= new Font("SansSerif", Font.BOLD, 14);
 	Map<String, AbstractScene>	sceneList				= new HashMap<>();
+	private Color				infoColor;
 
 	public LevelManager(GameEngine gameEngine, Game game) {
 		super(game);
@@ -150,8 +152,9 @@ public class LevelManager extends Level implements Serializable {
 				count++;
 			}
 		}
-		logger.info(String.format("count=%d", count));
+//		logger.info(String.format("count=%d", count));
 		sceneList.get(game.name).create();
+		infoColor = sceneList.get(game.name).getInfoColor();
 		addToEngine();
 	}
 
@@ -205,6 +208,10 @@ public class LevelManager extends Level implements Serializable {
 
 	public void updateFps() {
 		maxAnimaltionPhase = Gdx.graphics.getFramesPerSecond() / 10;
+	}
+
+	public Color getInfoColor() {
+		return infoColor;
 	}
 
 }

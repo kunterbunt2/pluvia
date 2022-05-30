@@ -4,9 +4,11 @@ import com.abdalla.bushnaq.pluvia.shader.mirror.Mirror;
 import com.abdalla.bushnaq.pluvia.shader.mirror.MirrorShader;
 import com.abdalla.bushnaq.pluvia.shader.water.Water;
 import com.abdalla.bushnaq.pluvia.shader.water.WaterShader;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Config;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.math.Plane;
@@ -36,28 +38,32 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 //		this.waveSpeed = waveSpeed;
 	}
 
-//	public String createPrefixBase(final Renderable renderable, final Config config) {
-//
-//		final String defaultPrefix = DefaultShader.createPrefix(renderable, config);
-//		String version = null;
-//		if (isGL3()) {
-//			if (Gdx.app.getType() == ApplicationType.Desktop) {
-//				if (version == null)
-//					version = "#version 130\n" + "#define GLSL3\n";
-//			} else if (Gdx.app.getType() == ApplicationType.Android) {
-//				if (version == null)
-//					version = "#version 300 es\n" + "#define GLSL3\n";
-//			}
-//		}
-//		String prefix = "";
-//		if (version != null)
-//			prefix += version;
-//		// if (config.prefix != null)
-//		// prefix += config.prefix;
-//		prefix += defaultPrefix;
-//
-//		return prefix;
-//	}
+	public String createPrefixBase(final Renderable renderable, final Config config) {
+
+		final String	defaultPrefix	= DefaultShader.createPrefix(renderable, config);
+		String			version			= null;
+		if (isGL3()) {
+			if (Gdx.app.getType() == ApplicationType.Desktop) {
+				if (version == null)
+					version = "#version 130\n" + "#define GLSL3\n";
+			} else if (Gdx.app.getType() == ApplicationType.Android) {
+				if (version == null)
+					version = "#version 300 es\n" + "#define GLSL3\n";
+			}
+		}
+		String prefix = "";
+		if (version != null)
+			prefix += version;
+		// if (config.prefix != null)
+		// prefix += config.prefix;
+		prefix += defaultPrefix;
+
+		return prefix;
+	}
+
+	protected boolean isGL3() {
+		return Gdx.graphics.getGLVersion().isVersionEqualToOrHigher(3, 0);
+	}
 
 	@Override
 	protected Shader createShader(final Renderable renderable) {
@@ -66,7 +72,10 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 		} else if (renderable.material.id.equals("mirror")) {
 			return createMirrorShader(renderable);
 		} else {
-			shader = new MyShader(renderable, config);
+			final String prefix = createPrefixBase(renderable, config);
+			config.fragmentShader = null;
+			config.vertexShader = null;
+			shader = new MyShader(renderable, config, prefix);
 			shader.setClippingPlane(clippingPlane);
 			return shader;
 
@@ -79,8 +88,8 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 //	}
 
 	private Shader createWaterShader(final Renderable renderable) {
-//		final String prefix = createPrefixBase(renderable, config);
-		final String	prefix	= "";
+		final String	prefix	= createPrefixBase(renderable, config);
+//		final String	prefix	= "";
 		final Config	config	= new Config();
 		config.vertexShader = Gdx.files.internal("shader/water.vertex.glsl").readString();
 		config.fragmentShader = Gdx.files.internal("shader/water.fragment.glsl").readString();
@@ -92,9 +101,9 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 	}
 
 	private Shader createMirrorShader(final Renderable renderable) {
-//		final String prefix = createPrefixBase(renderable, config);
-		final String	prefix	= "";
-		final Config	config	= new Config();
+		final String prefix = createPrefixBase(renderable, config);
+//		final String	prefix	= "";
+//		final Config	config	= new Config();
 		config.vertexShader = Gdx.files.internal("shader/mirror.vertex.glsl").readString();
 		config.fragmentShader = Gdx.files.internal("shader/mirror.fragment.glsl").readString();
 		mirrorShader = new MirrorShader(renderable, config, prefix, mirror);

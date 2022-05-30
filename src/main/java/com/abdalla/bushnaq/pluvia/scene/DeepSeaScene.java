@@ -25,5 +25,9 @@ public class DeepSeaScene extends AbstractScene {
 		createFish(0.1f, 3f);
 //		createFirefly();
 	}
+	@Override
+	public Color getInfoColor() {
+		return Color.WHITE;
+	}
 
 }
