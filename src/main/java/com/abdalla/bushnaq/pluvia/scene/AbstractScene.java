@@ -65,7 +65,7 @@ public abstract class AbstractScene {
 		Vector3		min	= gameEngine.renderEngine.sceneBox.min;
 		Vector3		max	= gameEngine.renderEngine.sceneBox.max;
 		BoundingBox	b	= new BoundingBox(new Vector3(min.x, -5f, min.z), new Vector3(max.x, 0f, 0));
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			int		type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_FISH_MODELS);
 			float	size	= minSize + (float) Math.random() * (maxSize - minSize);
 			Fish	fish	= new Fish(gameEngine, type, size, b);
@@ -75,14 +75,14 @@ public abstract class AbstractScene {
 
 	private GameObject instanciateBuilding(final GameEngine gameEngine, final int index) {
 //		int i = rand.nextInt(ModelManager.MAX_NUMBER_OF_BUILDING_MODELS);
+		final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[(int) (Math.random() * ModelManager.MAX_NUMBER_OF_BUILDING_MODELS)]), null);
+		Material			m	= go.instance.model.materials.get(0);
 		if (gameEngine.renderEngine.isPbr()) {
-			final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCubePbr[(int) (Math.random() * ModelManager.MAX_NUMBER_OF_BUILDING_MODELS)]), null);
-			Material			m	= go.instance.model.materials.get(0);
 			m.set(PBRColorAttribute.createBaseColorFactor(Color.BLACK));
 			return go;
 		} else {
-			final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[0]), null);
-			Material			m	= go.instance.model.materials.get(0);
+//			final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[(int) (Math.random() * ModelManager.MAX_NUMBER_OF_BUILDING_MODELS)]), null);
+//			Material			m	= go.instance.model.materials.get(0);
 			m.set(ColorAttribute.createDiffuse(Color.GRAY));
 			return go;
 		}
@@ -157,7 +157,7 @@ public abstract class AbstractScene {
 						final float			zs		= iteration * scaleZ * twinFactorZs - screetSize;
 						// System.out.println(String.format(" xx=%f zz=%f xs=%f", xx, zz, xs));
 						if (up)
-							inst.instance.transform.setToTranslationAndScaling(xx, y + ys / 2 + 0.1f, zz, xs, ys, zs);
+							inst.instance.transform.setToTranslationAndScaling(xx, y /* + ys / 2 + 0.1f */, zz, xs, ys, zs);
 						else
 							inst.instance.transform.setToTranslationAndScaling(xx, y - ys / 2 - 0.1f, zz, xs, ys, zs);
 						inst.update();
@@ -173,11 +173,7 @@ public abstract class AbstractScene {
 	protected void createMirror(Color color) {
 		if (gameEngine.renderEngine.isMirrorPresent()) {
 			Model model;
-//			if (gameEngine.renderEngine.isPbr()) {
 			model = gameEngine.modelManager.mirror;
-//			} else {
-//				model = gameEngine.modelManager.square;
-//			}
 			GameObject cube = new GameObject(new ModelInstanceHack(model), null);
 			cube.instance.materials.get(0).set(ColorAttribute.createDiffuse(color));
 			cube.instance.transform.setToTranslationAndScaling(0f, WATER_Y, -15f, WATER_X, 0.1f, WATER_Z);
@@ -195,18 +191,14 @@ public abstract class AbstractScene {
 			// plane below the water
 			{
 				Model model;
-				if (gameEngine.renderEngine.isPbr()) {
-					model = gameEngine.modelManager.squarePbr;
-				} else {
-					model = gameEngine.modelManager.square;
-				}
+				model = gameEngine.modelManager.square;
 				GameObject cube = new GameObject(new ModelInstanceHack(model), null);
 				if (gameEngine.renderEngine.isPbr()) {
-					cube.instance.materials.get(0).set(PBRColorAttribute.createBaseColorFactor(Color.BLUE));
+					cube.instance.materials.get(0).set(PBRColorAttribute.createBaseColorFactor(Color.GREEN));
 				} else {
-					cube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.BLUE));
+					cube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.GREEN));
 				}
-				cube.instance.transform.setToTranslationAndScaling(0f, -10f, 0f, 100f, 0.1f, 100f);
+				cube.instance.transform.setToTranslationAndScaling(0f, -30f, 0f, 100f, 0.1f, 100f);
 				renderModelInstances.add(cube);
 			}
 		}
@@ -226,11 +218,7 @@ public abstract class AbstractScene {
 
 	protected void createPlane(Color color) {
 		Model model;
-		if (gameEngine.renderEngine.isPbr()) {
-			model = gameEngine.modelManager.squarePbr;
-		} else {
-			model = gameEngine.modelManager.square;
-		}
+		model = gameEngine.modelManager.square;
 		GameObject	cube	= new GameObject(new ModelInstanceHack(model), null);
 		Material	m		= cube.instance.materials.get(0);
 		m.set(PBRColorAttribute.createBaseColorFactor(color));

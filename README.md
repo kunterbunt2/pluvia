@@ -1,6 +1,10 @@
 # pluvia
-Pluvia, a computer game for rainy days.
+Pluvia, a computer game for rainy days.  
 Pluvia is written in Java using libgdx game library and the pbr extension gtx-gdx-gltf.
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/05/pluvia-turtle-1.png)  
+
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/05/pluvia-1.png)  
+
 
 # Controls
 | Control |Purpose      |
@@ -39,6 +43,8 @@ Pluvia can be configured usign the config/pluvia.propertries file.
 |pluvia.showGraphs    |false|pluvia.showGraphs=true    |cpu/gpu graphs can be displayed using F6|
 |pluvia.fullscreenMode|true|pluvia.fullscreenMode=false|window mode or full screen mode|
 |pluvia.pluvia.pbrMode|true|pluvia.pluvia.pbrMode=false|enable/disable phisical based rendering|
+|pluvia.maxPointLights|20|pluvia.maxPointLights=10     |configure maximum number of point lights the engine tries to render, this has a big impact on performance|
+
 
 # How To Report a Bug
 Please contact me to report a bug or just create a ticket at https://github.com/kunterbunt2/pluvia/issues  

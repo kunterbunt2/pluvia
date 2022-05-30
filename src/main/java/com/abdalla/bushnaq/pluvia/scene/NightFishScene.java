@@ -29,17 +29,18 @@ public class NightFishScene extends AbstractScene {
 		gameEngine.renderEngine.getFog().setColor(Color.BLACK);
 		// water
 		gameEngine.renderEngine.getWater().setPresent(true);
-		gameEngine.renderEngine.getWater().setWaveStrength(0.01f);
+		gameEngine.renderEngine.getWater().setWaveStrength(0.05f);
+		gameEngine.renderEngine.getWater().setRefractiveMultiplicator(50f);
 		createWater();
 		// mirror
 		gameEngine.renderEngine.getMirror().setPresent(false);
 		createCity(gameEngine, 0, 0, -CITY_SIZE * 5, false, 2f);
-		createFish(0.2f, 0.2f);
+		createFish(1.0f, 0.2f);
 	}
+
 	@Override
 	public Color getInfoColor() {
 		return Color.WHITE;
 	}
-
 
 }

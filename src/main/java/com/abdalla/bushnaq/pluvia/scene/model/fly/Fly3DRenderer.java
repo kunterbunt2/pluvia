@@ -20,7 +20,6 @@ public class Fly3DRenderer extends ObjectRenderer {
 	private final Vector3			direction				= new Vector3();	// intermediate value
 	private Fly					fly;
 	private GameObject				instance;
-	// private GameObject poiInstance;
 	private float					lightIntensity			= 0f;
 	private boolean					lightIsOne				= false;
 	private final List<PointLight>	pointLight				= new ArrayList<>();
@@ -36,16 +35,9 @@ public class Fly3DRenderer extends ObjectRenderer {
 	@Override
 	public void create(final GameEngine gameEngine) {
 		if (instance == null) {
-			if (gameEngine.renderEngine.isPbr()) {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.flyModelPbr[fly.getType()].scene.model), null);
-//				poiInstance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.fishCubePbr[0]), fish);
-			} else {
 				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.flyModel[fly.getType()].scene.model), null);
-			}
 			gameEngine.renderEngine.addDynamic(instance);
-//			gameEngine.renderEngine.addDynamic(poiInstance);
 			instance.update();
-//			poiInstance.update();
 		}
 	}
 

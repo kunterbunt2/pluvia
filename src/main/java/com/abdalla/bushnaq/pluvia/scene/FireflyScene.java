@@ -34,13 +34,18 @@ public class FireflyScene extends AbstractScene {
 		gameEngine.renderEngine.getFog().setFullDistance(1150f);
 		gameEngine.renderEngine.getFog().setColor(Color.BLACK);
 		// water
-		gameEngine.renderEngine.getWater().setPresent(true);
-		gameEngine.renderEngine.getWater().setWaveStrength(0.02f);
+		gameEngine.renderEngine.getWater().setPresent(false);
+		gameEngine.renderEngine.getWater().setWaveStrength(0.005f);
+		gameEngine.renderEngine.getWater().setTiling(16f);
+		gameEngine.renderEngine.getWater().setWaveSpeed(0.02f);
+		gameEngine.renderEngine.getWater().setRefractiveMultiplicator(0f);
 		createWater();
 		// mirror
 		gameEngine.renderEngine.getMirror().setPresent(false);
-		gameEngine.renderEngine.getMirror().setReflectivity(0.5f);
+		gameEngine.renderEngine.getMirror().setReflectivity(0.9f);
 		createMirror(Color.BLACK);
+
+		createPlane(Color.BLACK);
 
 		// generate instances
 		createCity(gameEngine, 0, 0, -CITY_SIZE * 5, true, 2);
@@ -58,9 +63,10 @@ public class FireflyScene extends AbstractScene {
 			gameEngine.context.flyList.add(fly);
 		}
 	}
+
 	@Override
 	public Color getInfoColor() {
-		return Color.BLACK;
+		return Color.WHITE;
 	}
 
 }

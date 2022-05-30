@@ -32,7 +32,6 @@ public class Stone3DRenderer extends ObjectRenderer {
 	private GameObject				instance;
 	private float					lightIntensity				= 0f;
 	private boolean					lightIsOne					= false;
-//	private GameObject				rightInstance;
 	private final List<PointLight>	pointLight					= new ArrayList<>();
 	private Stone					stone;
 	private final Vector3			translation					= new Vector3();	// intermediate value
@@ -44,22 +43,10 @@ public class Stone3DRenderer extends ObjectRenderer {
 	@Override
 	public void create(final GameEngine gameEngine) {
 		if (instance == null) {
-			if (gameEngine.renderEngine.isPbr()) {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.stonePbr[stone.getType()].scene.model), stone);
-			} else {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.stone[stone.getType()].scene.model), stone);
-			}
+			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.stone[stone.getType()].scene.model), stone);
 			gameEngine.renderEngine.addDynamic(instance);
 			instance.update();
 		}
-//		if (rightInstance == null) {
-//			if (renderMaster.sceneManager.isPbr()) {
-//				rightInstance = new GameObject(new ModelInstanceHack(renderMaster.rightCubePbr[stone.getType()].scene.model), stone);
-//			} else {
-//				rightInstance = new GameObject(new ModelInstanceHack(renderMaster.cube[stone.getType()]), stone);
-//			}
-//		}
-
 	}
 
 	@Override
@@ -199,18 +186,6 @@ public class Stone3DRenderer extends ObjectRenderer {
 			pl.setPosition(translation);
 		}
 
-//		if (stone.isLeftAttached()) {
-//			renderMaster.sceneManager.removeDynamic(instance);
-//			renderMaster.sceneManager.addDynamic(rightInstance);
-//			rightInstance.instance.transform.setToTranslation(translation);
-//			if (stone.isVanishing()) {
-//				rightInstance.instance.transform.scale(fraction, fraction, fraction);
-//			} else {
-//				rightInstance.instance.transform.scale(1f, 1f, 1f);
-//			}
-//			rightInstance.update();
-//		}
-//		else
 		{
 			instance.instance.transform.setToTranslation(translation);
 			if (stone.isVanishing()) {
@@ -221,12 +196,6 @@ public class Stone3DRenderer extends ObjectRenderer {
 			instance.update();
 
 		}
-//		if (stone.isLeftAttached() || stone.isRightAttached() || stone.isVanishing()) {
-//			turnLightOn(renderMaster);
-//			tuneLightIntensity();
-//		} else {
-//			turnLightOff(renderMaster);
-//		}
 
 	}
 }

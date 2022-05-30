@@ -82,11 +82,7 @@ public class LevelManager extends Level implements Serializable {
 		float	dy			= (height);
 
 		Model	model;
-		if (gameEngine.renderEngine.isPbr()) {
-			model = gameEngine.modelManager.levelCubePbr;
-		} else {
-			model = gameEngine.modelManager.levelCube;
-		}
+		model = gameEngine.modelManager.levelCube;
 		// level back
 		int count = 0;
 		if (game.nrOfRows != 0) {

@@ -30,13 +30,8 @@ public class Digit3DRenderer extends ObjectRenderer {
 	@Override
 	public void create(final GameEngine gameEngine) {
 		if (instance == null) {
-			if (gameEngine.renderEngine.isPbr()) {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.levelCubePbr), null);
-			} else {
 				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.levelCube), null);
-			}
 			stone.getRenderModelInstances().add(instance);
-//			gameEngine.renderEngine.addStatic(instance);
 			translation.x = stone.x;
 			translation.y = -stone.y;
 			translation.z = stone.z;

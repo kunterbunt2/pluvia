@@ -146,12 +146,12 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	public void createMonument() {
 		{
-			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCubePbr[0]), null);
+			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCube[0]), null);
 			cube.instance.transform.setToTranslationAndScaling(0, -5, 0, 1f, 10f, 1f);
 			renderEngine.addStatic(cube.instance);
 		}
 		{
-			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCubePbr[0]), null);
+			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCube[0]), null);
 			cube.instance.transform.setToTranslationAndScaling(0, -10, 0, 10f, 1f, 10f);
 			renderEngine.addStatic(cube.instance);
 		}

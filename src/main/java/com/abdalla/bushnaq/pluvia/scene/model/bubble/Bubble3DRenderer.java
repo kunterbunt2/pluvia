@@ -24,7 +24,6 @@ public class Bubble3DRenderer extends ObjectRenderer {
 	private final Vector3			direction				= new Vector3();	// intermediate value
 	private Bubble					bubble;
 	private GameObject				instance;
-	// private GameObject poiInstance;
 	private float					lightIntensity			= 0f;
 	private boolean					lightIsOne				= false;
 	private final List<PointLight>	pointLight				= new ArrayList<>();
@@ -40,16 +39,9 @@ public class Bubble3DRenderer extends ObjectRenderer {
 	@Override
 	public void create(final GameEngine gameEngine) {
 		if (instance == null) {
-			if (gameEngine.renderEngine.isPbr()) {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.bubbleModelPbr[bubble.getType()].scene.model), null);
-//				poiInstance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.fishCubePbr[0]), fish);
-			} else {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.bubbleModel[bubble.getType()].scene.model), null);
-			}
+			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.bubbleModel[bubble.getType()].scene.model), null);
 			gameEngine.renderEngine.addDynamic(instance);
-//			gameEngine.renderEngine.addDynamic(poiInstance);
 			instance.update();
-//			poiInstance.update();
 		}
 	}
 
