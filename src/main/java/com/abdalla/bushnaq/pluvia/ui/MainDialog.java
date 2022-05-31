@@ -50,7 +50,7 @@ public class MainDialog extends AbstractDialog {
 	private void createGame(int gameIndex) {
 		if (getGameEngine().context.levelManager != null)
 			getGameEngine().context.levelManager.disposeLevel();
-		getGameEngine().context.selectGamee(gameIndex);
+		getGameEngine().context.selectGame(gameIndex);
 		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
 //		universe.GameThread.clearLevel();
 		getGameEngine().context.levelManager.readFromDisk();

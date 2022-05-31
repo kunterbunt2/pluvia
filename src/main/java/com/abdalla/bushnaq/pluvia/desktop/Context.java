@@ -35,13 +35,6 @@
  * -------------------------------------------------------------------------*/
 package com.abdalla.bushnaq.pluvia.desktop;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.GameList;
 import com.abdalla.bushnaq.pluvia.game.LevelManager;
@@ -55,8 +48,6 @@ import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.util.MercatorRandomGenerator;
-import com.badlogic.gdx.Graphics.Monitor;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 /**
  * @author kunterbunt
@@ -148,7 +139,7 @@ public class Context extends ApplicationProperties {
 		this.selected = selected;
 	}
 
-	public void selectGamee(int gameIndex) {
+	public void selectGame(int gameIndex) {
 		game = gameList.get(gameIndex);
 	}
 
@@ -156,4 +147,5 @@ public class Context extends ApplicationProperties {
 		levelManager.destroy();
 		levelManager = null;
 	}
+
 }

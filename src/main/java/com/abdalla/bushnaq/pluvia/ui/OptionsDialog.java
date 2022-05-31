@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.Sizes;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -23,6 +24,10 @@ public class OptionsDialog extends AbstractDialog {
 	private VisLabel	maxPointLightsLabel;
 	private VisSlider	maxSceneObjectsSlider;
 	private VisLabel	maxSceneObjectsLabel;
+	private VisCheckBox	pbrCheckBox;
+	private VisCheckBox	showFpsCheckBox;
+	private VisCheckBox	vsyncCheckBox;
+	private VisCheckBox	fullScreenModeCheckBox;
 
 	public OptionsDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		super(gameEngine, batch, inputMultiplexer);
@@ -46,6 +51,14 @@ public class OptionsDialog extends AbstractDialog {
 		createMaxPointLights(sizes);
 		getTable().row().pad(16);
 		createMaxSceneObjects(sizes);
+		getTable().row().pad(16);
+		createPbr(sizes);
+		getTable().row().pad(16);
+		createShowFps(sizes);
+		getTable().row().pad(16);
+		createVsync(sizes);
+		getTable().row().pad(16);
+		createFullScreenMode(sizes);
 		getTable().row().pad(16);
 		createButtons(sizes);
 
@@ -71,6 +84,10 @@ public class OptionsDialog extends AbstractDialog {
 				public void clicked(final InputEvent event, final float x, final float y) {
 					getGameEngine().context.restart = true;
 					getGameEngine().context.SetGraphicsQuality((int) graphicsQualitySlider.getValue());
+					getGameEngine().context.setPbr(pbrCheckBox.isChecked());
+					getGameEngine().context.setShowFps(showFpsCheckBox.isChecked());
+					getGameEngine().context.setVsync(vsyncCheckBox.isChecked());
+					getGameEngine().context.setFullScreenMode(fullScreenModeCheckBox.isChecked());
 					getGameEngine().context.write();
 					close();
 				}
@@ -156,7 +173,7 @@ public class OptionsDialog extends AbstractDialog {
 		{
 			VisLabel label = new VisLabel("Max Scene Objects");
 			label.setAlignment(Align.right);
-			getTable().add(label).width(BUTTON_WIDTH * sizes.scaleFactor);
+			getTable().add(label).width(LABEL_WIDTH * sizes.scaleFactor);
 		}
 		{
 			maxSceneObjectsSlider = new VisSlider(0f, 500f, 1f, false);
@@ -175,6 +192,54 @@ public class OptionsDialog extends AbstractDialog {
 			maxSceneObjectsLabel = new VisLabel("" + getGameEngine().context.getMaxSceneObjects());
 			maxSceneObjectsLabel.setAlignment(Align.right);
 			getTable().add(maxSceneObjectsLabel).width(100).center();
+		}
+	}
+
+	private void createPbr(Sizes sizes) {
+		{
+			VisLabel label = new VisLabel("Physical Based Rendering");
+			label.setAlignment(Align.right);
+			getTable().add(label);
+		}
+		{
+			pbrCheckBox = new VisCheckBox("", getGameEngine().context.getPbrModeProperty());
+			getTable().add(pbrCheckBox).colspan(1).colspan(1).left();
+		}
+	}
+
+	private void createShowFps(Sizes sizes) {
+		{
+			VisLabel label = new VisLabel("Show Frames Per Second");
+			label.setAlignment(Align.right);
+			getTable().add(label);
+		}
+		{
+			showFpsCheckBox = new VisCheckBox("", getGameEngine().context.getShowFpsProperty());
+			getTable().add(showFpsCheckBox).colspan(1).colspan(1).left();
+		}
+	}
+
+	private void createVsync(Sizes sizes) {
+		{
+			VisLabel label = new VisLabel("Vertical Synchronization");
+			label.setAlignment(Align.right);
+			getTable().add(label);
+		}
+		{
+			vsyncCheckBox = new VisCheckBox("", getGameEngine().context.getVsyncProperty());
+			getTable().add(vsyncCheckBox).colspan(1).colspan(1).left();
+		}
+	}
+
+	private void createFullScreenMode(Sizes sizes) {
+		{
+			VisLabel label = new VisLabel("Full Screen Mode");
+			label.setAlignment(Align.right);
+			getTable().add(label);
+		}
+		{
+			fullScreenModeCheckBox = new VisCheckBox("", getGameEngine().context.getFullscreenModeProperty());
+			getTable().add(fullScreenModeCheckBox).colspan(1).colspan(1).left();
 		}
 	}
 

@@ -35,13 +35,14 @@ public abstract class AbstractDialog {
 	protected static final Color	LIGHT_BLUE_COLOR	= new Color(0x1BA1E2FF);
 	protected static final int		DIALOG_WIDTH		= 150;
 	protected static final int		BUTTON_WIDTH		= 150;
+	protected static final int		LABEL_WIDTH			= 200;
 	private final Batch				batch;
 	private GameEngine				gameEngine;
 	private final InputMultiplexer	inputMultiplexer;
 	private List<InputProcessor>	inputProcessorCache	= new ArrayList<>();
 	// private float blurAmount = 1f;
-	//	private int						blurPasses			= 1;
-	//	private BlurMode				blurMode			= BlurMode.up;
+	// private int blurPasses = 1;
+	// private BlurMode blurMode = BlurMode.up;
 	final Logger					logger				= LoggerFactory.getLogger(this.getClass());
 	private Stage					stage;
 	private boolean					visible				= false;
@@ -74,6 +75,7 @@ public abstract class AbstractDialog {
 				});
 			}
 			stage.addListener(new InputListener() {
+
 				@Override
 				public boolean keyDown(InputEvent event, int keycode) {
 					switch (event.getKeyCode()) {
@@ -83,6 +85,7 @@ public abstract class AbstractDialog {
 					}
 					return false;
 				}
+
 			});
 		}
 		stage.addActor(createWindow(title));

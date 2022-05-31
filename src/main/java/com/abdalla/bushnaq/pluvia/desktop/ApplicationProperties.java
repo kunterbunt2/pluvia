@@ -18,7 +18,7 @@ public class ApplicationProperties {
 	private static final String		PLUVIA_SHOW_FPS				= "pluvia.showFps";
 	private static final String		PLUVIA_DEBUG_MODE			= "pluvia.debugMode";
 	private static final String		PLUVIA_VSYNC				= "pluvia.vsync";
-	private static final String		PLUVIA_PBR_MODE				= "pluvia.pbrMode";
+	private static final String		PLUVIA_PBR_MODE				= "pluvia.pbr";
 	private static final String		PLUVIA_FOREGROUND_FPS		= "pluvia.foregroundFPS";
 	protected static final String	PLUVIA_SHADOW_MAP_SIZE		= "pluvia.shadowMapSize";
 	private static final String		PLUVIA_GRAPHICS_QUALITY		= "pluvia.graphicsQuality";
@@ -64,23 +64,6 @@ public class ApplicationProperties {
 		}
 	}
 
-//	public int getMaxPointLights(int graphicsQuality) {
-//		switch (getGraphicsQuality()) {
-//		case 1:
-//			return 0;
-//		case 2:
-//			return 5;
-//		case 3:
-//			return 20;
-//		case 4:
-//			return 500;
-//		case 5:// custom
-//			return getMaxPointLights();
-//		default:
-//			return 0;
-//		}
-//	}
-
 	private void updateGrphicsQuality() {
 		if (getGraphicsQuality() < MAX_GRAPHICS_QUALITY) {
 			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "" + predefinedMaxPointLights[getGraphicsQuality()]);
@@ -88,35 +71,6 @@ public class ApplicationProperties {
 			properties.setProperty(PLUVIA_MSAA_SAMPLES, "" + predefinedMssaSamples[getGraphicsQuality()]);
 			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "" + predefinedMaxSceneObjects[getGraphicsQuality()]);
 		}
-//		switch (getGraphicsQuality()) {
-//		case 1:
-//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "0");
-//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "128");
-//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "0");
-//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "0");
-//			break;
-//		case 2:
-//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "5");
-//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "2024");
-//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "4");
-//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "100");
-//			break;
-//		case 3:
-//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "20");
-//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "4096");
-//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "16");
-//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "200");
-//			break;
-//		case 4:
-//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "500");
-//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "8192");
-//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "16");
-//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "500");
-//			break;
-//		case 5:// custom
-//			break;
-//
-//		}
 		logger.info("--- read following properties ---");
 		for (String property : properties.stringPropertyNames()) {
 			logger.info(String.format("%s=%s", property, properties.get(property)));
@@ -251,6 +205,34 @@ public class ApplicationProperties {
 	public void SetGraphicsQuality(int value) {
 		properties.setProperty(PLUVIA_GRAPHICS_QUALITY, "" + value);
 //		updateGrphicsQuality();
+	}
+
+	public void setPbr(boolean checked) {
+		if (checked)
+			properties.setProperty(PLUVIA_PBR_MODE, "true");
+		else
+			properties.setProperty(PLUVIA_PBR_MODE, "false");
+	}
+
+	public void setShowFps(boolean checked) {
+		if (checked)
+			properties.setProperty(PLUVIA_SHOW_FPS, "true");
+		else
+			properties.setProperty(PLUVIA_SHOW_FPS, "false");
+	}
+
+	public void setVsync(boolean checked) {
+		if (checked)
+			properties.setProperty(PLUVIA_VSYNC, "true");
+		else
+			properties.setProperty(PLUVIA_VSYNC, "false");
+	}
+
+	public void setFullScreenMode(boolean checked) {
+		if (checked)
+			properties.setProperty(PLUVIA_FULLSCREEN_MODE, "true");
+		else
+			properties.setProperty(PLUVIA_FULLSCREEN_MODE, "false");
 	}
 
 }
