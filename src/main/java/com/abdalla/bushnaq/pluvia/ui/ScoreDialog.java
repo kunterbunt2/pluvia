@@ -33,10 +33,15 @@ public class ScoreDialog extends AbstractDialog {
 		createStage("", true);
 	}
 
-	@Override
-	protected void close() {
-		pop();
-	};
+//	@Override
+//	protected void close() {
+//		pop();
+//	};
+//	@Override
+//	protected void enterAction() {
+//		close();
+////		close();
+//	}
 
 	@Override
 	public void update(final Context universe) {
@@ -88,7 +93,7 @@ public class ScoreDialog extends AbstractDialog {
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(final InputEvent event, final float x, final float y) {
-					ScoreDialog.this.close();
+					close();
 				}
 			});
 			getTable().add(button).colspan(4).center().width(BUTTON_WIDTH * sizes.scaleFactor).pad(16);

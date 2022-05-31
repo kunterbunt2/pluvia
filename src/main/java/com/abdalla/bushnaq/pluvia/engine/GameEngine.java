@@ -18,6 +18,7 @@ import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.ui.AboutDialog;
 import com.abdalla.bushnaq.pluvia.ui.MainDialog;
+import com.abdalla.bushnaq.pluvia.ui.OptionsDialog;
 import com.abdalla.bushnaq.pluvia.ui.PauseDialog;
 import com.abdalla.bushnaq.pluvia.ui.ScoreDialog;
 import com.badlogic.gdx.ApplicationListener;
@@ -28,8 +29,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.profiling.GLErrorListener;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
@@ -87,6 +88,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private MainDialog				mainDialog;
 	private AboutDialog				aboutDialog;
 	private PauseDialog				pauseDialog;
+	private OptionsDialog			optionsDialog;
 	private ScoreDialog				scoreDialog;
 	private boolean					showFps;
 
@@ -100,9 +102,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	@Override
 	public void create() {
 		try {
-			Gdx.gl.glEnable(0x884F);
-			if (Gdx.gl.glGetError() != 0)
-				logger.error("" + Gdx.gl.glGetError());
+//			Gdx.gl.glEnable(0x884F);
+//			if (Gdx.gl.glGetError() != 0)
+//				logger.error("" + Gdx.gl.glGetError());
 			profiler = new GLProfiler(Gdx.graphics);
 			profiler.setListener(GLErrorListener.LOGGING_LISTENER);// ---enable exception throwing in case of error
 			profiler.setListener(new MyGLErrorListener());
@@ -171,6 +173,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		mainDialog = new MainDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		aboutDialog = new AboutDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		pauseDialog = new PauseDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
+		optionsDialog = new OptionsDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		scoreDialog = new ScoreDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		mainDialog.setVisible(true);
 	}
@@ -364,10 +367,13 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	@Override
 	public void render() {
-		Gdx.gl.glEnable(0x884F);
-		int error = Gdx.gl.glGetError();
-		if (error != 0)
-			logger.error("glGetError=" + error);
+//		int error1 = Gdx.gl.glGetError();
+//		if (error1 != 0)
+//			logger.error("glGetError=" + error1);
+//		Gdx.gl.glEnable(0x884F);
+//		int error2 = Gdx.gl.glGetError();
+//		if (error2 != 0)
+//			logger.error("glGetError=" + error2);
 		try {
 			renderEngine.cpuGraph.begin();
 			context.advanceInTime();
@@ -379,6 +385,8 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			logger.error(e.getMessage(), e);
 			System.exit(0);
 		}
+		if (context.restart)
+			Gdx.app.exit();
 	}
 
 	private void render(final long currentTime) throws Exception {
@@ -401,7 +409,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 				Game game = context.game;
 				context.getScoreList().add(game.getName(), context.levelManager.getScore(), game.getSteps(), game.getRelativeTime(), System.getProperty("user.name")/* game.getUserName() */);
 				context.levelManager.tilt();
-				context.levelManager.destroyLevel();
+				context.levelManager.disposeLevel();
 				context.levelManager.writeToDisk();
 				if (!mainDialog.isVisible())
 					mainDialog.setVisible(true);
@@ -478,6 +486,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 		if (pauseDialog.isVisible()) {
 			pauseDialog.draw();
+		}
+		if (optionsDialog.isVisible()) {
+			optionsDialog.draw();
 		}
 		if (scoreDialog.isVisible()) {
 			scoreDialog.update(context);
@@ -564,6 +575,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	public AboutDialog getAboutDialog() {
 		return aboutDialog;
+	}
+
+	public OptionsDialog getOptionsDialog() {
+		return optionsDialog;
 	}
 
 }

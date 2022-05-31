@@ -18,16 +18,18 @@ public class AboutDialog extends AbstractDialog {
 		createStage("", true);
 	}
 
-	@Override
-	protected void close() {
-		AboutDialog.this.setVisible(false);
-		getGameEngine().getMainDialog().setVisible(true);
-	}
+//	@Override
+//	protected void close() {
+//		pop();
+////		AboutDialog.this.setVisible(false);
+////		getGameEngine().getMainDialog().setVisible(true);
+//	}
 
-	@Override
-	protected void enterAction() {
-		close();
-	}
+//	@Override
+//	protected void enterAction() {
+//		close();
+////		close();
+//	}
 
 	@Override
 	protected void create() {
@@ -52,7 +54,7 @@ public class AboutDialog extends AbstractDialog {
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(final InputEvent event, final float x, final float y) {
-					AboutDialog.this.close();
+					close();
 				}
 			});
 			getTable().add(button).center().width(BUTTON_WIDTH * sizes.scaleFactor).pad(16);

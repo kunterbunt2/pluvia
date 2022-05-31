@@ -18,10 +18,17 @@ public class PauseDialog extends AbstractDialog {
 		createStage("", true);
 	}
 
-	@Override
-	protected void enterAction() {
-		close();
+	protected void close() {
+		setVisible(false);
 	}
+//	@Override
+//	protected void enterAction() {
+//		setVisible(false);
+//	}
+//
+//	protected void escapeAction() {
+//		setVisible(false);
+//	}
 
 	@Override
 	public void create() {
@@ -40,7 +47,7 @@ public class PauseDialog extends AbstractDialog {
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(final InputEvent event, final float x, final float y) {
-					PauseDialog.this.close();
+					close();
 				}
 			});
 			getTable().add(button).center().width(BUTTON_WIDTH * sizes.scaleFactor);
@@ -64,9 +71,9 @@ public class PauseDialog extends AbstractDialog {
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(final InputEvent event, final float x, final float y) {
-					getGameEngine().context.levelManager.destroyLevel();
+					getGameEngine().context.levelManager.disposeLevel();
 					getGameEngine().context.levelManager.createLevel();
-					PauseDialog.this.close();
+					close();
 				}
 			});
 			getTable().add(button).center().width(BUTTON_WIDTH * sizes.scaleFactor);

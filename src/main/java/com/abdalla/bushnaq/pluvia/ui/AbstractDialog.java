@@ -40,8 +40,8 @@ public abstract class AbstractDialog {
 	private final InputMultiplexer	inputMultiplexer;
 	private List<InputProcessor>	inputProcessorCache	= new ArrayList<>();
 	// private float blurAmount = 1f;
-//	private int						blurPasses			= 1;
-//	private BlurMode				blurMode			= BlurMode.up;
+	//	private int						blurPasses			= 1;
+	//	private BlurMode				blurMode			= BlurMode.up;
 	final Logger					logger				= LoggerFactory.getLogger(this.getClass());
 	private Stage					stage;
 	private boolean					visible				= false;
@@ -66,7 +66,7 @@ public abstract class AbstractDialog {
 					public boolean keyDown(InputEvent event, int keycode) {
 						switch (event.getKeyCode()) {
 						case Input.Keys.ESCAPE:
-							AbstractDialog.this.close();
+							escapeAction();
 							return true;
 						}
 						return false;
@@ -78,7 +78,7 @@ public abstract class AbstractDialog {
 				public boolean keyDown(InputEvent event, int keycode) {
 					switch (event.getKeyCode()) {
 					case Input.Keys.ENTER:
-						AbstractDialog.this.enterAction();
+						enterAction();
 						return true;
 					}
 					return false;
@@ -97,7 +97,11 @@ public abstract class AbstractDialog {
 	}
 
 	protected void enterAction() {
+		close();
+	}
 
+	protected void escapeAction() {
+		close();
 	}
 
 	protected VisDialog createWindow(String title) {
@@ -112,7 +116,7 @@ public abstract class AbstractDialog {
 	}
 
 	protected void close() {
-		setVisible(false);
+		pop();
 	}
 
 	public void dispose() {

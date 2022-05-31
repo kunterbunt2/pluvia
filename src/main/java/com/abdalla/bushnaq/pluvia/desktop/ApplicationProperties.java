@@ -1,6 +1,7 @@
 package com.abdalla.bushnaq.pluvia.desktop;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -11,6 +12,8 @@ import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 public class ApplicationProperties {
+	public static final int			MAX_GRAPHICS_QUALITY		= 4;
+	private static final String		PLUVIA_PROPERTIES_FILE_NAME	= "config/pluvia.properties";
 	private static final String		PLUVIA_MAX_SCENE_OBJECTS	= "pluvia.maxSceneObjects";
 	private static final String		PLUVIA_SHOW_FPS				= "pluvia.showFps";
 	private static final String		PLUVIA_DEBUG_MODE			= "pluvia.debugMode";
@@ -29,52 +32,97 @@ public class ApplicationProperties {
 	private boolean					showGraphs;
 	public Properties				properties					= new Properties();
 	private int						maxSceneObjects;
+	public int						predefinedMaxPointLights[]	= { 0, 5, 10, 20 };
+	public int						predefinedShadowMapSize[]	= { 1024, 2048, 4096, 8192 };
+	public int						predefinedMssaSamples[]		= { 0, 4, 8, 16 };
+	public int						predefinedMaxSceneObjects[]	= { 0, 25, 50, 100 };
 
 	public ApplicationProperties() {
+		read();
+		updateGrphicsQuality();
+		debugMode = getDebugModeProperty();
+		showGraphs = getShowGraphsProperty();
+	}
+
+	public void write() {
 		try {
-			FileInputStream inStream = new FileInputStream("config/pluvia.properties");
+			FileOutputStream inStream = new FileOutputStream(PLUVIA_PROPERTIES_FILE_NAME);
+			properties.store(inStream, "");
+			inStream.close();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	private void read() {
+		try {
+			FileInputStream inStream = new FileInputStream(PLUVIA_PROPERTIES_FILE_NAME);
 			properties.load(inStream);
 			inStream.close();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		switch (getGraphicsQuality()) {
-		case 1:
-			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "0");
-			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "128");
-			properties.setProperty(PLUVIA_MSAA_SAMPLES, "0");
-			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "0");
-			break;
-		case 2:
-			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "5");
-			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "2024");
-			properties.setProperty(PLUVIA_MSAA_SAMPLES, "4");
-			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "100");
-			break;
-		case 3:
-			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "20");
-			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "4096");
-			properties.setProperty(PLUVIA_MSAA_SAMPLES, "16");
-			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "200");
-			break;
-		case 4:
-			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "500");
-			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "8192");
-			properties.setProperty(PLUVIA_MSAA_SAMPLES, "16");
-			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "500");
-			break;
-		case 5:// custom
-			break;
+	}
 
+//	public int getMaxPointLights(int graphicsQuality) {
+//		switch (getGraphicsQuality()) {
+//		case 1:
+//			return 0;
+//		case 2:
+//			return 5;
+//		case 3:
+//			return 20;
+//		case 4:
+//			return 500;
+//		case 5:// custom
+//			return getMaxPointLights();
+//		default:
+//			return 0;
+//		}
+//	}
+
+	private void updateGrphicsQuality() {
+		if (getGraphicsQuality() < MAX_GRAPHICS_QUALITY) {
+			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "" + predefinedMaxPointLights[getGraphicsQuality()]);
+			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "" + predefinedShadowMapSize[getGraphicsQuality()]);
+			properties.setProperty(PLUVIA_MSAA_SAMPLES, "" + predefinedMssaSamples[getGraphicsQuality()]);
+			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "" + predefinedMaxSceneObjects[getGraphicsQuality()]);
 		}
+//		switch (getGraphicsQuality()) {
+//		case 1:
+//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "0");
+//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "128");
+//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "0");
+//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "0");
+//			break;
+//		case 2:
+//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "5");
+//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "2024");
+//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "4");
+//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "100");
+//			break;
+//		case 3:
+//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "20");
+//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "4096");
+//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "16");
+//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "200");
+//			break;
+//		case 4:
+//			properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "500");
+//			properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "8192");
+//			properties.setProperty(PLUVIA_MSAA_SAMPLES, "16");
+//			properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "500");
+//			break;
+//		case 5:// custom
+//			break;
+//
+//		}
 		logger.info("--- read following properties ---");
 		for (String property : properties.stringPropertyNames()) {
 			logger.info(String.format("%s=%s", property, properties.get(property)));
 		}
 		logger.info("---");
 		maxSceneObjects = readIntegerProperty(PLUVIA_MAX_SCENE_OBJECTS, 10, 0, 500);
-		debugMode = getDebugModeProperty();
-		showGraphs = getShowGraphsProperty();
 	}
 
 	public boolean getFullscreenModeProperty() {
@@ -103,7 +151,7 @@ public class ApplicationProperties {
 	}
 
 	public int getGraphicsQuality() {
-		return readIntegerProperty(PLUVIA_GRAPHICS_QUALITY, 3, 1, 5);
+		return readIntegerProperty(PLUVIA_GRAPHICS_QUALITY, 2, 0, MAX_GRAPHICS_QUALITY);
 	}
 
 	private int readIntegerProperty(String propertyName, int propertyDefaultValue, int propertyMinValue, int propertyMaxValue) {
@@ -198,6 +246,11 @@ public class ApplicationProperties {
 
 	public boolean isDebugMode() {
 		return debugMode;
+	}
+
+	public void SetGraphicsQuality(int value) {
+		properties.setProperty(PLUVIA_GRAPHICS_QUALITY, "" + value);
+//		updateGrphicsQuality();
 	}
 
 }

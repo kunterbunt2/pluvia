@@ -49,7 +49,7 @@ public class MainDialog extends AbstractDialog {
 
 	private void createGame(int gameIndex) {
 		if (getGameEngine().context.levelManager != null)
-			getGameEngine().context.levelManager.destroyLevel();
+			getGameEngine().context.levelManager.disposeLevel();
 		getGameEngine().context.selectGamee(gameIndex);
 		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
 //		universe.GameThread.clearLevel();
@@ -130,8 +130,19 @@ public class MainDialog extends AbstractDialog {
 			button.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					MainDialog.this.setVisible(false);
-					getGameEngine().getAboutDialog().setVisible(true);
+					getGameEngine().getAboutDialog().push(MainDialog.this);
+				}
+			});
+			table1.add(button).center().width(BUTTON_WIDTH * sizes.scaleFactor);
+		}
+		{
+			table1.row();
+			VisTextButton button = new VisTextButton("Options");
+			addHoverEffect(button);
+			button.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					getGameEngine().getOptionsDialog().push(MainDialog.this);
 				}
 			});
 			table1.add(button).center().width(BUTTON_WIDTH * sizes.scaleFactor);

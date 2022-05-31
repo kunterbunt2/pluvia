@@ -83,6 +83,7 @@ public class Context extends ApplicationProperties {
 	public MercatorRandomGenerator	universeRG;
 //	private boolean					useFixedDelta	= false;
 	protected ScoreList				scoreList		= new ScoreList(3);
+	public boolean					restart			= false;
 
 	public Context() {
 		scoreList.init(gameList);
@@ -151,4 +152,8 @@ public class Context extends ApplicationProperties {
 		game = gameList.get(gameIndex);
 	}
 
+	public void dispose() {
+		levelManager.destroy();
+		levelManager = null;
+	}
 }

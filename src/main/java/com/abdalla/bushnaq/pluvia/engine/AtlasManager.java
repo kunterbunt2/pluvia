@@ -60,6 +60,7 @@ public class AtlasManager {
 			generator.dispose(); // don't forget to dispose to avoid memory leaks!
 			fontData.font = new BitmapFont(generateFont.getData(), atlas.findRegion(fontData.name), true);
 			packer.dispose();
+			generateFont.dispose();
 			fontData.font.setUseIntegerPositions(false);
 		}
 		modelFont = fontDataList[0].font;

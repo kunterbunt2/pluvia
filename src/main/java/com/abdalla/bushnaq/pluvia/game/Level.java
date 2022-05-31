@@ -122,7 +122,7 @@ public abstract class Level {
 
 	protected abstract Stone createStone(int x, int y, int type);
 
-	public abstract void destroyLevel();
+	public abstract void disposeLevel();
 
 	protected void dropStones() {
 		for (int y = height - 2; y >= preview; y--) {

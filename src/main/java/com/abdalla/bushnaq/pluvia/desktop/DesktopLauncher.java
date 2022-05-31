@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;
+import com.abdalla.bushnaq.pluvia.util.TimeUnit;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -11,28 +13,47 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
 
 public class DesktopLauncher {
-	private Logger	logger	= LoggerFactory.getLogger(this.getClass());
-	boolean			useOGL3	= true;
+	private static final int	UNIVERSE_GENERATION_RANDOM_SEED	= 1;
+	private static Logger		logger							= LoggerFactory.getLogger(DesktopLauncher.class);
+	boolean						useOGL3							= true;
+
+	public static void main(final String[] args) throws Exception {
+		logger.info(String.format("Starting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+		DesktopLauncher desktopLauncher = new DesktopLauncher();
+		desktopLauncher.loop();
+		logger.info(String.format("Shutting down pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+	}
 
 	/**
 	 * called by GameEngine to create Lwjgl3Application
 	 *
-	 * @param context
-	 * @param screen
 	 * @throws Exception
 	 */
-	public DesktopLauncher(final Context context, final GameEngine gameEngine) throws Exception {
-		final Lwjgl3ApplicationConfiguration config = createConfig(context);
-		logger.info("Lwjgl3Application ");
-		try {
-			new Lwjgl3Application(gameEngine, config);
+	public DesktopLauncher() throws Exception {
+//		loop();
+//		System.exit(0);
+	}
 
-		} catch (Throwable e) {
-			logger.error(e.getMessage(), e);
-			Thread.sleep(5000);
-		}
-		logger.info("DesktopLauncher constructed");
-		System.exit(0);
+	private void loop() throws Exception, InterruptedException {
+		boolean restart = false;
+		do {
+			if (restart)
+				logger.info(String.format("Restarting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+			final Context context = new Context();
+			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
+			final GameEngine						gameEngine	= new GameEngine(context);
+			final Lwjgl3ApplicationConfiguration	config		= createConfig(context);
+			logger.info("Lwjgl3Application ");
+			try {
+				context.restart = false;
+				new Lwjgl3Application(gameEngine, config);
+			} catch (Throwable e) {
+				logger.error(e.getMessage(), e);
+				Thread.sleep(5000);
+			}
+			context.dispose();
+			restart = context.restart;
+		} while (restart);
 	}
 
 	private Lwjgl3ApplicationConfiguration createConfig(Context context) {
@@ -48,7 +69,7 @@ public class DesktopLauncher {
 //		config.useOpenGL3(true, 3, 2);
 		config.setOpenGLEmulation(GLEmulation.GL30, 3, 2);
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, context.getMSAASamples());
-		config.setTitle("PLuvia");
+		config.setTitle("Pluvia");
 		config.setAutoIconify(false);
 		final Monitor[] monitors = Lwjgl3ApplicationConfiguration.getMonitors();
 		if (monitor < 0 || monitor >= monitors.length) {

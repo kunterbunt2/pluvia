@@ -55,6 +55,10 @@ public class LevelManager extends Level implements Serializable {
 		sceneList.put(GameName.UI.name(), new RainScene(gameEngine, rand, renderModelInstances));
 	}
 
+	public void destroy() {
+		disposeLevel();
+	}
+
 	private void addToEngine() {
 		for (GameObject uberModel : renderModelInstances) {
 			gameEngine.renderEngine.addStatic(uberModel);
@@ -162,7 +166,7 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	@Override
-	public void destroyLevel() {
+	public void disposeLevel() {
 		clear();
 		destroyLevelBackground();
 //		gameEngine.universe.selectRandomGame();

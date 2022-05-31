@@ -530,6 +530,8 @@ public class RenderEngine {
 	}
 
 	public void dispose() throws Exception {
+		staticCache.dispose();
+		dynamicCache.dispose();
 		vfxManager.dispose();
 		mercatorShaderProvider.dispose();
 		cpuGraph.dispose();
@@ -548,6 +550,8 @@ public class RenderEngine {
 			specularCubemap.dispose();
 			brdfLUT.dispose();
 		}
+		atlasManager.dispose();
+		Gdx.input.setInputProcessor(null);
 	}
 
 	public void end() {
