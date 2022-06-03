@@ -175,7 +175,7 @@ public class MainDialog extends AbstractDialog {
 			button.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					logger.info("quit game");
+//					logger.info("quit game");
 					Gdx.app.exit();
 				}
 			});

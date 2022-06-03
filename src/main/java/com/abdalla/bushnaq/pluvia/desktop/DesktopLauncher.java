@@ -30,8 +30,6 @@ public class DesktopLauncher {
 	 * @throws Exception
 	 */
 	public DesktopLauncher() throws Exception {
-//		loop();
-//		System.exit(0);
 	}
 
 	private void loop() throws Exception, InterruptedException {
@@ -43,7 +41,6 @@ public class DesktopLauncher {
 			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
 			final GameEngine						gameEngine	= new GameEngine(context);
 			final Lwjgl3ApplicationConfiguration	config		= createConfig(context);
-			logger.info("Lwjgl3Application ");
 			try {
 				context.restart = false;
 				new Lwjgl3Application(gameEngine, config);
@@ -57,10 +54,8 @@ public class DesktopLauncher {
 	}
 
 	private Lwjgl3ApplicationConfiguration createConfig(Context context) {
-		int	monitor			= 0;
-		int	foregroundFPS	= context.getForegroundFPSProperty();
-		monitor = context.getMonitorProperty();
-		Lwjgl3ApplicationConfiguration config;
+		int								foregroundFPS	= context.getForegroundFPSProperty();
+		Lwjgl3ApplicationConfiguration	config;
 		config = new Lwjgl3ApplicationConfiguration();
 		config.useVsync(context.getVsyncProperty());
 		config.setForegroundFPS(foregroundFPS);
@@ -70,19 +65,20 @@ public class DesktopLauncher {
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, context.getMSAASamples());
 		config.setTitle("Pluvia");
 		config.setAutoIconify(false);
-		final Monitor[] monitors = Lwjgl3ApplicationConfiguration.getMonitors();
-		if (monitor < 0 || monitor >= monitors.length) {
-			monitor = 0;
-			logger.error(String.format("pluvia.monitiro=%d cannot be negative or higher than the number of monitors %d.", monitor, monitors.length));
-		}
+		final Monitor[]		monitors		= Lwjgl3ApplicationConfiguration.getMonitors();
+		int					monitor			= context.getMonitorProperty();
+//		if (monitor < 0 || monitor >= monitors.length) {
+//			monitor = 0;
+//			logger.error(String.format("pluvia.monitiro=%d cannot be negative or higher than the number of monitors %d.", monitor, monitors.length));
+//		}
 		final DisplayMode	primaryMode		= Lwjgl3ApplicationConfiguration.getDisplayMode(monitors[monitor]);
 		boolean				fullScreenMode	= context.getFullscreenModeProperty();
 		if (fullScreenMode)
 			config.setFullscreenMode(primaryMode);
-		config.setWindowPosition(0, 0);
-		config.setWindowedMode(primaryMode.width, primaryMode.height);
+//		config.setWindowPosition(0, 0);
+//		config.setWindowedMode(primaryMode.width, primaryMode.height);
 		config.setMaximized(true);
-		config.setMaximizedMonitor(monitors[monitor]);
+//		config.setMaximizedMonitor(monitors[monitor]);
 		return config;
 	}
 

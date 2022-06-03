@@ -88,8 +88,13 @@ public class ApplicationProperties {
 	}
 
 	public int getMonitorProperty() {
-		final Monitor[] monitors = Lwjgl3ApplicationConfiguration.getMonitors();
-		return readIntegerProperty(PLUVIA_MONITOR, 0, 0, monitors.length);
+		final Monitor[]	monitors	= Lwjgl3ApplicationConfiguration.getMonitors();
+		int				monitor		= readIntegerProperty(PLUVIA_MONITOR, 0, 0, monitors.length);
+		if (monitor < 0 || monitor >= monitors.length) {
+			monitor = 0;
+			logger.error(String.format("pluvia.monitiro=%d cannot be negative or higher than the number of monitors %d.", monitor, monitors.length));
+		}
+		return monitor;
 	}
 
 	public int getMaxPointLights() {
