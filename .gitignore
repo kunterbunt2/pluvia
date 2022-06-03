@@ -10,3 +10,4 @@ config/*.xml
 pluvia.log
 *.gz
 screenshots/*
+app/config/*
