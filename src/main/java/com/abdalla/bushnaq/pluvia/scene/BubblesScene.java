@@ -20,7 +20,8 @@ public class BubblesScene extends AbstractScene {
 	@Override
 	public void create() {
 		super.create();
-		logo.setColor(Color.BLACK);
+		logo.setColor(getInfoColor());
+		version.setColor(getInfoColor());
 		gameEngine.renderEngine.setSkyBox(false);
 		gameEngine.renderEngine.setShadowEnabled(true);
 		// time

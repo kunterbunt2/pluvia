@@ -15,7 +15,8 @@ public class DeepSeaScene extends AbstractScene {
 	@Override
 	public void create() {
 		super.create();
-		logo.setColor(Color.WHITE);
+		logo.setColor(getInfoColor());
+		version.setColor(getInfoColor());
 		gameEngine.renderEngine.setShadowEnabled(false);
 		gameEngine.renderEngine.getFog().setColor(Color.BLUE);
 		gameEngine.renderEngine.getFog().setBeginDistance(13f);
