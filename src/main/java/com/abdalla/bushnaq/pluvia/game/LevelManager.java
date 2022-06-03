@@ -26,6 +26,7 @@ import com.abdalla.bushnaq.pluvia.scene.model.digit.DigitType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.math.Vector3;
 
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
@@ -90,18 +91,15 @@ public class LevelManager extends Level implements Serializable {
 		// level back
 		int count = 0;
 		if (game.nrOfRows != 0) {
-//		{
-//			Model m;
-//			if (gameEngine.renderEngine.isPbr()) {
-//				m = gameEngine.modelManager.backPlatePbr;
-//			} else {
+			//back side
+//			{
+//				Model m;
 //				m = gameEngine.modelManager.backPlate;
+//				GameObject cube = new GameObject(new ModelInstanceHack(m), null);
+//				cube.instance.transform.setToTranslationAndScaling(-0.5f, height / 2 + 0.75f, -0.5f, width, height - 0.5f, 1);
+//				cube.instance.transform.rotate(Vector3.X, 90);
+//				renderModelInstances.add(cube);
 //			}
-//			GameObject cube = new GameObject(new ModelInstanceHack(m), null);
-//			cube.instance.transform.setToTranslationAndScaling(-0.5f, height / 2 + 0.75f, -0.5f, width, height - 0.5f, 1);
-//			cube.instance.transform.rotate(Vector3.X, 90);
-//			renderModelInstances.add(cube);
-//		}
 			// left side
 			for (float y = height - 0.75f; y >= preview; y -= 0.5f) {
 				GameObject cube = new GameObject(new ModelInstanceHack(model), null);

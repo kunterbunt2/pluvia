@@ -56,7 +56,7 @@ public class ModelManager {
 
 	public void create(boolean isPbr) throws Exception {
 
-//		final Texture		texture			= new Texture(Gdx.files.internal("assets/tiles.png"));
+//		final Texture		texture			= new Texture(Gdx.files.internal(ASSETS_FOLDER+"/tiles.png"));
 		final ModelBuilder modelBuilder = new ModelBuilder();
 //		final ModelCreator	modelCreator	= new ModelCreator();
 		createStoneModels(isPbr);
@@ -79,7 +79,7 @@ public class ModelManager {
 			final Attribute	color		= new PBRColorAttribute(PBRColorAttribute.BaseColorFactor, Color.WHITE);
 			final Attribute	metallic	= PBRFloatAttribute.createMetallic(0.5f);
 			final Attribute	roughness	= PBRFloatAttribute.createRoughness(0.5f);
-			final Attribute	blending	= new BlendingAttribute(0.5f);											// opacity is set by pbrMetallicRoughness below
+			final Attribute	blending	= new BlendingAttribute(1.0f);											// opacity is set by pbrMetallicRoughness below
 			final Material	material	= new Material(metallic, roughness, color, blending);
 			backPlate = createSquare(modelBuilder, 0.5f, 0.5f, material);
 		} else {
@@ -113,13 +113,13 @@ public class ModelManager {
 		Color[] colors = new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD, Color.MAGENTA, Color.YELLOW, Color.BLACK };
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_FLY_MODELS; i++) {
-				firelyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/firefly.glb")));
+				firelyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/firefly.glb")));
 				Material m = firelyModel[i].scene.model.materials.get(0);
 				m.set(PBRColorAttribute.createBaseColorFactor(colors[i]));
 			}
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_FLY_MODELS; i++) {
-				firelyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/firefly.glb")));
+				firelyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/firefly.glb")));
 				removePbrNature(firelyModel[i]);
 				Material m = firelyModel[i].scene.model.materials.get(0);
 				m.set(ColorAttribute.createDiffuse(colors[i]));
@@ -136,7 +136,7 @@ public class ModelManager {
 //		Color[] colors = new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD, Color.MAGENTA, Color.YELLOW, Color.BLACK };
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_RAIN_MODELS; i++) {
-				rainModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/rain.glb")));
+				rainModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/rain.glb")));
 				Material		m			= rainModel[i].scene.model.materials.get(0);
 //				m.set(PBRColorAttribute.createBaseColorFactor(colors[i]));
 				final Attribute	blending	= new BlendingAttribute(0.9f);				// opacity is set by pbrMetallicRoughness below
@@ -144,7 +144,7 @@ public class ModelManager {
 			}
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_RAIN_MODELS; i++) {
-				rainModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/rain.glb")));
+				rainModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/rain.glb")));
 				removePbrNature(rainModel[i]);
 				Material		m			= rainModel[i].scene.model.materials.get(0);
 				final Attribute	blending	= new BlendingAttribute(0.3f);				// opacity is set by pbrMetallicRoughness below
@@ -157,14 +157,14 @@ public class ModelManager {
 //		Color[] colors = new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD, Color.MAGENTA, Color.YELLOW, Color.BLACK };
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_FIRELY_MODELS; i++) {
-				flyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/fly.glb")));
+				flyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/fly.glb")));
 //				Material m = flyModelPbr[i].scene.model.materials.get(0);
 //				m.set(PBRColorAttribute.createBaseColorFactor(colors[i]));
 			}
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_FIRELY_MODELS; i++) {
 
-				flyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/fly.glb")));
+				flyModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/fly.glb")));
 				removePbrNature(flyModel[i]);
 				ColorAttribute	color	= ColorAttribute.createDiffuse(Color.BLACK);
 				Material		m		= flyModel[i].scene.model.materials.get(0);
@@ -177,7 +177,7 @@ public class ModelManager {
 		Color[] colors = new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD, Color.MAGENTA, Color.YELLOW, Color.BLACK };
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_BUBBLE_MODELS; i++) {
-				bubbleModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/bubble.glb")));
+				bubbleModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/bubble.glb")));
 				Material m = bubbleModel[i].scene.model.materials.get(0);
 				m.set(PBRColorAttribute.createBaseColorFactor(colors[i]));
 				final Attribute blending = new BlendingAttribute(0.03f); // opacity is set by pbrMetallicRoughness below
@@ -186,7 +186,7 @@ public class ModelManager {
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_BUBBLE_MODELS; i++) {
 
-				bubbleModel[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/bubble.glb")));
+				bubbleModel[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/bubble.glb")));
 				removePbrNature(bubbleModel[i]);
 				Material m = bubbleModel[i].scene.model.materials.get(0);
 				m.set(ColorAttribute.createDiffuse(colors[i]));
@@ -258,14 +258,14 @@ public class ModelManager {
 
 	private void createStoneModels(boolean isPbr) {
 		Cube[] cubes = new Cube[] { //
-				new Cube(null, "assets/models/stone1.glb"), //
-				new Cube(null, "assets/models/stone2.glb"), //
-				new Cube(null, "assets/models/stone3.glb"), //
-				new Cube(null, "assets/models/stone4.glb"), //
-				new Cube(null, "assets/models/stone5.glb"), //
-				new Cube(null, "assets/models/stone6.glb"), //
-				new Cube(null, "assets/models/stone7.glb"), //
-				new Cube(null, "assets/models/stone8.glb") //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone1.glb"), //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone2.glb"), //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone3.glb"), //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone4.glb"), //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone5.glb"), //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone6.glb"), //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone7.glb"), //
+				new Cube(null, AtlasManager.ASSETS_FOLDER+"/models/stone8.glb") //
 		};
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_STONE_MODELS; i++) {
@@ -305,13 +305,13 @@ public class ModelManager {
 	private void createTutleModels(boolean isPbr) {
 		if (isPbr) {
 			for (int i = 0; i < MAX_NUMBER_OF_TURTLE_MODELS; i++) {
-				turtleCube[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/turtle.glb")));
+				turtleCube[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/turtle.glb")));
 //				Material m = turtleCubePbr[i].scene.model.materials.get(0);
 //				m.set(PBRColorAttribute.createBaseColorFactor(Color.BLACK));
 			}
 		} else {
 			for (int i = 0; i < MAX_NUMBER_OF_TURTLE_MODELS; i++) {
-				turtleCube[i] = new GLBLoader().load(Gdx.files.internal(String.format("assets/models/turtle.glb")));
+				turtleCube[i] = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.ASSETS_FOLDER+"/models/turtle.glb")));
 				removePbrNature(turtleCube[i]);
 //				Material			m	= turtleCube[i].scene.model.materials.get(0);
 //				PBRColorAttribute	ca	= (PBRColorAttribute) m.get(PBRColorAttribute.BaseColorFactor);

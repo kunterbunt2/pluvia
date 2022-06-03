@@ -13,6 +13,7 @@ import com.abdalla.bushnaq.pluvia.engine.shader.GameSettings;
 import com.abdalla.bushnaq.pluvia.engine.shader.MercatorPbrShaderProvider;
 import com.abdalla.bushnaq.pluvia.engine.shader.MercatorShaderProvider;
 import com.abdalla.bushnaq.pluvia.engine.shader.MercatorShaderProviderInterface;
+import com.abdalla.bushnaq.pluvia.engine.shader.MyPBRShader;
 import com.abdalla.bushnaq.pluvia.engine.shader.mirror.Mirror;
 import com.abdalla.bushnaq.pluvia.engine.shader.water.Water;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
@@ -326,7 +327,7 @@ public class RenderEngine {
 
 	private void createEnvironment() {
 		// shadow
-		int shadowMapSize = context.getShadowMapSizeProperty(4096);
+		int shadowMapSize = context.getShadowMapSizeProperty();
 		shadowLight = /* new DirectionalShadowLight(4048 * 2, 4048 * 2); */
 				new DirectionalShadowLight(shadowMapSize, shadowMapSize, GameSettings.SHADOW_VIEWPORT_WIDTH, GameSettings.SHADOW_VIEWPORT_HEIGHT, GameSettings.SHADOW_NEAR, GameSettings.SHADOW_FAR);
 		final Matrix4 m = new Matrix4();
@@ -1236,11 +1237,12 @@ public class RenderEngine {
 //		// iblBuilder.dispose();
 //	}
 	private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
-		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "assets/textures/" + name + "/diffuse/diffuse_", "_0." + diffuseExtension, EnvironmentUtil.FACE_NAMES_FULL);
-		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "assets/textures/" + name + "/environmentDay/environment_", "_0." + environmentExtension, EnvironmentUtil.FACE_NAMES_FULL);
-		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "assets/textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension,
+		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.ASSETS_FOLDER + "/textures/" + name + "/diffuse/diffuse_", "_0." + diffuseExtension, EnvironmentUtil.FACE_NAMES_FULL);
+		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.ASSETS_FOLDER + "/textures/" + name + "/environmentDay/environment_", "_0." + environmentExtension,
 				EnvironmentUtil.FACE_NAMES_FULL);
-		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "assets/textures/" + name + "/specular/specular_", "_", "." + specularExtension, specularIterations,
+		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.ASSETS_FOLDER + "/textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension,
+				EnvironmentUtil.FACE_NAMES_FULL);
+		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.ASSETS_FOLDER + "/textures/" + name + "/specular/specular_", "_", "." + specularExtension, specularIterations,
 				EnvironmentUtil.FACE_NAMES_FULL);
 		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
 

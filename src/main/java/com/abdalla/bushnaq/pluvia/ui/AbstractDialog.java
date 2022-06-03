@@ -19,10 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.VisUI.SkinScale;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -35,7 +34,7 @@ public abstract class AbstractDialog {
 	protected static final Color	LIGHT_BLUE_COLOR	= new Color(0x1BA1E2FF);
 	protected static final int		DIALOG_WIDTH		= 150;
 	protected static final int		BUTTON_WIDTH		= 150;
-	protected static final int		LABEL_WIDTH			= 200;
+	protected static final int		LABEL_WIDTH			= 250;
 	private final Batch				batch;
 	private GameEngine				gameEngine;
 	private final InputMultiplexer	inputMultiplexer;
@@ -87,11 +86,10 @@ public abstract class AbstractDialog {
 				}
 
 			});
+			stage.addActor(createWindow(title));
+			create();
+			packAndPosition();
 		}
-		stage.addActor(createWindow(title));
-		create();
-		packAndPosition();
-
 	}
 
 	protected void packAndPosition() {
@@ -109,9 +107,10 @@ public abstract class AbstractDialog {
 
 	protected VisDialog createWindow(String title) {
 		dialog = new VisDialog(title);
-		dialog.setColor(0.0f, 0.0f, 0.0f, 0.6f);
+		dialog.setColor(0.0f, 0.0f, 0.0f, 1.0f);
 		dialog.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		dialog.setMovable(false);
+		getDialog().setBackground((Drawable) null);
 //		table.setDebug(true);
 		table.pad(0, 16, 16, 16);
 		dialog.getContentTable().add(this.table);

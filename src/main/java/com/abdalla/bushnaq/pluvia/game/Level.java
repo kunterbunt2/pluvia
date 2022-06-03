@@ -17,6 +17,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.abdalla.bushnaq.pluvia.desktop.Context;
+import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.util.RcBoolean;
 import com.abdalla.bushnaq.pluvia.util.sound.Tools;
@@ -234,14 +236,14 @@ public abstract class Level {
 //								&& (Patch[x][y].isMovingLeft() == Patch[x - 1][y].isMovingLeft()))
 						stickyLeft = true;
 					if (stickyRight && !patch[x][y].isRightAttached()) {
-						Tools.play("assets/sound/sticky.wav");
+						Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/sticky.wav");
 						patch[x][y].setRightAttached(true);
 					}
 					if (!stickyRight && patch[x][y].isRightAttached()) {
 						patch[x][y].setRightAttached(false);
 					}
 					if (stickyLeft && !patch[x][y].isLeftAttached()) {
-						Tools.play("assets/sound/sticky.wav");
+						Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/sticky.wav");
 						patch[x][y].setLeftAttached(true);
 					}
 					if (!stickyLeft && patch[x][y].isLeftAttached()) {
@@ -628,12 +630,12 @@ public abstract class Level {
 		for (Stone stone : droppingStonesBuffer) {
 			// stones that where droopping but now cannto drop
 			// Vis.PlaySoundEffect(SOUND_EFFECT_DROP);
-			Tools.play("assets/sound/drop.wav");
+			Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/drop.wav");
 		}
 		droppingStonesBuffer.clear();
 
 		if (canVanish) {
-			Tools.play("assets/sound/Vanish.wav");
+			Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/Vanish.wav");
 			return GamePhase.vanishing;
 		}
 		markStickyPatches();
@@ -731,7 +733,7 @@ public abstract class Level {
 
 	public void writeToDisk() {
 		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(String.format("config/%s.xml", game.name))));
+			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(String.format(Context.CONFIG_FOLDER + "/%s.xml", game.name))));
 			write(encoder);
 			encoder.close();
 		} catch (FileNotFoundException e) {
@@ -744,7 +746,7 @@ public abstract class Level {
 		if (!game.name.equals(GameName.UI.name())) {
 			try {
 				XMLDecoder encoder;
-				encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(String.format("config/%s.xml", game.name))));
+				encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(String.format(Context.CONFIG_FOLDER + "/%s.xml", game.name))));
 				read(encoder);
 				encoder.close();
 			} catch (FileNotFoundException e) {

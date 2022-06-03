@@ -13,7 +13,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 public class ApplicationProperties {
 	public static final int			MAX_GRAPHICS_QUALITY		= 4;
-	private static final String		PLUVIA_PROPERTIES_FILE_NAME	= "config/pluvia.properties";
+	private static final String		PLUVIA_PROPERTIES_FILE_NAME	= Context.CONFIG_FOLDER + "/pluvia.properties";
 	private static final String		PLUVIA_MAX_SCENE_OBJECTS	= "pluvia.maxSceneObjects";
 	private static final String		PLUVIA_SHOW_FPS				= "pluvia.showFps";
 	private static final String		PLUVIA_DEBUG_MODE			= "pluvia.debugMode";
@@ -28,7 +28,7 @@ public class ApplicationProperties {
 	private static final String		PLUVIA_SHOW_GRAPHS			= "pluvia.showGraphs";
 	private static final String		PLUVIA_FULLSCREEN_MODE		= "pluvia.fullscreenMode";
 	private Logger					logger						= LoggerFactory.getLogger(this.getClass());
-	private boolean					debugMode;																// debug mode is allowed
+	private boolean					debugMode;																	// debug mode is allowed
 	private boolean					showGraphs;
 	public Properties				properties					= new Properties();
 	private int						maxSceneObjects;
@@ -120,7 +120,7 @@ public class ApplicationProperties {
 				}
 			} catch (NumberFormatException e) {
 				propertyValue = propertyDefaultValue;
-				logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue));
+				logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue, propertyMinValue, propertyMaxValue));
 			}
 		}
 		return propertyValue;
@@ -170,11 +170,11 @@ public class ApplicationProperties {
 		return false;
 	}
 
-	public int getShadowMapSizeProperty(int shadowMapSize) {
+	public int getShadowMapSizeProperty() {
 		return readMultipleOf2Property(PLUVIA_SHADOW_MAP_SIZE, 4096, 128, 8192);
 	}
 
-	public int getForegroundFPSProperty(int foregroundFPS) {
+	public int getForegroundFPSProperty() {
 		return readIntegerProperty(PLUVIA_FOREGROUND_FPS, 60, 25, 10000);
 	}
 
@@ -207,6 +207,10 @@ public class ApplicationProperties {
 //		updateGrphicsQuality();
 	}
 
+	public void setForegroundFps(int value) {
+		properties.setProperty(PLUVIA_FOREGROUND_FPS, "" + value);
+	}
+
 	public void setPbr(boolean checked) {
 		if (checked)
 			properties.setProperty(PLUVIA_PBR_MODE, "true");
@@ -233,6 +237,34 @@ public class ApplicationProperties {
 			properties.setProperty(PLUVIA_FULLSCREEN_MODE, "true");
 		else
 			properties.setProperty(PLUVIA_FULLSCREEN_MODE, "false");
+	}
+
+	public void setMaxPointLights(int value) {
+		properties.setProperty(PLUVIA_MAX_POINT_LIGHTS, "" + value);
+	}
+
+	public void setMaxSceneObjects(int value) {
+		properties.setProperty(PLUVIA_MAX_SCENE_OBJECTS, "" + value);
+	}
+
+	public void setDebugMode(boolean checked) {
+		properties.setProperty(PLUVIA_DEBUG_MODE, "" + checked);
+	}
+
+	public void setShadowMapSize(int value) {
+		properties.setProperty(PLUVIA_SHADOW_MAP_SIZE, "" + value);
+	}
+
+	public void setMsaaSamples(int value) {
+		properties.setProperty(PLUVIA_MSAA_SAMPLES, "" + value);
+	}
+
+	public void setMonitor(int value) {
+		properties.setProperty(PLUVIA_MONITOR, "" + value);
+	}
+
+	public void setShowGraphs(boolean checked) {
+		properties.setProperty(PLUVIA_SHOW_GRAPHS, "" + checked);
 	}
 
 }

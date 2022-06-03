@@ -1,12 +1,14 @@
 package com.abdalla.bushnaq.pluvia.util.sound;
 
+import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
+
 public class Tools {
 	static boolean		enable			= true;
 	static SoundManager	soundManager	= new SoundManager();
 
 	public static void beep() {
 		if (enable)
-			soundManager.play("assets/sound/ping.wav");
+			soundManager.play(AtlasManager.ASSETS_FOLDER+"/sound/ping.wav");
 	}
 
 	public static void error(final String format, final Object... arguments) {

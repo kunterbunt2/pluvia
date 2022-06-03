@@ -13,6 +13,8 @@ import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.abdalla.bushnaq.pluvia.desktop.Context;
+
 public class ScoreList extends HashMap<String, TreeSet<Score>> {
 	protected Logger	logger	= LoggerFactory.getLogger(this.getClass());
 	int					size;
@@ -80,7 +82,7 @@ public class ScoreList extends HashMap<String, TreeSet<Score>> {
 
 	protected void writeToDisk() {
 		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("config/score.xml")));
+			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(Context.CONFIG_FOLDER + "/score.xml")));
 			write(encoder);
 			encoder.close();
 		} catch (FileNotFoundException e) {
@@ -126,7 +128,7 @@ public class ScoreList extends HashMap<String, TreeSet<Score>> {
 	}
 
 	protected void readFromDisk() throws FileNotFoundException {
-		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream("config/score.xml")));
+		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.CONFIG_FOLDER + "/score.xml")));
 		read(encoder);
 		encoder.close();
 	}

@@ -3,6 +3,7 @@
  */
 package com.abdalla.bushnaq.pluvia.game;
 
+import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.util.sound.Tools;
 
@@ -124,7 +125,7 @@ public class Game {
 	protected boolean queryTilt(Stone patch[][]) {
 		for (int x = 0; x < nrOfColumns; x++) {
 			if (patch[x][preview] != null) {
-				Tools.play("assets/sound/tilt.wav");
+				Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/tilt.wav");
 				return true;
 			}
 		}

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -14,20 +15,21 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.VisUI.SkinScale;
 
 public class AtlasManager {
-	public TextureAtlas	atlas;
-	public BitmapFont	aeroFont;
-	public BitmapFont	modelFont;
-	public BitmapFont	logoFont;
-	public FontData[]	fontDataList	= {										//
-			new FontData("model-font", "assets/fonts/Roboto-Bold.ttf", 64),		//
-			new FontData("Aero-font", "assets/fonts/Aero.ttf", 128),			//
-			new FontData("logo-font", "assets/fonts/Roboto-Thin.ttf", 128),		//
-			new FontData("small-font", "assets/fonts/Roboto-Bold.ttf", 10),		//
-			new FontData("version-font", "assets/fonts/Roboto-Thin.ttf", 16),	//
+	public static final String	ASSETS_FOLDER	= "app/assets";
+	public TextureAtlas			atlas;
+	public BitmapFont			aeroFont;
+	public BitmapFont			modelFont;
+	public BitmapFont			logoFont;
+	public FontData[]			fontDataList	= {											//
+			new FontData("model-font", ASSETS_FOLDER + "/fonts/Roboto-Bold.ttf", 64),		//
+			new FontData("Aero-font", ASSETS_FOLDER + "/fonts/Aero.ttf", 128),				//
+			new FontData("logo-font", ASSETS_FOLDER + "/fonts/Roboto-Thin.ttf", 128),		//
+			new FontData("small-font", ASSETS_FOLDER + "/fonts/Roboto-Bold.ttf", 10),		//
+			new FontData("version-font", ASSETS_FOLDER + "/fonts/Roboto-Thin.ttf", 16),		//
 	};
-	AtlasRegion			systemTextureRegion;
-	public BitmapFont	smallFont;
-	public BitmapFont	versionFont;
+	AtlasRegion					systemTextureRegion;
+	public BitmapFont			smallFont;
+	public BitmapFont			versionFont;
 
 	public AtlasManager() {
 	}
@@ -43,6 +45,7 @@ public class AtlasManager {
 	public void init() {
 		initTextures();
 		initFonts();
+		atlas.getTextures().forEach(t -> t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear));
 	}
 
 	private void initFonts() {
@@ -71,7 +74,7 @@ public class AtlasManager {
 	}
 
 	private void initTextures() {
-		atlas = new TextureAtlas(Gdx.files.internal("assets/atlas/atlas.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal(ASSETS_FOLDER + "/atlas/atlas.atlas"));
 		systemTextureRegion = atlas.findRegion("system");
 		VisUI.load(SkinScale.X2);
 		VisUI.getSkin().getFont("default-font").getData().markupEnabled = true;

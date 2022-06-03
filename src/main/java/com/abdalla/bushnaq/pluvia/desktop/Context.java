@@ -53,6 +53,7 @@ import com.abdalla.bushnaq.pluvia.util.MercatorRandomGenerator;
  * @author kunterbunt
  */
 public class Context extends ApplicationProperties {
+	public static final String		CONFIG_FOLDER	= "app/config";
 	public static final float		WORLD_SCALE		= 2.0f;
 	public long						currentTime		= 8L * 10000;
 	private boolean					enableTime		= true;

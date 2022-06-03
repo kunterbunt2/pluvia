@@ -29,7 +29,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 
 public class MainDialog extends AbstractDialog {
 	protected static final int	DIALOG_HEIGHT	= 150 * 4;
-	VisList<String>				listView		= new VisList<>();
+	private VisList<String>		listView		= new VisList<>();
 	private VisTable			table1			= new VisTable(true);
 	private VisTable			table2			= new VisTable(true);
 	private VisTable			table3			= new VisTable(true);

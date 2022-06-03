@@ -58,9 +58,8 @@ public class DesktopLauncher {
 
 	private Lwjgl3ApplicationConfiguration createConfig(Context context) {
 		int	monitor			= 0;
-		int	foregroundFPS	= 60;
+		int	foregroundFPS	= context.getForegroundFPSProperty();
 		monitor = context.getMonitorProperty();
-		foregroundFPS = context.getForegroundFPSProperty(foregroundFPS);
 		Lwjgl3ApplicationConfiguration config;
 		config = new Lwjgl3ApplicationConfiguration();
 		config.useVsync(context.getVsyncProperty());

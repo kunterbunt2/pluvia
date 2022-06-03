@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.Sizes;
 import com.kotcrab.vis.ui.VisUI;
@@ -95,7 +96,7 @@ public class PauseDialog extends AbstractDialog {
 			getTable().add(button).center().width(BUTTON_WIDTH * sizes.scaleFactor).pad(16);
 		}
 
-		getTable().pack();
+//		getTable().pack();
 		positionWindow();
 	}
 

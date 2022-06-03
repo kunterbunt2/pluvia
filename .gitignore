@@ -8,5 +8,5 @@ target
 config/*.xml
 config/*.xml
 pluvia.log
-
-
+*.gz
+screenshots/*
