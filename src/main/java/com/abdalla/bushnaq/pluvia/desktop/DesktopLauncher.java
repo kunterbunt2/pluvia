@@ -64,7 +64,7 @@ public class DesktopLauncher {
 		config.setOpenGLEmulation(GLEmulation.GL30, 3, 2);
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, context.getMSAASamples());
 		config.setTitle("Pluvia");
-		config.setAutoIconify(false);
+		config.setAutoIconify(true);
 		final Monitor[]		monitors		= Lwjgl3ApplicationConfiguration.getMonitors();
 		int					monitor			= context.getMonitorProperty();
 //		if (monitor < 0 || monitor >= monitors.length) {
