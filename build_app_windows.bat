@@ -83,12 +83,13 @@ rem  --bind-services
 
 rem ------ PACKAGING ----------------------------------------------------------
 rem In the end we will find the package inside the target/installer directory.
+rem -%PROJECT_VERSION% ^
 
 call "%JAVA_HOME%\bin\jpackage" ^
   --type %INSTALLER_TYPE% ^
   --dest target/installer ^
   --input target/installer/input ^
-  --name Pluvia-%PROJECT_VERSION% ^
+  --name pluvia ^
   --main-class com.abdalla.bushnaq.pluvia.desktop.DesktopLauncher ^
   --main-jar libs/%MAIN_JAR% ^
   --java-options -Xmx2048m ^
@@ -101,6 +102,6 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --win-shortcut ^
   --win-per-user-install ^
   --win-menu ^
-  --temp target/temp ^
-  --verbose ^
-  --win-console
+  --temp target/temp
+rem   --verbose ^
+rem   --win-console
