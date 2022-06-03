@@ -26,6 +26,7 @@ xcopy /S /Q target\libs\* target\installer\input\libs\
 xcopy /S /Q target\assets\* target\installer\input\assets\
 xcopy /S /Q target\config\* target\installer\input\config\
 copy target\%MAIN_JAR% target\installer\input\libs\
+copy README.md target\installer\input\
 
 rem ------ REQUIRED MODULES ---------------------------------------------------
 rem Use jlink to detect all modules that are required to run the application.
@@ -98,6 +99,7 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --app-version %APP_VERSION% ^
   --vendor "Kunterbunt" ^
   --copyright "Copyright © 2022 Kunterbunt." ^
+  --license-file LICENSE ^
   --win-dir-chooser ^
   --win-shortcut ^
   --win-per-user-install ^

@@ -1,9 +1,36 @@
 # pluvia
+
 Pluvia, a computer game for rainy days.  
-Pluvia is written in Java using libgdx game library and the pbr extension gtx-gdx-gltf.
+It is relaxing and does not impose time pressure.
+Pluvia’s main target is to gain the highest score by keeping a steady growing pile of stones from reaching the top of the screen.  
+In a Pluvia game, stones of different color drop from above onto each other to form gradually a heap that will eventually reach the top of the screen and end the game. Each stone that drops into the game screen increments the score one point.  
+Whenever two or more stones of the same colour land on top of each other, they vanish and leave space for more stones to drop.  
+Whenever two or more stones of the same colour land beside each other, they glue to each other and form a bar. Bars are very annoying and you will end up trying to avoid them.  
+Each time some stones have dropped into the game screen, you can interact with the heap; You can click on one of the stones with the left or right mouse button to push it to the left or right. The stone will move into that direction as long as there is room, pushing any other stones with along with it.  
+This way you can heap stones of same colour on top of each other to make room.  
+If you do not want to move any stone, you can press the space key to force new stones to drop.  
+You can exit any game using the escape button and selecting ‘Exit’ in the ‘Game Menu’. You can always continue such a game.
+
+[Pluvia Web site](https://pluvia.bushnaq.de/)  
+[Pluvia github site](https://github.com/kunterbunt2/pluvia)  
+
+Pluvia is written in Java using
+[libgdx]( https://libgdx.com/) game library and the pbr extension [gdx-gltf]( https://github.com/mgsx-dev/gdx-gltf).
+
+
 ![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/05/pluvia-turtle-1.png)  
 
 ![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/05/pluvia-1.png)  
+
+
+# Installation
+Pluvia is released as a msi installer for Windows platform. This installer is however not digitally signed. This means that your Windows will warn you with a popup that the software could be 
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/windows-protected-your-pc-1.png)
+
+You need to select More info to see the next popup
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/windows-protected-your-pc-2.png)
+Now you can seelect Run anyway to start the installer.
+
 
 
 # Controls
@@ -30,34 +57,13 @@ These controls are only valid in debug mode
 |Middle mouse button|clicking and move mouse to tilt camera|
 
 # Configuration
-Pluvia can be configured usign the config/pluvia.propertries file.
+Pluvia can be configured in the Options dialog.
 
-| Property             |Default|Example                    | Description |
-|----------|-------------      |------                     |--------                          |
-|pluvia.foregroundFPS  |60     |pluvia.foregroundFPS=160   |frames per second to try to match |
-|pluvia.monitor        |0      |pluvia.monitor=1           |monitor to use, if more than one are connected, 0 is promary |
-|pluvia.vsync          |true   |pluvia.vsync=false         |virtual syn with monitor refresh rate |
-|pluvia.debugMode      |false  |pluvia.debugMode=true      |debug mode enabled, allows to pan the camera and see various fbos| 
-|pluvia.shadowMapSize  |4096   |pluvia.shadowMapSize=8192  |the bigger, the better, but you need enough video card ram|
-|pluvia.showFps        |false  |pluvia.showFps=true        |display frames per second in lower left corner|
-|pluvia.showGraphs     |false  |pluvia.showGraphs=true     |cpu/gpu graphs can be displayed using F6|
-|pluvia.fullscreenMode |true   |pluvia.fullscreenMode=false|window mode or full screen mode|
-|pluvia.pluvia.pbrMode |true   |pluvia.pluvia.pbrMode=false|enable/disable phisical based rendering|
-|pluvia.maxPointLights |20     |pluvia.maxPointLights=10   |configure maximum number of point lights the engine tries to render, this has a big impact on performance|
-|pluvia.graphicsQuality|3      |pluvia.graphicsQuality=1   |1=slow computer, 4=latest hardware|
+You can configure the performance of Pluvia to match your system, just slide the Graphics Quality slider to the positoin that works on your computer. The difference of performance on my computer is factor 20.
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/pluvia-options-1.png)
 
-# Graphics Quality
-With the pluvia.graphicsQuality setting following other settings are overwritten
-
-| Graphics Quality |pluvia.maxPointLights|pluvia.shadowMapSize|pluvia.msaaSamples|pluvia.maxSceneObjects|
-|---               |-------------        |------              |--------          |-----                 |
-|1                 |0                    |128                 |0                 |0                     |
-|2                 |5                    |2024                |4                 |100                   |
-|3                 |20                   |4096                |16                |200                   |
-|4                 |500                  |8192                |16                |500                   |
-|5                 |customizable         |customizable        |customizable      |customizable          |
-
-
+All other settings like multi monitor, full screen mode, etc. can be configured in the Graphics Tab of the Options dialog.
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/pluvia-options-2.png)  
 
 # How To Report a Bug
 Please contact me to report a bug or just create a ticket at https://github.com/kunterbunt2/pluvia/issues  
