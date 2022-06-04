@@ -12,30 +12,32 @@ import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 public class ApplicationProperties {
-	public static final int			MAX_GRAPHICS_QUALITY		= 4;
-	private static final String		PLUVIA_PROPERTIES_FILE_NAME	= Context.CONFIG_FOLDER + "/pluvia.properties";
-	private static final String		PLUVIA_MAX_SCENE_OBJECTS	= "pluvia.maxSceneObjects";
-	private static final String		PLUVIA_SHOW_FPS				= "pluvia.showFps";
-	private static final String		PLUVIA_DEBUG_MODE			= "pluvia.debugMode";
-	private static final String		PLUVIA_VSYNC				= "pluvia.vsync";
-	private static final String		PLUVIA_PBR_MODE				= "pluvia.pbr";
-	private static final String		PLUVIA_FOREGROUND_FPS		= "pluvia.foregroundFPS";
-	protected static final String	PLUVIA_SHADOW_MAP_SIZE		= "pluvia.shadowMapSize";
-	private static final String		PLUVIA_GRAPHICS_QUALITY		= "pluvia.graphicsQuality";
-	private static final String		PLUVIA_MSAA_SAMPLES			= "pluvia.msaaSamples";
-	private static final String		PLUVIA_MAX_POINT_LIGHTS		= "pluvia.maxPointLights";
-	private static final String		PLUVIA_MONITOR				= "pluvia.monitor";
-	private static final String		PLUVIA_SHOW_GRAPHS			= "pluvia.showGraphs";
-	private static final String		PLUVIA_FULLSCREEN_MODE		= "pluvia.fullscreenMode";
-	private Logger					logger						= LoggerFactory.getLogger(this.getClass());
-	private boolean					debugMode;																	// debug mode is allowed
+	public static final int			MAX_GRAPHICS_QUALITY			= 4;
+	private static final String		PLUVIA_PROPERTIES_FILE_NAME		= Context.CONFIG_FOLDER + "/pluvia.properties";
+	private static final String		PLUVIA_MAX_SCENE_OBJECTS		= "pluvia.maxSceneObjects";
+	private static final String		PLUVIA_SHOW_FPS					= "pluvia.showFps";
+	private static final String		PLUVIA_DEBUG_MODE				= "pluvia.debugMode";
+	private static final String		PLUVIA_VSYNC					= "pluvia.vsync";
+	private static final String		PLUVIA_PBR_MODE					= "pluvia.pbr";
+	private static final String		PLUVIA_FOREGROUND_FPS			= "pluvia.foregroundFPS";
+	protected static final String	PLUVIA_SHADOW_MAP_SIZE			= "pluvia.shadowMapSize";
+	private static final String		PLUVIA_GRAPHICS_QUALITY			= "pluvia.graphicsQuality";
+	private static final String		PLUVIA_MSAA_SAMPLES				= "pluvia.msaaSamples";
+	private static final String		PLUVIA_MAX_POINT_LIGHTS			= "pluvia.maxPointLights";
+	private static final String		PLUVIA_MONITOR					= "pluvia.monitor";
+	private static final String		PLUVIA_SHOW_GRAPHS				= "pluvia.showGraphs";
+	private static final String		PLUVIA_FULLSCREEN_MODE			= "pluvia.fullscreenMode";
+	private static final String		PLUVIA_AMBIENT_AUDIO			= "pluvia.ambientAudio";
+	private static final String		PLUVIA_AMBIENT_AUDIO_VOLUMEN	= "pluvia.ambientAudioVolumen";
+	private Logger					logger							= LoggerFactory.getLogger(this.getClass());
+	private boolean					debugMode;																		// debug mode is allowed
 	private boolean					showGraphs;
-	public Properties				properties					= new Properties();
+	public Properties				properties						= new Properties();
 	private int						maxSceneObjects;
-	public int						predefinedMaxPointLights[]	= { 0, 5, 10, 20 };
-	public int						predefinedShadowMapSize[]	= { 1024, 2048, 4096, 8192 };
-	public int						predefinedMssaSamples[]		= { 0, 4, 8, 16 };
-	public int						predefinedMaxSceneObjects[]	= { 0, 25, 50, 100 };
+	public int						predefinedMaxPointLights[]		= { 0, 5, 10, 20 };
+	public int						predefinedShadowMapSize[]		= { 1024, 2048, 4096, 8192 };
+	public int						predefinedMssaSamples[]			= { 0, 4, 8, 16 };
+	public int						predefinedMaxSceneObjects[]		= { 0, 25, 50, 100 };
 
 	public ApplicationProperties() {
 		read();
@@ -270,6 +272,22 @@ public class ApplicationProperties {
 
 	public void setShowGraphs(boolean checked) {
 		properties.setProperty(PLUVIA_SHOW_GRAPHS, "" + checked);
+	}
+
+	public boolean getAmbientAudioProperty() {
+		return readBooleanProperty(PLUVIA_AMBIENT_AUDIO, false);
+	}
+
+	public void setAmbientAudio(boolean checked) {
+		properties.setProperty(PLUVIA_AMBIENT_AUDIO, "" + checked);
+	}
+
+	public void setAmbientAudioVolumen(int value) {
+		properties.setProperty(PLUVIA_AMBIENT_AUDIO_VOLUMEN, "" + value);
+	}
+
+	public int getAmbientAudioVolumenProperty() {
+		return readIntegerProperty(PLUVIA_AMBIENT_AUDIO_VOLUMEN, 1, 1, 100);
 	}
 
 }

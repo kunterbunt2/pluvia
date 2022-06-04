@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import com.abdalla.bushnaq.audio.synthesis.AudioEngine;
+import com.abdalla.bushnaq.audio.synthesis.MercatorAudioEngine;
+import com.abdalla.bushnaq.audio.synthesis.Mp3Player;
+import com.abdalla.bushnaq.audio.synthesis.OpenAlException;
+import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.game.LevelManager;
 import com.badlogic.gdx.Gdx;
@@ -12,13 +17,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.Sizes;
 import com.kotcrab.vis.ui.VisUI;
@@ -34,16 +33,43 @@ public class MainDialog extends AbstractDialog {
 	private VisTable			table2			= new VisTable(true);
 	private VisTable			table3			= new VisTable(true);
 	private VisLabel			descriptionLabel;
+	Mp3Player					mp3Player;
+	public AudioEngine			audioEngine		= new MercatorAudioEngine();
 
 	public MainDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		super(gameEngine, batch, inputMultiplexer);
 		createStage("", false);
 	}
 
+	public void draw() {
+		super.draw();
+		try {
+			audioEngine.begin(getGameEngine().renderEngine.getCamera());
+			audioEngine.end();
+		} catch (OpenAlException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
 	public void setVisible(final boolean visible) {
 		super.setVisible(visible);
 		if (visible) {
 			createGame(6);
+			if (getGameEngine().context.getAmbientAudioProperty()) {
+				try {
+					audioEngine.create();
+//				audioEngine.enableHrtf(0);
+					mp3Player = audioEngine.createAudioProducer(Mp3Player.class);
+					mp3Player.setFile(Gdx.files.internal(AtlasManager.ASSETS_FOLDER + "/sound/pluvia.ogg"));
+					mp3Player.setGain(((float) getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
+					mp3Player.play();
+					AudioEngine.checkAlError("Failed to set listener orientation with error #");
+				} catch (OpenAlException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		} else {
+			disposeAudio();
 		}
 	}
 
@@ -217,5 +243,23 @@ public class MainDialog extends AbstractDialog {
 			}
 		}
 		return resultStringBuilder.toString();
+	}
+
+	@Override
+	public void dispose() {
+		disposeAudio();
+		super.dispose();
+	}
+
+	private void disposeAudio() {
+		if (mp3Player != null) {
+			try {
+				mp3Player.dispose();
+				mp3Player = null;
+				audioEngine.dispose();
+			} catch (OpenAlException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
 	}
 }

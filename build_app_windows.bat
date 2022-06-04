@@ -84,7 +84,6 @@ rem  --bind-services
 
 rem ------ PACKAGING ----------------------------------------------------------
 rem In the end we will find the package inside the target/installer directory.
-rem -%PROJECT_VERSION% ^
 
 call "%JAVA_HOME%\bin\jpackage" ^
   --type %INSTALLER_TYPE% ^

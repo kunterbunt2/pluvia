@@ -189,8 +189,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	@Override
 	public void dispose() {
 		try {
-			// if (mp3Player != null)
-			// mp3Player.dispose();
 			if (profiler.isEnabled()) {
 				profiler.disable();
 			}

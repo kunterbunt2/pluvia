@@ -39,9 +39,9 @@ public abstract class AbstractDialog {
 	private GameEngine				gameEngine;
 	private final InputMultiplexer	inputMultiplexer;
 	private List<InputProcessor>	inputProcessorCache	= new ArrayList<>();
-	// private float blurAmount = 1f;
-	// private int blurPasses = 1;
-	// private BlurMode blurMode = BlurMode.up;
+//	private float					blurAmount			= 1f;
+//	private int						blurPasses			= 1;
+//	private BlurMode				blurMode			= BlurMode.up;
 	final Logger					logger				= LoggerFactory.getLogger(this.getClass());
 	private Stage					stage;
 	private boolean					visible				= false;
@@ -203,9 +203,10 @@ public abstract class AbstractDialog {
 			}
 			inputMultiplexer.clear();
 			inputMultiplexer.addProcessor(stage);
-			gameEngine.renderEngine.updateBlurEffect(1, 1f);
+//			gameEngine.renderEngine.updateBlurEffect(1, 1f);
 //			gameEngine.renderEngine.addBlurEffect();
-			gameEngine.renderEngine.updateBlurEffect(2, 1f);
+//			gameEngine.renderEngine.updateBlurEffect(32, 1f);
+//			gameEngine.renderEngine.addBloomEffect();
 //			blurMode = BlurMode.up;
 //			blurAmount = 1f;
 //			blurPasses = 1;
@@ -216,7 +217,8 @@ public abstract class AbstractDialog {
 			}
 			inputProcessorCache.clear();
 //			blurMode = BlurMode.down;
-			gameEngine.renderEngine.removeBlurEffect();
+//			gameEngine.renderEngine.removeBlurEffect();
+//			gameEngine.renderEngine.removeBloomEffect();
 			afterInvisible();
 		}
 	}
