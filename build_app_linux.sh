@@ -28,9 +28,11 @@ rm -rfd ./target/java-runtime/
 rm -rfd target/installer/
 
 mkdir -p target/installer/input/libs/
+mkdir -p target/installer/input/assets
+mkdir -p target/installer/input/config
 
 cp target/libs/* target/installer/input/libs/
-cp target/assets/* target/installer/input/assets/
+cp -r target/assets/* target/installer/input/assets/
 cp target/config/* target/installer/input/config/
 cp target/${MAIN_JAR} target/installer/input/libs/
 cp README.md target/installer/input/
@@ -89,9 +91,9 @@ $JAVA_HOME/bin/jlink \
 # In the end we will find the package inside the target/installer directory.
 
 echo "Creating installer of type $INSTALLER_TYPE"
+#--type $INSTALLER_TYPE \
 
 $JAVA_HOME/bin/jpackage \
---type $INSTALLER_TYPE \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \
@@ -103,9 +105,7 @@ $JAVA_HOME/bin/jpackage \
 --app-version ${APP_VERSION} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
---license-file LICENSE \
---linux-shortcut \
---linux-menu-group \
---verbose \
---win-console
-
+--verbose
+#--license-file LICENSE \
+#--linux-shortcut \
+#--linux-menu-group \

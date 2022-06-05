@@ -12,6 +12,7 @@ import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALCapabilities;
+import org.lwjgl.openal.ALUtil;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTHRTF;
@@ -23,16 +24,17 @@ import com.badlogic.gdx.math.Vector3;
 import com.scottlogic.util.UnsortedList;
 
 /**
- * SoundEngine manages Synthesizer instances and caches them when they are not used
- * Synthesizer need to be all of the same type
- * Synthesizer must be reinitialized when reusing them
+ * SoundEngine manages Synthesizer instances and caches them when they are not
+ * used Synthesizer need to be all of the same type Synthesizer must be
+ * reinitialized when reusing them
+ * 
  * @author abdalla bushnaq
  *
  */
 public class AudioEngine {
 	private static ALCapabilities alCapabilities;
 	private static ALCCapabilities alcCapabilities;
-	private static long device;
+	private static long device = 0;
 	private static Logger logger = LoggerFactory.getLogger(AudioEngine.class);
 	private static final int START_RADIUS = 1500;
 	private static final int STOP_RADIUS = 2000;
@@ -56,6 +58,8 @@ public class AudioEngine {
 	}
 
 	public static void checkAlError(final String message) throws OpenAlException {
+		if (device == 0)
+			return;
 		final int error = AL10.alGetError();
 		if (error != AL10.AL_NO_ERROR) {
 			final String msg = message + error + " " + getALErrorString(error);
@@ -65,9 +69,8 @@ public class AudioEngine {
 	}
 
 	/**
-	   * 1) Identify the error code.
-	   * 2) Return the error as a string.
-	   */
+	 * 1) Identify the error code. 2) Return the error as a string.
+	 */
 	public static String getALCErrorString(final int err) {
 		switch (err) {
 		case ALC10.ALC_NO_ERROR:
@@ -88,9 +91,8 @@ public class AudioEngine {
 	}
 
 	/**
-	   * 1) Identify the error code.
-	   * 2) Return the error as a string.
-	   */
+	 * 1) Identify the error code. 2) Return the error as a string.
+	 */
 	public static String getALErrorString(final int err) {
 		switch (err) {
 		case AL10.AL_NO_ERROR:
@@ -114,31 +116,33 @@ public class AudioEngine {
 
 	private final int bits;
 
-	//	private MovingCamera camera;
+	// private MovingCamera camera;
 
 	private long context;
-	private final Vector3 direction = new Vector3();//direction of the listener (what direction is he looking to)
-	private final float disableRadius2 = STOP_RADIUS * STOP_RADIUS;//all audio streams that are located further away will be stopped and removed
+	private final Vector3 direction = new Vector3();// direction of the listener (what direction is he looking to)
+	private final float disableRadius2 = STOP_RADIUS * STOP_RADIUS;// all audio streams that are located further away
+																	// will be stopped and removed
 	private int effect;
 	private int enabledAudioSourceCount = 0;
-	private final float enableRadius2 = START_RADIUS * START_RADIUS;//an audio streams that gets closer will get added and started
+	private final float enableRadius2 = START_RADIUS * START_RADIUS;// an audio streams that gets closer will get added
+																	// and started
 	Map<String, AbstractSynthesizerFactory<? extends AudioProducer>> factoryMap = new HashMap<>();
 	private int maxMonoSources = 0;
-	private final Vector3 position = new Vector3();//position of the listener
+	private final Vector3 position = new Vector3();// position of the listener
 	private final int samplerate;
 	private final int samples;
-	//	private final SynthesizerFactory<T> synthFactory;
+	// private final SynthesizerFactory<T> synthFactory;
 	private final List<AudioProducer> synths = new UnsortedList<>();
 	private final List<OpenAlSource> unusedSources = new ArrayList<>();
-	private final Vector3 up = new Vector3();//what is up direction for the listener?
+	private final Vector3 up = new Vector3();// what is up direction for the listener?
 
-	private final Vector3 velocity = new Vector3();//the velocity of the listener
+	private final Vector3 velocity = new Vector3();// the velocity of the listener
 
-	public AudioEngine(final int samples, final int samplerate, final int bits/*, final int channels*/) {
+	public AudioEngine(final int samples, final int samplerate, final int bits/* , final int channels */) {
 		this.samples = samples;
 		this.samplerate = samplerate;
 		this.bits = bits;
-		//		this.channels = channels;
+		// this.channels = channels;
 	}
 
 	public void add(final AbstractSynthesizerFactory<? extends AudioProducer> factory) {
@@ -146,35 +150,43 @@ public class AudioEngine {
 	}
 
 	public void begin(final MovingCamera camera) throws OpenAlException {
-		//		this.camera = camera;
-		//did we move since last update?
-		//		if (!position.equals(camera.position) || !up.equals(camera.up) || !direction.equals(camera.direction) || !velocity.equals(camera.velocity)) {
-		//			position.set(camera.position.x, camera.position.y, camera.position.z);
-		//			up.set(camera.up.x, camera.up.y, camera.up.z);
-		//			direction.set(camera.direction.x, camera.direction.y, camera.direction.z);
-		//			velocity.set(camera.velocity.x, camera.velocity.y, camera.velocity.z);
-		//			updateCamera();
-		//		}
-		if (!position.equals(camera.position) || !up.equals(camera.up) || !direction.equals(camera.direction) || !velocity.equals(camera.velocity)) {
-			position.set(camera.position.x, camera.position.y, camera.position.z);//isometric view with camera hight but lookat location
+		// this.camera = camera;
+		// did we move since last update?
+		// if (!position.equals(camera.position) || !up.equals(camera.up) ||
+		// !direction.equals(camera.direction) || !velocity.equals(camera.velocity)) {
+		// position.set(camera.position.x, camera.position.y, camera.position.z);
+		// up.set(camera.up.x, camera.up.y, camera.up.z);
+		// direction.set(camera.direction.x, camera.direction.y, camera.direction.z);
+		// velocity.set(camera.velocity.x, camera.velocity.y, camera.velocity.z);
+		// updateCamera();
+		// }
+		if (!position.equals(camera.position) || !up.equals(camera.up) || !direction.equals(camera.direction)
+				|| !velocity.equals(camera.velocity)) {
+			position.set(camera.position.x, camera.position.y, camera.position.z);// isometric view with camera hight
+																					// but lookat location
 			up.set(camera.up.x, camera.up.y, camera.up.z);
-			direction.set(camera.direction.x, camera.direction.y, camera.direction.z);//ignore y axis in isometric game?
+			direction.set(camera.direction.x, camera.direction.y, camera.direction.z);// ignore y axis in isometric
+																						// game?
 			velocity.set(camera.velocity.x, camera.velocity.y, camera.velocity.z);
 			updateCamera();
 		}
 		cullSynths();
 	}
 
-	//	MercatorSynthesizerFactory mercatorSynthesizerFactory = new MercatorSynthesizerFactory();
-	//	Mp3PlayerFactory mp3PlayerFactory = new Mp3PlayerFactory();
+	// MercatorSynthesizerFactory mercatorSynthesizerFactory = new
+	// MercatorSynthesizerFactory();
+	// Mp3PlayerFactory mp3PlayerFactory = new Mp3PlayerFactory();
 
 	public void create() throws OpenAlException {
-		//		List<String> list = ALUtil.getStringList(0, ALC10.ALC_DEVICE_SPECIFIER/*, EnumerateAllExt.ALC_DEFAULT_ALL_DEVICES_SPECIFIER*/);
+//		List<String> list = ALUtil.getStringList(0, ALC10.ALC_DEVICE_SPECIFIER/*EnumerateAllExt.ALC_DEFAULT_ALL_DEVICES_SPECIFIER*/);
+
 		final String deviceinfo = ALC10.alcGetString(0, EnumerateAllExt.ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
 		logger.info("Device: " + deviceinfo);
 		device = ALC10.alcOpenDevice(deviceinfo);
-		if (device == 0)
-			throw new RuntimeException("Couldn't find such device");
+		if (device == 0) {
+			logger.error(String.format("Could not open openal device '%s', sound will be disabled.", deviceinfo));
+			return;
+		}
 		final int[] attributes = new int[] { ALC11.ALC_MONO_SOURCES, 1, 0 };
 		context = ALC10.alcCreateContext(device, attributes);
 		final boolean b = ALC10.alcMakeContextCurrent(context);
@@ -201,11 +213,11 @@ public class AudioEngine {
 			}
 			final int index = 0;
 
-			//enable hrtf
-			//			enableHrtf(index);
+			// enable hrtf
+			// enableHrtf(index);
 
 		}
-		//		disableHrtf(0);
+		// disableHrtf(0);
 
 		for (int i = 0; i < attrs.length; ++i) {
 			if (attrs[i] == ALC11.ALC_MONO_SOURCES) {
@@ -214,6 +226,10 @@ public class AudioEngine {
 		}
 		setListenerOrientation(new Vector3(0, 0, -1), new Vector3(0, 1, 0));
 		createAuxiliaryEffectSlot();
+	}
+
+	public boolean isCreated() {
+		return device != 0;
 	}
 
 	public <T extends AudioProducer> T createAudioProducer(final Class<T> clazz) throws OpenAlException {
@@ -226,15 +242,15 @@ public class AudioEngine {
 			}
 		}
 
-		//		if (MercatorSynthesizer.class.isAssignableFrom(clazz)) {
-		//			T audioProducer = (T) mercatorSynthesizerFactory.createSynth();
-		//			synths.add(audioProducer);
-		//			return audioProducer;
-		//		} else if (Mp3Player.class.isAssignableFrom(clazz)) {
-		//			T audioProducer = (T) mp3PlayerFactory.createSynth();
-		//			synths.add(audioProducer);
-		//			return audioProducer;
-		//		}
+		// if (MercatorSynthesizer.class.isAssignableFrom(clazz)) {
+		// T audioProducer = (T) mercatorSynthesizerFactory.createSynth();
+		// synths.add(audioProducer);
+		// return audioProducer;
+		// } else if (Mp3Player.class.isAssignableFrom(clazz)) {
+		// T audioProducer = (T) mp3PlayerFactory.createSynth();
+		// synths.add(audioProducer);
+		// return audioProducer;
+		// }
 		return null;
 	}
 
@@ -264,22 +280,24 @@ public class AudioEngine {
 	}
 
 	/**
-	 * There is a limit of supported audio sources
-	 * All synthesizers that are further away than disableRadius will be disabled and their audio source unassigned.
-	 * All synthesizers that are nearer than enableRadius will be enabled and assigned an audio source.
+	 * There is a limit of supported audio sources All synthesizers that are further
+	 * away than disableRadius will be disabled and their audio source unassigned.
+	 * All synthesizers that are nearer than enableRadius will be enabled and
+	 * assigned an audio source.
+	 * 
 	 * @throws OpenAlException
 	 */
 	private void cullSynths() throws OpenAlException {
 		enabledAudioSourceCount = 0;
 		for (final AudioProducer synth : synths) {
 			if (position.dst2(synth.getPosition()) > disableRadius2) {
-				//disable synth
+				// disable synth
 				disableSynth(synth);
 			} else if (position.dst2(synth.getPosition()) < enableRadius2) {
-				//enable synth
+				// enable synth
 				enableSynth(synth);
 			} else {
-				//synth should stay as it is now
+				// synth should stay as it is now
 				if (synth.isEnabled())
 					enabledAudioSourceCount++;
 			}
@@ -287,6 +305,8 @@ public class AudioEngine {
 	}
 
 	public void disableHrtf(final int index) throws OpenAlException {
+		if (device == 0)
+			return;
 		int i = 0;
 		final int[] attr = new int[5];
 		attr[i++] = SOFTHRTF.ALC_HRTF_SOFT;
@@ -299,7 +319,8 @@ public class AudioEngine {
 		attr[i] = 0;
 		if (!SOFTHRTF.alcResetDeviceSOFT(device, attr))
 			checkAlcError(String.format("Failed to reset device: %s", device));
-		//				printf("Failed to reset device: %s\n", alcGetString(device, alcGetError(device)));
+		// printf("Failed to reset device: %s\n", alcGetString(device,
+		// alcGetError(device)));
 	}
 
 	private void disableSynth(final AudioProducer synth) throws OpenAlException {
@@ -308,11 +329,13 @@ public class AudioEngine {
 			source.pause();
 			unusedSources.add(source);
 		} else {
-			//do nothing
+			// do nothing
 		}
 	}
 
 	public void dispose() throws OpenAlException {
+		if (device == 0)
+			return;
 		for (final AudioProducer synth : synths) {
 			synth.dispose();
 		}
@@ -320,17 +343,18 @@ public class AudioEngine {
 			source.dispose();
 		}
 		removeAuxiliaryEffectSlot();
-		//		AudioEngine.checkAlError("Openal error #");
+		// AudioEngine.checkAlError("Openal error #");
 		{
 			ALC10.alcSuspendContext(context);
 			checkAlcError("Openal error #");
 		}
-		//		AudioEngine.checkAlError("Openal error #");
+		// AudioEngine.checkAlError("Openal error #");
 		{
 			final boolean result = ALC10.alcMakeContextCurrent(0);
 			checkAlcError(result, "Openal error #");
 		}
-		//all calls to AL10.alGetError from this point will fail with #40964 AL_INVALID_OPERATION, as it needs the context to work properly
+		// all calls to AL10.alGetError from this point will fail with #40964
+		// AL_INVALID_OPERATION, as it needs the context to work properly
 		{
 			ALC10.alcDestroyContext(context);
 			checkAlcError("Openal error #");
@@ -339,12 +363,14 @@ public class AudioEngine {
 			final boolean result = ALC10.alcCloseDevice(device);
 			checkAlcError(result, "Openal error #");
 		}
-		//		{
-		//			ALC.destroy();
-		//		}
+		// {
+		// ALC.destroy();
+		// }
 	}
 
 	public void enableHrtf(final int index) throws OpenAlException {
+		if (device == 0)
+			return;
 		int i = 0;
 		final int[] attr = new int[5];
 		attr[i++] = SOFTHRTF.ALC_HRTF_SOFT;
@@ -357,13 +383,14 @@ public class AudioEngine {
 		attr[i] = 0;
 		if (!SOFTHRTF.alcResetDeviceSOFT(device, attr))
 			checkAlcError(String.format("Failed to reset device: %s", device));
-		//				printf("Failed to reset device: %s\n", alcGetString(device, alcGetError(device)));
+		// printf("Failed to reset device: %s\n", alcGetString(device,
+		// alcGetError(device)));
 		queryHrtfEnabled();
 	}
 
 	private void enableSynth(final AudioProducer synth) throws OpenAlException {
 		if (synth.isEnabled()) {
-			//do nothing
+			// do nothing
 		} else {
 			OpenAlSource source;
 			if (unusedSources.size() > 0)
@@ -395,6 +422,8 @@ public class AudioEngine {
 	}
 
 	private void queryHrtfEnabled() {
+		if (device == 0)
+			return;
 		/* Check if HRTF is enabled, and show which is being used. */
 		final int hrtf_state = ALC10.alcGetInteger(device, SOFTHRTF.ALC_HRTF_SOFT);
 		if (hrtf_state == 0)
@@ -407,12 +436,12 @@ public class AudioEngine {
 
 	public void remove(final AudioProducer audioProducer) {
 		synths.remove(audioProducer);
-		//		synthFactory.cacheSynth(Synth);
-		//		if (MercatorSynthesizer.class.isInstance(audioProducer)) {
-		//			mercatorSynthesizerFactory.cacheSynth((MercatorSynthesizer) audioProducer);
-		//		} else if (Mp3Player.class.isInstance(audioProducer)) {
-		//			mp3PlayerFactory.cacheSynth((Mp3Player) audioProducer);
-		//		}
+		// synthFactory.cacheSynth(Synth);
+		// if (MercatorSynthesizer.class.isInstance(audioProducer)) {
+		// mercatorSynthesizerFactory.cacheSynth((MercatorSynthesizer) audioProducer);
+		// } else if (Mp3Player.class.isInstance(audioProducer)) {
+		// mp3PlayerFactory.cacheSynth((Mp3Player) audioProducer);
+		// }
 		for (final AbstractSynthesizerFactory factory : factoryMap.values()) {
 			if (factory.handles().isInstance(audioProducer)) {
 				factory.cacheSynth(audioProducer);
@@ -421,6 +450,8 @@ public class AudioEngine {
 	}
 
 	private void removeAuxiliaryEffectSlot() throws OpenAlException {
+		if (device == 0)
+			return;
 		EXTEfx.alDeleteAuxiliaryEffectSlots(auxiliaryEffectSlot);
 		AudioEngine.checkAlError("Failed to delete auxiliary effect slot with error #");
 		auxiliaryEffectSlot = 0;
@@ -432,10 +463,11 @@ public class AudioEngine {
 		checkAlError("Failed to set listener orientation with error #");
 	}
 
-	//	public void setListenerPosition(final Vector3 position) throws OpenAlException {
-	//		AL10.alListener3f(AL10.AL_POSITION, position.x, position.y, position.z);
-	//		checkAlError("Failed to set listener position with error #");
-	//	}
+	// public void setListenerPosition(final Vector3 position) throws
+	// OpenAlException {
+	// AL10.alListener3f(AL10.AL_POSITION, position.x, position.y, position.z);
+	// checkAlError("Failed to set listener position with error #");
+	// }
 
 	private void setListenerPositionAndVelocity(final Vector3 position, final Vector3 velocity) throws OpenAlException {
 		AL10.alListener3f(AL10.AL_POSITION, position.x, position.y, position.z);

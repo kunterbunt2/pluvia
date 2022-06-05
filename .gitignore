@@ -11,3 +11,4 @@ pluvia.log
 *.gz
 screenshots/*
 app/config/*
+/bin/
