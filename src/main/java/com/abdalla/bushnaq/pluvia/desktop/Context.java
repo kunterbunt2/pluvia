@@ -57,31 +57,31 @@ enum OperatingSystem {
  * @author kunterbunt
  */
 public class Context extends ApplicationProperties {
-	private static String			appFolderName		= "app";
-	private static String			configFolderName	= "app/config";
-	public static final float		WORLD_SCALE			= 2.0f;
-	public long						currentTime			= 8L * 10000;
-	private boolean					enableTime			= true;
-	public ModelList<Fish>			fishList			= new ModelList<>();
-	public ModelList<Fly>			fireflyList			= new ModelList<>();
-	public ModelList<Firefly>		flyList				= new ModelList<>();
-	public ModelList<Rain>			rainList			= new ModelList<>();
-	public ModelList<Bubble>		bubbleList			= new ModelList<>();
-	public ModelList<Digit>			digitList			= new ModelList<>();
+	private static String appFolderName = "app";
+	private static String configFolderName = "app/config";
+	public static final float WORLD_SCALE = 2.0f;
+	public long currentTime = 8L * 10000;
+	private boolean enableTime = true;
+	public ModelList<Fish> fishList = new ModelList<>();
+	public ModelList<Fly> fireflyList = new ModelList<>();
+	public ModelList<Firefly> flyList = new ModelList<>();
+	public ModelList<Rain> rainList = new ModelList<>();
+	public ModelList<Bubble> bubbleList = new ModelList<>();
+	public ModelList<Digit> digitList = new ModelList<>();
 //	private final long				fixedDelta		= 20L;
-	public Game						game				= null;				// the current game
-	public GameList					gameList			= new GameList();
-	private long					lastTime			= 0;
-	public LevelManager				levelManager		= null;
-	public Object					selected			= null;
-	public StoneList				stoneList			= new StoneList();
-	public long						timeDelta			= 0L;
-	public ModelList<Turtle>		turtleList			= new ModelList<>();
-	public MercatorRandomGenerator	universeRG;
+	public Game game = null; // the current game
+	public GameList gameList = new GameList();
+	private long lastTime = 0;
+	public LevelManager levelManager = null;
+	public Object selected = null;
+	public StoneList stoneList = new StoneList();
+	public long timeDelta = 0L;
+	public ModelList<Turtle> turtleList = new ModelList<>();
+	public MercatorRandomGenerator universeRG;
 //	private boolean					useFixedDelta	= false;
-	protected ScoreList				scoreList			= new ScoreList(3);
-	public boolean					restart				= false;
-	private OperatingSystem			operatingSystem;
+	protected ScoreList scoreList = new ScoreList(3);
+	public boolean restart = false;
+	private OperatingSystem operatingSystem;
 
 	public static String getAppFolderName() {
 		return appFolderName;
@@ -100,8 +100,13 @@ public class Context extends ApplicationProperties {
 			configFolderName = getAppFolderName() + "/config";
 			break;
 		case linux:
-			appFolderName = "../lib/app";
-			configFolderName = getAppFolderName() + "/config";
+			if (isRunningInEclipse()) {
+				appFolderName = "app";
+				configFolderName = getAppFolderName() + "/config";
+			} else {
+				appFolderName = "../lib/app";
+				configFolderName = getAppFolderName() + "/config";
+			}
 			break;
 		}
 		init();
@@ -189,6 +194,12 @@ public class Context extends ApplicationProperties {
 			// Operating system is based on Linux/Unix/*AIX
 		} else
 			return OperatingSystem.unknonw;
+	}
+
+	public static boolean isRunningInEclipse() {
+		String path = System.getProperty("java.class.path").toLowerCase();
+		boolean isEclipse = path.contains(".m2");
+		return isEclipse;
 	}
 
 }
