@@ -122,11 +122,13 @@ public class Context extends ApplicationProperties {
 			if (isRunningInEclipse()) {
 				logger.info("Detected Windows system and we are running inside of Eclipse.");
 				installationFolder = getInstallationFolder() + "/../..";
+				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected Windows system.");
 				installationFolder = getInstallationFolder() + "/../../..";
+				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = getHomeFolderName() + "/config";
 			}
@@ -135,11 +137,13 @@ public class Context extends ApplicationProperties {
 			if (isRunningInEclipse()) {
 				logger.info("Detected linux system and we are running inside of Eclipse.");
 				installationFolder = getInstallationFolder() + "/../..";
+				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected linux system.");
-				installationFolder = getInstallationFolder() + "/../../../../../bin";
+				installationFolder = getInstallationFolder() + "/../../../../bin";
+				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/../lib/app";
 				configFolderName = getHomeFolderName() + "/config";
 			}
