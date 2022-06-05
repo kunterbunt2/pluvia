@@ -13,7 +13,7 @@ JAVA_VERSION=17
 MAIN_JAR="pluvia-$PROJECT_VERSION.jar"
 
 # Set desired installer type: "app-image", "rpm" or "deb".
-INSTALLER_TYPE=rpm
+INSTALLER_TYPE=deb
 
 echo "java home: $JAVA_HOME"
 echo "project version: $PROJECT_VERSION"
@@ -92,6 +92,8 @@ $JAVA_HOME/bin/jlink \
 
 echo "Creating installer of type $INSTALLER_TYPE"
 #--type $INSTALLER_TYPE \
+#--type app-image \
+#--name HelloWorld \
 
 $JAVA_HOME/bin/jpackage \
 --dest target/installer \
@@ -105,7 +107,7 @@ $JAVA_HOME/bin/jpackage \
 --app-version ${APP_VERSION} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
+--license-file LICENSE \
+--linux-shortcut \
+--linux-menu-group \
 --verbose
-#--license-file LICENSE \
-#--linux-shortcut \
-#--linux-menu-group \

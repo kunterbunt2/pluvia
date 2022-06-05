@@ -41,6 +41,7 @@ public class DesktopLauncher {
 			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
 			final GameEngine						gameEngine	= new GameEngine(context);
 			final Lwjgl3ApplicationConfiguration	config		= createConfig(context);
+			config.disableAudio(true);
 			try {
 				context.restart = false;
 				new Lwjgl3Application(gameEngine, config);

@@ -635,7 +635,7 @@ public abstract class Level {
 		droppingStonesBuffer.clear();
 
 		if (canVanish) {
-			Tools.play(AtlasManager.getAssetsFolderName() + "/sound/Vanish.wav");
+			Tools.play(AtlasManager.getAssetsFolderName() + "/sound/vanish.wav");
 			return GamePhase.vanishing;
 		}
 		markStickyPatches();

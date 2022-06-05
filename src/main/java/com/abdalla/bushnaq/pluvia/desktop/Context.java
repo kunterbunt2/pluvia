@@ -49,7 +49,7 @@ import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.util.MercatorRandomGenerator;
 
-enum operatingSystem {
+enum OperatingSystem {
 	windows, linux, osx, ios, android, unknonw, webgl, applet, headlessDesktop
 }
 
@@ -81,6 +81,7 @@ public class Context extends ApplicationProperties {
 //	private boolean					useFixedDelta	= false;
 	protected ScoreList				scoreList			= new ScoreList(3);
 	public boolean					restart				= false;
+	private OperatingSystem			operatingSystem;
 
 	public static String getAppFolderName() {
 		return appFolderName;
@@ -91,7 +92,8 @@ public class Context extends ApplicationProperties {
 	}
 
 	public Context() {
-		switch (getOeratingSystemType()) {
+		operatingSystem = getOeratingSystemType();
+		switch (operatingSystem) {
 		case windows:
 		default:
 			appFolderName = "app";
@@ -174,19 +176,19 @@ public class Context extends ApplicationProperties {
 		levelManager = null;
 	}
 
-	public static operatingSystem getOeratingSystemType() {
+	public static OperatingSystem getOeratingSystemType() {
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.contains("win")) {
-			return operatingSystem.windows;
+			return OperatingSystem.windows;
 			// Operating system is based on Windows
 		} else if (os.contains("osx")) {
-			return operatingSystem.osx;
+			return OperatingSystem.osx;
 			// Operating system is Apple OSX based
 		} else if (os.contains("nix") || os.contains("nux")) {
-			return operatingSystem.linux;
+			return OperatingSystem.linux;
 			// Operating system is based on Linux/Unix/*AIX
 		} else
-			return operatingSystem.unknonw;
+			return OperatingSystem.unknonw;
 	}
 
 }
