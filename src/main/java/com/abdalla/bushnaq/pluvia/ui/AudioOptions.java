@@ -19,7 +19,7 @@ public class AudioOptions {
 	private VisLabel	ambientAudioVolumenLabel;
 
 	public AudioOptions(Table table, GameEngine gameEngine) {
-		table.setDebug(true);
+//		table.setDebug(true);
 		this.gameEngine = gameEngine;
 		sizes = VisUI.getSizes();
 		table.row().pad(16);
