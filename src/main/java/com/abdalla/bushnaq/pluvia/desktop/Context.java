@@ -36,6 +36,7 @@
 package com.abdalla.bushnaq.pluvia.desktop;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,10 +89,20 @@ public class Context extends ApplicationProperties {
 	protected ScoreList				scoreList			= new ScoreList(3);
 	public boolean					restart				= false;
 	private OperatingSystem			operatingSystem;
-	protected Logger				logger				= LoggerFactory.getLogger(this.getClass());
+	private String					installationFolder;
+	protected static Logger			logger				= LoggerFactory.getLogger(Context.class);
 
 	public static String getAppFolderName() {
 		return appFolderName;
+	}
+
+	private static String getInstallationFolder() {
+		try {
+			return new File(DesktopLauncher.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+		} catch (URISyntaxException e) {
+			logger.error(e.getMessage(), e);
+		}
+		return "";
 	}
 
 	public static String getHomeFolderName() {
@@ -108,23 +119,28 @@ public class Context extends ApplicationProperties {
 		switch (operatingSystem) {
 		case windows:
 		default:
-			appFolderName = "app";
 			if (isRunningInEclipse()) {
 				logger.info("Detected Windows system and we are running inside of Eclipse.");
+				installationFolder = getInstallationFolder() + "/../..";
+				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected Windows system.");
+				installationFolder = getInstallationFolder() + "/../../..";
+				appFolderName = installationFolder + "/app";
 				configFolderName = getHomeFolderName() + "/config";
 			}
 			break;
 		case linux:
 			if (isRunningInEclipse()) {
 				logger.info("Detected linux system and we are running inside of Eclipse.");
-				appFolderName = "app";
+				installationFolder = getInstallationFolder() + "/../..";
+				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected linux system.");
-				appFolderName = "../lib/app";
+				installationFolder = getInstallationFolder() + "/../../../../../bin";
+				appFolderName = installationFolder + "/../lib/app";
 				configFolderName = getHomeFolderName() + "/config";
 			}
 			break;
