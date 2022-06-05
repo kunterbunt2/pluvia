@@ -13,7 +13,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 public class ApplicationProperties {
 	public static final int			MAX_GRAPHICS_QUALITY			= 4;
-	private static final String		PLUVIA_PROPERTIES_FILE_NAME		= Context.CONFIG_FOLDER + "/pluvia.properties";
+	private static String			propertyFileName;
 	private static final String		PLUVIA_MAX_SCENE_OBJECTS		= "pluvia.maxSceneObjects";
 	private static final String		PLUVIA_SHOW_FPS					= "pluvia.showFps";
 	private static final String		PLUVIA_DEBUG_MODE				= "pluvia.debugMode";
@@ -30,7 +30,7 @@ public class ApplicationProperties {
 	private static final String		PLUVIA_AMBIENT_AUDIO			= "pluvia.ambientAudio";
 	private static final String		PLUVIA_AMBIENT_AUDIO_VOLUMEN	= "pluvia.ambientAudioVolumen";
 	private Logger					logger							= LoggerFactory.getLogger(this.getClass());
-	private boolean					debugMode;																		// debug mode is allowed
+	private boolean					debugMode;																	// debug mode is allowed
 	private boolean					showGraphs;
 	public Properties				properties						= new Properties();
 	private int						maxSceneObjects;
@@ -40,6 +40,10 @@ public class ApplicationProperties {
 	public int						predefinedMaxSceneObjects[]		= { 0, 25, 50, 100 };
 
 	public ApplicationProperties() {
+	}
+
+	protected void init() {
+		propertyFileName = Context.getConfigFolderName() + "/pluvia.properties";
 		read();
 		updateGrphicsQuality();
 		debugMode = getDebugModeProperty();
@@ -48,7 +52,7 @@ public class ApplicationProperties {
 
 	public void write() {
 		try {
-			FileOutputStream inStream = new FileOutputStream(PLUVIA_PROPERTIES_FILE_NAME);
+			FileOutputStream inStream = new FileOutputStream(propertyFileName);
 			properties.store(inStream, "");
 			inStream.close();
 		} catch (IOException e) {
@@ -58,7 +62,7 @@ public class ApplicationProperties {
 
 	private void read() {
 		try {
-			FileInputStream inStream = new FileInputStream(PLUVIA_PROPERTIES_FILE_NAME);
+			FileInputStream inStream = new FileInputStream(propertyFileName);
 			properties.load(inStream);
 			inStream.close();
 		} catch (IOException e) {

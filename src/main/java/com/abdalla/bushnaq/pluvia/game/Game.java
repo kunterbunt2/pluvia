@@ -125,7 +125,7 @@ public class Game {
 	protected boolean queryTilt(Stone patch[][]) {
 		for (int x = 0; x < nrOfColumns; x++) {
 			if (patch[x][preview] != null) {
-				Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/tilt.wav");
+				Tools.play(AtlasManager.getAssetsFolderName()+"/sound/tilt.wav");
 				return true;
 			}
 		}

@@ -8,7 +8,7 @@ public class Tools {
 
 	public static void beep() {
 		if (enable)
-			soundManager.play(AtlasManager.ASSETS_FOLDER+"/sound/ping.wav");
+			soundManager.play(AtlasManager.getAssetsFolderName() + "/sound/ping.wav");
 	}
 
 	public static void error(final String format, final Object... arguments) {

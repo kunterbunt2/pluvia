@@ -82,7 +82,7 @@ public class ScoreList extends HashMap<String, TreeSet<Score>> {
 
 	protected void writeToDisk() {
 		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(Context.CONFIG_FOLDER + "/score.xml")));
+			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(Context.getConfigFolderName() + "/score.xml")));
 			write(encoder);
 			encoder.close();
 		} catch (FileNotFoundException e) {
@@ -128,7 +128,7 @@ public class ScoreList extends HashMap<String, TreeSet<Score>> {
 	}
 
 	protected void readFromDisk() throws FileNotFoundException {
-		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.CONFIG_FOLDER + "/score.xml")));
+		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.getConfigFolderName() + "/score.xml")));
 		read(encoder);
 		encoder.close();
 	}

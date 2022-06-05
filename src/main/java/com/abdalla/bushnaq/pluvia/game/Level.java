@@ -236,14 +236,14 @@ public abstract class Level {
 //								&& (Patch[x][y].isMovingLeft() == Patch[x - 1][y].isMovingLeft()))
 						stickyLeft = true;
 					if (stickyRight && !patch[x][y].isRightAttached()) {
-						Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/sticky.wav");
+						Tools.play(AtlasManager.getAssetsFolderName() + "/sound/sticky.wav");
 						patch[x][y].setRightAttached(true);
 					}
 					if (!stickyRight && patch[x][y].isRightAttached()) {
 						patch[x][y].setRightAttached(false);
 					}
 					if (stickyLeft && !patch[x][y].isLeftAttached()) {
-						Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/sticky.wav");
+						Tools.play(AtlasManager.getAssetsFolderName() + "/sound/sticky.wav");
 						patch[x][y].setLeftAttached(true);
 					}
 					if (!stickyLeft && patch[x][y].isLeftAttached()) {
@@ -630,12 +630,12 @@ public abstract class Level {
 		for (Stone stone : droppingStonesBuffer) {
 			// stones that where droopping but now cannto drop
 			// Vis.PlaySoundEffect(SOUND_EFFECT_DROP);
-			Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/drop.wav");
+			Tools.play(AtlasManager.getAssetsFolderName() + "/sound/drop.wav");
 		}
 		droppingStonesBuffer.clear();
 
 		if (canVanish) {
-			Tools.play(AtlasManager.ASSETS_FOLDER+"/sound/Vanish.wav");
+			Tools.play(AtlasManager.getAssetsFolderName() + "/sound/Vanish.wav");
 			return GamePhase.vanishing;
 		}
 		markStickyPatches();
@@ -733,7 +733,7 @@ public abstract class Level {
 
 	public void writeToDisk() {
 		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(String.format(Context.CONFIG_FOLDER + "/%s.xml", game.name))));
+			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
 			write(encoder);
 			encoder.close();
 		} catch (FileNotFoundException e) {
@@ -746,7 +746,7 @@ public abstract class Level {
 		if (!game.name.equals(GameName.UI.name())) {
 			try {
 				XMLDecoder encoder;
-				encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(String.format(Context.CONFIG_FOLDER + "/%s.xml", game.name))));
+				encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
 				read(encoder);
 				encoder.close();
 			} catch (FileNotFoundException e) {

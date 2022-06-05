@@ -67,7 +67,7 @@ public class MainDialog extends AbstractDialog {
 					audioEngine.create();
 //				audioEngine.enableHrtf(0);
 					mp3Player = audioEngine.createAudioProducer(Mp3Player.class);
-					mp3Player.setFile(Gdx.files.internal(AtlasManager.ASSETS_FOLDER + "/sound/pluvia.ogg"));
+					mp3Player.setFile(Gdx.files.internal(AtlasManager.getAssetsFolderName() + "/sound/pluvia.ogg"));
 					mp3Player.setGain(((float) getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
 					mp3Player.play();
 					AudioEngine.checkAlError("Failed to set listener orientation with error #");

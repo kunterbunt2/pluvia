@@ -1,5 +1,6 @@
 package com.abdalla.bushnaq.pluvia.engine;
 
+import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
@@ -15,23 +16,21 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.VisUI.SkinScale;
 
 public class AtlasManager {
-	public static final String	ASSETS_FOLDER	= "app/assets";
-	public TextureAtlas			atlas;
-	public BitmapFont			aeroFont;
-	public BitmapFont			modelFont;
-	public BitmapFont			logoFont;
-	public FontData[]			fontDataList	= {											//
-			new FontData("model-font", ASSETS_FOLDER + "/fonts/Roboto-Bold.ttf", 64),		//
-			new FontData("Aero-font", ASSETS_FOLDER + "/fonts/Aero.ttf", 128),				//
-			new FontData("logo-font", ASSETS_FOLDER + "/fonts/Roboto-Thin.ttf", 128),		//
-			new FontData("small-font", ASSETS_FOLDER + "/fonts/Roboto-Bold.ttf", 10),		//
-			new FontData("version-font", ASSETS_FOLDER + "/fonts/Roboto-Thin.ttf", 16),		//
-	};
-	AtlasRegion					systemTextureRegion;
-	public BitmapFont			smallFont;
-	public BitmapFont			versionFont;
+	private static String	assetsFolderName;
+	public TextureAtlas		atlas;
+	public BitmapFont		aeroFont;
+	public BitmapFont		modelFont;
+	public BitmapFont		logoFont;
+	public FontData[]		fontDataList;
+	public AtlasRegion		systemTextureRegion;
+	public BitmapFont		smallFont;
+	public BitmapFont		versionFont;
 
 	public AtlasManager() {
+	}
+
+	public static String getAssetsFolderName() {
+		return assetsFolderName;
 	}
 
 	public void dispose() {
@@ -43,6 +42,17 @@ public class AtlasManager {
 	}
 
 	public void init() {
+		assetsFolderName = Context.getAppFolderName() + "/assets";
+
+		FontData[] temp = { //
+				new FontData("model-font", assetsFolderName + "/fonts/Roboto-Bold.ttf", 64), //
+				new FontData("Aero-font", assetsFolderName + "/fonts/Aero.ttf", 128), //
+				new FontData("logo-font", assetsFolderName + "/fonts/Roboto-Thin.ttf", 128), //
+				new FontData("small-font", assetsFolderName + "/fonts/Roboto-Bold.ttf", 10), //
+				new FontData("version-font", assetsFolderName + "/fonts/Roboto-Thin.ttf", 16), //
+		};
+		fontDataList = temp;
+
 		initTextures();
 		initFonts();
 		atlas.getTextures().forEach(t -> t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear));
@@ -74,7 +84,7 @@ public class AtlasManager {
 	}
 
 	private void initTextures() {
-		atlas = new TextureAtlas(Gdx.files.internal(ASSETS_FOLDER + "/atlas/atlas.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal(assetsFolderName + "/atlas/atlas.atlas"));
 		systemTextureRegion = atlas.findRegion("system");
 		VisUI.load(SkinScale.X2);
 		VisUI.getSkin().getFont("default-font").getData().markupEnabled = true;

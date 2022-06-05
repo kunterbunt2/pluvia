@@ -49,35 +49,60 @@ import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.util.MercatorRandomGenerator;
 
+enum operatingSystem {
+	windows, linux, osx, ios, android, unknonw, webgl, applet, headlessDesktop
+}
+
 /**
  * @author kunterbunt
  */
 public class Context extends ApplicationProperties {
-	public static final String		CONFIG_FOLDER	= "app/config";
-	public static final float		WORLD_SCALE		= 2.0f;
-	public long						currentTime		= 8L * 10000;
-	private boolean					enableTime		= true;
-	public ModelList<Fish>			fishList		= new ModelList<>();
-	public ModelList<Fly>			fireflyList		= new ModelList<>();
-	public ModelList<Firefly>		flyList			= new ModelList<>();
-	public ModelList<Rain>			rainList		= new ModelList<>();
-	public ModelList<Bubble>		bubbleList		= new ModelList<>();
-	public ModelList<Digit>			digitList		= new ModelList<>();
+	private static String			appFolderName		= "app";
+	private static String			configFolderName	= "app/config";
+	public static final float		WORLD_SCALE			= 2.0f;
+	public long						currentTime			= 8L * 10000;
+	private boolean					enableTime			= true;
+	public ModelList<Fish>			fishList			= new ModelList<>();
+	public ModelList<Fly>			fireflyList			= new ModelList<>();
+	public ModelList<Firefly>		flyList				= new ModelList<>();
+	public ModelList<Rain>			rainList			= new ModelList<>();
+	public ModelList<Bubble>		bubbleList			= new ModelList<>();
+	public ModelList<Digit>			digitList			= new ModelList<>();
 //	private final long				fixedDelta		= 20L;
-	public Game						game			= null;				// the current game
-	public GameList					gameList		= new GameList();
-	private long					lastTime		= 0;
-	public LevelManager				levelManager	= null;
-	public Object					selected		= null;
-	public StoneList				stoneList		= new StoneList();
-	public long						timeDelta		= 0L;
-	public ModelList<Turtle>		turtleList		= new ModelList<>();
+	public Game						game				= null;				// the current game
+	public GameList					gameList			= new GameList();
+	private long					lastTime			= 0;
+	public LevelManager				levelManager		= null;
+	public Object					selected			= null;
+	public StoneList				stoneList			= new StoneList();
+	public long						timeDelta			= 0L;
+	public ModelList<Turtle>		turtleList			= new ModelList<>();
 	public MercatorRandomGenerator	universeRG;
 //	private boolean					useFixedDelta	= false;
-	protected ScoreList				scoreList		= new ScoreList(3);
-	public boolean					restart			= false;
+	protected ScoreList				scoreList			= new ScoreList(3);
+	public boolean					restart				= false;
+
+	public static String getAppFolderName() {
+		return appFolderName;
+	}
+
+	public static String getConfigFolderName() {
+		return configFolderName;
+	}
 
 	public Context() {
+		switch (getOeratingSystemType()) {
+		case windows:
+		default:
+			appFolderName = "app";
+			configFolderName = getAppFolderName() + "/config";
+			break;
+		case linux:
+			appFolderName = "../lib/app";
+			configFolderName = getAppFolderName() + "/config";
+			break;
+		}
+		init();
 		scoreList.init(gameList);
 	}
 
@@ -147,6 +172,21 @@ public class Context extends ApplicationProperties {
 	public void dispose() {
 		levelManager.destroy();
 		levelManager = null;
+	}
+
+	public static operatingSystem getOeratingSystemType() {
+		String os = System.getProperty("os.name").toLowerCase();
+		if (os.contains("win")) {
+			return operatingSystem.windows;
+			// Operating system is based on Windows
+		} else if (os.contains("osx")) {
+			return operatingSystem.osx;
+			// Operating system is Apple OSX based
+		} else if (os.contains("nix") || os.contains("nux")) {
+			return operatingSystem.linux;
+			// Operating system is based on Linux/Unix/*AIX
+		} else
+			return operatingSystem.unknonw;
 	}
 
 }
