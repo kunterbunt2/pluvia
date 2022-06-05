@@ -35,6 +35,11 @@
  * -------------------------------------------------------------------------*/
 package com.abdalla.bushnaq.pluvia.desktop;
 
+import java.io.File;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.GameList;
 import com.abdalla.bushnaq.pluvia.game.LevelManager;
@@ -57,34 +62,40 @@ enum OperatingSystem {
  * @author kunterbunt
  */
 public class Context extends ApplicationProperties {
-	private static String appFolderName = "app";
-	private static String configFolderName = "app/config";
-	public static final float WORLD_SCALE = 2.0f;
-	public long currentTime = 8L * 10000;
-	private boolean enableTime = true;
-	public ModelList<Fish> fishList = new ModelList<>();
-	public ModelList<Fly> fireflyList = new ModelList<>();
-	public ModelList<Firefly> flyList = new ModelList<>();
-	public ModelList<Rain> rainList = new ModelList<>();
-	public ModelList<Bubble> bubbleList = new ModelList<>();
-	public ModelList<Digit> digitList = new ModelList<>();
+	private static String			appFolderName		= "app";
+	private static String			configFolderName	= "app/config";
+	private static String			homeFolderName;
+	public static final float		WORLD_SCALE			= 2.0f;
+	public long						currentTime			= 8L * 10000;
+	private boolean					enableTime			= true;
+	public ModelList<Fish>			fishList			= new ModelList<>();
+	public ModelList<Fly>			fireflyList			= new ModelList<>();
+	public ModelList<Firefly>		flyList				= new ModelList<>();
+	public ModelList<Rain>			rainList			= new ModelList<>();
+	public ModelList<Bubble>		bubbleList			= new ModelList<>();
+	public ModelList<Digit>			digitList			= new ModelList<>();
 //	private final long				fixedDelta		= 20L;
-	public Game game = null; // the current game
-	public GameList gameList = new GameList();
-	private long lastTime = 0;
-	public LevelManager levelManager = null;
-	public Object selected = null;
-	public StoneList stoneList = new StoneList();
-	public long timeDelta = 0L;
-	public ModelList<Turtle> turtleList = new ModelList<>();
-	public MercatorRandomGenerator universeRG;
+	public Game						game				= null;										// the current game
+	public GameList					gameList			= new GameList();
+	private long					lastTime			= 0;
+	public LevelManager				levelManager		= null;
+	public Object					selected			= null;
+	public StoneList				stoneList			= new StoneList();
+	public long						timeDelta			= 0L;
+	public ModelList<Turtle>		turtleList			= new ModelList<>();
+	public MercatorRandomGenerator	universeRG;
 //	private boolean					useFixedDelta	= false;
-	protected ScoreList scoreList = new ScoreList(3);
-	public boolean restart = false;
-	private OperatingSystem operatingSystem;
+	protected ScoreList				scoreList			= new ScoreList(3);
+	public boolean					restart				= false;
+	private OperatingSystem			operatingSystem;
+	protected Logger				logger				= LoggerFactory.getLogger(this.getClass());
 
 	public static String getAppFolderName() {
 		return appFolderName;
+	}
+
+	public static String getHomeFolderName() {
+		return homeFolderName;
 	}
 
 	public static String getConfigFolderName() {
@@ -92,25 +103,43 @@ public class Context extends ApplicationProperties {
 	}
 
 	public Context() {
+		homeFolderName = System.getProperty("user.home") + "/.pluvia";
 		operatingSystem = getOeratingSystemType();
 		switch (operatingSystem) {
 		case windows:
 		default:
 			appFolderName = "app";
-			configFolderName = getAppFolderName() + "/config";
+			if (isRunningInEclipse()) {
+				logger.info("Detected Windows system and we are running inside of Eclipse.");
+				configFolderName = appFolderName + "/config";
+			} else {
+				logger.info("Detected Windows system.");
+				configFolderName = getHomeFolderName() + "/config";
+			}
 			break;
 		case linux:
 			if (isRunningInEclipse()) {
+				logger.info("Detected linux system and we are running inside of Eclipse.");
 				appFolderName = "app";
-				configFolderName = getAppFolderName() + "/config";
+				configFolderName = appFolderName + "/config";
 			} else {
+				logger.info("Detected linux system.");
 				appFolderName = "../lib/app";
-				configFolderName = getAppFolderName() + "/config";
+				configFolderName = getHomeFolderName() + "/config";
 			}
 			break;
 		}
+		createFolder(homeFolderName);
+		createFolder(configFolderName);
 		init();
 		scoreList.init(gameList);
+	}
+
+	private void createFolder(String folderName) {
+		File directory = new File(folderName);
+		if (!directory.exists()) {
+			directory.mkdirs(); // If you require it to make the entire directory path including parents, use directory.mkdirs(); here instead.
+		}
 	}
 
 	public ScoreList getScoreList() {
@@ -197,8 +226,8 @@ public class Context extends ApplicationProperties {
 	}
 
 	public static boolean isRunningInEclipse() {
-		String path = System.getProperty("java.class.path").toLowerCase();
-		boolean isEclipse = path.contains(".m2");
+		String	path		= System.getProperty("java.class.path").toLowerCase();
+		boolean	isEclipse	= path.contains(".m2");
 		return isEclipse;
 	}
 
