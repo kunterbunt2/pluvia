@@ -36,6 +36,7 @@
 package com.abdalla.bushnaq.pluvia.desktop;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
@@ -98,11 +99,25 @@ public class Context extends ApplicationProperties {
 
 	private static String getInstallationFolder() {
 		try {
-			return new File(DesktopLauncher.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+			String path = new File(DesktopLauncher.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+			if (path.endsWith(".jar")) {
+				path = path.substring(0, path.lastIndexOf("/") - 1);
+			}
+			path = cleanupPath(path);
+			return path;
 		} catch (URISyntaxException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
+	}
+
+	private static String cleanupPath(String path) {
+		try {
+			path = new File(path).getCanonicalPath();// get rid of all the /..
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		return path;
 	}
 
 	public static String getHomeFolderName() {
@@ -121,13 +136,13 @@ public class Context extends ApplicationProperties {
 		default:
 			if (isRunningInEclipse()) {
 				logger.info("Detected Windows system and we are running inside of Eclipse.");
-				installationFolder = getInstallationFolder() + "/../..";
+				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
 				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected Windows system.");
-				installationFolder = getInstallationFolder() + "/../../..";
+				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
 				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = getHomeFolderName() + "/config";
@@ -136,15 +151,15 @@ public class Context extends ApplicationProperties {
 		case linux:
 			if (isRunningInEclipse()) {
 				logger.info("Detected linux system and we are running inside of Eclipse.");
-				installationFolder = getInstallationFolder() + "/../..";
+				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
 				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected linux system.");
-				installationFolder = getInstallationFolder() + "/../../../../bin";
+				installationFolder = cleanupPath(getInstallationFolder() + "/../../../bin");
 				logger.info("Detected installation folder " + installationFolder);
-				appFolderName = installationFolder + "/../lib/app";
+				appFolderName = cleanupPath(installationFolder + "/../lib/app");
 				configFolderName = getHomeFolderName() + "/config";
 			}
 			break;
