@@ -243,7 +243,7 @@
 							<executable>./build_app_linux.sh</executable>
 							<environmentVariables>
 								<APP_VERSION>
-                                    ${client.version}
+                                    ${project.version}
                                 </APP_VERSION>
 								<PROJECT_VERSION>
                                     ${project.version}
@@ -283,7 +283,7 @@
 							<executable>build_app_windows.bat</executable>
 							<environmentVariables>
 								<APP_VERSION>
-                                    ${client.version}
+                                    ${project.version}
                                 </APP_VERSION>
 								<PROJECT_VERSION>
                                     ${project.version}
@@ -323,7 +323,7 @@
 							<executable>./build_app_mac.sh</executable>
 							<environmentVariables>
 								<APP_VERSION>
-                                    ${client.version}
+                                    ${project.version}
                                 </APP_VERSION>
 								<PROJECT_VERSION>
                                     ${project.version}
