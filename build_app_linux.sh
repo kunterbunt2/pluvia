@@ -96,6 +96,7 @@ echo "Creating installer of type $INSTALLER_TYPE"
 #--name HelloWorld \
 
 $JAVA_HOME/bin/jpackage \
+--type $INSTALLER_TYPE \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \

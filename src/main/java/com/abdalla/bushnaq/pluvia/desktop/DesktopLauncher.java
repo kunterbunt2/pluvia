@@ -18,10 +18,14 @@ public class DesktopLauncher {
 	boolean						useOGL3							= true;
 
 	public static void main(final String[] args) throws Exception {
+		logger.info("------------------------------------------------------------------------------");
 		logger.info(String.format("Starting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+		logger.info("------------------------------------------------------------------------------");
 		DesktopLauncher desktopLauncher = new DesktopLauncher();
 		desktopLauncher.loop();
+		logger.info("------------------------------------------------------------------------------");
 		logger.info(String.format("Shutting down pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+		logger.info("------------------------------------------------------------------------------");
 	}
 
 	/**

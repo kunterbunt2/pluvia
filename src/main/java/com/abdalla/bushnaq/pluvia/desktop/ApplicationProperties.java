@@ -202,7 +202,7 @@ public class ApplicationProperties {
 	}
 
 	public boolean getShowFpsProperty() {
-		return readBooleanProperty(PLUVIA_SHOW_FPS, false);
+		return readBooleanProperty(PLUVIA_SHOW_FPS, true);
 	}
 
 	public boolean isShowGraphs() {
