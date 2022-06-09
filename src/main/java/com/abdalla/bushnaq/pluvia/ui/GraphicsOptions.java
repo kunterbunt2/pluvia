@@ -18,7 +18,7 @@ public class GraphicsOptions {
 	private VisCheckBox				pbrCheckBox;
 	private VisCheckBox				showFpsCheckBox;
 	private VisCheckBox				vsyncCheckBox;
-	private VisCheckBox				fullScreenModeCheckBox;
+//	private VisCheckBox				fullScreenModeCheckBox;
 	private VisCheckBox				debugModeCheckBox;
 	private VisSlider				foregroundFpsSlider;
 	private VisLabel				foregroundFpsLabel;
@@ -36,7 +36,7 @@ public class GraphicsOptions {
 		createPbr(table);
 		createDebugMode(table);
 		createVsync(table);
-		createFullScreenMode(table);
+//		createFullScreenMode(table);
 		createForgroundFps(table);
 		createMonitor(table);
 	}
@@ -127,18 +127,18 @@ public class GraphicsOptions {
 		table.row().pad(16);
 	}
 
-	private void createFullScreenMode(Table table) {
-		{
-			VisLabel label = new VisLabel("Full Screen Mode");
-			label.setAlignment(Align.right);
-			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
-		}
-		{
-			fullScreenModeCheckBox = new VisCheckBox("", gameEngine.context.getFullscreenModeProperty());
-			table.add(fullScreenModeCheckBox).colspan(2).left();
-		}
-		table.row().pad(16);
-	}
+//	private void createFullScreenMode(Table table) {
+//		{
+//			VisLabel label = new VisLabel("Full Screen Mode");
+//			label.setAlignment(Align.right);
+//			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
+//		}
+//		{
+//			fullScreenModeCheckBox = new VisCheckBox("", gameEngine.context.getFullscreenModeProperty());
+//			table.add(fullScreenModeCheckBox).colspan(2).left();
+//		}
+//		table.row().pad(16);
+//	}
 
 	private void createDebugMode(Table table) {
 		{
@@ -170,7 +170,7 @@ public class GraphicsOptions {
 		gameEngine.context.setPbr(pbrCheckBox.isChecked());
 		gameEngine.context.setShowFps(showFpsCheckBox.isChecked());
 		gameEngine.context.setVsync(vsyncCheckBox.isChecked());
-		gameEngine.context.setFullScreenMode(fullScreenModeCheckBox.isChecked());
+//		gameEngine.context.setFullScreenMode(fullScreenModeCheckBox.isChecked());
 		gameEngine.context.setDebugMode(debugModeCheckBox.isChecked());
 		gameEngine.context.setForegroundFps((int) foregroundFpsSlider.getValue());
 		gameEngine.context.setMonitor(monitorSelectBox.getSelected());

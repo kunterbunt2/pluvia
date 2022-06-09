@@ -86,7 +86,7 @@ public class ApplicationProperties {
 	}
 
 	public boolean getFullscreenModeProperty() {
-		return readBooleanProperty(PLUVIA_FULLSCREEN_MODE, true);
+		return true;// readBooleanProperty(PLUVIA_FULLSCREEN_MODE, true);
 	}
 
 	public boolean getShowGraphsProperty() {
