@@ -78,19 +78,4 @@ A direct x diagnostic report is very helpfull, as every system is different.
 6. attach the dxdiag.txt file to teh ticket
 
 # Tested on Following Systems
-
-## Test System 1
-* Windows 11 Home 64-bit
-* AMD Ryzen 9 3950X 16-Core Processor
-* 64GB RAM
-* NVIDIA GeForce RTX 2080 Ti
-* Feature Levels: 12_2,12_1,12_0,11_1,11_0,10_1,10_0,9_3,9_2,9_1
-* Display 2560 x 1440
-
-## Test System 2
-* Windows 11 Home 64-bit
-* AMD Ryzen 9 3950X 16-Core Processor
-* 16GB RAM
-* VMware Virtual SVGA 3D Graphics Adapter
-* Feature Levels: 10_0,9_3,9_2,9_1
-* Display 2560 x 1440
+https://github.com/kunterbunt2/pluvia/wiki/System-Tested
