@@ -94,9 +94,9 @@ echo "Creating installer of type $INSTALLER_TYPE"
 #--type $INSTALLER_TYPE \
 #--type app-image \
 #--name HelloWorld \
+#--type $INSTALLER_TYPE \
 
 $JAVA_HOME/bin/jpackage \
---type $INSTALLER_TYPE \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \

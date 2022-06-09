@@ -19,10 +19,19 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
+    - name: Install binutils
+    run: sudo apt-get install binutils
+    - name: Install fakeroot
+    run: sudo apt-get install fakeroot
     - name: Build with Maven
       run: mvn verify --batch-mode --update-snapshots package
     - name: Upload DEB package
       uses: actions/upload-artifact@v2
       with:
         name: DEB files
-        path: target/installer/*
+        path: target/installer/*.deb
+    - name: Upload DEB package
+      uses: actions/upload-artifact@v2
+      with:
+        name: DEB files
+        path: target/installer/*.deb
