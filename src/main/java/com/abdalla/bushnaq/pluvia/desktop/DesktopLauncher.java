@@ -21,6 +21,8 @@ public class DesktopLauncher {
 		logger.info("------------------------------------------------------------------------------");
 		logger.info(String.format("Starting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
 		logger.info("------------------------------------------------------------------------------");
+		logger.info("user.home = " + System.getProperty("user.home"));
+
 		DesktopLauncher desktopLauncher = new DesktopLauncher();
 		desktopLauncher.loop();
 		logger.info("------------------------------------------------------------------------------");
