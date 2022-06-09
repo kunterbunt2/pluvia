@@ -14,17 +14,20 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulati
 
 public class DesktopLauncher {
 	private static final int	UNIVERSE_GENERATION_RANDOM_SEED	= 1;
-	private static Logger		logger							= LoggerFactory.getLogger(DesktopLauncher.class);
+	private Logger				logger							= LoggerFactory.getLogger(this.getClass());
 	boolean						useOGL3							= true;
 
 	public static void main(final String[] args) throws Exception {
+		DesktopLauncher desktopLauncher = new DesktopLauncher();
+		desktopLauncher.start();
+	}
+
+	private void start() throws InterruptedException, Exception {
 		logger.info("------------------------------------------------------------------------------");
 		logger.info(String.format("Starting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
 		logger.info("------------------------------------------------------------------------------");
 		logger.info("user.home = " + System.getProperty("user.home"));
-
-		DesktopLauncher desktopLauncher = new DesktopLauncher();
-		desktopLauncher.loop();
+		loop();
 		logger.info("------------------------------------------------------------------------------");
 		logger.info(String.format("Shutting down pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
 		logger.info("------------------------------------------------------------------------------");
