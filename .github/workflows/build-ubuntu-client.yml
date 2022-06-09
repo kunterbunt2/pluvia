@@ -19,10 +19,10 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
-    - name: Install binutils
-      run: sudo apt-get install binutils
-    - name: Install fakeroot
-      run: sudo apt-get install fakeroot
+#    - name: Install binutils
+#      run: sudo apt-get install binutils
+#    - name: Install fakeroot
+#      run: sudo apt-get install fakeroot
     - name: Build with Maven
       run: mvn verify --batch-mode --update-snapshots package
     - name: Upload deb package
