@@ -94,9 +94,27 @@ echo "Creating installer of type $INSTALLER_TYPE"
 #--type $INSTALLER_TYPE \
 #--type app-image \
 #--name HelloWorld \
-#--type $INSTALLER_TYPE \
 
 $JAVA_HOME/bin/jpackage \
+--type deb \
+--dest target/installer \
+--input target/installer/input \
+--name pluvia \
+--main-class com.abdalla.bushnaq.pluvia.desktop.DesktopLauncher \
+--main-jar libs/${MAIN_JAR} \
+--java-options -Xmx2048m \
+--runtime-image target/java-runtime \
+--icon src/main/logo/linux/pluvia-icon.png \
+--app-version ${APP_VERSION} \
+--vendor "Kunterbunt" \
+--copyright "Copyright © 2022 Kunterbunt." \
+--license-file LICENSE \
+--linux-shortcut \
+--linux-menu-group games \
+--verbose
+
+$JAVA_HOME/bin/jpackage \
+--type rpm \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \
