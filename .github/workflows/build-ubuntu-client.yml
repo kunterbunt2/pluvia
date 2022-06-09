@@ -25,13 +25,13 @@ jobs:
       run: sudo apt-get install fakeroot
     - name: Build with Maven
       run: mvn verify --batch-mode --update-snapshots package
-    - name: Upload DEB package
+    - name: Upload deb package
       uses: actions/upload-artifact@v2
       with:
-        name: DEB files
+        name: deb files
         path: target/installer/*.deb
-    - name: Upload DEB package
+    - name: Upload rpm package
       uses: actions/upload-artifact@v2
       with:
-        name: DEB files
-        path: target/installer/*.deb
+        name: rpm files
+        path: target/installer/*.rpm
