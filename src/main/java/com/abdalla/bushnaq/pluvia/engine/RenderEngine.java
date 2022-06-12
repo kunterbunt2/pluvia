@@ -10,9 +10,9 @@ import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.camera.MovingCamera;
 import com.abdalla.bushnaq.pluvia.engine.camera.MyCameraInputController;
 import com.abdalla.bushnaq.pluvia.engine.shader.GameSettings;
-import com.abdalla.bushnaq.pluvia.engine.shader.MercatorPbrShaderProvider;
-import com.abdalla.bushnaq.pluvia.engine.shader.MercatorShaderProvider;
-import com.abdalla.bushnaq.pluvia.engine.shader.MercatorShaderProviderInterface;
+import com.abdalla.bushnaq.pluvia.engine.shader.GamePbrShaderProvider;
+import com.abdalla.bushnaq.pluvia.engine.shader.GameShaderProvider;
+import com.abdalla.bushnaq.pluvia.engine.shader.GameShaderProviderInterface;
 import com.abdalla.bushnaq.pluvia.engine.shader.mirror.Mirror;
 import com.abdalla.bushnaq.pluvia.engine.shader.water.Water;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
@@ -139,7 +139,7 @@ public class RenderEngine {
 	private InfoDialog						info;
 	private final InputMultiplexer			inputMultiplexer					= new InputMultiplexer();
 	private GameObject						lookatCube;
-	public MercatorShaderProviderInterface	mercatorShaderProvider;
+	public GameShaderProviderInterface	gameShaderProvider;
 	private Mirror							mirror								= new Mirror();
 	private SceneSkybox						nightSkyBox;
 	private float							northDirectionDegree				= 90;
@@ -476,16 +476,16 @@ public class RenderEngine {
 			config.numDirectionalLights = 1;
 			config.numPointLights = context.getMaxPointLights();
 			config.numSpotLights = 0;
-			mercatorShaderProvider = MercatorPbrShaderProvider.createDefault(config, water, mirror);
-			return mercatorShaderProvider;
+			gameShaderProvider = GamePbrShaderProvider.createDefault(config, water, mirror);
+			return gameShaderProvider;
 		} else {
 
 			DefaultShader.Config config = new Config();
 //			config.numDirectionalLights = 2;
 //			config.numPointLights = context.getMaxPointLights();
 //			config.numSpotLights = 0;
-			mercatorShaderProvider = MercatorShaderProvider.createDefault(config, water, mirror);
-			return mercatorShaderProvider;
+			gameShaderProvider = GameShaderProvider.createDefault(config, water, mirror);
+			return gameShaderProvider;
 		}
 	}
 
@@ -538,7 +538,7 @@ public class RenderEngine {
 		staticCache.dispose();
 		dynamicCache.dispose();
 		vfxManager.dispose();
-		mercatorShaderProvider.dispose();
+		gameShaderProvider.dispose();
 		cpuGraph.dispose();
 		gpuGraph.dispose();
 		postFbo.dispose();
@@ -880,13 +880,13 @@ public class RenderEngine {
 			// waterRefractionFbo
 			Gdx.gl.glEnable(GL30C.GL_CLIP_DISTANCE0);
 			water.getRefractionFbo().begin();
-			mercatorShaderProvider.setClippingPlane(refractionClippingPlane);
+			gameShaderProvider.setClippingPlane(refractionClippingPlane);
 			renderColors(takeScreenShot);
 			water.getRefractionFbo().end();
 			handleFrameBufferScreenshot(takeScreenShot, water.getRefractionFbo(), "water.refraction.fbo");
 
 			// waterReflectionFbo
-			mercatorShaderProvider.setClippingPlane(reflectionClippingPlane);
+			gameShaderProvider.setClippingPlane(reflectionClippingPlane);
 			final float	cameraYDistance	= 2 * (camera.position.y - .2f);
 			final float	lookatYDistance	= 2 * (camera.lookat.y - .2f);
 			camera.position.y -= cameraYDistance;
@@ -911,7 +911,7 @@ public class RenderEngine {
 		}
 		if (isMirrorPresent()) {
 			// waterReflectionFbo
-			mercatorShaderProvider.setClippingPlane(reflectionClippingPlane);
+			gameShaderProvider.setClippingPlane(reflectionClippingPlane);
 			final float	cameraYDistance	= 2 * (camera.position.y - 0.1f);
 			final float	lookatYDistance	= 2 * (camera.lookat.y - 0.1f);
 			camera.position.y -= cameraYDistance;

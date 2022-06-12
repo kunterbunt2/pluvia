@@ -13,10 +13,10 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Config;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.math.Plane;
 
-public class MercatorShaderProvider extends DefaultShaderProvider implements MercatorShaderProviderInterface {
+public class GameShaderProvider extends DefaultShaderProvider implements GameShaderProviderInterface {
 
-	public static MercatorShaderProvider createDefault(final Config config, final Water water, final Mirror mirror) {
-		return new MercatorShaderProvider(config, water, mirror);
+	public static GameShaderProvider createDefault(final Config config, final Water water, final Mirror mirror) {
+		return new GameShaderProvider(config, water, mirror);
 	}
 
 	private Plane		clippingPlane;
@@ -29,7 +29,7 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 	private Water		water;
 	public WaterShader	waterShader;
 
-	public MercatorShaderProvider(final Config config, final Water water, final Mirror mirror) {
+	public GameShaderProvider(final Config config, final Water water, final Mirror mirror) {
 		super(config);
 		this.water = water;
 		this.mirror = mirror;

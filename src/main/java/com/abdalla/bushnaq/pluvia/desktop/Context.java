@@ -19,7 +19,7 @@ import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
-import com.abdalla.bushnaq.pluvia.util.MercatorRandomGenerator;
+import com.abdalla.bushnaq.pluvia.util.RandomGenerator;
 
 /**
  * @author kunterbunt
@@ -116,7 +116,7 @@ public class Context extends ApplicationProperties {
 
 	public ModelList<Turtle>		turtleList		= new ModelList<>();
 
-	public MercatorRandomGenerator	universeRG;
+	public RandomGenerator	universeRG;
 
 	public Context() {
 		homeFolderName = System.getProperty("user.home") + "/.pluvia";
@@ -203,7 +203,7 @@ public class Context extends ApplicationProperties {
 
 	public void create(final int randomGeneratorSeed, final long age) throws Exception {
 		{
-			universeRG = new MercatorRandomGenerator(randomGeneratorSeed);
+			universeRG = new RandomGenerator(randomGeneratorSeed);
 		}
 	}
 

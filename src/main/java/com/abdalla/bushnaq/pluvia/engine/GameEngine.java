@@ -543,7 +543,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			// did we select an object?
 			// renderMaster.sceneClusterManager.createCoordinates();
 			final GameObject selected = renderEngine.getGameObject(screenX, screenY);
-			System.out.println("selected " + selected);
+//			System.out.println("selected " + selected);
 			if (selected != null)
 				context.levelManager.reactLeft(selected.interactive);
 		}
@@ -552,7 +552,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			// did we select an object?
 			// renderMaster.sceneClusterManager.createCoordinates();
 			final GameObject selected = renderEngine.getGameObject(screenX, screenY);
-			System.out.println("selected " + selected);
+//			System.out.println("selected " + selected);
 			if (selected != null)
 				context.levelManager.reactRight(selected.interactive);
 		}

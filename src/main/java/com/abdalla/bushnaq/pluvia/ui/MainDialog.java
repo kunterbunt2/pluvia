@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import com.abdalla.bushnaq.audio.synthesis.AudioEngine;
-import com.abdalla.bushnaq.audio.synthesis.MercatorAudioEngine;
 import com.abdalla.bushnaq.audio.synthesis.Mp3Player;
 import com.abdalla.bushnaq.audio.synthesis.OpenAlException;
 import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
@@ -29,7 +28,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 
 public class MainDialog extends AbstractDialog {
 	protected static final int	DIALOG_HEIGHT	= 150 * 4;
-	public AudioEngine			audioEngine		= new MercatorAudioEngine();
+	public AudioEngine			audioEngine		= new AudioEngine();
 	private VisLabel			descriptionLabel;
 	private VisList<String>		listView		= new VisList<>();
 	Mp3Player					mp3Player;

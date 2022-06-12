@@ -142,6 +142,18 @@ public class AudioEngine {
 		// this.channels = channels;
 	}
 
+	public AudioEngine() {
+		this(4410 / 4, 44100, 16);
+		add(new MercatorSynthesizerFactory());
+		add(new Mp3PlayerFactory());
+	}
+
+	public AudioEngine(final int samples) {
+		this(samples, 44100, 16);
+		add(new MercatorSynthesizerFactory());
+		add(new Mp3PlayerFactory());
+	}
+
 	public void add(final AbstractSynthesizerFactory<? extends AudioProducer> factory) {
 		factoryMap.put(factory.getClass().getSimpleName(), factory);
 	}
@@ -168,10 +180,6 @@ public class AudioEngine {
 		}
 		cullSynths();
 	}
-
-	// MercatorSynthesizerFactory mercatorSynthesizerFactory = new
-	// MercatorSynthesizerFactory();
-	// Mp3PlayerFactory mp3PlayerFactory = new Mp3PlayerFactory();
 
 	public void create() throws OpenAlException {
 //		List<String> list = ALUtil.getStringList(0, ALC10.ALC_DEVICE_SPECIFIER/*EnumerateAllExt.ALC_DEFAULT_ALL_DEVICES_SPECIFIER*/);
@@ -233,15 +241,6 @@ public class AudioEngine {
 			}
 		}
 
-		// if (MercatorSynthesizer.class.isAssignableFrom(clazz)) {
-		// T audioProducer = (T) mercatorSynthesizerFactory.createSynth();
-		// synths.add(audioProducer);
-		// return audioProducer;
-		// } else if (Mp3Player.class.isAssignableFrom(clazz)) {
-		// T audioProducer = (T) mp3PlayerFactory.createSynth();
-		// synths.add(audioProducer);
-		// return audioProducer;
-		// }
 		return null;
 	}
 
@@ -431,12 +430,6 @@ public class AudioEngine {
 
 	public void remove(final AudioProducer audioProducer) {
 		synths.remove(audioProducer);
-		// synthFactory.cacheSynth(Synth);
-		// if (MercatorSynthesizer.class.isInstance(audioProducer)) {
-		// mercatorSynthesizerFactory.cacheSynth((MercatorSynthesizer) audioProducer);
-		// } else if (Mp3Player.class.isInstance(audioProducer)) {
-		// mp3PlayerFactory.cacheSynth((Mp3Player) audioProducer);
-		// }
 		for (final AbstractSynthesizerFactory factory : factoryMap.values()) {
 			if (factory.handles().isInstance(audioProducer)) {
 				factory.cacheSynth(audioProducer);

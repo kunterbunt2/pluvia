@@ -3,7 +3,7 @@ package com.abdalla.bushnaq.pluvia.engine.shader;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.math.Plane;
 
-public interface MercatorShaderProviderInterface extends ShaderProvider {
+public interface GameShaderProviderInterface extends ShaderProvider {
 	@Override
 	public void dispose();
 

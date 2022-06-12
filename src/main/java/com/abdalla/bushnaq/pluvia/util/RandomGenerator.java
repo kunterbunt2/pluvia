@@ -2,11 +2,11 @@ package com.abdalla.bushnaq.pluvia.util;
 
 import java.util.Random;
 
-public class MercatorRandomGenerator {
+public class RandomGenerator {
 	public int				index;
 	private final Random	random;
 
-	public MercatorRandomGenerator(final int seed) {
+	public RandomGenerator(final int seed) {
 		random = new Random(seed);
 	}
 

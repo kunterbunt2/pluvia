@@ -16,10 +16,10 @@ import net.mgsx.gltf.scene3d.shaders.PBRShader;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 
-public class MercatorPbrShaderProvider extends PBRShaderProvider implements MercatorShaderProviderInterface {
+public class GamePbrShaderProvider extends PBRShaderProvider implements GameShaderProviderInterface {
 
-	public static MercatorPbrShaderProvider createDefault(final PBRShaderConfig config, final Water water, final Mirror mirror) {
-		return new MercatorPbrShaderProvider(config, water, mirror);
+	public static GamePbrShaderProvider createDefault(final PBRShaderConfig config, final Water water, final Mirror mirror) {
+		return new GamePbrShaderProvider(config, water, mirror);
 	}
 
 	private Plane		clippingPlane;
@@ -34,7 +34,7 @@ public class MercatorPbrShaderProvider extends PBRShaderProvider implements Merc
 //	private final FrameBuffer	waterRefractionFbo;
 	public WaterShader	waterShader;
 
-	public MercatorPbrShaderProvider(final PBRShaderConfig config, final Water water, final Mirror mirror) {
+	public GamePbrShaderProvider(final PBRShaderConfig config, final Water water, final Mirror mirror) {
 		super(config);
 //		this.waterTiling = waterTiling;
 //		this.waveStrength = waveStrength;
