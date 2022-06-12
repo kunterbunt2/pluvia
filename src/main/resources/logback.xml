@@ -4,7 +4,9 @@
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
-	<property name="LOG_FILE" value="${user.home}/.pluvia/pluvia" />
+	
+	<!-- -->
+	<variable name="LOG_FILE" value="${user.home}/.pluvia/pluvia" />
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_FILE}.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
