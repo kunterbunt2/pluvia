@@ -135,13 +135,6 @@ public class AudioEngine {
 
 	private final Vector3												velocity				= new Vector3();				// the velocity of the listener
 
-	public AudioEngine(final int samples, final int samplerate, final int bits/* , final int channels */) {
-		this.samples = samples;
-		this.samplerate = samplerate;
-		this.bits = bits;
-		// this.channels = channels;
-	}
-
 	public AudioEngine() {
 		this(4410 / 4, 44100, 16);
 		add(new MercatorSynthesizerFactory());
@@ -152,6 +145,13 @@ public class AudioEngine {
 		this(samples, 44100, 16);
 		add(new MercatorSynthesizerFactory());
 		add(new Mp3PlayerFactory());
+	}
+
+	public AudioEngine(final int samples, final int samplerate, final int bits/* , final int channels */) {
+		this.samples = samples;
+		this.samplerate = samplerate;
+		this.bits = bits;
+		// this.channels = channels;
 	}
 
 	public void add(final AbstractSynthesizerFactory<? extends AudioProducer> factory) {

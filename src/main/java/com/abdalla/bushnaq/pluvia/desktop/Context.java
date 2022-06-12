@@ -87,36 +87,36 @@ public class Context extends ApplicationProperties {
 		return isEclipse;
 	}
 
-	public ModelList<Bubble>		bubbleList		= new ModelList<>();
-	public long						currentTime		= 8L * 10000;
-	public ModelList<Digit>			digitList		= new ModelList<>();
-	private boolean					enableTime		= true;
-	public ModelList<Fly>			fireflyList		= new ModelList<>();
-	public ModelList<Fish>			fishList		= new ModelList<>();
-	public ModelList<Firefly>		flyList			= new ModelList<>();
+	public ModelList<Bubble>	bubbleList		= new ModelList<>();
+	public long					currentTime		= 8L * 10000;
+	public ModelList<Digit>		digitList		= new ModelList<>();
+	private boolean				enableTime		= true;
+	public ModelList<Fly>		fireflyList		= new ModelList<>();
+	public ModelList<Fish>		fishList		= new ModelList<>();
+	public ModelList<Firefly>	flyList			= new ModelList<>();
 	// private final long fixedDelta = 20L;
-	public Game						game			= null;				// the current game
-	public GameList					gameList		= new GameList();
-	private String					installationFolder;
-	private long					lastTime		= 0;
-	public LevelManager				levelManager	= null;
-	private OperatingSystem			operatingSystem;
-	public ModelList<Rain>			rainList		= new ModelList<>();
+	public Game					game			= null;				// the current game
+	public GameList				gameList		= new GameList();
+	private String				installationFolder;
+	private long				lastTime		= 0;
+	public LevelManager			levelManager	= null;
+	private OperatingSystem		operatingSystem;
+	public ModelList<Rain>		rainList		= new ModelList<>();
 
-	public boolean					restart			= false;
+	public boolean				restart			= false;
 
 	// private boolean useFixedDelta = false;
-	protected ScoreList				scoreList		= new ScoreList(3);
+	protected ScoreList			scoreList		= new ScoreList(3);
 
-	public Object					selected		= null;
+	public Object				selected		= null;
 
-	public StoneList				stoneList		= new StoneList();
+	public StoneList			stoneList		= new StoneList();
 
-	public long						timeDelta		= 0L;
+	public long					timeDelta		= 0L;
 
-	public ModelList<Turtle>		turtleList		= new ModelList<>();
+	public ModelList<Turtle>	turtleList		= new ModelList<>();
 
-	public RandomGenerator	universeRG;
+	public RandomGenerator		universeRG;
 
 	public Context() {
 		homeFolderName = System.getProperty("user.home") + "/.pluvia";
