@@ -9,34 +9,34 @@ import org.lwjgl.system.libc.LibCStdlib;
 
 public class Synthesizer extends AbstractAudioProducer {
 
-	private BassBoost bassBoost = null;
-	private float bassBoostDbGain = 12;
-	private float bassBoostFrequency = 440;
-	private boolean enableBassBoost = false;
-	//	private boolean enabled = false;//a disabled synth does not possess an audio source and any of the source attached resource like filters and buffers
-	private boolean enableFilter;
-	//	private float gain = 1.0f;
-	private float highGain = 0.0f;
-	volatile double lastFrequency = 0.0;
-	long lastIndex;
-	private final List<Lfo> lfos = new ArrayList<>();
-	private float lowGain = 1.0f;
+	private BassBoost				bassBoost			= null;
+	private float					bassBoostDbGain		= 12;
+	private float					bassBoostFrequency	= 440;
+	private boolean					enableBassBoost		= false;
+	// private boolean enabled = false;//a disabled synth does not possess an audio source and any of the source attached resource like filters and buffers
+	private boolean					enableFilter;
+	// private float gain = 1.0f;
+	private float					highGain			= 0.0f;
+	volatile double					lastFrequency		= 0.0;
+	long							lastIndex;
+	private final List<Lfo>			lfos				= new ArrayList<>();
+	private float					lowGain				= 1.0f;
 
-	private final List<Oscilator> oscillators = new ArrayList<>();
+	private final List<Oscilator>	oscillators			= new ArrayList<>();
 
-	//	/**
-	//	 * adapt synthesizer to the current source velocity
-	//	 * @param speed
-	//	 * @throws OpenAlException
-	//	 */
-	//	public void adaptToVelocity(final float speed) throws OpenAlException {
-	//	}
+	// /**
+	// * adapt synthesizer to the current source velocity
+	// * @param speed
+	// * @throws OpenAlException
+	// */
+	// public void adaptToVelocity(final float speed) throws OpenAlException {
+	// }
 
-	//	private boolean play = false;//is the source playing?
-	//	private final Vector3 position = new Vector3();//position of the audio source
-	private final int samplerate;
-	//	private OpenAlSource source = null;//if enabled, this will hold the attached openal source, otherwise null
-	//	private final Vector3 velocity = new Vector3();//velocity of the audio source
+	// private boolean play = false;//is the source playing?
+	// private final Vector3 position = new Vector3();//position of the audio source
+	private final int				samplerate;
+	// private OpenAlSource source = null;//if enabled, this will hold the attached openal source, otherwise null
+	// private final Vector3 velocity = new Vector3();//velocity of the audio source
 
 	public Synthesizer(final int samplerate) throws OpenAlException {
 		this.samplerate = samplerate;
@@ -47,13 +47,13 @@ public class Synthesizer extends AbstractAudioProducer {
 		lfos.add(lfo);
 	}
 
-	//	public OpenAlSource disable() throws OpenAlException {
-	//		enabled = false;
-	//		source.pause();
-	//		final OpenAlSource sourceBuffer = source;
-	//		source = null;
-	//		return sourceBuffer;
-	//	}
+	// public OpenAlSource disable() throws OpenAlException {
+	// enabled = false;
+	// source.pause();
+	// final OpenAlSource sourceBuffer = source;
+	// source = null;
+	// return sourceBuffer;
+	// }
 
 	public void add(final Oscilator generator) {
 		generator.setSampleRate(samplerate);
@@ -64,44 +64,46 @@ public class Synthesizer extends AbstractAudioProducer {
 		bassBoost = new BassBoost(bassBoostFrequency, bassBoostDbGain, samplerate);
 	}
 
-	//	public Vector3 getPosition() {
-	//		return position;
-	//	}
+	// public Vector3 getPosition() {
+	// return position;
+	// }
 
-	//	public boolean isEnabled() {
-	//		return enabled;
-	//	}
+	// public boolean isEnabled() {
+	// return enabled;
+	// }
 
-	//	public boolean isPlaying() throws OpenAlException {
-	//		return play;
-	//	}
+	// public boolean isPlaying() throws OpenAlException {
+	// return play;
+	// }
 
-	//	public void pause() throws OpenAlException {
-	//		if (this.play) {
-	//			play = false;
-	//		}
-	//		if (isEnabled())
-	//			source.pause();
-	//	}
+	// public void pause() throws OpenAlException {
+	// if (this.play) {
+	// play = false;
+	// }
+	// if (isEnabled())
+	// source.pause();
+	// }
 
-	//	public void play() throws OpenAlException {
-	//		if (!this.play) {
-	//			play = true;
-	//		}
-	//		if (isEnabled())
-	//			source.play();
-	//	}
+	// public void play() throws OpenAlException {
+	// if (!this.play) {
+	// play = true;
+	// }
+	// if (isEnabled())
+	// source.play();
+	// }
 
 	@Override
 	public void dispose() throws OpenAlException {
-		super.dispose();
-		//		if (isEnabled())
-		//			source.dispose();
-		for (final Oscilator osc : oscillators) {
-			osc.dispose();
-		}
-		for (final Lfo lfo : lfos) {
-			lfo.dispose();
+		if (isEnabled()) {
+			super.dispose();
+			// if (isEnabled())
+			// source.dispose();
+			for (final Oscilator osc : oscillators) {
+				osc.dispose();
+			}
+			for (final Lfo lfo : lfos) {
+				lfo.dispose();
+			}
 		}
 	}
 
@@ -113,7 +115,7 @@ public class Synthesizer extends AbstractAudioProducer {
 		this.source.setGain(gain);
 		this.source.updateFilter(enableFilter, lowGain, highGain);
 		if (isPlaying())
-			this.source.play();//we should be playing
+			this.source.play();// we should be playing
 		this.source.unparkOrStartThread();
 	}
 
@@ -140,28 +142,28 @@ public class Synthesizer extends AbstractAudioProducer {
 		if (bassBoost != null)
 			value = bassBoost.process(value, 1);
 
-		//Short.MAX_VALUE;
+		// Short.MAX_VALUE;
 		return (short) (32760 * value);
 
 	}
 
-	//	/**
-	//	 * Convenience method used for debugging
-	//	 * @throws OpenAlcException
-	//	 */
-	//	public void renderBuffer() throws OpenAlcException {
-	//		if (isEnabled()) {
-	//			source.renderBuffer();
-	//		} else {
-	//			throw new OpenAlcException("Synth is disabled");
-	//		}
-	//	}
+	// /**
+	// * Convenience method used for debugging
+	// * @throws OpenAlcException
+	// */
+	// public void renderBuffer() throws OpenAlcException {
+	// if (isEnabled()) {
+	// source.renderBuffer();
+	// } else {
+	// throw new OpenAlcException("Synth is disabled");
+	// }
+	// }
 
 	@Override
 	public void processBuffer(final ByteBuffer byteBuffer) throws OpenAlcException {
-		double f1 = -1;
-		double f2 = 0.0;
-		ByteBufferContainer byteBufferContainer = null;
+		double				f1					= -1;
+		double				f2					= 0.0;
+		ByteBufferContainer	byteBufferContainer	= null;
 		if (isKeepCopy()) {
 			byteBufferContainer = new ByteBufferContainer();
 			byteBufferContainer.byteBuffer = LibCStdlib.malloc(source.getBuffersize());
@@ -199,30 +201,30 @@ public class Synthesizer extends AbstractAudioProducer {
 		this.bassBoostDbGain = bassBoostDbGain;
 	}
 
-	//	public void setGain(final float gain) throws OpenAlException {
-	//		if (this.gain != gain && isEnabled()) {
-	//			source.setGain(gain);
-	//		}
-	//		this.gain = gain;
-	//	}
+	// public void setGain(final float gain) throws OpenAlException {
+	// if (this.gain != gain && isEnabled()) {
+	// source.setGain(gain);
+	// }
+	// this.gain = gain;
+	// }
 
-	//	public void setPositionAndVelocity(final float[] position, final float[] velocity) throws OpenAlException {
-	//		if (this.getPosition().x != position[0] || this.getPosition().y != position[1] || this.getPosition().z != position[2]) {
-	//			this.getPosition().set(position[0], position[1], position[2]);
-	//		}
-	//		if (isEnabled()) {
-	//			source.setPosition(position);
-	//		}
-	//		//		}
-	//		if (this.velocity.x != velocity[0] || this.velocity.y != velocity[1] || this.velocity.z != velocity[2]) {
-	//			this.velocity.set(velocity[0], velocity[1], velocity[2]);
-	//			adaptToVelocity(this.velocity.len());
-	//		}
-	//		if (isEnabled()) {
-	//			source.setVelocity(position, velocity);
-	//		}
-	//		//		}
-	//	}
+	// public void setPositionAndVelocity(final float[] position, final float[] velocity) throws OpenAlException {
+	// if (this.getPosition().x != position[0] || this.getPosition().y != position[1] || this.getPosition().z != position[2]) {
+	// this.getPosition().set(position[0], position[1], position[2]);
+	// }
+	// if (isEnabled()) {
+	// source.setPosition(position);
+	// }
+	// // }
+	// if (this.velocity.x != velocity[0] || this.velocity.y != velocity[1] || this.velocity.z != velocity[2]) {
+	// this.velocity.set(velocity[0], velocity[1], velocity[2]);
+	// adaptToVelocity(this.velocity.len());
+	// }
+	// if (isEnabled()) {
+	// source.setVelocity(position, velocity);
+	// }
+	// // }
+	// }
 
 	public void setFilter(final boolean enableFilter) throws OpenAlException {
 		this.enableFilter = enableFilter;
@@ -245,29 +247,29 @@ public class Synthesizer extends AbstractAudioProducer {
 				removeBasBoost();
 			}
 		} else {
-			//no filter
+			// no filter
 			if (enableBassBoost) {
 				createBassBoost();
 			} else {
-				//ok
+				// ok
 			}
 		}
 	}
 
-	//	public void waitForPlay() throws InterruptedException, OpenAlException {
-	//		if (isEnabled()) {
-	//			do {
-	//				Thread.sleep(100); // should use a thread sleep NOT sleep() for a more responsive finish
-	//			} while (source.isPlaying());
-	//		}
-	//	}
+	// public void waitForPlay() throws InterruptedException, OpenAlException {
+	// if (isEnabled()) {
+	// do {
+	// Thread.sleep(100); // should use a thread sleep NOT sleep() for a more responsive finish
+	// } while (source.isPlaying());
+	// }
+	// }
 
-	//	public void writeWav(final String fileName) throws IOException, OpenAlcException {
-	//		if (isEnabled()) {
-	//			source.writeWav(fileName);
-	//		} else {
-	//			throw new OpenAlcException("Synth is disabled");
-	//		}
-	//	}
+	// public void writeWav(final String fileName) throws IOException, OpenAlcException {
+	// if (isEnabled()) {
+	// source.writeWav(fileName);
+	// } else {
+	// throw new OpenAlcException("Synth is disabled");
+	// }
+	// }
 
 }

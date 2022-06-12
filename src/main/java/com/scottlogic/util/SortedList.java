@@ -809,7 +809,7 @@ public class SortedList<T> extends AbstractList<T> implements Serializable {
 	}
 
 	//removes the given node from the tree, rebalancing if required, adds to modcount too..
-	private void remove(final Node toRemove) {
+	protected void remove(final Node toRemove) {
 		if (toRemove.isLeaf()) {
 			final Node parent = toRemove.parent;
 			if (parent == null) { //case where there is only one element in the list..

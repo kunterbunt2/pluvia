@@ -199,7 +199,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			scoreDialog.dispose();
 			pauseDialog.dispose();
 			aboutDialog.dispose();
-			mainDialog.dispose();
 		} catch (final Exception e) {
 			logger.error(e.getMessage(), e);
 		}

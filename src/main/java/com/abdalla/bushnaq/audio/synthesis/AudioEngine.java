@@ -24,20 +24,18 @@ import com.badlogic.gdx.math.Vector3;
 import com.scottlogic.util.UnsortedList;
 
 /**
- * SoundEngine manages Synthesizer instances and caches them when they are not
- * used Synthesizer need to be all of the same type Synthesizer must be
- * reinitialized when reusing them
+ * SoundEngine manages Synthesizer instances and caches them when they are not used Synthesizer need to be all of the same type Synthesizer must be reinitialized when reusing them
  * 
  * @author abdalla bushnaq
  *
  */
 public class AudioEngine {
-	private static ALCapabilities alCapabilities;
-	private static ALCCapabilities alcCapabilities;
-	private static long device = 0;
-	private static Logger logger = LoggerFactory.getLogger(AudioEngine.class);
-	private static final int START_RADIUS = 1500;
-	private static final int STOP_RADIUS = 2000;
+	private static ALCapabilities	alCapabilities;
+	private static ALCCapabilities	alcCapabilities;
+	private static long				device			= 0;
+	private static Logger			logger			= LoggerFactory.getLogger(AudioEngine.class);
+	private static final int		START_RADIUS	= 1500;
+	private static final int		STOP_RADIUS		= 2000;
 
 	public static void checkAlcError(final boolean result, final String message) throws OpenAlException {
 		final int error = ALC10.alcGetError(device);
@@ -112,31 +110,31 @@ public class AudioEngine {
 		}
 	}
 
-	int auxiliaryEffectSlot;
+	int																	auxiliaryEffectSlot;
 
-	private final int bits;
+	private final int													bits;
 
 	// private MovingCamera camera;
 
-	private long context;
-	private final Vector3 direction = new Vector3();// direction of the listener (what direction is he looking to)
-	private final float disableRadius2 = STOP_RADIUS * STOP_RADIUS;// all audio streams that are located further away
-																	// will be stopped and removed
-	private int effect;
-	private int enabledAudioSourceCount = 0;
-	private final float enableRadius2 = START_RADIUS * START_RADIUS;// an audio streams that gets closer will get added
-																	// and started
-	Map<String, AbstractSynthesizerFactory<? extends AudioProducer>> factoryMap = new HashMap<>();
-	private int maxMonoSources = 0;
-	private final Vector3 position = new Vector3();// position of the listener
-	private final int samplerate;
-	private final int samples;
+	private long														context;
+	private final Vector3												direction				= new Vector3();				// direction of the listener (what direction is he looking to)
+	private final float													disableRadius2			= STOP_RADIUS * STOP_RADIUS;	// all audio streams that are located further away
+																																// will be stopped and removed
+	private int															effect;
+	private int															enabledAudioSourceCount	= 0;
+	private final float													enableRadius2			= START_RADIUS * START_RADIUS;	// an audio streams that gets closer will get added
+																																// and started
+	Map<String, AbstractSynthesizerFactory<? extends AudioProducer>>	factoryMap				= new HashMap<>();
+	private int															maxMonoSources			= 0;
+	private final Vector3												position				= new Vector3();				// position of the listener
+	private final int													samplerate;
+	private final int													samples;
 	// private final SynthesizerFactory<T> synthFactory;
-	private final List<AudioProducer> synths = new UnsortedList<>();
-	private final List<OpenAlSource> unusedSources = new ArrayList<>();
-	private final Vector3 up = new Vector3();// what is up direction for the listener?
+	private final List<AudioProducer>									synths					= new UnsortedList<>();
+	private final List<OpenAlSource>									unusedSources			= new ArrayList<>();
+	private final Vector3												up						= new Vector3();				// what is up direction for the listener?
 
-	private final Vector3 velocity = new Vector3();// the velocity of the listener
+	private final Vector3												velocity				= new Vector3();				// the velocity of the listener
 
 	public AudioEngine(final int samples, final int samplerate, final int bits/* , final int channels */) {
 		this.samples = samples;
@@ -160,8 +158,7 @@ public class AudioEngine {
 		// velocity.set(camera.velocity.x, camera.velocity.y, camera.velocity.z);
 		// updateCamera();
 		// }
-		if (!position.equals(camera.position) || !up.equals(camera.up) || !direction.equals(camera.direction)
-				|| !velocity.equals(camera.velocity)) {
+		if (!position.equals(camera.position) || !up.equals(camera.up) || !direction.equals(camera.direction) || !velocity.equals(camera.velocity)) {
 			position.set(camera.position.x, camera.position.y, camera.position.z);// isometric view with camera hight
 																					// but lookat location
 			up.set(camera.up.x, camera.up.y, camera.up.z);
@@ -194,8 +191,8 @@ public class AudioEngine {
 		AL.createCapabilities(alcCapabilities);
 		alCapabilities = AL.getCapabilities();
 
-		final int size = ALC10.alcGetInteger(device, ALC10.ALC_ATTRIBUTES_SIZE);
-		final int[] attrs = new int[size];
+		final int	size	= ALC10.alcGetInteger(device, ALC10.ALC_ATTRIBUTES_SIZE);
+		final int[]	attrs	= new int[size];
 
 		ALC10.alcGetIntegerv(device, ALC10.ALC_ALL_ATTRIBUTES, attrs);
 
@@ -233,7 +230,6 @@ public class AudioEngine {
 	}
 
 	public <T extends AudioProducer> T createAudioProducer(final Class<T> clazz) throws OpenAlException {
-
 		for (final AbstractSynthesizerFactory<? extends AudioProducer> factory : factoryMap.values()) {
 			if (factory.handles().isAssignableFrom(clazz)) {
 				final T audioProducer = (T) factory.createSynth();
@@ -280,10 +276,8 @@ public class AudioEngine {
 	}
 
 	/**
-	 * There is a limit of supported audio sources All synthesizers that are further
-	 * away than disableRadius will be disabled and their audio source unassigned.
-	 * All synthesizers that are nearer than enableRadius will be enabled and
-	 * assigned an audio source.
+	 * There is a limit of supported audio sources All synthesizers that are further away than disableRadius will be disabled and their audio source unassigned. All synthesizers that are nearer than enableRadius will be
+	 * enabled and assigned an audio source.
 	 * 
 	 * @throws OpenAlException
 	 */
@@ -307,8 +301,8 @@ public class AudioEngine {
 	public void disableHrtf(final int index) throws OpenAlException {
 		if (device == 0)
 			return;
-		int i = 0;
-		final int[] attr = new int[5];
+		int			i		= 0;
+		final int[]	attr	= new int[5];
 		attr[i++] = SOFTHRTF.ALC_HRTF_SOFT;
 		attr[i++] = ALC10.ALC_FALSE;
 		{
@@ -339,9 +333,11 @@ public class AudioEngine {
 		for (final AudioProducer synth : synths) {
 			synth.dispose();
 		}
+		synths.clear();
 		for (final OpenAlSource source : unusedSources) {
 			source.dispose();
 		}
+		unusedSources.clear();
 		removeAuxiliaryEffectSlot();
 		// AudioEngine.checkAlError("Openal error #");
 		{
@@ -371,8 +367,8 @@ public class AudioEngine {
 	public void enableHrtf(final int index) throws OpenAlException {
 		if (device == 0)
 			return;
-		int i = 0;
-		final int[] attr = new int[5];
+		int			i		= 0;
+		final int[]	attr	= new int[5];
 		attr[i++] = SOFTHRTF.ALC_HRTF_SOFT;
 		attr[i++] = ALC10.ALC_TRUE;
 		{

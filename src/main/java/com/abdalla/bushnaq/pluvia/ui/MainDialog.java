@@ -28,18 +28,17 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
 public class MainDialog extends AbstractDialog {
-	protected static final int DIALOG_HEIGHT = 150 * 4;
-	private VisList<String> listView = new VisList<>();
-	private VisTable table1 = new VisTable(true);
-	private VisTable table2 = new VisTable(true);
-	private VisTable table3 = new VisTable(true);
-	private VisLabel descriptionLabel;
-	Mp3Player mp3Player;
-	public AudioEngine audioEngine = new MercatorAudioEngine();
-	Sound oggSound;
+	protected static final int	DIALOG_HEIGHT	= 150 * 4;
+	private VisList<String>		listView		= new VisList<>();
+	private VisTable			table1			= new VisTable(true);
+	private VisTable			table2			= new VisTable(true);
+	private VisTable			table3			= new VisTable(true);
+	private VisLabel			descriptionLabel;
+	Mp3Player					mp3Player;
+	public AudioEngine			audioEngine		= new MercatorAudioEngine();
+	Sound						oggSound;
 
-	public MainDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer)
-			throws Exception {
+	public MainDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		super(gameEngine, batch, inputMultiplexer);
 		createStage("", false);
 	}
@@ -89,16 +88,15 @@ public class MainDialog extends AbstractDialog {
 		getGameEngine().context.levelManager.readFromDisk();
 		getGameEngine().context.levelManager.createLevel();
 		{
-			float z = getGameEngine().context.game.cameraZPosition;
-			Vector3 position = getGameEngine().renderEngine.getCamera().position;
+			float	z			= getGameEngine().context.game.cameraZPosition;
+			Vector3	position	= getGameEngine().renderEngine.getCamera().position;
 			position.z = z;
 			if (getGameEngine().context.game.getNrOfRows() == 0) {
 				position.y = 4;
 				getGameEngine().renderEngine.getCamera().lookat.y = 4.5f;
 			} else {
 				position.y = getGameEngine().context.game.getNrOfRows() / 2;
-				getGameEngine().renderEngine.getCamera().lookat.y = getGameEngine().context.game.getNrOfRows() / 2
-						+ 0.5f;
+				getGameEngine().renderEngine.getCamera().lookat.y = getGameEngine().context.game.getNrOfRows() / 2 + 0.5f;
 			}
 			getGameEngine().renderEngine.getCamera().update();
 		}
@@ -122,8 +120,7 @@ public class MainDialog extends AbstractDialog {
 			VisLabel label = new VisLabel("Main Menu");
 			label.setColor(LIGHT_BLUE_COLOR);
 			label.setAlignment(Align.center);
-			getTable().add(label)./* width(DIALOG_WIDTH * 4 * sizes.scaleFactor). */pad(0, 16, 16, 16).center()
-					.colspan(3);
+			getTable().add(label)./* width(DIALOG_WIDTH * 4 * sizes.scaleFactor). */pad(0, 16, 16, 16).center().colspan(3);
 		}
 		{
 			getTable().row();
@@ -226,17 +223,16 @@ public class MainDialog extends AbstractDialog {
 
 	private void updateDesciption(Sizes sizes) {
 		try {
-			String fileName = listView.getSelected() + ".txt";
-			String description = readFile(this.getClass().getResourceAsStream(fileName));
-			String[] split = description.split("\n");
+			String		fileName	= listView.getSelected() + ".txt";
+			String		description	= readFile(this.getClass().getResourceAsStream(fileName));
+			String[]	split		= description.split("\n");
 			table3.clear();
 			for (String line : split) {
 				table3.row();
 				descriptionLabel = new VisLabel(line);
 				descriptionLabel.setWrap(true);
 				descriptionLabel.setAlignment(Align.topLeft);
-				table3.add(descriptionLabel).width(DIALOG_WIDTH * 3 * sizes.scaleFactor).pad(0).space(0, 0, 3, 0).left()
-						.top();
+				table3.add(descriptionLabel).width(DIALOG_WIDTH * 3 * sizes.scaleFactor).pad(0).space(0, 0, 3, 0).left().top();
 			}
 			packAndPosition();
 		} catch (IOException e) {
@@ -262,10 +258,8 @@ public class MainDialog extends AbstractDialog {
 	}
 
 	private void disposeAudio() {
-		if (mp3Player != null) {
+		if (audioEngine.isCreated()) {
 			try {
-				mp3Player.dispose();
-				mp3Player = null;
 				audioEngine.dispose();
 			} catch (OpenAlException e) {
 				logger.error(e.getMessage(), e);
