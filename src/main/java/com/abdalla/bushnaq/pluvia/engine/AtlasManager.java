@@ -5,9 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -16,21 +16,23 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.VisUI.SkinScale;
 
 public class AtlasManager {
-	private static String	assetsFolderName;
-	public TextureAtlas		atlas;
-	public BitmapFont		aeroFont;
-	public BitmapFont		modelFont;
-	public BitmapFont		logoFont;
-	public FontData[]		fontDataList;
-	public AtlasRegion		systemTextureRegion;
-	public BitmapFont		smallFont;
-	public BitmapFont		versionFont;
-
-	public AtlasManager() {
-	}
+	private static String assetsFolderName;
 
 	public static String getAssetsFolderName() {
 		return assetsFolderName;
+	}
+
+	public BitmapFont	aeroFont;
+	public TextureAtlas	atlas;
+	public FontData[]	fontDataList;
+	public BitmapFont	logoFont;
+	public BitmapFont	modelFont;
+	public BitmapFont	smallFont;
+	public AtlasRegion	systemTextureRegion;
+
+	public BitmapFont	versionFont;
+
+	public AtlasManager() {
 	}
 
 	public void dispose() {

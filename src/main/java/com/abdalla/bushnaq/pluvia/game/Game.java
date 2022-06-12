@@ -9,33 +9,23 @@ import com.abdalla.bushnaq.pluvia.util.sound.Tools;
 
 public class Game {
 	public float		cameraZPosition;
-//	protected String	helpPath			= null;
-	protected String	name				= null;	// ---Game name
-	protected int		nrOfColumns			= 0;	// ---Size of board
-	protected int		nrOfFallenRows		= 0;	// ---Level starts with lower part filled up
-	protected int		nrOfFallingStones	= 0;	// ---Max count of simultaneous falling stones
-	protected int		nrOfRows			= 0;	// ---Size of board
-	protected int		nrOfStones			= 0;	// ---Max count of different stone types (colors)
-	protected int		preview				= 0;	// ---Rows of visible stones that will drop in the next moves
+	protected String	description;
+	// protected String helpPath = null;
+	protected String	name				= null;			// ---Game name
+	protected int		nrOfColumns			= 0;			// ---Size of board
+	protected int		nrOfFallenRows		= 0;			// ---Level starts with lower part filled up
+	protected int		nrOfFallingStones	= 0;			// ---Max count of simultaneous falling stones
+	protected int		nrOfRows			= 0;			// ---Size of board
+	protected int		nrOfStones			= 0;			// ---Max count of different stone types (colors)
+	protected int		preview				= 0;			// ---Rows of visible stones that will drop in the next moves
 	protected long		relativeTime		= 0;
 	protected boolean	reset				= false;
+
 	protected int		score				= 0;
 
-	public long getRelativeTime() {
-		return relativeTime;
-	}
+	protected int		steps				= 0;
 
-	public int getSteps() {
-		return steps;
-	}
-
-	protected int		steps		= 0;
-	protected String	userName	= "Test User";
-	protected String	description;
-
-//	public Game() {
-//		helpPath = "doc/" + Name + ".html";
-//	}
+	protected String	userName			= "Test User";
 
 	public Game(String aName, int aNrOfColumns, int aNrOfRows, int aNrOfFallingStones, int aNrOfStones, int aPreview, int aNrOfFallenRows, float cameraZPosition, boolean aReset) {
 		name = aName;
@@ -50,6 +40,18 @@ public class Game {
 		this.cameraZPosition = cameraZPosition;
 	}
 
+	public void addStoneScore() {
+		score += getStoneScore();
+	}
+
+//	public Game() {
+//		helpPath = "doc/" + Name + ".html";
+//	}
+
+	public String getName() {
+		return name;
+	}
+
 //	public void addScore() {
 //		if (score > 0) {
 ////			scoreList.add(new Score(userName, System.currentTimeMillis(), relativeTime, score, steps));
@@ -60,10 +62,6 @@ public class Game {
 //	public String getHelpPath() {
 //		return helpPath;
 //	}
-
-	public String getName() {
-		return name;
-	}
 
 	public int getNrOfColumns() {
 		return nrOfColumns;
@@ -89,18 +87,18 @@ public class Game {
 		return preview;
 	}
 
+	public long getRelativeTime() {
+		return relativeTime;
+	}
+
 	public int getScore(Stone patch[][]) {
 //		if (queryHeapHeight(patch) == 0)
-			return score;
+		return score;
 //		return -1;
 	}
 
-	protected int queryHeapHeight(Stone patch[][]) {
-		for (int y = preview; y < nrOfRows; y++)
-			for (int x = 0; x < nrOfColumns; x++)
-				if (patch[x][y] != null)
-					return nrOfRows - y;
-		return 0;
+	public int getSteps() {
+		return steps;
 	}
 
 	protected int getStoneScore() {
@@ -118,29 +116,37 @@ public class Game {
 		return reset;
 	}
 
-	protected boolean queryWin(Stone patch[][]) {
-		return false;
+	protected int queryHeapHeight(Stone patch[][]) {
+		for (int y = preview; y < nrOfRows; y++)
+			for (int x = 0; x < nrOfColumns; x++)
+				if (patch[x][y] != null)
+					return nrOfRows - y;
+		return 0;
 	}
 
 	protected boolean queryTilt(Stone patch[][]) {
 		for (int x = 0; x < nrOfColumns; x++) {
 			if (patch[x][preview] != null) {
-				Tools.play(AtlasManager.getAssetsFolderName()+"/sound/tilt.wav");
+				Tools.play(AtlasManager.getAssetsFolderName() + "/sound/tilt.wav");
 				return true;
 			}
 		}
 		return false;
 	}
 
-	protected void reset() {
-		score = -nrOfColumns * nrOfRows * getStoneScore();
-		steps = 0;
-		relativeTime = 0;
+	protected boolean queryWin(Stone patch[][]) {
+		return false;
 	}
 
 //	public void setHelpPath(String aHelpPath) {
 //		helpPath = aHelpPath;
 //	}
+
+	protected void reset() {
+		score = -nrOfColumns * nrOfRows * getStoneScore();
+		steps = 0;
+		relativeTime = 0;
+	}
 
 	public void setName(String aName) {
 		name = aName;
@@ -181,10 +187,6 @@ public class Game {
 		score = aScore;
 	}
 
-	public void setUserName(String aUserName) {
-		userName = aUserName;
-	}
-
 //	public void updatePatchScore(Stone aPatch[][]) {
 //		for (int y = preview; y < nrOfRows; y++) {
 //			for (int x = 0; x < nrOfColumns; x++) {
@@ -200,8 +202,8 @@ public class Game {
 //	public void updateScore(int aHeapHeight) {
 //	}
 
-	public void addStoneScore() {
-		score += getStoneScore();
+	public void setUserName(String aUserName) {
+		userName = aUserName;
 	}
 
 //	public void updateScore(Stone aPatch[][]) {

@@ -15,17 +15,17 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisSlider;
 
 public class GraphicsOptions {
+	// private VisCheckBox fullScreenModeCheckBox;
+	private VisCheckBox				debugModeCheckBox;
+	private VisLabel				foregroundFpsLabel;
+	private VisSlider				foregroundFpsSlider;
+	private GameEngine				gameEngine;
+	private VisSelectBox<Integer>	monitorSelectBox;
 	private VisCheckBox				pbrCheckBox;
 	private VisCheckBox				showFpsCheckBox;
-	private VisCheckBox				vsyncCheckBox;
-//	private VisCheckBox				fullScreenModeCheckBox;
-	private VisCheckBox				debugModeCheckBox;
-	private VisSlider				foregroundFpsSlider;
-	private VisLabel				foregroundFpsLabel;
-	private VisSelectBox<Integer>	monitorSelectBox;
 	private VisCheckBox				showGraphsCheckBox;
-	private GameEngine				gameEngine;
 	private Sizes					sizes;
+	private VisCheckBox				vsyncCheckBox;
 
 	public GraphicsOptions(Table table, GameEngine gameEngine) {
 		this.gameEngine = gameEngine;
@@ -39,6 +39,19 @@ public class GraphicsOptions {
 //		createFullScreenMode(table);
 		createForgroundFps(table);
 		createMonitor(table);
+	}
+
+	private void createDebugMode(Table table) {
+		{
+			VisLabel label = new VisLabel("Debug Mode");
+			label.setAlignment(Align.right);
+			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
+		}
+		{
+			debugModeCheckBox = new VisCheckBox("", gameEngine.context.getDebugModeProperty());
+			table.add(debugModeCheckBox).colspan(2).left();
+		}
+		table.row().pad(16);
 	}
 
 	private void createForgroundFps(Table table) {
@@ -74,7 +87,7 @@ public class GraphicsOptions {
 			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
 		}
 		{
-			monitorSelectBox = new VisSelectBox<Integer>();
+			monitorSelectBox = new VisSelectBox<>();
 			final Monitor[]	monitors	= Lwjgl3ApplicationConfiguration.getMonitors();
 			Integer[]		values		= new Integer[monitors.length];
 			for (int i = 0; i < monitors.length; i++) {
@@ -114,19 +127,6 @@ public class GraphicsOptions {
 		table.row().pad(16);
 	}
 
-	private void createVsync(Table table) {
-		{
-			VisLabel label = new VisLabel("Vertical Synchronization");
-			label.setAlignment(Align.right);
-			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
-		}
-		{
-			vsyncCheckBox = new VisCheckBox("", gameEngine.context.getVsyncProperty());
-			table.add(vsyncCheckBox).colspan(2).left();
-		}
-		table.row().pad(16);
-	}
-
 //	private void createFullScreenMode(Table table) {
 //		{
 //			VisLabel label = new VisLabel("Full Screen Mode");
@@ -140,19 +140,6 @@ public class GraphicsOptions {
 //		table.row().pad(16);
 //	}
 
-	private void createDebugMode(Table table) {
-		{
-			VisLabel label = new VisLabel("Debug Mode");
-			label.setAlignment(Align.right);
-			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
-		}
-		{
-			debugModeCheckBox = new VisCheckBox("", gameEngine.context.getDebugModeProperty());
-			table.add(debugModeCheckBox).colspan(2).left();
-		}
-		table.row().pad(16);
-	}
-
 	private void createShowGraphs(Table table) {
 		{
 			VisLabel label = new VisLabel("Show CPU/GPU Time Graphs");
@@ -162,6 +149,19 @@ public class GraphicsOptions {
 		{
 			showGraphsCheckBox = new VisCheckBox("", gameEngine.context.getShowGraphsProperty());
 			table.add(showGraphsCheckBox).colspan(2).left();
+		}
+		table.row().pad(16);
+	}
+
+	private void createVsync(Table table) {
+		{
+			VisLabel label = new VisLabel("Vertical Synchronization");
+			label.setAlignment(Align.right);
+			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
+		}
+		{
+			vsyncCheckBox = new VisCheckBox("", gameEngine.context.getVsyncProperty());
+			table.add(vsyncCheckBox).colspan(2).left();
 		}
 		table.row().pad(16);
 	}

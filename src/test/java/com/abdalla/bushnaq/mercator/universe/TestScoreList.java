@@ -19,6 +19,17 @@ public class TestScoreList {
 		logger.info(String.format("%s", testInfo.getDisplayName()));
 	}
 
+	private void printResult(ScoreList scoreList) {
+		for (String game : scoreList.keySet()) {
+			int lastScore = Integer.MAX_VALUE;
+			for (Score score : scoreList.get(game)) {
+				assertTrue(lastScore >= score.getScore(), String.format("sorting is wrong score %d is sorted after %d", score.getScore(), lastScore));
+				logger.info(String.format("%s %s %d", score.getGame(), score.getUserName(), score.getScore()));
+				lastScore = score.getScore();
+			}
+		}
+	}
+
 	@Test
 	public void sortOneGame() {
 		ScoreList scoreList = new ScoreList(3);
@@ -30,17 +41,6 @@ public class TestScoreList {
 		}
 
 		printResult(scoreList);
-	}
-
-	private void printResult(ScoreList scoreList) {
-		for (String game : scoreList.keySet()) {
-			int lastScore = Integer.MAX_VALUE;
-			for (Score score : scoreList.get(game)) {
-				assertTrue(lastScore >= score.getScore(), String.format("sorting is wrong score %d is sorted after %d", score.getScore(), lastScore));
-				logger.info(String.format("%s %s %d", score.getGame(), score.getUserName(), score.getScore()));
-				lastScore = score.getScore();
-			}
-		}
 	}
 
 	@Test

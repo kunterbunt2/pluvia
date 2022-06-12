@@ -13,30 +13,38 @@ import com.badlogic.gdx.math.Vector3;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 public class Rain3DRenderer extends ObjectRenderer {
+	private static Color			DIAMON_BLUE_COLOR		= new Color(0x006ab6ff);
+	private static Color			GRAY_COLOR				= new Color(0x404853ff);
+	private static final float		NORMAL_LIGHT_INTENSITY	= 10f;
+	private static Color			POST_GREEN_COLOR		= new Color(0x00614eff);
+	private static Color			SCARLET_COLOR			= new Color(0xb00233ff);
 	private static final float		SIZE_X					= 1.0f;
 	private static final float		SIZE_Y					= 1.0f;
 	private static final float		SIZE_Z					= 1.0f;
-	private static final float		NORMAL_LIGHT_INTENSITY	= 10f;
-	private final Vector3			direction				= new Vector3();	// intermediate value
-	private Rain					rain;
+	private float					angle					= 0;
+	private final Vector3			direction				= new Vector3();		// intermediate value
 	private GameObject				instance;
+	private final Vector3			lightDelta;
 	private float					lightIntensity			= 0f;
 	private boolean					lightIsOne				= false;
-	private final List<PointLight>	pointLight				= new ArrayList<>();
-	private final Vector3			translation				= new Vector3();	// intermediate value
-	private final Vector3			lightDelta;
+
 	private Vector3					lightPosition			= new Vector3();
-	private float angle = 0;
+
+	private final List<PointLight>	pointLight				= new ArrayList<>();
+
+	private Rain					rain;
+
+	private final Vector3			translation				= new Vector3();		// intermediate value
 
 	public Rain3DRenderer(final Rain patch) {
 		this.rain = patch;
-		lightDelta = new Vector3((float) Math.random() * rain.getSize()*2, (float) Math.random() * rain.getSize()*2, (float) Math.random() * rain.getSize()*2);
+		lightDelta = new Vector3((float) Math.random() * rain.getSize() * 2, (float) Math.random() * rain.getSize() * 2, (float) Math.random() * rain.getSize() * 2);
 	}
 
 	@Override
 	public void create(final GameEngine gameEngine) {
 		if (instance == null) {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.rainModel[rain.getType()].scene.model), null);
+			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.rainModel[rain.getType()].scene.model), null);
 			gameEngine.renderEngine.addDynamic(instance);
 			instance.update();
 		}
@@ -68,11 +76,6 @@ public class Rain3DRenderer extends ObjectRenderer {
 			lightIsOne = false;
 		}
 	}
-
-	private static Color	DIAMON_BLUE_COLOR	= new Color(0x006ab6ff);
-	private static Color	GRAY_COLOR			= new Color(0x404853ff);
-	private static Color	POST_GREEN_COLOR	= new Color(0x00614eff);
-	private static Color	SCARLET_COLOR		= new Color(0xb00233ff);
 
 	private void turnLightOn(final GameEngine gameEngine) {
 		if (!lightIsOne) {

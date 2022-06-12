@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
- * BEGIN_PROJECT_HEADER 
+ * BEGIN_PROJECT_HEADER
  *
  * Copyright (c) 2004-2005 by Abdalla Bushnaq.
  *
@@ -8,30 +8,30 @@
  * Project    : Library
  * JRE        : J2SE 5.0
  *
- * END_PROJECT_HEADER    
+ * END_PROJECT_HEADER
  * -------------------------------------------------------------------------*/
 package com.abdalla.bushnaq.pluvia.util;
-public class RcBoolean
-{
-	private boolean	booleanValue;
-	public RcBoolean( boolean aValue )
-	{
+
+public class RcBoolean {
+	private boolean booleanValue;
+
+	public RcBoolean(boolean aValue) {
 		booleanValue = aValue;
 	}
-	public boolean getBooleanValue()
-	{
+
+	public boolean getBooleanValue() {
 		return booleanValue;
 	}
-	public void setBooleanValue( boolean aValue )
-	{
+
+	public void setBooleanValue(boolean aValue) {
 		booleanValue = aValue;
 	}
-	public void setFalse()
-	{
+
+	public void setFalse() {
 		booleanValue = false;
 	}
-	public void setTrue()
-	{
+
+	public void setTrue() {
 		booleanValue = true;
 	}
 }

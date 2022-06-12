@@ -63,10 +63,6 @@ public abstract class Level {
 		game.setReset(false);
 	}
 
-	public int getSteps() {
-		return game.steps;
-	}
-
 	protected boolean clearCommandAttributes() {
 		boolean somethingHasChanged = false;
 		for (int y = height - 1; y >= 0; y--) {
@@ -117,12 +113,12 @@ public abstract class Level {
 
 	abstract void createLevelBackground();
 
+	protected abstract Stone createStone(int x, int y, int type);
+
 	protected Stone createStoneAndUpdateScore(int x, int y, int type) {
 		game.addStoneScore();
 		return createStone(x, y, type);
 	}
-
-	protected abstract Stone createStone(int x, int y, int type);
 
 	public abstract void disposeLevel();
 
@@ -173,11 +169,23 @@ public abstract class Level {
 		return "save/" + game.getUserName() + "/" + game.getName() + ".xml";
 	}
 
+	public String getName() {
+		return game.name;
+	}
+
 //	public int getScore() {
 //		if (queryHeapHeight() == 0)
 //			return game.getScore();
 //		return -1;
 //	}
+
+	public int getScore() {
+		return game.getScore(patch);
+	}
+
+	public int getSteps() {
+		return game.steps;
+	}
 
 	protected boolean isUserReacted() {
 		return userReacted;
@@ -501,13 +509,40 @@ public abstract class Level {
 		return 0;
 	}
 
+	protected boolean queryTilt() {
+		return game.queryTilt(patch);
+	}
+
 	protected boolean queryWin() {
 		return game.queryWin(patch);
 	}
 
-	protected boolean queryTilt() {
-		return game.queryTilt(patch);
-	}
+//	protected void readFromDisk() {
+//		try {
+//			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(getLastGameName())));
+//			readFromDisk(decoder);
+//			NrOfTotalStones = ((Integer) decoder.readObject()).intValue();
+//			game.score = ((Integer) decoder.readObject()).intValue();
+//			game.relativeTime = ((Long) decoder.readObject()).longValue();
+//			decoder.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	protected void readFromDisk(XMLDecoder aDecoder) {
+//		for (int y = height - 1; y >= 0; y--) {
+//			for (int x = 0; x < width; x++) {
+//				boolean exits = ((Boolean) aDecoder.readObject()).booleanValue();
+//				if (exits) {
+//					int type = ((Integer) aDecoder.readObject()).intValue();
+//					patch[x][y] = createStone(x, y, type);
+//					patch[x][y].readFromDisk(aDecoder);
+//				} else {
+//				}
+//			}
+//		}
+//	}
 
 	public void reactLeft(Object selected) {
 		if (selected != null && userCanReact()) {
@@ -545,32 +580,38 @@ public abstract class Level {
 		}
 	}
 
-//	protected void readFromDisk() {
-//		try {
-//			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(getLastGameName())));
-//			readFromDisk(decoder);
-//			NrOfTotalStones = ((Integer) decoder.readObject()).intValue();
-//			game.score = ((Integer) decoder.readObject()).intValue();
-//			game.relativeTime = ((Long) decoder.readObject()).longValue();
-//			decoder.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	protected void readFromDisk(XMLDecoder aDecoder) {
-//		for (int y = height - 1; y >= 0; y--) {
-//			for (int x = 0; x < width; x++) {
-//				boolean exits = ((Boolean) aDecoder.readObject()).booleanValue();
-//				if (exits) {
-//					int type = ((Integer) aDecoder.readObject()).intValue();
-//					patch[x][y] = createStone(x, y, type);
-//					patch[x][y].readFromDisk(aDecoder);
-//				} else {
-//				}
-//			}
-//		}
-//	}
+	private void read(XMLDecoder decoder) {
+		// only if this is a real game type and not the UI type
+		if (!game.name.equals(GameName.UI.name())) {
+			game.score = (int) decoder.readObject();
+			game.steps = (int) decoder.readObject();
+			game.relativeTime = (long) decoder.readObject();
+			for (int y = height - 1; y >= 0; y--) {
+				for (int x = 0; x < width; x++) {
+					boolean exists = (boolean) decoder.readObject();
+					if (exists) {
+						int type = (int) decoder.readObject();
+						patch[x][y] = createStoneAndUpdateScore(x, y, type);
+						patch[x][y].read(decoder);
+					}
+				}
+			}
+		}
+	}
+
+	public void readFromDisk() {
+		// only if this is a real game type and not the UI type
+		if (!game.name.equals(GameName.UI.name())) {
+			try {
+				XMLDecoder encoder;
+				encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
+				read(encoder);
+				encoder.close();
+			} catch (FileNotFoundException e) {
+				logger.info(e.getMessage(), e);
+			}
+		}
+	}
 
 	protected abstract void removeStone(Stone stone);
 
@@ -647,10 +688,6 @@ public abstract class Level {
 		if (!pushingRightStones.isEmpty())
 			return GamePhase.pushingRight;
 		return GamePhase.waiting;
-	}
-
-	public int getScore() {
-		return game.getScore(patch);
 	}
 
 	protected void setUserReacted(boolean userReacted) {
@@ -731,49 +768,6 @@ public abstract class Level {
 		return gamePhase.equals(GamePhase.waiting) && animationPhase == 0;
 	}
 
-	public void writeToDisk() {
-		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
-			write(encoder);
-			encoder.close();
-		} catch (FileNotFoundException e) {
-			logger.warn(e.getMessage(), e);
-		}
-	}
-
-	public void readFromDisk() {
-		// only if this is a real game type and not the UI type
-		if (!game.name.equals(GameName.UI.name())) {
-			try {
-				XMLDecoder encoder;
-				encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
-				read(encoder);
-				encoder.close();
-			} catch (FileNotFoundException e) {
-				logger.info(e.getMessage(), e);
-			}
-		}
-	}
-
-	private void read(XMLDecoder decoder) {
-		// only if this is a real game type and not the UI type
-		if (!game.name.equals(GameName.UI.name())) {
-			game.score = (int) decoder.readObject();
-			game.steps = (int) decoder.readObject();
-			game.relativeTime = (long) decoder.readObject();
-			for (int y = height - 1; y >= 0; y--) {
-				for (int x = 0; x < width; x++) {
-					boolean exists = (boolean) decoder.readObject();
-					if (exists) {
-						int type = (int) decoder.readObject();
-						patch[x][y] = createStoneAndUpdateScore(x, y, type);
-						patch[x][y].read(decoder);
-					}
-				}
-			}
-		}
-	}
-
 	protected void write(XMLEncoder encoder) {
 //		encoder.writeObject(game.Name);
 //		encoder.writeObject(game.nrOfRows);
@@ -794,8 +788,14 @@ public abstract class Level {
 		}
 	}
 
-	public String getName() {
-		return game.name;
+	public void writeToDisk() {
+		try {
+			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
+			write(encoder);
+			encoder.close();
+		} catch (FileNotFoundException e) {
+			logger.warn(e.getMessage(), e);
+		}
 	}
 
 }

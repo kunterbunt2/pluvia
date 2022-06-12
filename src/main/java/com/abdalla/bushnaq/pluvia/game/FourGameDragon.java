@@ -6,9 +6,9 @@ package com.abdalla.bushnaq.pluvia.game;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 
 /**
- * 
+ *
  * 13 rows of 5 columns, 8 different stones, with up to 3 stones that can fall at the same time
- * 
+ *
  *
  */
 public class FourGameDragon extends Game {
@@ -23,6 +23,17 @@ public class FourGameDragon extends Game {
 	@Override
 	public void addStoneScore() {
 		// do not increment score for every stone that is in the level
+	}
+
+	/**
+	 * if you lost the game, you get
+	 */
+	@Override
+	public int getScore(Stone patch[][]) {
+		int heapHeight = queryHeapHeight(patch);
+		if (heapHeight < 9)
+			score = Math.max(score, (nrOfRows - heapHeight) * nrOfColumns * getStoneScore());
+		return score;
 	}
 
 	/**
@@ -41,15 +52,7 @@ public class FourGameDragon extends Game {
 		return true;
 	}
 
-	/**
-	 *if you lost the game, you get 
-	 */
-	public int getScore(Stone patch[][]) {
-		int heapHeight = queryHeapHeight(patch);
-		if (heapHeight < 9)
-			score = Math.max(score, (nrOfRows - heapHeight) * nrOfColumns * getStoneScore());
-		return score;
-	}
+	@Override
 	protected void reset() {
 		score = 0;
 		steps = 0;

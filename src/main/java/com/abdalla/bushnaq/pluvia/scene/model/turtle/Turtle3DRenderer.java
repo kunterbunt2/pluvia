@@ -17,16 +17,24 @@ import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 public class Turtle3DRenderer extends ObjectRenderer {
+	private static Color			DIAMON_BLUE_COLOR		= new Color(0x006ab6ff);
+	private static Color			GRAY_COLOR				= new Color(0x404853ff);
 	private static final float		NORMAL_LIGHT_INTENSITY	= 2f;
+	private static Color			POST_GREEN_COLOR		= new Color(0x00614eff);
+	private static Color			SCARLET_COLOR			= new Color(0xb00233ff);
 	private static final float		TURTLE_X_SIZE			= 1f;
 	private static final float		TURTLE_Y_SIZE			= 1f;
 	private static final float		TURTLE_Z_SIZE			= 1f;
-	private final Vector3			direction				= new Vector3();	// intermediate value
+	private final Vector3			direction				= new Vector3();		// intermediate value
 	private GameObject				instance;
 	private float					lightIntensity			= 0f;
+
 	private boolean					lightIsOne				= false;
+
 	private final List<PointLight>	pointLight				= new ArrayList<>();
-	private final Vector3			translation				= new Vector3();	// intermediate value
+
+	private final Vector3			translation				= new Vector3();		// intermediate value
+
 	private Turtle					turtle;
 
 	public Turtle3DRenderer(final Turtle patch) {
@@ -68,11 +76,6 @@ public class Turtle3DRenderer extends ObjectRenderer {
 			lightIsOne = false;
 		}
 	}
-
-	private static Color	DIAMON_BLUE_COLOR	= new Color(0x006ab6ff);
-	private static Color	GRAY_COLOR			= new Color(0x404853ff);
-	private static Color	POST_GREEN_COLOR	= new Color(0x00614eff);
-	private static Color	SCARLET_COLOR		= new Color(0xb00233ff);
 
 	private void turnLightOn(final GameEngine gameEngine) {
 		if (!lightIsOne) {

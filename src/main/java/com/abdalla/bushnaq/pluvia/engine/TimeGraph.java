@@ -20,12 +20,12 @@ class Frame {
 public class TimeGraph extends Array<Frame> {
 	private static final long	FACTOR		= 100000L;
 	long						absolute	= 0;
+	private Color				backgroundColor;
 	long						delta		= 0;
-	private int					maxFrames;
-	ScreenViewport				viewport	= new ScreenViewport();
 	private FrameBuffer			fbo;
 	private Color				highlightColor;
-	private Color				backgroundColor;
+	private int					maxFrames;
+	ScreenViewport				viewport	= new ScreenViewport();
 
 	public TimeGraph(Color highlightColor, Color backgroundColor, int width, int height) {
 		this.highlightColor = highlightColor;
@@ -39,30 +39,13 @@ public class TimeGraph extends Array<Frame> {
 		}
 	}
 
-	public void dispose() {
-		fbo.dispose();
-	}
-
 	public void begin() {
 		absolute = System.nanoTime();
 
 	}
 
-	public void end() {
-		delta = (System.nanoTime() - absolute) / FACTOR;
-	}
-
-	public void update() {
-		{
-			Frame frame;
-			if (size == maxFrames) {
-				frame = removeIndex(0);
-			} else {
-				frame = new Frame();
-			}
-			frame.delta = delta;
-			add(frame);
-		}
+	public void dispose() {
+		fbo.dispose();
 	}
 
 	public void draw(PolygonSpriteBatch batch2D, AtlasManager atlasManager) {
@@ -103,8 +86,25 @@ public class TimeGraph extends Array<Frame> {
 		}
 	}
 
+	public void end() {
+		delta = (System.nanoTime() - absolute) / FACTOR;
+	}
+
 	public FrameBuffer getFbo() {
 		return fbo;
+	}
+
+	public void update() {
+		{
+			Frame frame;
+			if (size == maxFrames) {
+				frame = removeIndex(0);
+			} else {
+				frame = new Frame();
+			}
+			frame.delta = delta;
+			add(frame);
+		}
 	}
 
 }

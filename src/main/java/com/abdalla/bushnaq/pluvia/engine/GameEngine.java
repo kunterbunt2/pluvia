@@ -29,7 +29,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.profiling.GLErrorListener;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -67,30 +66,30 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	public static final float		SOOM_SPEED					= 8.0f * 10;
 	public static final float		SPACE_BETWEEN_OBJECTS		= 0.1f / Context.WORLD_SCALE;
 	public static final Color		TEXT_COLOR					= Color.WHITE;								// 0xffffffff;
+	private AboutDialog				aboutDialog;
 	private float					centerXD;
 	private float					centerYD;
 	private float					centerZD;
+	public final Context			context;
 	private GameObject				cube						= null;
 	boolean							enableProfiling				= true;
 	private boolean					followMode;
-//	private BitmapFont			font;
+	// private BitmapFont font;
 	private final List<VisLabel>	labels						= new ArrayList<>();
 	private final Logger			logger						= LoggerFactory.getLogger(this.getClass());
+	private MainDialog				mainDialog;
 	private int						maxFramesPerSecond;
 	public ModelManager				modelManager;
+	private OptionsDialog			optionsDialog;
+	private PauseDialog				pauseDialog;
 	private GLProfiler				profiler;
 	public RenderEngine				renderEngine;
+	private ScoreDialog				scoreDialog;
+	private boolean					showFps;
 	private Stage					stage;
 	private StringBuilder			stringBuilder;
 	private boolean					takeScreenShot;
-	public final Context			context;
 	private boolean					vsyncEnabled				= true;
-	private MainDialog				mainDialog;
-	private AboutDialog				aboutDialog;
-	private PauseDialog				pauseDialog;
-	private OptionsDialog			optionsDialog;
-	private ScoreDialog				scoreDialog;
-	private boolean					showFps;
 
 	public GameEngine(final Context context) throws Exception {
 		this.context = context;
@@ -178,14 +177,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		mainDialog.setVisible(true);
 	}
 
-	public ScoreDialog getScoreDialog() {
-		return scoreDialog;
-	}
-
-	public void togglePause() {
-		pauseDialog.setVisible(!pauseDialog.isVisible());
-	}
-
 	@Override
 	public void dispose() {
 		try {
@@ -204,6 +195,14 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 	}
 
+	public AboutDialog getAboutDialog() {
+		return aboutDialog;
+	}
+
+	public MainDialog getMainDialog() {
+		return mainDialog;
+	}
+
 //	private void exit() {
 //		Gdx.app.exit();
 //	}
@@ -219,6 +218,14 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	public int getMaxFramesPerSecond() {
 		return maxFramesPerSecond;
+	}
+
+	public OptionsDialog getOptionsDialog() {
+		return optionsDialog;
+	}
+
+	public ScoreDialog getScoreDialog() {
+		return scoreDialog;
 	}
 
 	@Override
@@ -494,10 +501,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	}
 
-	public MainDialog getMainDialog() {
-		return mainDialog;
-	}
-
 	private void renderStones(final long currentTime) throws Exception {
 		float	dx	= ((float) context.levelManager.width) / 2;
 		float	dy	= (context.levelManager.height);
@@ -527,6 +530,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	@Override
 	public void setCamera(final float x, final float z, final boolean setDirty) throws Exception {
 		renderEngine.setCameraTo(x, z, setDirty);
+	}
+
+	public void togglePause() {
+		pauseDialog.setVisible(!pauseDialog.isVisible());
 	}
 
 	@Override
@@ -568,14 +575,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		for (Digit digit : context.digitList) {
 			digit.update(context.levelManager);
 		}
-	}
-
-	public AboutDialog getAboutDialog() {
-		return aboutDialog;
-	}
-
-	public OptionsDialog getOptionsDialog() {
-		return optionsDialog;
 	}
 
 }

@@ -3,8 +3,7 @@ package com.scottlogic.util;
 import java.util.Comparator;
 
 /**
- * Provides a {@code SortedList} which sorts the elements by their
- * natural order.
+ * Provides a {@code SortedList} which sorts the elements by their natural order.
  *
  * @author Mark Rhodes
  * @version 1.1
@@ -16,8 +15,7 @@ public class NaturalSortedList<T extends Comparable<? super T>> extends SortedLi
 	private static final long serialVersionUID = -8834713008973648930L;
 
 	/**
-	 * Constructs a new @{code NaturalSortedList} which sorts elements
-	 * according to their <i>natural order</i>.
+	 * Constructs a new @{code NaturalSortedList} which sorts elements according to their <i>natural order</i>.
 	 */
 	public NaturalSortedList() {
 		super(new Comparator<T>() {

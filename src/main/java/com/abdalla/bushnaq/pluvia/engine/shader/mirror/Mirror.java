@@ -7,18 +7,10 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
 
 public class Mirror {
-	private boolean	present			= false;
-	private float	reflectivity	= 0.5f;
+	private boolean		present			= false;
+	private FrameBuffer	reflectionFbo;
 
-	public float getReflectivity() {
-		return reflectivity;
-	}
-
-	public void setReflectivity(float reflectivity) {
-		this.reflectivity = reflectivity;
-	}
-
-	private FrameBuffer reflectionFbo;
+	private float		reflectivity	= 0.5f;
 
 	public Mirror() {
 
@@ -45,12 +37,20 @@ public class Mirror {
 		return reflectionFbo;
 	}
 
+	public float getReflectivity() {
+		return reflectivity;
+	}
+
 	public boolean isPresent() {
 		return present;
 	}
 
 	public void setPresent(boolean present) {
 		this.present = present;
+	}
+
+	public void setReflectivity(float reflectivity) {
+		this.reflectivity = reflectivity;
 	}
 
 }

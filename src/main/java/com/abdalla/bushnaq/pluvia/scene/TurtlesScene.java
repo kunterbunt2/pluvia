@@ -38,6 +38,7 @@ public class TurtlesScene extends AbstractScene {
 		createPlane(Color.WHITE);
 		createTurtles(1f, 1f);
 	}
+
 	@Override
 	public Color getInfoColor() {
 		return Color.BLACK;

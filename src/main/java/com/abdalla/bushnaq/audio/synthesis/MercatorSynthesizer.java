@@ -2,7 +2,7 @@ package com.abdalla.bushnaq.audio.synthesis;
 
 /**
  * use 2 saw oscillators with 5 cent vibrato, one generator is detuned -2.5 cent while the other is detuned 2.5 cent
- * 
+ *
  * @author abdal
  *
  */

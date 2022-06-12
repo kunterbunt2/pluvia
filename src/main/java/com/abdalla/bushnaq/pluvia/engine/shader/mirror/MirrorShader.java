@@ -8,6 +8,14 @@ import com.badlogic.gdx.math.Plane;
 
 public class MirrorShader extends DefaultShader {
 	private static Plane	clippingPlane;
+//	private final int			u_refractionTexture		= register("u_refractionTexture");
+//	private final int			u_tiling				= register("u_tiling");
+//	private final int			u_waveStrength			= register("u_waveStrength");
+//	private final Texture		waterDuDv;
+//	private float				waveSpeed				= 0.03f;
+//	private float				waveStrength			= 0.01f;
+	private Mirror			mirror;
+
 //	private static final String	DUDV_MAP_FILE_NAME		= "shader/texture/waterDUDV.png";
 //	private static final String	NORMAL_MAP_FILE_NAME	= "shader/texture/normal.png";
 //	private static FrameBuffer	waterReflectionFbo;
@@ -17,18 +25,10 @@ public class MirrorShader extends DefaultShader {
 //	private float				tiling;
 	private final int		u_clippingPlane		= register("u_clippingPlane");
 //	private final int			u_depthMap				= register("u_depthMap");
-
+	private final int		u_reflectionTexture	= register("u_reflectionTexture");
 //	private final int			u_dudvMapTexture		= register("u_dudvMapTexture");
 //	private final int			u_moveFactor			= register("u_moveFactor");
 	private final int		u_reflectivity		= register("u_reflectivity");
-	private final int		u_reflectionTexture	= register("u_reflectionTexture");
-//	private final int			u_refractionTexture		= register("u_refractionTexture");
-//	private final int			u_tiling				= register("u_tiling");
-//	private final int			u_waveStrength			= register("u_waveStrength");
-//	private final Texture		waterDuDv;
-//	private float				waveSpeed				= 0.03f;
-//	private float				waveStrength			= 0.01f;
-	private Mirror			mirror;
 
 	public MirrorShader(final Renderable renderable, final Config config, final String prefix, final Mirror mirror) {
 		super(renderable, config, prefix);

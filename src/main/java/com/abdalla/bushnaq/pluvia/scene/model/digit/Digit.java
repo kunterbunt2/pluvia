@@ -11,14 +11,14 @@ import com.abdalla.bushnaq.pluvia.engine.Renderable;
 import com.abdalla.bushnaq.pluvia.game.Level;
 
 public class Digit extends Renderable {
-	float						x		= 0;
-	float						y		= 0;
-	float						z		= 0;
 	private char				digit	= 0;
-	private String				text;
 	private int					digitPosition;
 	private DigitType			digitType;
 	private List<GameObject>	renderModelInstances;
+	private String				text;
+	float						x		= 0;
+	float						y		= 0;
+	float						z		= 0;
 
 	public Digit(List<GameObject> renderModelInstances, GameEngine gameEngine, float x, float y, float z, int digitPosition, DigitType digitType) {
 		this.renderModelInstances = renderModelInstances;
@@ -33,6 +33,22 @@ public class Digit extends Renderable {
 
 	public char getDigit() {
 		return digit;
+	}
+
+	public int getDigitPosition() {
+		return digitPosition;
+	}
+
+	public DigitType getDigitType() {
+		return digitType;
+	}
+
+	public List<GameObject> getRenderModelInstances() {
+		return renderModelInstances;
+	}
+
+	public String getText() {
+		return text;
 	}
 
 	public void setDigit(char digit) {
@@ -58,22 +74,6 @@ public class Digit extends Renderable {
 			char c = sI.charAt(getDigitPosition());
 			setDigit(c);
 		}
-	}
-
-	public DigitType getDigitType() {
-		return digitType;
-	}
-
-	public int getDigitPosition() {
-		return digitPosition;
-	}
-
-	public List<GameObject> getRenderModelInstances() {
-		return renderModelInstances;
-	}
-
-	public String getText() {
-		return text;
 	}
 
 }

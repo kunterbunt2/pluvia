@@ -4,9 +4,9 @@
 package com.abdalla.bushnaq.pluvia.game;
 
 /**
- * 
+ *
  * 13 rows of 5 columns, 5 different stones, with up to 5 stones that can fall at the same time
- * 
+ *
  *
  */
 public class FiveGame extends FourGameDragon {

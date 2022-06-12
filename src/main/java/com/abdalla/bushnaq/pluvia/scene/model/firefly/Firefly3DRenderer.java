@@ -13,19 +13,27 @@ import com.badlogic.gdx.math.Vector3;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 public class Firefly3DRenderer extends ObjectRenderer {
+	private static Color			DIAMON_BLUE_COLOR		= new Color(0x006ab6ff);
+	private static Color			GRAY_COLOR				= new Color(0x404853ff);
+	private static final float		NORMAL_LIGHT_INTENSITY	= 10f;
+	private static Color			POST_GREEN_COLOR		= new Color(0x00614eff);
+	private static Color			SCARLET_COLOR			= new Color(0xb00233ff);
 	private static final float		SIZE_X					= 1.0f;
 	private static final float		SIZE_Y					= 1.0f;
 	private static final float		SIZE_Z					= 1.0f;
-	private static final float		NORMAL_LIGHT_INTENSITY	= 10f;
-	private final Vector3			direction				= new Vector3();	// intermediate value
-	private Firefly						firefly;
+	private final Vector3			direction				= new Vector3();		// intermediate value
+	private Firefly					firefly;
 	private GameObject				instance;
-	private float					lightIntensity			= 0f;
-	private boolean					lightIsOne				= false;
-	private final List<PointLight>	pointLight				= new ArrayList<>();
-	private final Vector3			translation				= new Vector3();	// intermediate value
 	private final Vector3			lightDelta;
+	private float					lightIntensity			= 0f;
+
+	private boolean					lightIsOne				= false;
+
 	private Vector3					lightPosition			= new Vector3();
+
+	private final List<PointLight>	pointLight				= new ArrayList<>();
+
+	private final Vector3			translation				= new Vector3();		// intermediate value
 
 	public Firefly3DRenderer(final Firefly patch) {
 		this.firefly = patch;
@@ -35,7 +43,7 @@ public class Firefly3DRenderer extends ObjectRenderer {
 	@Override
 	public void create(final GameEngine gameEngine) {
 		if (instance == null) {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.firelyModel[firefly.getType()].scene.model), null);
+			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.firelyModel[firefly.getType()].scene.model), null);
 			gameEngine.renderEngine.addDynamic(instance);
 			instance.update();
 		}
@@ -67,11 +75,6 @@ public class Firefly3DRenderer extends ObjectRenderer {
 			lightIsOne = false;
 		}
 	}
-
-	private static Color	DIAMON_BLUE_COLOR	= new Color(0x006ab6ff);
-	private static Color	GRAY_COLOR			= new Color(0x404853ff);
-	private static Color	POST_GREEN_COLOR	= new Color(0x00614eff);
-	private static Color	SCARLET_COLOR		= new Color(0xb00233ff);
 
 	private void turnLightOn(final GameEngine gameEngine) {
 		if (!lightIsOne) {
@@ -138,8 +141,7 @@ public class Firefly3DRenderer extends ObjectRenderer {
 			instance.instance.transform.rotate(Vector3.X, firefly.rotation.x);
 			instance.instance.transform.rotate(Vector3.Y, firefly.rotation.y);
 			instance.instance.transform.rotate(Vector3.Z, firefly.rotation.z);
-			
-			
+
 			instance.instance.transform.translate(firefly.positionDelta);
 //			instance.instance.transform.rotateTowardDirection(direction, Vector3.Y);
 			instance.instance.transform.scale(SIZE_X * firefly.getSize(), SIZE_Y * firefly.getSize(), SIZE_Z * firefly.getSize());

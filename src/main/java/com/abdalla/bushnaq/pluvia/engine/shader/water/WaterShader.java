@@ -26,13 +26,13 @@ public class WaterShader extends DefaultShader {
 	private final int			u_normalMap					= register("u_normalMap");
 	private final int			u_reflectionTexture			= register("u_reflectionTexture");
 	private final int			u_refractionTexture			= register("u_refractionTexture");
-	private final int			u_tiling					= register("u_tiling");
 	private final int			u_refractiveMultiplicator	= register("u_refractiveMultiplicator");
+	private final int			u_tiling					= register("u_tiling");
 	private final int			u_waveStrength				= register("u_waveStrength");
-	private final Texture		waterDuDv;
-//	private float				waveSpeed				= 0.03f;
+	// private float waveSpeed = 0.03f;
 //	private float				waveStrength			= 0.01f;
 	private Water				water;
+	private final Texture		waterDuDv;
 
 	public WaterShader(final Renderable renderable, final Config config, final String prefix, final Water water) {
 		super(renderable, config, prefix);

@@ -37,7 +37,7 @@ public interface AudioProducer {
 
 	public void waitForPlay() throws InterruptedException, OpenAlException;
 
-	//	public short process(long l);
+	// public short process(long l);
 
 	public void writeWav(final String fileName) throws IOException, OpenAlcException;
 

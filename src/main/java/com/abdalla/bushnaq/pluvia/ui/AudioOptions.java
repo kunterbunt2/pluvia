@@ -12,11 +12,11 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSlider;
 
 public class AudioOptions {
+	private VisCheckBox	ambientAudioCheckBox;
+	private VisLabel	ambientAudioVolumenLabel;
+	private VisSlider	ambientAudioVolumenSlider;
 	private GameEngine	gameEngine;
 	private Sizes		sizes;
-	private VisCheckBox	ambientAudioCheckBox;
-	private VisSlider	ambientAudioVolumenSlider;
-	private VisLabel	ambientAudioVolumenLabel;
 
 	public AudioOptions(Table table, GameEngine gameEngine) {
 //		table.setDebug(true);

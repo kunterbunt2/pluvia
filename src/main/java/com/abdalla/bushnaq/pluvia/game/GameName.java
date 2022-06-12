@@ -1,5 +1,5 @@
 package com.abdalla.bushnaq.pluvia.game;
 
 public enum GameName {
-	Bird, Rabbit, Turtle, Dragon, FIVE, SIX, UI
+	Bird, Dragon, FIVE, Rabbit, SIX, Turtle, UI
 }

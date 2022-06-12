@@ -17,19 +17,19 @@ import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 public class Bubble3DRenderer extends ObjectRenderer {
+	private static final float		NORMAL_LIGHT_INTENSITY	= 1f;
 	private static final float		SIZE_X					= 1.0f;
 	private static final float		SIZE_Y					= 1.0f;
 	private static final float		SIZE_Z					= 1.0f;
-	private static final float		NORMAL_LIGHT_INTENSITY	= 1f;
-	private final Vector3			direction				= new Vector3();	// intermediate value
 	private Bubble					bubble;
+	private final Vector3			direction				= new Vector3();	// intermediate value
 	private GameObject				instance;
+	private final Vector3			lightDelta;
 	private float					lightIntensity			= 0f;
 	private boolean					lightIsOne				= false;
+	private Vector3					lightPosition			= new Vector3();
 	private final List<PointLight>	pointLight				= new ArrayList<>();
 	private final Vector3			translation				= new Vector3();	// intermediate value
-	private final Vector3			lightDelta;
-	private Vector3					lightPosition			= new Vector3();
 
 	public Bubble3DRenderer(final Bubble patch) {
 		this.bubble = patch;

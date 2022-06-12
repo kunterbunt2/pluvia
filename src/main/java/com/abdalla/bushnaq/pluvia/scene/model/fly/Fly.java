@@ -13,8 +13,8 @@ import com.badlogic.gdx.math.collision.BoundingBox;
  * @author bushnaq TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
 public class Fly extends Fish {
-	int pause = 0;
-	float radius = 5f;
+	int		pause	= 0;
+	float	radius	= 5f;
 
 	public Fly(GameEngine gameEngine, int type, float size, BoundingBox cage) {
 		super();
@@ -39,7 +39,7 @@ public class Fly extends Fish {
 		timeDelta = currentTime - lastTimeAdvancement;
 		lastTimeAdvancement = currentTime;
 		final float delta = (currentMaxEngineSpeed * timeDelta) / TimeUnit.TICKS_PER_DAY;
-//		if (TimeUnit.isInt(currentTime)) 
+//		if (TimeUnit.isInt(currentTime))
 		{
 			if (destinationPlanetDistanceProgress + delta >= destinationPlanetDistance) {
 				// we have arrived

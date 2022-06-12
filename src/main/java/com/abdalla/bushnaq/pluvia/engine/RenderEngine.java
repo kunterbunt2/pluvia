@@ -115,25 +115,32 @@ public class RenderEngine {
 	private MovingCamera					camera;
 	private GameObject						cameraCube;
 	private final EnvironmentCache			computedEnvironement				= new EnvironmentCache();
+	private final Context					context;
+	TimeGraph								cpuGraph;
 	private float							currentDayTime;
 	private SceneSkybox						daySkyBox;
 	private boolean							debugMode							= false;
 	private ModelBatch						depthBatch;
+	private GameObject						depthOfFieldMeter;
 	private Cubemap							diffuseCubemap;
 	private final ModelCache				dynamicCache						= new ModelCache();
 	private boolean							dynamicDayTime						= false;
 	public Array<GameObject>				dynamicModelInstances				= new Array<>();
+	GaussianBlurEffect						effect1;
+	BloomEffect								effect2;
 	private boolean							enableDepthOfField					= true;
 	public Environment						environment							= new Environment();
 	private Cubemap							environmentDayCubemap;
 	private Cubemap							environmentNightCubemap;
 	private float							fixedDayTime						= 10;
 	private Fog								fog									= new Fog(Color.BLACK, 15f, 30f, 0.5f);
+	TimeGraph								gpuGraph;
 	private Matrix4							identityMatrix						= new Matrix4();
 	private InfoDialog						info;
 	private final InputMultiplexer			inputMultiplexer					= new InputMultiplexer();
 	private GameObject						lookatCube;
 	public MercatorShaderProviderInterface	mercatorShaderProvider;
+	private Mirror							mirror								= new Mirror();
 	private SceneSkybox						nightSkyBox;
 	private float							northDirectionDegree				= 90;
 	private boolean							pbr;
@@ -143,15 +150,17 @@ public class RenderEngine {
 	public Model							rayCube;
 	// private final Ray ray = new Ray(new Vector3(), new Vector3());
 	private Plane							reflectionClippingPlane				= new Plane(new Vector3(0f, 1f, 0f), 0.1f);								// render everything above the
-																																						// water
+	// water
 	private Plane							refractionClippingPlane				= new Plane(new Vector3(0f, -1f, 0f), (-0.1f));							// render everything below the
-																																						// water
+	// water
 	private final Array<ModelInstance>		renderableProviders					= new Array<>();
 	private RenderableSorter				renderableSorter;
 	public final BoundingBox				sceneBox							= new BoundingBox(new Vector3(-20, -50, -30), new Vector3(20, 20, 2));
 	private boolean							shadowEnabled						= true;
 	private DirectionalShadowLight			shadowLight							= null;
 	private final Vector3					shadowLightDirection				= new Vector3();
+	// OrthographicCamera debugCamera;
+	private boolean							showGraphs;
 	private boolean							skyBox								= false;
 	private Cubemap							specularCubemap;
 	private final int						speed								= 5;																	// speed of time
@@ -160,11 +169,11 @@ public class RenderEngine {
 	private boolean							staticCacheDirty					= true;
 	private int								staticCacheDirtyCount				= 0;
 	public final Array<GameObject>			staticModelInstances				= new Array<>();
+	private Array<Text2D>					text2DList							= new Array<>();
 	private float							timeOfDay							= 8;																	// 24h time
-	private final Context					context;
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
-//	private DepthOfFieldEffect				vfxEffect;
+	// private DepthOfFieldEffect vfxEffect;
 	private final VfxManager				vfxManager;
 	public int								visibleDynamicGameObjectCount		= 0;
 	public int								visibleDynamicLightCount			= 0;
@@ -174,15 +183,6 @@ public class RenderEngine {
 	private final Array<ModelInstance>		visibleStaticModelInstances			= new Array<>();
 	private final Array<RenderableProvider>	visibleStaticRenderableProviders	= new Array<>();
 	private Water							water								= new Water();
-	private Mirror							mirror								= new Mirror();
-	private GameObject						depthOfFieldMeter;
-	GaussianBlurEffect						effect1;
-	BloomEffect								effect2;
-	private Array<Text2D>					text2DList							= new Array<>();
-	TimeGraph								cpuGraph;
-	TimeGraph								gpuGraph;
-//	OrthographicCamera						debugCamera;
-	private boolean							showGraphs;
 
 	public RenderEngine(final Context context, final InputProcessor inputProcessor) throws Exception {
 		this.context = context;
@@ -206,53 +206,24 @@ public class RenderEngine {
 		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
 	}
 
-	private void createBlurEffect() {
-//		effect = new MotionBlurEffect(Pixmap.Format.RGBA8888, MixEffect.Method.MAX, .8f);
-		effect1 = new GaussianBlurEffect();
-		effect1.setType(BlurType.Gaussian5x5);
-		effect1.setAmount(100);
-		effect1.setPasses(32);
-	}
-
-	private void createBloomEffect() {
-//		effect = new MotionBlurEffect(Pixmap.Format.RGBA8888, MixEffect.Method.MAX, .8f);
-		Settings s = new Settings(50/* int blurPasses */, 0.999f/* float bloomThreshold */, 1.0f/* float baseIntensity */, 1.0f/* float baseSaturation */, 10.0f/* float bloomIntensity */,
-				0.5f/* float bloomSaturation */);
-
-		effect2 = new BloomEffect(s);
-//		effect2.setBlurPasses(16);
-//		effect2.setType(BlurType.Gaussian5x5);
-//		effect2.setAmount(100);
-//		effect2.setPasses(32);
-	}
-
-	public void addBlurEffect() {
-		vfxManager.addEffect(effect1);
-	}
-
-	public void removeBlurEffect() {
-		vfxManager.removeEffect(effect1);
-	}
-
-	public void addBloomEffect() {
-		vfxManager.addEffect(effect2);
-	}
-
-	public void removeBloomEffect() {
-		vfxManager.removeEffect(effect2);
-	}
-
-	public void updateBlurEffect(int passes, float amount) {
-		effect1.setAmount(amount);
-		effect1.setPasses(passes);
-	}
-
 	public void add(final PointLight pointLight, final boolean dynamic) {
 		if (dynamic) {
 			environment.add(pointLight);
 		} else {
 			environment.add(pointLight);
 		}
+	}
+
+	public void add(Text2D text2d) {
+		text2DList.add(text2d);
+	}
+
+	public void addBloomEffect() {
+		vfxManager.addEffect(effect2);
+	}
+
+	public void addBlurEffect() {
+		vfxManager.addEffect(effect1);
 	}
 
 	public void addDynamic(final GameObject instance) {
@@ -281,6 +252,26 @@ public class RenderEngine {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	}
 
+	private void createBloomEffect() {
+//		effect = new MotionBlurEffect(Pixmap.Format.RGBA8888, MixEffect.Method.MAX, .8f);
+		Settings s = new Settings(50/* int blurPasses */, 0.999f/* float bloomThreshold */, 1.0f/* float baseIntensity */, 1.0f/* float baseSaturation */, 10.0f/* float bloomIntensity */,
+				0.5f/* float bloomSaturation */);
+
+		effect2 = new BloomEffect(s);
+//		effect2.setBlurPasses(16);
+//		effect2.setType(BlurType.Gaussian5x5);
+//		effect2.setAmount(100);
+//		effect2.setPasses(32);
+	}
+
+	private void createBlurEffect() {
+//		effect = new MotionBlurEffect(Pixmap.Format.RGBA8888, MixEffect.Method.MAX, .8f);
+		effect1 = new GaussianBlurEffect();
+		effect1.setType(BlurType.Gaussian5x5);
+		effect1.setAmount(100);
+		effect1.setPasses(32);
+	}
+
 	private void createCamera() throws Exception {
 		camera = new MovingCamera(67f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		final Vector3 lookat = new Vector3(0, 0, 0);
@@ -292,46 +283,6 @@ public class RenderEngine {
 		camera.update();
 		camera.setDirty(true);
 	}
-
-//	private void createDepthOfFieldMeter() {
-//		if (isDebugMode()) {
-//
-//			if (depthOfFieldMeter == null) {
-//				final Ray	ray	= new Ray();
-//				Vector3		o	= new Vector3(camera.position);
-//				o.add(0f, 0f, -camera.near);
-//				ray.set(o, camera.direction);
-//				depthOfFieldMeter = createRay(ray, camera.far - camera.near);
-//
-//				addStatic(depthOfFieldMeter);
-//			}
-//		} else {
-//			if (depthOfFieldMeter != null) {
-//				removeStatic(depthOfFieldMeter);
-//			}
-//		}
-//	}
-
-//	private void createCameraCube() {
-//		if (isDebugMode()) {
-//			if (cameraCube == null) {
-//				cameraCube = new GameObject(new ModelInstanceHack(rayCube), null);
-//				cameraCube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
-//				cameraCube.instance.transform.scale(0.5f, 0.5f, 0.5f);
-//				addDynamic(cameraCube);
-//			}
-//			final Vector3 position = new Vector3();
-//			cameraCube.instance.transform.getTranslation(position);
-//			if (!position.equals(camera.position)) {
-//				cameraCube.instance.transform.setToTranslation(camera.position);
-//				cameraCube.update();
-//			}
-//		} else {
-//			if (cameraCube != null) {
-//				removeDynamic(cameraCube);
-//			}
-//		}
-//	}
 
 	private void createCoordinates() {
 		final Vector3	position	= new Vector3(0, 0, 0);
@@ -380,6 +331,46 @@ public class RenderEngine {
 		getFog().setFogEquation(environment);
 	}
 
+//	private void createDepthOfFieldMeter() {
+//		if (isDebugMode()) {
+//
+//			if (depthOfFieldMeter == null) {
+//				final Ray	ray	= new Ray();
+//				Vector3		o	= new Vector3(camera.position);
+//				o.add(0f, 0f, -camera.near);
+//				ray.set(o, camera.direction);
+//				depthOfFieldMeter = createRay(ray, camera.far - camera.near);
+//
+//				addStatic(depthOfFieldMeter);
+//			}
+//		} else {
+//			if (depthOfFieldMeter != null) {
+//				removeStatic(depthOfFieldMeter);
+//			}
+//		}
+//	}
+
+//	private void createCameraCube() {
+//		if (isDebugMode()) {
+//			if (cameraCube == null) {
+//				cameraCube = new GameObject(new ModelInstanceHack(rayCube), null);
+//				cameraCube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
+//				cameraCube.instance.transform.scale(0.5f, 0.5f, 0.5f);
+//				addDynamic(cameraCube);
+//			}
+//			final Vector3 position = new Vector3();
+//			cameraCube.instance.transform.getTranslation(position);
+//			if (!position.equals(camera.position)) {
+//				cameraCube.instance.transform.setToTranslation(camera.position);
+//				cameraCube.update();
+//			}
+//		} else {
+//			if (cameraCube != null) {
+//				removeDynamic(cameraCube);
+//			}
+//		}
+//	}
+
 	private String createFileName(final Date date, final String append) {
 		final String			pattern				= "yyyy-MM-dd-HH-mm-ss";
 		final SimpleDateFormat	simpleDateFormat	= new SimpleDateFormat(pattern);
@@ -405,35 +396,6 @@ public class RenderEngine {
 		camController.translateUnits = 1000f;
 		inputMultiplexer.addProcessor(inputProcessor);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
-
-//	private void createLookatCube() {
-//		if (isDebugMode()) {
-//			if (lookatCube == null) {
-//				lookatCube = new GameObject(new ModelInstanceHack(rayCube), null);
-//				lookatCube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
-//				lookatCube.instance.transform.scale(0.5f, 0.5f, 0.5f);
-//				addDynamic(lookatCube);
-//			}
-//			final Vector3 position = new Vector3();
-//			lookatCube.instance.transform.getTranslation(position);
-//			if (!position.equals(camera.lookat)) {
-//				lookatCube.instance.transform.setToTranslation(camera.lookat);
-//				lookatCube.update();
-//			}
-//		} else {
-//			if (lookatCube != null) {
-//				removeDynamic(lookatCube);
-//			}
-//		}
-//	}
-
-	public MyCameraInputController getCamController() {
-		return camController;
-	}
-
-	public InputMultiplexer getInputMultiplexer() {
-		return inputMultiplexer;
 	}
 
 	private GameObject createRay(final Ray ray, Float length) {
@@ -469,6 +431,27 @@ public class RenderEngine {
 			rayCube = modelBuilder.createBox(1.0f, 1.0f, 1.0f, material, Usage.Position | Usage.Normal);
 		}
 	}
+
+//	private void createLookatCube() {
+//		if (isDebugMode()) {
+//			if (lookatCube == null) {
+//				lookatCube = new GameObject(new ModelInstanceHack(rayCube), null);
+//				lookatCube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
+//				lookatCube.instance.transform.scale(0.5f, 0.5f, 0.5f);
+//				addDynamic(lookatCube);
+//			}
+//			final Vector3 position = new Vector3();
+//			lookatCube.instance.transform.getTranslation(position);
+//			if (!position.equals(camera.lookat)) {
+//				lookatCube.instance.transform.setToTranslation(camera.lookat);
+//				lookatCube.update();
+//			}
+//		} else {
+//			if (lookatCube != null) {
+//				removeDynamic(lookatCube);
+//			}
+//		}
+//	}
 
 	private void createShader() {
 		atlasManager = new AtlasManager();
@@ -579,8 +562,23 @@ public class RenderEngine {
 	public void end() {
 	}
 
+	private void fboToScreen() {
+		clearViewport();
+		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
+		batch2D.disableBlending();
+		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
+		batch2D.begin();
+		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
+		batch2D.end();
+		batch2D.enableBlending();
+	}
+
 	public AtlasManager getAtlasManager() {
 		return atlasManager;
+	}
+
+	public MyCameraInputController getCamController() {
+		return camController;
 	}
 
 	public MovingCamera getCamera() {
@@ -589,6 +587,10 @@ public class RenderEngine {
 
 	public float getCurrentDayTime() {
 		return currentDayTime;
+	}
+
+	public float getFixedDayTime() {
+		return fixedDayTime;
 	}
 
 	public Fog getFog() {
@@ -631,6 +633,18 @@ public class RenderEngine {
 		return result;
 	}
 
+	InfoDialog getInfo() {
+		return info;
+	}
+
+	public InputMultiplexer getInputMultiplexer() {
+		return inputMultiplexer;
+	}
+
+	public Mirror getMirror() {
+		return mirror;
+	}
+
 	public Array<ModelInstance> getRenderableProviders() {
 		return renderableProviders;
 	}
@@ -641,6 +655,10 @@ public class RenderEngine {
 
 	public float getTimeOfDay() {
 		return timeOfDay;
+	}
+
+	public Context getUniverse() {
+		return context;
 	}
 
 	public Water getWater() {
@@ -689,8 +707,16 @@ public class RenderEngine {
 		return debugMode;
 	}
 
+	public boolean isDynamicDayTime() {
+		return dynamicDayTime;
+	}
+
 	public boolean isEnableDepthOfField() {
 		return enableDepthOfField;
+	}
+
+	public boolean isMirrorPresent() {
+		return mirror.isPresent() /* && isPbr() */;
 	}
 
 	public boolean isNight() {
@@ -705,6 +731,10 @@ public class RenderEngine {
 		return shadowEnabled;
 	}
 
+	private boolean isShowGraphs() {
+		return showGraphs;
+	}
+
 	private boolean isSkyBox() {
 		return skyBox;
 	}
@@ -716,10 +746,6 @@ public class RenderEngine {
 
 	public boolean isWaterPresent() {
 		return water.isPresent() /* && isPbr() */;
-	}
-
-	public boolean isMirrorPresent() {
-		return mirror.isPresent() /* && isPbr() */;
 	}
 
 	public void postProcessRender() throws Exception {
@@ -776,17 +802,6 @@ public class RenderEngine {
 		}
 	}
 
-	private void fboToScreen() {
-		clearViewport();
-		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
-		batch2D.disableBlending();
-		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
-		batch2D.begin();
-		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
-		batch2D.end();
-		batch2D.enableBlending();
-	}
-
 	public void remove(final PointLight pointLight, final boolean dynamic) {
 		if (dynamic) {
 			environment.remove(pointLight);
@@ -806,6 +821,18 @@ public class RenderEngine {
 
 		visibleStaticModelInstances.clear();
 		return true;
+	}
+
+	public void removeAllText2D() {
+		text2DList.clear();
+	}
+
+	public void removeBloomEffect() {
+		vfxManager.removeEffect(effect2);
+	}
+
+	public void removeBlurEffect() {
+		vfxManager.removeEffect(effect1);
 	}
 
 	public boolean removeDynamic(final GameObject instance) {
@@ -929,18 +956,6 @@ public class RenderEngine {
 		fboToScreen();
 	}
 
-	private void renderGraphs() {
-		if (context.isShowGraphs()) {
-			cpuGraph.update();
-			gpuGraph.update();
-		}
-		if (isShowGraphs()) {
-			cpuGraph.draw(batch2D, atlasManager);
-			gpuGraph.draw(batch2D, atlasManager);
-		}
-//		batch2D.setTransformMatrix(identityMatrix);// fix transformMatrix
-	}
-
 	private void render2DText() {
 		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
 		batch2D.begin();
@@ -1012,33 +1027,6 @@ public class RenderEngine {
 		depthBatch.end();
 	}
 
-	private void updateDynamicModelInstanceCache() {
-
-		{
-			visibleDynamicGameObjectCount = 0;
-			if (useDynamicCache) {
-				dynamicCache.begin(camera);
-				for (final GameObject instance : dynamicModelInstances) {
-					if (isVisible(instance)) {
-						dynamicCache.add(instance.instance);
-						visibleDynamicGameObjectCount++;
-						renderableProviders.add(instance.instance);
-					}
-				}
-				dynamicCache.end();
-			} else {
-				visibleDynamicModelInstances.clear();
-				for (final GameObject instance : dynamicModelInstances) {
-					if (isVisible(instance)) {
-						visibleDynamicGameObjectCount++;
-						renderableProviders.add(instance.instance);
-						visibleDynamicModelInstances.add(instance.instance);
-					}
-				}
-			}
-		}
-	}
-
 	private void renderFbos(boolean takeScreenShot) {
 		batch2D.begin();
 		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
@@ -1100,6 +1088,18 @@ public class RenderEngine {
 
 	}
 
+	private void renderGraphs() {
+		if (context.isShowGraphs()) {
+			cpuGraph.update();
+			gpuGraph.update();
+		}
+		if (isShowGraphs()) {
+			cpuGraph.draw(batch2D, atlasManager);
+			gpuGraph.draw(batch2D, atlasManager);
+		}
+//		batch2D.setTransformMatrix(identityMatrix);// fix transformMatrix
+	}
+
 	/**
 	 * Render shadows only to interal frame buffers. (useful when you're using your own frame buffer to render scenes)
 	 */
@@ -1122,6 +1122,271 @@ public class RenderEngine {
 			getInfo().update(getUniverse(), getUniverse().selected, this);
 			getInfo().act(Gdx.graphics.getDeltaTime());
 			getInfo().draw();
+		}
+	}
+
+	public void setAlwaysDay(final boolean alwaysDay) {
+		this.alwaysDay = alwaysDay;
+	}
+
+	private void setAmbientLight(final float rLum, final float gLum, final float bLum) {
+		ambientLight.color.set(rLum, gLum, bLum, 1f);
+	}
+
+	public void setCamera(final Vector3 position, final Vector3 up, final Vector3 LookAt) throws Exception {
+		camera.position.set(position);
+		camera.up.set(up);
+		camera.lookAt(LookAt);
+		camera.update();
+		// camController.notifyListener(camera);
+	}
+
+	public void setCameraTo(final float x, final float z, final boolean setDirty) throws Exception {
+		camera.position.add(x - camera.lookat.x, 0, z - camera.lookat.z);
+		camera.update();
+		camera.setDirty(setDirty);// only set dirty if requested
+		camera.lookat.x = x;
+		camera.lookat.z = z;
+		// camController.notifyListener(camera);
+	}
+
+	private void setCurrentDayTime(float currentDayTime) {
+		this.currentDayTime = currentDayTime;
+	}
+
+	public void setDebugMode(boolean debugMode) {
+		this.debugMode = debugMode;
+	}
+
+	public void setDynamicDayTime(boolean dynamicDayTime) {
+		this.dynamicDayTime = dynamicDayTime;
+	}
+
+	public void setEnableDepthOfField(final boolean enableDepthOfField) {
+		this.enableDepthOfField = enableDepthOfField;
+	}
+
+	public void setFixedDayTime(float fixedDayTime) {
+		this.fixedDayTime = fixedDayTime;
+	}
+
+	public void setPbr(boolean pbr) {
+		this.pbr = pbr;
+	}
+
+//	private void updateFog() {
+//		if (fogEquation != null) {
+//			// fogEquation.x is where the fog begins
+//			// .y should be where it reaches 100%
+//			// then z is how quickly it falls off
+//			// fogEquation.value.set(MathUtils.lerp(sceneManager.camera.near,
+//			// sceneManager.camera.far, (FOG_X + 1f) / 2f),
+//			// MathUtils.lerp(sceneManager.camera.near, sceneManager.camera.far, (FAG_Y +
+//			// 1f) / 2f),
+//			// 1000f * (FOG_Z + 1f) / 2f);
+//
+//			fogEquation.value.set(fogMinDistance, fogMaxDistance, fogMixValue);
+//		}
+//	}
+
+	public void setShadowEnabled(boolean shadowEnabled) {
+		this.shadowEnabled = shadowEnabled;
+	}
+
+	private void setShadowLight(final float lum) {
+//		shadowLight.intensity = lum;
+//		shadowLight.set(GameSettings.SHADOW_INTENSITY, GameSettings.SHADOW_INTENSITY, GameSettings.SHADOW_INTENSITY,shadowLightDirection.nor());
+		shadowLight.set(lum, lum, lum, shadowLightDirection.nor());
+	}
+
+	private void setShowGraphs(boolean showGraphs) {
+		this.showGraphs = showGraphs;
+	}
+
+	public void setSkyBox(boolean skyBox) {
+		this.skyBox = skyBox;
+	}
+
+	// private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
+//		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/diffuse/diffuse_", "." + diffuseExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
+//		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environment/environment_", "." + environmentExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
+////		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension, EnvironmentUtil.FACE_NAMES_FULL);
+//		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/specular/specular_", "_", "." + specularExtension, specularIterations, EnvironmentUtil.FACE_NAMES_NEG_POS);
+//		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
+//
+//		// // setup quick IBL (image based lighting)
+//		// DirectionalLightEx light = new DirectionalLightEx();
+//		// light.direction.set(1, -3, 1).nor();
+//		// light.color.set(Color.WHITE);
+//		// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
+//		// environmentCubemap = iblBuilder.buildEnvMap(1024);
+//		// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
+//		// specularCubemap = iblBuilder.buildRadianceMap(10);
+//		// iblBuilder.dispose();
+//	}
+	private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
+		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/diffuse/diffuse_", "_0." + diffuseExtension,
+				EnvironmentUtil.FACE_NAMES_FULL);
+		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentDay/environment_", "_0." + environmentExtension,
+				EnvironmentUtil.FACE_NAMES_FULL);
+		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension,
+				EnvironmentUtil.FACE_NAMES_FULL);
+		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/specular/specular_", "_", "." + specularExtension,
+				specularIterations, EnvironmentUtil.FACE_NAMES_FULL);
+		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
+
+		// // setup quick IBL (image based lighting)
+		// DirectionalLightEx light = new DirectionalLightEx();
+		// light.direction.set(1, -3, 1).nor();
+		// light.color.set(Color.WHITE);
+		// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
+		// environmentCubemap = iblBuilder.buildEnvMap(1024);
+		// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
+		// specularCubemap = iblBuilder.buildRadianceMap(10);
+		// iblBuilder.dispose();
+	}
+
+	public void toggleDebugmode() {
+		setDebugMode(!isDebugMode());
+		if (isDebugMode()) {
+			getInputMultiplexer().addProcessor(getCamController());
+		} else {
+			getInputMultiplexer().removeProcessor(getCamController());
+		}
+	}
+
+	public void toggleShowGraphs() {
+		setShowGraphs(!isShowGraphs());
+	}
+
+	/**
+	 * should be called in order to perform light culling, skybox update and animations.
+	 *
+	 * @param delta
+	 */
+	private void update(final float delta) {
+		if (camera != null) {
+			updateEnvironment();
+			for (final RenderableProvider r : renderableProviders) {
+				if (r instanceof Updatable) {
+					((Updatable) r).update(camera, delta);
+				}
+			}
+			if (daySkyBox != null && isDay())
+				daySkyBox.update(camera, delta);
+			else if (nightSkyBox != null && isNight())
+				nightSkyBox.update(camera, delta);
+		}
+	}
+
+	public void updateBlurEffect(int passes, float amount) {
+		effect1.setAmount(amount);
+		effect1.setPasses(passes);
+	}
+
+	public void updateCamera(final float centerXD, final float centerYD, final float centerZD) {
+		camera.translate(centerXD, centerYD, centerZD);
+		camera.lookat.add(centerXD, centerYD, centerZD);
+		camera.lookAt(camera.lookat);
+		camera.update();
+	}
+
+	private void updateDynamicModelInstanceCache() {
+
+		{
+			visibleDynamicGameObjectCount = 0;
+			if (useDynamicCache) {
+				dynamicCache.begin(camera);
+				for (final GameObject instance : dynamicModelInstances) {
+					if (isVisible(instance)) {
+						dynamicCache.add(instance.instance);
+						visibleDynamicGameObjectCount++;
+						renderableProviders.add(instance.instance);
+					}
+				}
+				dynamicCache.end();
+			} else {
+				visibleDynamicModelInstances.clear();
+				for (final GameObject instance : dynamicModelInstances) {
+					if (isVisible(instance)) {
+						visibleDynamicGameObjectCount++;
+						renderableProviders.add(instance.instance);
+						visibleDynamicModelInstances.add(instance.instance);
+					}
+				}
+			}
+		}
+	}
+
+	private void updateEnvironment() {
+		computedEnvironement.setCache(environment);
+		pointLights.lights.clear();
+		spotLights.lights.clear();
+		if (environment != null) {
+			for (final Attribute a : environment) {
+				if (a instanceof PointLightsAttribute) {
+					pointLights.lights.addAll(((PointLightsAttribute) a).lights);
+					computedEnvironement.replaceCache(pointLights);
+				} else if (a instanceof SpotLightsAttribute) {
+					spotLights.lights.addAll(((SpotLightsAttribute) a).lights);
+					computedEnvironement.replaceCache(spotLights);
+				} else {
+					computedEnvironement.set(a);
+				}
+			}
+		}
+		cullLights();
+	}
+
+	public void updateEnvironment(final float timeOfDay) {
+		if (Math.abs(this.timeOfDay - timeOfDay) > 0.01) {
+			angle = (float) (Math.PI * (timeOfDay - 6) / 12);
+			shadowLightDirection.x = (float) Math.cos(angle);
+			shadowLightDirection.z = Math.abs((float) (Math.sin(angle)));
+			shadowLightDirection.y = -Math.abs((float) Math.sin(angle));
+			shadowLightDirection.nor();
+			shadowLightDirection.rotate(northDirectionDegree, 0, 1, 0);
+			shadowLight.setDirection(shadowLightDirection);
+
+			// day break
+			if (!alwaysDay && timeOfDay > 5 && timeOfDay <= 6) {
+				final float	intensity	= (timeOfDay - 5);
+				final float	r			= DAY_AMBIENT_INTENSITY_R * intensity;
+				final float	g			= DAY_AMBIENT_INTENSITY_G * intensity;
+				final float	b			= DAY_AMBIENT_INTENSITY_B * intensity;
+				setShadowLight(DAY_SHADOW_INTENSITY * intensity);
+				setAmbientLight(r, g, b);
+			}
+			// day
+			else if (isDay()) {
+				final float	intensity	= 1.0f;
+				final float	r			= DAY_AMBIENT_INTENSITY_R;
+				final float	g			= DAY_AMBIENT_INTENSITY_G;
+				final float	b			= DAY_AMBIENT_INTENSITY_B;
+				setShadowLight(DAY_SHADOW_INTENSITY * intensity);
+				setAmbientLight(r, g, b);
+			}
+			// sunset
+			else if (timeOfDay > 18 && timeOfDay <= 19) {
+				final float	intensity	= 1.0f - (timeOfDay - 18);
+				final float	r			= DAY_AMBIENT_INTENSITY_R * intensity;
+				final float	g			= DAY_AMBIENT_INTENSITY_G * intensity;
+				final float	b			= DAY_AMBIENT_INTENSITY_B * intensity;
+				setShadowLight(DAY_SHADOW_INTENSITY * intensity);
+				setAmbientLight(r, g, b);
+			}
+			// night
+			else if (isNight()) {
+				// setShadowLight(0.01f);
+				// setAmbientLight(0.0f, 0.0f, 0.0f);
+				final float	intensity	= (float) Math.abs(Math.abs(Math.sin(angle)));
+				final float	r			= NIGHT_AMBIENT_INTENSITY_R * intensity;
+				final float	g			= NIGHT_AMBIENT_INTENSITY_G * intensity;
+				final float	b			= NIGHT_AMBIENT_INTENSITY_B * intensity;
+				setShadowLight(NIGHT_SHADOW_INTENSITY * intensity);
+				setAmbientLight(r, g, b);
+			}
+			this.timeOfDay = timeOfDay;
 		}
 	}
 
@@ -1185,214 +1450,6 @@ public class RenderEngine {
 		// }
 	}
 
-	public void setAlwaysDay(final boolean alwaysDay) {
-		this.alwaysDay = alwaysDay;
-	}
-
-	private void setAmbientLight(final float rLum, final float gLum, final float bLum) {
-		ambientLight.color.set(rLum, gLum, bLum, 1f);
-	}
-
-	public void setCamera(final Vector3 position, final Vector3 up, final Vector3 LookAt) throws Exception {
-		camera.position.set(position);
-		camera.up.set(up);
-		camera.lookAt(LookAt);
-		camera.update();
-		// camController.notifyListener(camera);
-	}
-
-	public void setCameraTo(final float x, final float z, final boolean setDirty) throws Exception {
-		camera.position.add(x - camera.lookat.x, 0, z - camera.lookat.z);
-		camera.update();
-		camera.setDirty(setDirty);// only set dirty if requested
-		camera.lookat.x = x;
-		camera.lookat.z = z;
-		// camController.notifyListener(camera);
-	}
-
-	private void setCurrentDayTime(float currentDayTime) {
-		this.currentDayTime = currentDayTime;
-	}
-
-	public void setDebugMode(boolean debugMode) {
-		this.debugMode = debugMode;
-	}
-
-	public void setEnableDepthOfField(final boolean enableDepthOfField) {
-		this.enableDepthOfField = enableDepthOfField;
-	}
-
-	public void setPbr(boolean pbr) {
-		this.pbr = pbr;
-	}
-
-	public void setShadowEnabled(boolean shadowEnabled) {
-		this.shadowEnabled = shadowEnabled;
-	}
-
-	private void setShadowLight(final float lum) {
-//		shadowLight.intensity = lum;
-//		shadowLight.set(GameSettings.SHADOW_INTENSITY, GameSettings.SHADOW_INTENSITY, GameSettings.SHADOW_INTENSITY,shadowLightDirection.nor());
-		shadowLight.set(lum, lum, lum, shadowLightDirection.nor());
-	}
-
-	public void setSkyBox(boolean skyBox) {
-		this.skyBox = skyBox;
-	}
-
-//	private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
-//		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/diffuse/diffuse_", "." + diffuseExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
-//		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environment/environment_", "." + environmentExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
-////		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension, EnvironmentUtil.FACE_NAMES_FULL);
-//		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/specular/specular_", "_", "." + specularExtension, specularIterations, EnvironmentUtil.FACE_NAMES_NEG_POS);
-//		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
-//
-//		// // setup quick IBL (image based lighting)
-//		// DirectionalLightEx light = new DirectionalLightEx();
-//		// light.direction.set(1, -3, 1).nor();
-//		// light.color.set(Color.WHITE);
-//		// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
-//		// environmentCubemap = iblBuilder.buildEnvMap(1024);
-//		// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
-//		// specularCubemap = iblBuilder.buildRadianceMap(10);
-//		// iblBuilder.dispose();
-//	}
-	private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
-		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/diffuse/diffuse_", "_0." + diffuseExtension,
-				EnvironmentUtil.FACE_NAMES_FULL);
-		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentDay/environment_", "_0." + environmentExtension,
-				EnvironmentUtil.FACE_NAMES_FULL);
-		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension,
-				EnvironmentUtil.FACE_NAMES_FULL);
-		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/specular/specular_", "_", "." + specularExtension, specularIterations,
-				EnvironmentUtil.FACE_NAMES_FULL);
-		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
-
-		// // setup quick IBL (image based lighting)
-		// DirectionalLightEx light = new DirectionalLightEx();
-		// light.direction.set(1, -3, 1).nor();
-		// light.color.set(Color.WHITE);
-		// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
-		// environmentCubemap = iblBuilder.buildEnvMap(1024);
-		// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
-		// specularCubemap = iblBuilder.buildRadianceMap(10);
-		// iblBuilder.dispose();
-	}
-
-	/**
-	 * should be called in order to perform light culling, skybox update and animations.
-	 *
-	 * @param delta
-	 */
-	private void update(final float delta) {
-		if (camera != null) {
-			updateEnvironment();
-			for (final RenderableProvider r : renderableProviders) {
-				if (r instanceof Updatable) {
-					((Updatable) r).update(camera, delta);
-				}
-			}
-			if (daySkyBox != null && isDay())
-				daySkyBox.update(camera, delta);
-			else if (nightSkyBox != null && isNight())
-				nightSkyBox.update(camera, delta);
-		}
-	}
-
-	public void updateCamera(final float centerXD, final float centerYD, final float centerZD) {
-		camera.translate(centerXD, centerYD, centerZD);
-		camera.lookat.add(centerXD, centerYD, centerZD);
-		camera.lookAt(camera.lookat);
-		camera.update();
-	}
-
-	private void updateEnvironment() {
-		computedEnvironement.setCache(environment);
-		pointLights.lights.clear();
-		spotLights.lights.clear();
-		if (environment != null) {
-			for (final Attribute a : environment) {
-				if (a instanceof PointLightsAttribute) {
-					pointLights.lights.addAll(((PointLightsAttribute) a).lights);
-					computedEnvironement.replaceCache(pointLights);
-				} else if (a instanceof SpotLightsAttribute) {
-					spotLights.lights.addAll(((SpotLightsAttribute) a).lights);
-					computedEnvironement.replaceCache(spotLights);
-				} else {
-					computedEnvironement.set(a);
-				}
-			}
-		}
-		cullLights();
-	}
-
-//	private void updateFog() {
-//		if (fogEquation != null) {
-//			// fogEquation.x is where the fog begins
-//			// .y should be where it reaches 100%
-//			// then z is how quickly it falls off
-//			// fogEquation.value.set(MathUtils.lerp(sceneManager.camera.near,
-//			// sceneManager.camera.far, (FOG_X + 1f) / 2f),
-//			// MathUtils.lerp(sceneManager.camera.near, sceneManager.camera.far, (FAG_Y +
-//			// 1f) / 2f),
-//			// 1000f * (FOG_Z + 1f) / 2f);
-//
-//			fogEquation.value.set(fogMinDistance, fogMaxDistance, fogMixValue);
-//		}
-//	}
-
-	public void updateEnvironment(final float timeOfDay) {
-		if (Math.abs(this.timeOfDay - timeOfDay) > 0.01) {
-			angle = (float) (Math.PI * (timeOfDay - 6) / 12);
-			shadowLightDirection.x = (float) Math.cos(angle);
-			shadowLightDirection.z = Math.abs((float) (Math.sin(angle)));
-			shadowLightDirection.y = -Math.abs((float) Math.sin(angle));
-			shadowLightDirection.nor();
-			shadowLightDirection.rotate(northDirectionDegree, 0, 1, 0);
-			shadowLight.setDirection(shadowLightDirection);
-
-			// day break
-			if (!alwaysDay && timeOfDay > 5 && timeOfDay <= 6) {
-				final float	intensity	= (timeOfDay - 5);
-				final float	r			= DAY_AMBIENT_INTENSITY_R * intensity;
-				final float	g			= DAY_AMBIENT_INTENSITY_G * intensity;
-				final float	b			= DAY_AMBIENT_INTENSITY_B * intensity;
-				setShadowLight(DAY_SHADOW_INTENSITY * intensity);
-				setAmbientLight(r, g, b);
-			}
-			// day
-			else if (isDay()) {
-				final float	intensity	= 1.0f;
-				final float	r			= DAY_AMBIENT_INTENSITY_R;
-				final float	g			= DAY_AMBIENT_INTENSITY_G;
-				final float	b			= DAY_AMBIENT_INTENSITY_B;
-				setShadowLight(DAY_SHADOW_INTENSITY * intensity);
-				setAmbientLight(r, g, b);
-			}
-			// sunset
-			else if (timeOfDay > 18 && timeOfDay <= 19) {
-				final float	intensity	= 1.0f - (timeOfDay - 18);
-				final float	r			= DAY_AMBIENT_INTENSITY_R * intensity;
-				final float	g			= DAY_AMBIENT_INTENSITY_G * intensity;
-				final float	b			= DAY_AMBIENT_INTENSITY_B * intensity;
-				setShadowLight(DAY_SHADOW_INTENSITY * intensity);
-				setAmbientLight(r, g, b);
-			}
-			// night
-			else if (isNight()) {
-				// setShadowLight(0.01f);
-				// setAmbientLight(0.0f, 0.0f, 0.0f);
-				final float	intensity	= (float) Math.abs(Math.abs(Math.sin(angle)));
-				final float	r			= NIGHT_AMBIENT_INTENSITY_R * intensity;
-				final float	g			= NIGHT_AMBIENT_INTENSITY_G * intensity;
-				final float	b			= NIGHT_AMBIENT_INTENSITY_B * intensity;
-				setShadowLight(NIGHT_SHADOW_INTENSITY * intensity);
-				setAmbientLight(r, g, b);
-			}
-			this.timeOfDay = timeOfDay;
-		}
-	}
-
 	private void writeFrameBufferToDisk(final String fileName, final FrameBuffer frameBuffer) {
 		frameBuffer.bind();
 		// final FrameBuffer frameBuffer = shadowLight.getFrameBuffer();
@@ -1407,63 +1464,6 @@ public class RenderEngine {
 		// frameBuffer.getWidth(), frameBuffer.getHeight());
 		PixmapIO.writePNG(Gdx.files.local(fileName), frameBufferPixmap, Deflater.DEFAULT_COMPRESSION, true);
 		FrameBuffer.unbind();
-	}
-
-	public float getFixedDayTime() {
-		return fixedDayTime;
-	}
-
-	public void setFixedDayTime(float fixedDayTime) {
-		this.fixedDayTime = fixedDayTime;
-	}
-
-	public boolean isDynamicDayTime() {
-		return dynamicDayTime;
-	}
-
-	public void setDynamicDayTime(boolean dynamicDayTime) {
-		this.dynamicDayTime = dynamicDayTime;
-	}
-
-	public Mirror getMirror() {
-		return mirror;
-	}
-
-	InfoDialog getInfo() {
-		return info;
-	}
-
-	public void toggleDebugmode() {
-		setDebugMode(!isDebugMode());
-		if (isDebugMode()) {
-			getInputMultiplexer().addProcessor(getCamController());
-		} else {
-			getInputMultiplexer().removeProcessor(getCamController());
-		}
-	}
-
-	public void toggleShowGraphs() {
-		setShowGraphs(!isShowGraphs());
-	}
-
-	private void setShowGraphs(boolean showGraphs) {
-		this.showGraphs = showGraphs;
-	}
-
-	private boolean isShowGraphs() {
-		return showGraphs;
-	}
-
-	public Context getUniverse() {
-		return context;
-	}
-
-	public void add(Text2D text2d) {
-		text2DList.add(text2d);
-	}
-
-	public void removeAllText2D() {
-		text2DList.clear();
 	}
 
 }

@@ -194,7 +194,7 @@ public class OpenAlSource extends Thread {
 
 	/**
 	 * source will be moved to unused list pause all thread activity until continue is called
-	 * 
+	 *
 	 * @throws OpenAlException
 	 */
 	void pause() throws OpenAlException {

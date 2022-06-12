@@ -29,90 +29,21 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 
 public class MainDialog extends AbstractDialog {
 	protected static final int	DIALOG_HEIGHT	= 150 * 4;
+	public AudioEngine			audioEngine		= new MercatorAudioEngine();
+	private VisLabel			descriptionLabel;
 	private VisList<String>		listView		= new VisList<>();
+	Mp3Player					mp3Player;
+	Sound						oggSound;
 	private VisTable			table1			= new VisTable(true);
 	private VisTable			table2			= new VisTable(true);
 	private VisTable			table3			= new VisTable(true);
-	private VisLabel			descriptionLabel;
-	Mp3Player					mp3Player;
-	public AudioEngine			audioEngine		= new MercatorAudioEngine();
-	Sound						oggSound;
 
 	public MainDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		super(gameEngine, batch, inputMultiplexer);
 		createStage("", false);
 	}
 
-	public void draw() {
-		super.draw();
-		if (audioEngine.isCreated()) {
-			try {
-				audioEngine.begin(getGameEngine().renderEngine.getCamera());
-				audioEngine.end();
-			} catch (OpenAlException e) {
-				logger.error(e.getMessage(), e);
-			}
-		}
-	}
-
-	public void setVisible(final boolean visible) {
-		super.setVisible(visible);
-		if (visible) {
-			createGame(6);
-			if (getGameEngine().context.getAmbientAudioProperty()) {
-//				oggSound = Gdx.audio.newSound(Gdx.files.internal(AtlasManager.ASSETS_FOLDER + "/sound/drop.wav"));
-//				oggSound.play(((float) getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
-				try {
-					audioEngine.create();
-//				audioEngine.enableHrtf(0);
-					mp3Player = audioEngine.createAudioProducer(Mp3Player.class);
-					mp3Player.setFile(Gdx.files.internal(AtlasManager.getAssetsFolderName() + "/sound/pluvia.ogg"));
-					mp3Player.setGain(((float) getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
-					mp3Player.play();
-					AudioEngine.checkAlError("Failed to set listener orientation with error #");
-				} catch (OpenAlException e) {
-					logger.error(e.getMessage(), e);
-				}
-			}
-		} else {
-			disposeAudio();
-		}
-	}
-
-	private void createGame(int gameIndex) {
-		if (getGameEngine().context.levelManager != null)
-			getGameEngine().context.levelManager.disposeLevel();
-		getGameEngine().context.selectGame(gameIndex);
-		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
-//		universe.GameThread.clearLevel();
-		getGameEngine().context.levelManager.readFromDisk();
-		getGameEngine().context.levelManager.createLevel();
-		{
-			float	z			= getGameEngine().context.game.cameraZPosition;
-			Vector3	position	= getGameEngine().renderEngine.getCamera().position;
-			position.z = z;
-			if (getGameEngine().context.game.getNrOfRows() == 0) {
-				position.y = 4;
-				getGameEngine().renderEngine.getCamera().lookat.y = 4.5f;
-			} else {
-				position.y = getGameEngine().context.game.getNrOfRows() / 2;
-				getGameEngine().renderEngine.getCamera().lookat.y = getGameEngine().context.game.getNrOfRows() / 2 + 0.5f;
-			}
-			getGameEngine().renderEngine.getCamera().update();
-		}
-	}
-
 	@Override
-	protected void enterAction() {
-		startAction();
-	}
-
-	private void startAction() {
-		setVisible(false);
-		int checkedIndex = listView.getSelectedIndex();
-		createGame(checkedIndex);
-	}
-
 	public void create() {
 		Sizes sizes = VisUI.getSizes();
 		{
@@ -221,6 +152,105 @@ public class MainDialog extends AbstractDialog {
 
 	}
 
+	private void createGame(int gameIndex) {
+		if (getGameEngine().context.levelManager != null)
+			getGameEngine().context.levelManager.disposeLevel();
+		getGameEngine().context.selectGame(gameIndex);
+		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
+//		universe.GameThread.clearLevel();
+		getGameEngine().context.levelManager.readFromDisk();
+		getGameEngine().context.levelManager.createLevel();
+		{
+			float	z			= getGameEngine().context.game.cameraZPosition;
+			Vector3	position	= getGameEngine().renderEngine.getCamera().position;
+			position.z = z;
+			if (getGameEngine().context.game.getNrOfRows() == 0) {
+				position.y = 4;
+				getGameEngine().renderEngine.getCamera().lookat.y = 4.5f;
+			} else {
+				position.y = getGameEngine().context.game.getNrOfRows() / 2;
+				getGameEngine().renderEngine.getCamera().lookat.y = getGameEngine().context.game.getNrOfRows() / 2 + 0.5f;
+			}
+			getGameEngine().renderEngine.getCamera().update();
+		}
+	}
+
+	@Override
+	public void dispose() {
+		disposeAudio();
+		super.dispose();
+	}
+
+	private void disposeAudio() {
+		if (audioEngine.isCreated()) {
+			try {
+				audioEngine.dispose();
+			} catch (OpenAlException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+	}
+
+	@Override
+	public void draw() {
+		super.draw();
+		if (audioEngine.isCreated()) {
+			try {
+				audioEngine.begin(getGameEngine().renderEngine.getCamera());
+				audioEngine.end();
+			} catch (OpenAlException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+	}
+
+	@Override
+	protected void enterAction() {
+		startAction();
+	}
+
+	public String readFile(InputStream inputStream) throws IOException {
+		StringBuilder resultStringBuilder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				resultStringBuilder.append(line).append("\n");
+			}
+		}
+		return resultStringBuilder.toString();
+	}
+
+	@Override
+	public void setVisible(final boolean visible) {
+		super.setVisible(visible);
+		if (visible) {
+			createGame(6);
+			if (getGameEngine().context.getAmbientAudioProperty()) {
+//				oggSound = Gdx.audio.newSound(Gdx.files.internal(AtlasManager.ASSETS_FOLDER + "/sound/drop.wav"));
+//				oggSound.play(((float) getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
+				try {
+					audioEngine.create();
+//				audioEngine.enableHrtf(0);
+					mp3Player = audioEngine.createAudioProducer(Mp3Player.class);
+					mp3Player.setFile(Gdx.files.internal(AtlasManager.getAssetsFolderName() + "/sound/pluvia.ogg"));
+					mp3Player.setGain((getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
+					mp3Player.play();
+					AudioEngine.checkAlError("Failed to set listener orientation with error #");
+				} catch (OpenAlException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		} else {
+			disposeAudio();
+		}
+	}
+
+	private void startAction() {
+		setVisible(false);
+		int checkedIndex = listView.getSelectedIndex();
+		createGame(checkedIndex);
+	}
+
 	private void updateDesciption(Sizes sizes) {
 		try {
 			String		fileName	= listView.getSelected() + ".txt";
@@ -237,33 +267,6 @@ public class MainDialog extends AbstractDialog {
 			packAndPosition();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-		}
-	}
-
-	public String readFile(InputStream inputStream) throws IOException {
-		StringBuilder resultStringBuilder = new StringBuilder();
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				resultStringBuilder.append(line).append("\n");
-			}
-		}
-		return resultStringBuilder.toString();
-	}
-
-	@Override
-	public void dispose() {
-		disposeAudio();
-		super.dispose();
-	}
-
-	private void disposeAudio() {
-		if (audioEngine.isCreated()) {
-			try {
-				audioEngine.dispose();
-			} catch (OpenAlException e) {
-				logger.error(e.getMessage(), e);
-			}
 		}
 	}
 }

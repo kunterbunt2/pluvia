@@ -9,14 +9,12 @@ import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.Score;
 import com.abdalla.bushnaq.pluvia.game.ScoreList;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.Sizes;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.VisUI.SkinScale;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
@@ -43,10 +41,32 @@ public class ScoreDialog extends AbstractDialog {
 ////		close();
 //	}
 
-	@Override
-	public void update(final Context universe) {
-		if (changed != getGameEngine().context.getScoreList().getChanged()) {
-			create();
+	private void addRow(String userName, String score, String steps, String date) {
+		{
+			VisLabel label = new VisLabel("");
+			label.setAlignment(Align.left);
+			getTable().add(label).width(100 * sizes.scaleFactor).left();
+		}
+		{
+			VisTextField label = new VisTextField(userName);
+			label.setAlignment(Align.left);
+			getTable().add(label).width(100 * sizes.scaleFactor).left();
+		}
+		{
+			VisTextField label = new VisTextField(score);
+			label.setReadOnly(true);
+			label.setAlignment(Align.right);
+			getTable().add(label).width(50 * sizes.scaleFactor).right();
+		}
+		{
+			VisTextField label = new VisTextField(steps);
+			label.setAlignment(Align.right);
+			getTable().add(label).width(50 * sizes.scaleFactor).right();
+		}
+		{
+			VisTextField label = new VisTextField(date);
+			label.setAlignment(Align.right);
+			getTable().add(label).width(150 * sizes.scaleFactor).right();
 		}
 	}
 
@@ -132,32 +152,10 @@ public class ScoreDialog extends AbstractDialog {
 		}
 	}
 
-	private void addRow(String userName, String score, String steps, String date) {
-		{
-			VisLabel label = new VisLabel("");
-			label.setAlignment(Align.left);
-			getTable().add(label).width(100 * sizes.scaleFactor).left();
-		}
-		{
-			VisTextField label = new VisTextField(userName);
-			label.setAlignment(Align.left);
-			getTable().add(label).width(100 * sizes.scaleFactor).left();
-		}
-		{
-			VisTextField label = new VisTextField(score);
-			label.setReadOnly(true);
-			label.setAlignment(Align.right);
-			getTable().add(label).width(50 * sizes.scaleFactor).right();
-		}
-		{
-			VisTextField label = new VisTextField(steps);
-			label.setAlignment(Align.right);
-			getTable().add(label).width(50 * sizes.scaleFactor).right();
-		}
-		{
-			VisTextField label = new VisTextField(date);
-			label.setAlignment(Align.right);
-			getTable().add(label).width(150 * sizes.scaleFactor).right();
+	@Override
+	public void update(final Context universe) {
+		if (changed != getGameEngine().context.getScoreList().getChanged()) {
+			create();
 		}
 	}
 

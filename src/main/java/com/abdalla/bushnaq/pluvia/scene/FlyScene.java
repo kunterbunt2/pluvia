@@ -8,13 +8,8 @@ import com.abdalla.bushnaq.pluvia.engine.GameObject;
 import com.abdalla.bushnaq.pluvia.engine.ModelManager;
 import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-
-import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
-import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 public class FlyScene extends AbstractScene {
 
@@ -42,7 +37,6 @@ public class FlyScene extends AbstractScene {
 		// mirror
 		gameEngine.renderEngine.getMirror().setPresent(false);
 
-		
 		// generate instances
 		createPlane(Color.WHITE);
 
@@ -56,16 +50,16 @@ public class FlyScene extends AbstractScene {
 			int			type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_FLY_MODELS);
 			float		size	= minSize + (float) Math.random() * (maxSize - minSize);
 			BoundingBox	b		= new BoundingBox(new Vector3(min.x + 4f, size / 2, min.z + 5), new Vector3(max.x - 4f, 4f, 0));
-			Fly		firefly	= new Fly(gameEngine, type, size, b);
+			Fly			firefly	= new Fly(gameEngine, type, size, b);
 //			fish.setMaxSpeed(0.3f);
 //			fish.setAccellerationDistance(5f);
 			gameEngine.context.fireflyList.add(firefly);
 		}
 	}
+
 	@Override
 	public Color getInfoColor() {
 		return Color.BLACK;
 	}
-
 
 }

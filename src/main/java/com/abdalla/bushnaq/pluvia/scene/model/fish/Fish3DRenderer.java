@@ -37,7 +37,7 @@ public class Fish3DRenderer extends ObjectRenderer {
 	@Override
 	public void create(final GameEngine gameEngine) {
 		if (instance == null) {
-				instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.fishCube[fish.getType()]), null);
+			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.fishCube[fish.getType()]), null);
 //			poiInstance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.fishCubePbr[0]), fish);
 			gameEngine.renderEngine.addDynamic(instance);
 //			gameEngine.renderEngine.addDynamic(poiInstance);

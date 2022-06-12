@@ -21,6 +21,10 @@ public class Fog {
 
 	}
 
+	public float getBeginDistance() {
+		return beginDistance;
+	}
+
 	public Color getColor() {
 		return color;
 	}
@@ -31,6 +35,10 @@ public class Fog {
 
 	public float getFullDistance() {
 		return fullDistance;
+	}
+
+	public void setBeginDistance(float beginDistance) {
+		this.beginDistance = beginDistance;
 	}
 
 	public void setColor(Color color) {
@@ -62,13 +70,5 @@ public class Fog {
 			equation.value.set(getBeginDistance(), fullDistance, falloffGradiant);
 			environment.set(new ColorAttribute(ColorAttribute.Fog, getColor()));
 		}
-	}
-
-	public float getBeginDistance() {
-		return beginDistance;
-	}
-
-	public void setBeginDistance(float beginDistance) {
-		this.beginDistance = beginDistance;
 	}
 }

@@ -12,7 +12,6 @@ import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALCapabilities;
-import org.lwjgl.openal.ALUtil;
 import org.lwjgl.openal.EXTEfx;
 import org.lwjgl.openal.EnumerateAllExt;
 import org.lwjgl.openal.SOFTHRTF;
@@ -25,7 +24,7 @@ import com.scottlogic.util.UnsortedList;
 
 /**
  * SoundEngine manages Synthesizer instances and caches them when they are not used Synthesizer need to be all of the same type Synthesizer must be reinitialized when reusing them
- * 
+ *
  * @author abdalla bushnaq
  *
  */
@@ -225,10 +224,6 @@ public class AudioEngine {
 		createAuxiliaryEffectSlot();
 	}
 
-	public boolean isCreated() {
-		return device != 0;
-	}
-
 	public <T extends AudioProducer> T createAudioProducer(final Class<T> clazz) throws OpenAlException {
 		for (final AbstractSynthesizerFactory<? extends AudioProducer> factory : factoryMap.values()) {
 			if (factory.handles().isAssignableFrom(clazz)) {
@@ -278,7 +273,7 @@ public class AudioEngine {
 	/**
 	 * There is a limit of supported audio sources All synthesizers that are further away than disableRadius will be disabled and their audio source unassigned. All synthesizers that are nearer than enableRadius will be
 	 * enabled and assigned an audio source.
-	 * 
+	 *
 	 * @throws OpenAlException
 	 */
 	private void cullSynths() throws OpenAlException {
@@ -415,6 +410,10 @@ public class AudioEngine {
 
 	public int getSamples() {
 		return samples;
+	}
+
+	public boolean isCreated() {
+		return device != 0;
 	}
 
 	private void queryHrtfEnabled() {

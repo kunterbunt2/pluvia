@@ -39,7 +39,7 @@ public class Stone extends Renderable implements Comparable<Stone> {
 	public int			y				= 0;
 	public int			z				= 0;
 
-	public Stone(GameEngine gameEngine, /*int width, int height,*/ int x, int y, int aType) {
+	public Stone(GameEngine gameEngine, /* int width, int height, */ int x, int y, int aType) {
 		set3DRenderer(new Stone3DRenderer(this));
 //		this.width = width;
 //		this.height = height;

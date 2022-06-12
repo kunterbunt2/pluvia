@@ -13,17 +13,17 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisSlider;
 
 public class GraphicsQualityOptions {
+	private GameEngine				gameEngine;
 	private VisLabel				graphicsQualityLabel;
 	private VisSlider				graphicsQualitySlider;
-	private VisSlider				maxPointLightsSlider;
 	private VisLabel				maxPointLightsLabel;
-	private VisSlider				maxSceneObjectsSlider;
+	private VisSlider				maxPointLightsSlider;
 	private VisLabel				maxSceneObjectsLabel;
-	private VisSelectBox<Integer>	shadowMapSizeSelectBox;
-	private VisLabel				shadowMapSizeLabel;
+	private VisSlider				maxSceneObjectsSlider;
 	private VisLabel				msaaSamplesLabel;
 	private VisSlider				msaaSamplesSlider;
-	private GameEngine				gameEngine;
+	private VisLabel				shadowMapSizeLabel;
+	private VisSelectBox<Integer>	shadowMapSizeSelectBox;
 	private Sizes					sizes;
 
 	public GraphicsQualityOptions(Table table, GameEngine gameEngine) {
@@ -173,7 +173,7 @@ public class GraphicsQualityOptions {
 			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
 		}
 		{
-			shadowMapSizeSelectBox = new VisSelectBox<Integer>();
+			shadowMapSizeSelectBox = new VisSelectBox<>();
 			shadowMapSizeSelectBox.setItems(1024, 2048, 4096, 8192);
 			shadowMapSizeSelectBox.setSelected(gameEngine.context.getShadowMapSizeProperty());
 			if (!isCustomMode()) {
@@ -199,6 +199,17 @@ public class GraphicsQualityOptions {
 		return (int) graphicsQualitySlider.getValue() == ApplicationProperties.MAX_GRAPHICS_QUALITY;
 	}
 
+	public void save() {
+		gameEngine.context.SetGraphicsQuality((int) graphicsQualitySlider.getValue());
+		if (isCustomMode()) {
+			gameEngine.context.setMaxPointLights((int) maxPointLightsSlider.getValue());
+			gameEngine.context.setMaxSceneObjects((int) maxSceneObjectsSlider.getValue());
+			gameEngine.context.setShadowMapSize(shadowMapSizeSelectBox.getSelected());
+			gameEngine.context.setMsaaSamples((int) msaaSamplesSlider.getValue());
+		} else {
+		}
+	}
+
 	void setGraphicsQuality(int graphicsQuality) {
 		graphicsQualityLabel.setText("" + graphicsQuality);
 		graphicsQualitySlider.setValue(graphicsQuality);
@@ -209,30 +220,19 @@ public class GraphicsQualityOptions {
 		maxPointLightsSlider.setValue(maxPointLights);
 	}
 
-	private void setMsaaSamples(int value) {
-		msaaSamplesLabel.setText("" + value);
-		msaaSamplesSlider.setValue(value);
-	}
-
 	private void setMaxSceneObjects(int maxSceneObjects) {
 		maxSceneObjectsLabel.setText("" + maxSceneObjects);
 		maxSceneObjectsSlider.setValue(maxSceneObjects);
 	}
 
+	private void setMsaaSamples(int value) {
+		msaaSamplesLabel.setText("" + value);
+		msaaSamplesSlider.setValue(value);
+	}
+
 	private void setShadowMapSize(int value) {
 		shadowMapSizeLabel.setText("" + value);
 		shadowMapSizeSelectBox.setSelected(value);
-	}
-
-	public void save() {
-		gameEngine.context.SetGraphicsQuality((int) graphicsQualitySlider.getValue());
-		if (isCustomMode()) {
-			gameEngine.context.setMaxPointLights((int) maxPointLightsSlider.getValue());
-			gameEngine.context.setMaxSceneObjects((int) maxSceneObjectsSlider.getValue());
-			gameEngine.context.setShadowMapSize(shadowMapSizeSelectBox.getSelected());
-			gameEngine.context.setMsaaSamples((int) msaaSamplesSlider.getValue());
-		} else {
-		}
 	}
 
 }

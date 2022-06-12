@@ -14,7 +14,7 @@ public abstract class AbstractAudioProducer implements AudioProducer {
 
 	/**
 	 * adapt synthesizer to the current source velocity
-	 * 
+	 *
 	 * @param speed
 	 * @throws OpenAlException
 	 */
@@ -95,7 +95,7 @@ public abstract class AbstractAudioProducer implements AudioProducer {
 
 	/**
 	 * Convenience method used for debugging
-	 * 
+	 *
 	 * @throws OpenAlcException
 	 */
 	public void renderBuffer() throws OpenAlcException {

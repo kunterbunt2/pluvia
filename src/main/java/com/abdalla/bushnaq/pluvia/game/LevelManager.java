@@ -26,7 +26,6 @@ import com.abdalla.bushnaq.pluvia.scene.model.digit.DigitType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.math.Vector3;
 
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
@@ -34,10 +33,10 @@ public class LevelManager extends Level implements Serializable {
 	private static final long	serialVersionUID		= 1L;
 	private GameEngine			gameEngine;
 	int							index					= 0;
-	final List<GameObject>		renderModelInstances	= new ArrayList<>();
-	protected Font				TextFont				= new Font("SansSerif", Font.BOLD, 14);
-	Map<String, AbstractScene>	sceneList				= new HashMap<>();
 	private Color				infoColor;
+	final List<GameObject>		renderModelInstances	= new ArrayList<>();
+	Map<String, AbstractScene>	sceneList				= new HashMap<>();
+	protected Font				TextFont				= new Font("SansSerif", Font.BOLD, 14);
 
 	public LevelManager(GameEngine gameEngine, Game game) {
 		super(game);
@@ -54,10 +53,6 @@ public class LevelManager extends Level implements Serializable {
 		sceneList.put(GameName.FIVE.name(), new FlyScene(gameEngine, rand, renderModelInstances));
 		sceneList.put(GameName.SIX.name(), new DeepSeaScene(gameEngine, rand, renderModelInstances));
 		sceneList.put(GameName.UI.name(), new RainScene(gameEngine, rand, renderModelInstances));
-	}
-
-	public void destroy() {
-		disposeLevel();
 	}
 
 	private void addToEngine() {
@@ -91,7 +86,7 @@ public class LevelManager extends Level implements Serializable {
 		// level back
 		int count = 0;
 		if (game.nrOfRows != 0) {
-			//back side
+			// back side
 //			{
 //				Model m;
 //				m = gameEngine.modelManager.backPlate;
@@ -163,13 +158,8 @@ public class LevelManager extends Level implements Serializable {
 		return stone;
 	}
 
-	@Override
-	public void disposeLevel() {
-		clear();
-		destroyLevelBackground();
-//		gameEngine.universe.selectRandomGame();
-		game.reset();
-		NrOfTotalStones = 0;
+	public void destroy() {
+		disposeLevel();
 	}
 
 	public void destroyLevelBackground() {
@@ -187,9 +177,16 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	@Override
-	protected void removeStone(Stone stone) {
-		stone.get3DRenderer().destroy(gameEngine);
-		gameEngine.context.stoneList.remove(stone);
+	public void disposeLevel() {
+		clear();
+		destroyLevelBackground();
+//		gameEngine.universe.selectRandomGame();
+		game.reset();
+		NrOfTotalStones = 0;
+	}
+
+	public Color getInfoColor() {
+		return infoColor;
 	}
 
 //	@Override
@@ -204,12 +201,14 @@ public class LevelManager extends Level implements Serializable {
 		return gamePhase.equals(GamePhase.tilt);
 	}
 
-	public void updateFps() {
-		maxAnimaltionPhase = Gdx.graphics.getFramesPerSecond() / 10;
+	@Override
+	protected void removeStone(Stone stone) {
+		stone.get3DRenderer().destroy(gameEngine);
+		gameEngine.context.stoneList.remove(stone);
 	}
 
-	public Color getInfoColor() {
-		return infoColor;
+	public void updateFps() {
+		maxAnimaltionPhase = Gdx.graphics.getFramesPerSecond() / 10;
 	}
 
 }

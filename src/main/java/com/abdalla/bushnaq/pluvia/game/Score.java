@@ -7,11 +7,11 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 
 public class Score implements Comparable<Score> {
-	private long	time;
 	private String	game;
 	private long	relativeTime;
 	private Integer	score	= 0;
 	private Integer	steps	= 0;
+	private long	time;
 	private String	userName;
 
 	public Score() {
@@ -59,15 +59,6 @@ public class Score implements Comparable<Score> {
 		return userName;
 	}
 
-	public void write(XMLEncoder encoder) {
-		encoder.writeObject(time);
-		encoder.writeObject(game);
-		encoder.writeObject(relativeTime);
-		encoder.writeObject(score);
-		encoder.writeObject(steps);
-		encoder.writeObject(userName);
-	}
-
 	public void read(XMLDecoder e) {
 		time = (long) e.readObject();
 		game = (String) e.readObject();
@@ -75,5 +66,14 @@ public class Score implements Comparable<Score> {
 		score = (int) e.readObject();
 		steps = (int) e.readObject();
 		userName = (String) e.readObject();
+	}
+
+	public void write(XMLEncoder encoder) {
+		encoder.writeObject(time);
+		encoder.writeObject(game);
+		encoder.writeObject(relativeTime);
+		encoder.writeObject(score);
+		encoder.writeObject(steps);
+		encoder.writeObject(userName);
 	}
 }

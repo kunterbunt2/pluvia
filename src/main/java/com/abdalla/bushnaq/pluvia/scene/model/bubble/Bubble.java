@@ -13,10 +13,10 @@ import com.badlogic.gdx.math.collision.BoundingBox;
  * @author bushnaq TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
 public class Bubble extends Fish {
+	Vector3	positionDelta	= new Vector3((float) Math.random() * 3, (float) Math.random() * 3, (float) Math.random() * 3);
+//	Vector3	positionDelta	= new Vector3(1f, 2f, 3f);
 	float	radius			= 5f;
 	Vector3	rotation		= new Vector3((float) Math.random(), (float) Math.random(), (float) Math.random());
-	Vector3	positionDelta	= new Vector3((float) Math.random()*3, (float) Math.random()*3, (float) Math.random()*3);
-//	Vector3	positionDelta	= new Vector3(1f, 2f, 3f);
 
 	public Bubble(GameEngine gameEngine, int type, float size, BoundingBox cage) {
 		super();
@@ -35,7 +35,7 @@ public class Bubble extends Fish {
 		setAccellerationDistance(5f);
 		currentMaxEngineSpeed = minSpeed;
 		positionDelta.nor();
-		positionDelta.scl((float) Math.random()*3 );
+		positionDelta.scl((float) Math.random() * 3);
 	}
 
 	@Override

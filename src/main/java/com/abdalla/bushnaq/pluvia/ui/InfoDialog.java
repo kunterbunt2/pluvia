@@ -39,21 +39,13 @@ public class InfoDialog {
 	private final StringBuilder		stringBuilder	= new StringBuilder();
 	private final String			title			= "info";
 	private Class<?>				type;
-	private Window					window;
 	private boolean					visible;
+	private Window					window;
 
 	public InfoDialog(final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		this.batch = batch;
 		this.inputMultiplexer = inputMultiplexer;
 		debugTimer = new TimeStatistic();
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
-	public void setVisible(final boolean visible) {
-		this.visible = visible;
 	}
 
 	public void act(final float deltaTime) {
@@ -112,8 +104,16 @@ public class InfoDialog {
 		return stage.getViewport();
 	}
 
+	public boolean isVisible() {
+		return visible;
+	}
+
 	private void positionWindow() {
 		window.setPosition(0, screenHeight - window.getHeight() - GameEngine.FONT_SIZE - 2);
+	}
+
+	public void setVisible(final boolean visible) {
+		this.visible = visible;
 	}
 
 	private void update(final Context universe) {

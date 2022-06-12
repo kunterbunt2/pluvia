@@ -13,25 +13,16 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
 
 public class DesktopLauncher {
-	private static final int	UNIVERSE_GENERATION_RANDOM_SEED	= 1;
-	private Logger				logger							= LoggerFactory.getLogger(this.getClass());
-	boolean						useOGL3							= true;
+	private static final int UNIVERSE_GENERATION_RANDOM_SEED = 1;
 
 	public static void main(final String[] args) throws Exception {
 		DesktopLauncher desktopLauncher = new DesktopLauncher();
 		desktopLauncher.start();
 	}
 
-	private void start() throws InterruptedException, Exception {
-		logger.info("------------------------------------------------------------------------------");
-		logger.info(String.format("Starting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
-		logger.info("------------------------------------------------------------------------------");
-		logger.info("user.home = " + System.getProperty("user.home"));
-		loop();
-		logger.info("------------------------------------------------------------------------------");
-		logger.info(String.format("Shutting down pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
-		logger.info("------------------------------------------------------------------------------");
-	}
+	private Logger	logger	= LoggerFactory.getLogger(this.getClass());
+
+	boolean			useOGL3	= true;
 
 	/**
 	 * called by GameEngine to create Lwjgl3Application
@@ -39,28 +30,6 @@ public class DesktopLauncher {
 	 * @throws Exception
 	 */
 	public DesktopLauncher() throws Exception {
-	}
-
-	private void loop() throws Exception, InterruptedException {
-		boolean restart = false;
-		do {
-			if (restart)
-				logger.info(String.format("Restarting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
-			final Context context = new Context();
-			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
-			final GameEngine						gameEngine	= new GameEngine(context);
-			final Lwjgl3ApplicationConfiguration	config		= createConfig(context);
-			config.disableAudio(true);
-			try {
-				context.restart = false;
-				new Lwjgl3Application(gameEngine, config);
-			} catch (Throwable e) {
-				logger.error(e.getMessage(), e);
-				Thread.sleep(5000);
-			}
-			context.dispose();
-			restart = context.restart;
-		} while (restart);
 	}
 
 	private Lwjgl3ApplicationConfiguration createConfig(Context context) {
@@ -90,6 +59,95 @@ public class DesktopLauncher {
 		config.setMaximized(true);
 //		config.setMaximizedMonitor(monitors[monitor]);
 		return config;
+	}
+
+	private void loop() throws Exception, InterruptedException {
+		boolean restart = false;
+		do {
+			if (restart)
+				logger.info(String.format("Restarting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+			final Context context = new Context();
+			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
+			final GameEngine						gameEngine	= new GameEngine(context);
+			final Lwjgl3ApplicationConfiguration	config		= createConfig(context);
+			config.disableAudio(true);
+			try {
+				context.restart = false;
+				new Lwjgl3Application(gameEngine, config);
+			} catch (Throwable e) {
+				logger.error(e.getMessage(), e);
+				Thread.sleep(5000);
+			}
+			context.dispose();
+			restart = context.restart;
+		} while (restart);
+	}
+
+	private void start() throws InterruptedException, Exception {
+//		LoggerContext						lc			= (LoggerContext) LoggerFactory.getILoggerFactory();
+//		ch.qos.logback.classic.Logger		rootLogger		= lc.getLogger(Logger.ROOT_LOGGER_NAME);
+//		Iterator<Appender<ILoggingEvent>>	iterator	= logger2.iteratorForAppenders();
+//		while (iterator.hasNext()) {
+//			logger.info(iterator.next().getName());
+//		}
+//		RollingFileAppender<ILoggingEvent>	appender	= (RollingFileAppender) rootLogger.getAppender("FILE");
+		String property = System.getProperty("user.home");
+//		String file = property + "/.pluvia/pluvia1.log";
+//		String								file2 = appender.getFile();
+//		appender.setFile(file);
+//		String								file3 = appender.getFile();
+//		appender.stop();
+//		appender.start();
+//		rootLogger.info("test");
+//		LoggerContext			logCtx		= LoggerFactory.getILoggerFactory();
+//
+//		PatternLayoutEncoder	logEncoder	= new PatternLayoutEncoder();
+//		logEncoder.setContext(logCtx);
+//		logEncoder.setPattern("%-12date{YYYY-MM-dd HH:mm:ss.SSS} %-5level - %msg%n");
+//		logEncoder.start();
+//
+//		ConsoleAppender logConsoleAppender = new ConsoleAppender();
+//		logConsoleAppender.setContext(logCtx);
+//		logConsoleAppender.setName("console");
+//		logConsoleAppender.setEncoder(logEncoder);
+//		logConsoleAppender.start();
+//
+//		logEncoder = new PatternLayoutEncoder();
+//		logEncoder.setContext(logCtx);
+//		logEncoder.setPattern("%-12date{YYYY-MM-dd HH:mm:ss.SSS} %-5level - %msg%n");
+//		logEncoder.start();
+//
+//		RollingFileAppender logFileAppender = new RollingFileAppender();
+//		logFileAppender.setContext(logCtx);
+//		logFileAppender.setName("logFile");
+//		logFileAppender.setEncoder(logEncoder);
+//		logFileAppender.setAppend(true);
+//		logFileAppender.setFile("logs/logfile.log");
+//
+//		TimeBasedRollingPolicy logFilePolicy = new TimeBasedRollingPolicy();
+//		logFilePolicy.setContext(logCtx);
+//		logFilePolicy.setParent(logFileAppender);
+//		logFilePolicy.setFileNamePattern("logs/logfile-%d{yyyy-MM-dd_HH}.log");
+//		logFilePolicy.setMaxHistory(7);
+//		logFilePolicy.start();
+//
+//		logFileAppender.setRollingPolicy(logFilePolicy);
+//		logFileAppender.start();
+//
+//		Logger log = logCtx.getLogger("Main");
+//		log.setAdditive(false);
+//		log.setLevel(Level.INFO);
+//		log.addAppender(logConsoleAppender);
+//		log.addAppender(logFileAppender);
+
+		logger.info("------------------------------------------------------------------------------");
+		logger.info(String.format("Starting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+		logger.info("------------------------------------------------------------------------------");
+		logger.info("user.home = " + property);
+		loop();
+		logger.info("------------------------------------------------------------------------------");
+		logger.info(String.format("Shutting down pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
+		logger.info("------------------------------------------------------------------------------");
 	}
 
 }

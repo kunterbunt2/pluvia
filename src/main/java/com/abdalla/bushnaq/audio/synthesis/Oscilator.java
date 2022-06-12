@@ -10,13 +10,15 @@ public interface Oscilator {
 
 	/**
 	 * Vibrato control of the Oscillator
-	 * @param lfoFreq in Hz
+	 *
+	 * @param lfoFreq  in Hz
 	 * @param lfoDepth in cent
 	 */
 	void setLfo(float lfoFreq, float lfoDepth);
 
 	/**
 	 * set the base oscillator frequency
+	 *
 	 * @param oscFreq
 	 */
 	void setOscillator(float oscFreq);

@@ -206,21 +206,21 @@ public class ModelCreator {
 	public void print(final Model model) {
 
 		for (final Mesh mesh : model.meshes) {
-			final int maxVertices = mesh.getMaxVertices();
-			final int maxIndices = mesh.getMaxIndices();
+			final int	maxVertices	= mesh.getMaxVertices();
+			final int	maxIndices	= mesh.getMaxIndices();
 			System.out.printf("maxVertices=%d\n", maxVertices);
 			System.out.printf("maxIndices=%d\n", maxIndices);
 			{
-				final int numVertices = mesh.getNumVertices();
-				final int vertexSize = mesh.getVertexSize();
+				final int	numVertices	= mesh.getNumVertices();
+				final int	vertexSize	= mesh.getVertexSize();
 
 				System.out.printf("numVertices=%d\n", numVertices);
 				System.out.printf("vertexSize=%d\n", vertexSize);
 
 				final float[] vertices = new float[numVertices * vertexSize / 4];
 				mesh.getVertices(vertices);
-				int index = 0;
-				int vertixCount = 0;
+				int	index		= 0;
+				int	vertixCount	= 0;
 				for (int vertex = 0; vertex < vertices.length; vertex++) {
 					if (index == (vertexSize / 4) - 2) {
 						final float u = vertices[vertex];
@@ -250,8 +250,8 @@ public class ModelCreator {
 				System.out.printf("numIndices=%d\n", numIndices);
 				final short[] indexes = new short[numIndices];
 				mesh.getIndices(indexes);
-				int index = 0;
-				int indexCount = 0;
+				int	index		= 0;
+				int	indexCount	= 0;
 				for (int i = 0; i < indexes.length; i++) {
 					System.out.printf(" %d,", indexes[i]);
 					if (++index == 3) {
@@ -267,3 +267,5 @@ public class ModelCreator {
 	}
 
 }
+//@formatter:off
+//@formatter:on

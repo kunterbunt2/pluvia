@@ -16,33 +16,19 @@ import org.slf4j.LoggerFactory;
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 
 public class ScoreList extends HashMap<String, TreeSet<Score>> {
+	long				changed;
 	protected Logger	logger	= LoggerFactory.getLogger(this.getClass());
+
 	int					size;
-
-	public int getSize() {
-		return size;
-	}
-
-	long changed;
-
-	public long getChanged() {
-		return changed;
-	}
 
 	public ScoreList(int size) {
 		this.size = size;
 	}
 
-	public void add(String game, int score, int steps, long relativeTime, String userName) {
-		if (score > 0) {
-			add(new Score(game, score, steps, relativeTime, System.currentTimeMillis(), userName));
-		}
-	}
-
 	private void add(Score score) {
 		TreeSet<Score> treeSet = get(score.getGame());
 		if (treeSet == null) {
-			treeSet = new TreeSet<Score>();
+			treeSet = new TreeSet<>();
 			put(score.getGame(), treeSet);
 		}
 		treeSet.add(score);
@@ -51,6 +37,20 @@ public class ScoreList extends HashMap<String, TreeSet<Score>> {
 		}
 		changed = System.currentTimeMillis();
 		writeToDisk();
+	}
+
+	public void add(String game, int score, int steps, long relativeTime, String userName) {
+		if (score > 0) {
+			add(new Score(game, score, steps, relativeTime, System.currentTimeMillis(), userName));
+		}
+	}
+
+	public long getChanged() {
+		return changed;
+	}
+
+	public int getSize() {
+		return size;
 	}
 
 	public void init(GameList gameList) {
@@ -73,24 +73,33 @@ public class ScoreList extends HashMap<String, TreeSet<Score>> {
 			for (int i = 0; i < size; i++) {
 				TreeSet<Score> treeSet = get(game.getName());
 				if (treeSet == null) {
-					treeSet = new TreeSet<Score>();
+					treeSet = new TreeSet<>();
 					put(game.getName(), treeSet);
 				}
 			}
 		}
 	}
 
-	protected void writeToDisk() {
-		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(Context.getConfigFolderName() + "/score.xml")));
-			write(encoder);
-			encoder.close();
-		} catch (FileNotFoundException e) {
-			logger.warn(e.getMessage(), e);
+	private void read(XMLDecoder e) {
+		Integer numberOfGames = (Integer) e.readObject();
+		for (int gameIndex = 0; gameIndex < numberOfGames; gameIndex++) {
+			String	name			= (String) e.readObject();
+			Integer	numberOfScores	= (Integer) e.readObject();
+			for (int scoreIndex = 0; scoreIndex < numberOfScores; scoreIndex++) {
+				Score score = new Score();
+				score.read(e);
+				add(score);
+			}
 		}
 	}
 
-//	protected void readFromDisk() {
+	protected void readFromDisk() throws FileNotFoundException {
+		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.getConfigFolderName() + "/score.xml")));
+		read(encoder);
+		encoder.close();
+	}
+
+	// protected void readFromDisk() {
 //		try {
 //			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(getLastGameName())));
 //			readFromDisk(decoder);
@@ -127,22 +136,13 @@ public class ScoreList extends HashMap<String, TreeSet<Score>> {
 		}
 	}
 
-	protected void readFromDisk() throws FileNotFoundException {
-		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.getConfigFolderName() + "/score.xml")));
-		read(encoder);
-		encoder.close();
-	}
-
-	private void read(XMLDecoder e) {
-		Integer numberOfGames = (Integer) e.readObject();
-		for (int gameIndex = 0; gameIndex < numberOfGames; gameIndex++) {
-			String	name			= (String) e.readObject();
-			Integer	numberOfScores	= (Integer) e.readObject();
-			for (int scoreIndex = 0; scoreIndex < numberOfScores; scoreIndex++) {
-				Score score = new Score();
-				score.read(e);
-				add(score);
-			}
+	protected void writeToDisk() {
+		try {
+			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(Context.getConfigFolderName() + "/score.xml")));
+			write(encoder);
+			encoder.close();
+		} catch (FileNotFoundException e) {
+			logger.warn(e.getMessage(), e);
 		}
 	}
 

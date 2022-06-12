@@ -19,18 +19,9 @@ import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneAdapter;
 
 public class OptionsDialog extends AbstractDialog {
 
-	private TabbedPane				tabbedPane		= new TabbedPane();
-	private Sizes					sizes;
-	private VisTable				mainTable		= new VisTable();
-	private Cell<?>					tableSpacerCell;					// used to measure height adn set height of total dialog
-	private float					dialogHeight	= 0;
-	private GraphicsQualityOptions	graphicsQualityOptions;
-	private GraphicsOptions			graphicsOptions;
-	private AudioOptions			audioOptions;
-
 	private class TestTab extends Tab {
-		private String	title;
 		private Table	content;
+		private String	title;
 
 		public TestTab(String title) {
 			super(false, false);
@@ -39,26 +30,44 @@ public class OptionsDialog extends AbstractDialog {
 		}
 
 		@Override
-		public String getTabTitle() {
-			return title;
-		}
-
-		@Override
 		public Table getContentTable() {
 			return content;
 		}
+
+		@Override
+		public String getTabTitle() {
+			return title;
+		}
 	}
+
+	private AudioOptions			audioOptions;
+	final VisTable					container		= new VisTable();
+	private float					dialogHeight	= 0;
+	private GraphicsOptions			graphicsOptions;
+	private GraphicsQualityOptions	graphicsQualityOptions;
+	private VisTable				mainTable		= new VisTable();
+	private Sizes					sizes;
+
+	private TabbedPane				tabbedPane		= new TabbedPane();
+
+	private Cell<?>					tableSpacerCell;					// used to measure height adn set height of total dialog
 
 	public OptionsDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		super(gameEngine, batch, inputMultiplexer);
 		createStage("", true);
 	}
 
-	public void setVisible(final boolean visible) {
-		super.setVisible(visible);
-		if (visible) {
-			graphicsQualityOptions.setGraphicsQuality(getGameEngine().context.getGraphicsQuality());
+	/**
+	 * in the tabbed panel, every panel has a different height we need to find the maximum and then set the spacer cell to that size
+	 */
+	private void calculateBestTableHight() {
+		dialogHeight = 0;
+		for (Tab tab : tabbedPane.getTabs()) {
+			tabbedPane.switchTab(tab);
+			dialogHeight = Math.max(dialogHeight, getTable().getHeight());
 		}
+		tableSpacerCell.height(dialogHeight);
+		tabbedPane.switchTab(0);
 	}
 
 	@Override
@@ -84,46 +93,6 @@ public class OptionsDialog extends AbstractDialog {
 		createButtons(mainTable);
 
 		calculateBestTableHight();
-	}
-
-	/**
-	 * in the tabbed panel, every panel has a different height we need to find the maximum and then set the spacer cell to that size
-	 */
-	private void calculateBestTableHight() {
-		dialogHeight = 0;
-		for (Tab tab : tabbedPane.getTabs()) {
-			tabbedPane.switchTab(tab);
-			dialogHeight = Math.max(dialogHeight, getTable().getHeight());
-		}
-		tableSpacerCell.height(dialogHeight);
-		tabbedPane.switchTab(0);
-	}
-
-	private void createTabButtons(VisTable table) {
-		table.add(tabbedPane.getTable()).colspan(1).expandX().fillX();
-		tabbedPane.addListener(new TabbedPaneAdapter() {
-			@Override
-			public void switchedTab(Tab tab) {
-				container.clearChildren();
-				container.add(tab.getContentTable()).expand().fill();
-			}
-		});
-		tabbedPane.add(new TestTab("Graphics Quality"));
-		tabbedPane.add(new TestTab("Graphics"));
-		tabbedPane.add(new TestTab("Audio"));
-		tabbedPane.switchTab(1);
-		table.row().pad(16);
-		table.add(container);
-		table.row().pad(16);
-	}
-
-	private void createCaption(VisTable table) {
-		table.row();
-		VisLabel label = new VisLabel("Options");
-		label.setColor(LIGHT_BLUE_COLOR);
-		label.setAlignment(Align.center);
-		table.add(label).width(DIALOG_WIDTH * sizes.scaleFactor).pad(0, 16, 16, 16).center();
-		table.row().pad(16);
 	}
 
 	private void createButtons(VisTable table) {
@@ -161,6 +130,39 @@ public class OptionsDialog extends AbstractDialog {
 		getTable().pack();
 	}
 
-	final VisTable container = new VisTable();
+	private void createCaption(VisTable table) {
+		table.row();
+		VisLabel label = new VisLabel("Options");
+		label.setColor(LIGHT_BLUE_COLOR);
+		label.setAlignment(Align.center);
+		table.add(label).width(DIALOG_WIDTH * sizes.scaleFactor).pad(0, 16, 16, 16).center();
+		table.row().pad(16);
+	}
+
+	private void createTabButtons(VisTable table) {
+		table.add(tabbedPane.getTable()).colspan(1).expandX().fillX();
+		tabbedPane.addListener(new TabbedPaneAdapter() {
+			@Override
+			public void switchedTab(Tab tab) {
+				container.clearChildren();
+				container.add(tab.getContentTable()).expand().fill();
+			}
+		});
+		tabbedPane.add(new TestTab("Graphics Quality"));
+		tabbedPane.add(new TestTab("Graphics"));
+		tabbedPane.add(new TestTab("Audio"));
+		tabbedPane.switchTab(1);
+		table.row().pad(16);
+		table.add(container);
+		table.row().pad(16);
+	}
+
+	@Override
+	public void setVisible(final boolean visible) {
+		super.setVisible(visible);
+		if (visible) {
+			graphicsQualityOptions.setGraphicsQuality(getGameEngine().context.getGraphicsQuality());
+		}
+	}
 
 }

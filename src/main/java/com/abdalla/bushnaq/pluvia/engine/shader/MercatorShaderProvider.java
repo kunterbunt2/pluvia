@@ -20,14 +20,14 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 	}
 
 	private Plane		clippingPlane;
-	public MyShader		shader;
-	public WaterShader	waterShader;
+	private Mirror		mirror;
 	public MirrorShader	mirrorShader;
+	public MyShader		shader;
 //	private final float			waterTiling;
 //	private float				waveSpeed;
 //	private float				waveStrength;
 	private Water		water;
-	private Mirror		mirror;
+	public WaterShader	waterShader;
 
 	public MercatorShaderProvider(final Config config, final Water water, final Mirror mirror) {
 		super(config);
@@ -36,6 +36,19 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 //		this.waterTiling = waterTiling;
 //		this.waveStrength = waveStrength;
 //		this.waveSpeed = waveSpeed;
+	}
+
+	private Shader createMirrorShader(final Renderable renderable) {
+		final String prefix = createPrefixBase(renderable, config);
+//		final String	prefix	= "";
+//		final Config	config	= new Config();
+		config.vertexShader = Gdx.files.internal("shader/mirror.vertex.glsl").readString();
+		config.fragmentShader = Gdx.files.internal("shader/mirror.fragment.glsl").readString();
+		mirrorShader = new MirrorShader(renderable, config, prefix, mirror);
+//		setWaterAttribute(waterAttribute);
+		mirrorShader.setClippingPlane(clippingPlane);
+		return mirrorShader;
+
 	}
 
 	public String createPrefixBase(final Renderable renderable, final Config config) {
@@ -59,10 +72,6 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 		prefix += defaultPrefix;
 
 		return prefix;
-	}
-
-	protected boolean isGL3() {
-		return Gdx.graphics.getGLVersion().isVersionEqualToOrHigher(3, 0);
 	}
 
 	@Override
@@ -100,24 +109,15 @@ public class MercatorShaderProvider extends DefaultShaderProvider implements Mer
 
 	}
 
-	private Shader createMirrorShader(final Renderable renderable) {
-		final String prefix = createPrefixBase(renderable, config);
-//		final String	prefix	= "";
-//		final Config	config	= new Config();
-		config.vertexShader = Gdx.files.internal("shader/mirror.vertex.glsl").readString();
-		config.fragmentShader = Gdx.files.internal("shader/mirror.fragment.glsl").readString();
-		mirrorShader = new MirrorShader(renderable, config, prefix, mirror);
-//		setWaterAttribute(waterAttribute);
-		mirrorShader.setClippingPlane(clippingPlane);
-		return mirrorShader;
-
-	}
-
 	@Override
 	public void dispose() {
 		// pbrShader.dispose();
 		// waterShader.dispose();
 		super.dispose();
+	}
+
+	protected boolean isGL3() {
+		return Gdx.graphics.getGLVersion().isVersionEqualToOrHigher(3, 0);
 	}
 
 //	@Override

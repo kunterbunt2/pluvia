@@ -26,10 +26,10 @@ public class Fish extends Renderable {
 	protected float			minSpeed							= 0.01f;
 	public Vector3			poi									= new Vector3();
 	public Vector3			position;
+	protected float			size;
 	public Vector3			speed								= new Vector3(0, 0, 0);
 	protected long			timeDelta							= 0;
 	public int				type								= 0;
-	protected float			size;
 
 	protected Fish() {
 	}
@@ -53,7 +53,7 @@ public class Fish extends Renderable {
 		lastTimeAdvancement = currentTime;
 		final float delta = (currentMaxEngineSpeed * timeDelta) / TimeUnit.TICKS_PER_DAY;
 		destinationPlanetDistanceProgress += delta;
-		if (destinationPlanetDistanceProgress >= destinationPlanetDistance /*&& TimeUnit.isInt(currentTime) ( ( currentTime - (int)currentTime ) == 0.0f ) */ ) {
+		if (destinationPlanetDistanceProgress >= destinationPlanetDistance /* && TimeUnit.isInt(currentTime) ( ( currentTime - (int)currentTime ) == 0.0f ) */ ) {
 			position.set(poi);
 			choseStartingPoint(gameEngine);
 		}
@@ -102,6 +102,10 @@ public class Fish extends Renderable {
 		return minSpeed;
 	}
 
+	public float getSize() {
+		return size;
+	}
+
 	public int getType() {
 		return type;
 	}
@@ -121,10 +125,6 @@ public class Fish extends Renderable {
 	public void setMinSpeed(float minSpeed) {
 		this.minSpeed = minSpeed;
 		currentMaxEngineSpeed = minSpeed;
-	}
-
-	public float getSize() {
-		return size;
 	}
 
 }

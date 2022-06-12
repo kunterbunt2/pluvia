@@ -31,28 +31,52 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 //}
 
 public abstract class AbstractDialog {
-	protected static final Color	LIGHT_BLUE_COLOR	= new Color(0x1BA1E2FF);
-	protected static final int		DIALOG_WIDTH		= 150;
 	protected static final int		BUTTON_WIDTH		= 150;
+	protected static final int		DIALOG_WIDTH		= 150;
 	protected static final int		LABEL_WIDTH			= 250;
+	protected static final Color	LIGHT_BLUE_COLOR	= new Color(0x1BA1E2FF);
 	private final Batch				batch;
+	private VisDialog				dialog;
 	private GameEngine				gameEngine;
 	private final InputMultiplexer	inputMultiplexer;
 	private List<InputProcessor>	inputProcessorCache	= new ArrayList<>();
-//	private float					blurAmount			= 1f;
+	// private float blurAmount = 1f;
 //	private int						blurPasses			= 1;
 //	private BlurMode				blurMode			= BlurMode.up;
 	final Logger					logger				= LoggerFactory.getLogger(this.getClass());
-	private Stage					stage;
-	private boolean					visible				= false;
-	private VisDialog				dialog;
-	private VisTable				table				= new VisTable(true);
 	private AbstractDialog			parent;
+	private Stage					stage;
+	private VisTable				table				= new VisTable(true);
+	private boolean					visible				= false;
 
 	public AbstractDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		this.gameEngine = gameEngine;
 		this.batch = batch;
 		this.inputMultiplexer = inputMultiplexer;
+	}
+
+	protected void addHoverEffect(VisTextButton button) {
+		button.addListener(new ClickListener() {
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				button.setFocusBorderEnabled(true);
+			}
+
+			@Override
+			public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				button.setFocusBorderEnabled(false);
+			}
+		});
+	}
+
+	protected void afterInvisible() {
+	}
+
+	protected void beforeVisible() {
+	}
+
+	protected void close() {
+		pop();
 	}
 
 	protected abstract void create();
@@ -92,19 +116,6 @@ public abstract class AbstractDialog {
 		}
 	}
 
-	protected void packAndPosition() {
-		dialog.pack();
-		positionWindow();
-	}
-
-	protected void enterAction() {
-		close();
-	}
-
-	protected void escapeAction() {
-		close();
-	}
-
 	protected VisDialog createWindow(String title) {
 		dialog = new VisDialog(title);
 		dialog.setColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -115,10 +126,6 @@ public abstract class AbstractDialog {
 		table.pad(0, 16, 16, 16);
 		dialog.getContentTable().add(this.table);
 		return dialog;
-	}
-
-	protected void close() {
-		pop();
 	}
 
 	public void dispose() {
@@ -154,24 +161,42 @@ public abstract class AbstractDialog {
 		stage.draw();
 	}
 
-	public GameEngine getGameEngine() {
-		return gameEngine;
+	protected void enterAction() {
+		close();
 	}
 
-	public Viewport getViewport() {
-		return stage.getViewport();
-	}
-
-	public VisTable getTable() {
-		return table;
+	protected void escapeAction() {
+		close();
 	}
 
 	public VisDialog getDialog() {
 		return dialog;
 	}
 
+	public GameEngine getGameEngine() {
+		return gameEngine;
+	}
+
+	public VisTable getTable() {
+		return table;
+	}
+
+	public Viewport getViewport() {
+		return stage.getViewport();
+	}
+
 	public boolean isVisible() {
 		return visible;
+	}
+
+	protected void packAndPosition() {
+		dialog.pack();
+		positionWindow();
+	}
+
+	public void pop() {
+		setVisible(false);
+		parent.setVisible(true);
 	}
 
 	protected void positionWindow() {
@@ -180,18 +205,13 @@ public abstract class AbstractDialog {
 
 	/**
 	 * switch to another dialog
-	 * 
+	 *
 	 * @param dialog
 	 */
 	public void push(AbstractDialog parent) {
 		this.parent = parent;
 		parent.setVisible(false);
 		setVisible(true);
-	}
-
-	public void pop() {
-		setVisible(false);
-		parent.setVisible(true);
 	}
 
 	public void setVisible(final boolean visible) {
@@ -223,27 +243,7 @@ public abstract class AbstractDialog {
 		}
 	}
 
-	protected void afterInvisible() {
-	}
-
-	protected void beforeVisible() {
-	}
-
 	public void update(final Context universe) {
-	}
-
-	protected void addHoverEffect(VisTextButton button) {
-		button.addListener(new ClickListener() {
-			@Override
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				button.setFocusBorderEnabled(true);
-			}
-
-			@Override
-			public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				button.setFocusBorderEnabled(false);
-			}
-		});
 	}
 
 }

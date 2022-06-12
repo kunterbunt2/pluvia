@@ -23,16 +23,16 @@ public class MercatorPbrShaderProvider extends PBRShaderProvider implements Merc
 	}
 
 	private Plane		clippingPlane;
-	public MyPBRShader	pbrShader;
-//	private final FrameBuffer	waterReflectionFbo;
-//	private final FrameBuffer	waterRefractionFbo;
-	public WaterShader	waterShader;
+	private Mirror		mirror;
 	public MirrorShader	mirrorShader;
+	public MyPBRShader	pbrShader;
 //	private final float			waterTiling;
 //	private float				waveSpeed;
 //	private float				waveStrength;
 	private Water		water;
-	private Mirror		mirror;
+	// private final FrameBuffer waterReflectionFbo;
+//	private final FrameBuffer	waterRefractionFbo;
+	public WaterShader	waterShader;
 
 	public MercatorPbrShaderProvider(final PBRShaderConfig config, final Water water, final Mirror mirror) {
 		super(config);
@@ -41,6 +41,17 @@ public class MercatorPbrShaderProvider extends PBRShaderProvider implements Merc
 //		this.waveSpeed = waveSpeed;
 		this.water = water;
 		this.mirror = mirror;
+	}
+
+	private Shader createMirrorShader(final Renderable renderable) {
+		final String	prefix	= createPrefixBase(renderable, config);
+		final Config	config	= new Config();
+		config.vertexShader = Gdx.files.internal("shader/mirror.vertex.glsl").readString();
+		config.fragmentShader = Gdx.files.internal("shader/mirror.fragment.glsl").readString();
+		mirrorShader = new MirrorShader(renderable, config, prefix, mirror);
+		mirrorShader.setClippingPlane(clippingPlane);
+		return mirrorShader;
+
 	}
 
 	private MyPBRShader createPBRShader(final Renderable renderable) {
@@ -96,17 +107,6 @@ public class MercatorPbrShaderProvider extends PBRShaderProvider implements Merc
 //		setWaterAttribute(waterAttribute);
 		waterShader.setClippingPlane(clippingPlane);
 		return waterShader;
-
-	}
-
-	private Shader createMirrorShader(final Renderable renderable) {
-		final String	prefix	= createPrefixBase(renderable, config);
-		final Config	config	= new Config();
-		config.vertexShader = Gdx.files.internal("shader/mirror.vertex.glsl").readString();
-		config.fragmentShader = Gdx.files.internal("shader/mirror.fragment.glsl").readString();
-		mirrorShader = new MirrorShader(renderable, config, prefix, mirror);
-		mirrorShader.setClippingPlane(clippingPlane);
-		return mirrorShader;
 
 	}
 

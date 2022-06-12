@@ -1,8 +1,8 @@
 package com.abdalla.bushnaq.audio.synthesis;
 
 public class BassBoost {
-	double omega, sn, cs, a, shape, beta, b0, b1, b2, a0, a1, a2;
-	double xn1, xn2, yn1, yn2;
+	double	omega, sn, cs, a, shape, beta, b0, b1, b2, a0, a1, a2;
+	double	xn1, xn2, yn1, yn2;
 
 	public BassBoost(final float frequency, final float dB_boost, final int sampleRate) {
 		init(frequency, dB_boost, sampleRate);

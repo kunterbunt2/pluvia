@@ -5,14 +5,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
-import com.badlogic.gdx.math.Matrix4;
 
 public class Water {
+	private boolean		present					= false;
 	private FrameBuffer	reflectionFbo;
 	private FrameBuffer	refractionFbo;
-	private boolean		present					= false;
-	private float		tiling					= 4f;
 	private float		refractiveMultiplicator	= 1.0f;
+	private float		tiling					= 4f;
 	private float		waveSpeed				= 0.01f;
 	private float		waveStrength			= 0.007f;
 
@@ -55,6 +54,10 @@ public class Water {
 		return refractionFbo;
 	}
 
+	public float getRefractiveMultiplicator() {
+		return refractiveMultiplicator;
+	}
+
 	public float getTiling() {
 		return tiling;
 	}
@@ -75,6 +78,10 @@ public class Water {
 		this.present = present;
 	}
 
+	public void setRefractiveMultiplicator(float refractiveMultiplicator) {
+		this.refractiveMultiplicator = refractiveMultiplicator;
+	}
+
 	public void setTiling(float tiling) {
 		this.tiling = tiling;
 	}
@@ -85,14 +92,6 @@ public class Water {
 
 	public void setWaveStrength(float waveStrength) {
 		this.waveStrength = waveStrength;
-	}
-
-	public float getRefractiveMultiplicator() {
-		return refractiveMultiplicator;
-	}
-
-	public void setRefractiveMultiplicator(float refractiveMultiplicator) {
-		this.refractiveMultiplicator = refractiveMultiplicator;
 	}
 
 }

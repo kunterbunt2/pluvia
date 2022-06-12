@@ -26,16 +26,16 @@ import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 public abstract class AbstractScene {
+	protected static final float	CITY_SIZE	= 3;
 	private static final float		WATER_X		= 100;
 	private static final float		WATER_Y		= 0;
 	private static final float		WATER_Z		= 50;
-	protected static final float	CITY_SIZE	= 3;
-	protected Logger				logger		= LoggerFactory.getLogger(this.getClass());
 	protected GameEngine			gameEngine;
-	protected List<GameObject>		renderModelInstances;
-	protected Random				rand;
 	protected int					index		= 0;
+	protected Logger				logger		= LoggerFactory.getLogger(this.getClass());
 	protected Text2D				logo;
+	protected Random				rand;
+	protected List<GameObject>		renderModelInstances;
 	protected Text2D				version;
 
 	public AbstractScene(GameEngine gameEngine, Random rand, List<GameObject> renderModelInstances) {
@@ -59,34 +59,6 @@ public abstract class AbstractScene {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-	}
-
-	protected void createFish(float minSize, float maxSize) {
-		Vector3		min	= gameEngine.renderEngine.sceneBox.min;
-		Vector3		max	= gameEngine.renderEngine.sceneBox.max;
-		BoundingBox	b	= new BoundingBox(new Vector3(min.x, -5f, min.z), new Vector3(max.x, 0f, 0));
-		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 100); i++) {
-			int		type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_FISH_MODELS);
-			float	size	= minSize + (float) Math.random() * (maxSize - minSize);
-			Fish	fish	= new Fish(gameEngine, type, size, b);
-			gameEngine.context.fishList.add(fish);
-		}
-	}
-
-	private GameObject instanciateBuilding(final GameEngine gameEngine, final int index) {
-//		int i = rand.nextInt(ModelManager.MAX_NUMBER_OF_BUILDING_MODELS);
-		final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[(int) (Math.random() * ModelManager.MAX_NUMBER_OF_BUILDING_MODELS)]), null);
-		Material			m	= go.instance.model.materials.get(0);
-		if (gameEngine.renderEngine.isPbr()) {
-			m.set(PBRColorAttribute.createBaseColorFactor(Color.BLACK));
-			return go;
-		} else {
-//			final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[(int) (Math.random() * ModelManager.MAX_NUMBER_OF_BUILDING_MODELS)]), null);
-//			Material			m	= go.instance.model.materials.get(0);
-			m.set(ColorAttribute.createDiffuse(Color.GRAY));
-			return go;
-		}
-
 	}
 
 	protected void createCity(final GameEngine gameEngine, final float x, final float y, final float z, boolean up, float ScaleY) {
@@ -170,6 +142,18 @@ public abstract class AbstractScene {
 		}
 	}
 
+	protected void createFish(float minSize, float maxSize) {
+		Vector3		min	= gameEngine.renderEngine.sceneBox.min;
+		Vector3		max	= gameEngine.renderEngine.sceneBox.max;
+		BoundingBox	b	= new BoundingBox(new Vector3(min.x, -5f, min.z), new Vector3(max.x, 0f, 0));
+		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 100); i++) {
+			int		type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_FISH_MODELS);
+			float	size	= minSize + (float) Math.random() * (maxSize - minSize);
+			Fish	fish	= new Fish(gameEngine, type, size, b);
+			gameEngine.context.fishList.add(fish);
+		}
+	}
+
 	protected void createMirror(Color color) {
 		if (gameEngine.renderEngine.isMirrorPresent()) {
 			Model model;
@@ -178,6 +162,28 @@ public abstract class AbstractScene {
 			cube.instance.materials.get(0).set(ColorAttribute.createDiffuse(color));
 			cube.instance.transform.setToTranslationAndScaling(0f, WATER_Y, -15f, WATER_X, 0.1f, WATER_Z);
 			renderModelInstances.add(cube);
+		}
+	}
+
+	protected void createPlane(Color color) {
+		Model model;
+		model = gameEngine.modelManager.square;
+		GameObject	cube	= new GameObject(new ModelInstanceHack(model), null);
+		Material	m		= cube.instance.materials.get(0);
+		m.set(PBRColorAttribute.createBaseColorFactor(color));
+		cube.instance.transform.setToTranslationAndScaling(0f, WATER_Y, -15f, WATER_X, 0.1f, WATER_Z);
+		renderModelInstances.add(cube);
+	}
+
+	protected void createTurtles(float minSize, float maxSize) {
+		Vector3	min	= gameEngine.renderEngine.sceneBox.min;
+		Vector3	max	= gameEngine.renderEngine.sceneBox.max;
+		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 10); i++) {
+			int			type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_TURTLE_MODELS);
+			float		size	= minSize + (float) Math.random() * (maxSize - minSize);
+			BoundingBox	b		= new BoundingBox(new Vector3(min.x, size / 2, min.z), new Vector3(max.x, size / 2, 0));
+			Turtle		turtle	= new Turtle(gameEngine, type, size, b);
+			gameEngine.context.turtleList.add(turtle);
 		}
 	}
 
@@ -204,28 +210,22 @@ public abstract class AbstractScene {
 		}
 	}
 
-	protected void createTurtles(float minSize, float maxSize) {
-		Vector3	min	= gameEngine.renderEngine.sceneBox.min;
-		Vector3	max	= gameEngine.renderEngine.sceneBox.max;
-		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 10); i++) {
-			int			type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_TURTLE_MODELS);
-			float		size	= minSize + (float) Math.random() * (maxSize - minSize);
-			BoundingBox	b		= new BoundingBox(new Vector3(min.x, size / 2, min.z), new Vector3(max.x, size / 2, 0));
-			Turtle		turtle	= new Turtle(gameEngine, type, size, b);
-			gameEngine.context.turtleList.add(turtle);
-		}
-	}
-
-	protected void createPlane(Color color) {
-		Model model;
-		model = gameEngine.modelManager.square;
-		GameObject	cube	= new GameObject(new ModelInstanceHack(model), null);
-		Material	m		= cube.instance.materials.get(0);
-		m.set(PBRColorAttribute.createBaseColorFactor(color));
-		cube.instance.transform.setToTranslationAndScaling(0f, WATER_Y, -15f, WATER_X, 0.1f, WATER_Z);
-		renderModelInstances.add(cube);
-	}
-
 	public abstract Color getInfoColor();
+
+	private GameObject instanciateBuilding(final GameEngine gameEngine, final int index) {
+//		int i = rand.nextInt(ModelManager.MAX_NUMBER_OF_BUILDING_MODELS);
+		final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[(int) (Math.random() * ModelManager.MAX_NUMBER_OF_BUILDING_MODELS)]), null);
+		Material			m	= go.instance.model.materials.get(0);
+		if (gameEngine.renderEngine.isPbr()) {
+			m.set(PBRColorAttribute.createBaseColorFactor(Color.BLACK));
+			return go;
+		} else {
+//			final GameObject	go	= new GameObject(new ModelInstanceHack(gameEngine.modelManager.buildingCube[(int) (Math.random() * ModelManager.MAX_NUMBER_OF_BUILDING_MODELS)]), null);
+//			Material			m	= go.instance.model.materials.get(0);
+			m.set(ColorAttribute.createDiffuse(Color.GRAY));
+			return go;
+		}
+
+	}
 
 }

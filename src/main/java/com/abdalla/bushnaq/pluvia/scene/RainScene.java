@@ -6,9 +6,7 @@ import java.util.Random;
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.engine.GameObject;
 import com.abdalla.bushnaq.pluvia.engine.ModelManager;
-import com.abdalla.bushnaq.pluvia.engine.Text2D;
 import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -56,6 +54,7 @@ public class RainScene extends AbstractScene {
 			gameEngine.context.rainList.add(rain);
 		}
 	}
+
 	@Override
 	public Color getInfoColor() {
 		return Color.WHITE;
