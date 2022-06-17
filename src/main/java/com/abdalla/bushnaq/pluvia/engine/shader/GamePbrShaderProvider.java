@@ -60,14 +60,40 @@ public class GamePbrShaderProvider extends PBRShaderProvider implements GameShad
 		return pbrShader;
 	}
 
+	public String createPrefixBase(Renderable renderable, PBRShaderConfig config) {
+
+		String	defaultPrefix	= DefaultShader.createPrefix(renderable, config);
+		String	version			= config.glslVersion;
+		if (isGL3()) {
+			if (Gdx.app.getType() == ApplicationType.Desktop) {
+				if (version == null) {
+//					version = "#version 150\n" + "#define GLSL3\n";
+				}
+			} else if (Gdx.app.getType() == ApplicationType.Android) {
+				if (version == null) {
+					version = "#version 300 es\n" + "#define GLSL3\n";
+				}
+			}
+		}
+		String prefix = "";
+		if (version != null)
+			prefix += version;
+		if (config.prefix != null)
+			prefix += config.prefix;
+		prefix += defaultPrefix;
+
+		return prefix;
+	}
+
 	public String createPrefixBase(final Renderable renderable, final Config config) {
 
 		final String	defaultPrefix	= DefaultShader.createPrefix(renderable, config);
 		String			version			= null;
 		if (isGL3()) {
 			if (Gdx.app.getType() == ApplicationType.Desktop) {
-				if (version == null)
-					version = "#version 130\n" + "#define GLSL3\n";
+				if (version == null) {
+//					version = "#version 150\n" + "#define GLSL3\n";
+				}
 			} else if (Gdx.app.getType() == ApplicationType.Android) {
 				if (version == null)
 					version = "#version 300 es\n" + "#define GLSL3\n";
@@ -76,8 +102,6 @@ public class GamePbrShaderProvider extends PBRShaderProvider implements GameShad
 		String prefix = "";
 		if (version != null)
 			prefix += version;
-		// if (config.prefix != null)
-		// prefix += config.prefix;
 		prefix += defaultPrefix;
 
 		return prefix;

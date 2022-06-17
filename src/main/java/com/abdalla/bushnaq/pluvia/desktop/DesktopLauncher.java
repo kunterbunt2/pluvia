@@ -11,6 +11,7 @@ import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class DesktopLauncher {
 	private static final int UNIVERSE_GENERATION_RANDOM_SEED = 1;
@@ -41,6 +42,11 @@ public class DesktopLauncher {
 		config.setResizable(true);
 //		config.useOpenGL3(true, 3, 2);
 		config.setOpenGLEmulation(GLEmulation.GL30, 3, 2);
+		if (Context.getOeratingSystemType() == OperatingSystem.osx) {
+			ShaderProgram.prependVertexCode = "#version 150\n#define GLSL3\n";
+			ShaderProgram.prependFragmentCode = "#version 150\n#define GLSL3\n";
+		}
+
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, context.getMSAASamples());
 		config.setTitle("Pluvia");
 		config.setAutoIconify(true);
@@ -52,8 +58,8 @@ public class DesktopLauncher {
 //		}
 		final DisplayMode	primaryMode		= Lwjgl3ApplicationConfiguration.getDisplayMode(monitors[monitor]);
 		boolean				fullScreenMode	= context.getFullscreenModeProperty();
-		if (fullScreenMode)
-			config.setFullscreenMode(primaryMode);
+//		if (fullScreenMode)
+//			config.setFullscreenMode(primaryMode);
 //		config.setWindowPosition(0, 0);
 //		config.setWindowedMode(primaryMode.width, primaryMode.height);
 		config.setMaximized(true);

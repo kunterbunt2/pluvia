@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonRegion;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 /**
  * Draws batched quads using indices.
@@ -31,6 +32,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class CustomizedSpriteBatch extends PolygonSpriteBatch {
 	public CustomizedSpriteBatch(final int size) {
 		super(size);
+	}
+	public CustomizedSpriteBatch (int size, ShaderProgram defaultShader) {
+		super(size, size * 2, defaultShader);
 	}
 
 	@Override

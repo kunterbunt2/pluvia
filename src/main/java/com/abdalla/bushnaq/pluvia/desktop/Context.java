@@ -71,7 +71,7 @@ public class Context extends ApplicationProperties {
 		if (os.contains("win")) {
 			return OperatingSystem.windows;
 			// Operating system is based on Windows
-		} else if (os.contains("osx")) {
+		} else if (os.contains("mac")) {
 			return OperatingSystem.osx;
 			// Operating system is Apple OSX based
 		} else if (os.contains("nix") || os.contains("nux")) {
@@ -102,20 +102,13 @@ public class Context extends ApplicationProperties {
 	public LevelManager			levelManager	= null;
 	private OperatingSystem		operatingSystem;
 	public ModelList<Rain>		rainList		= new ModelList<>();
-
 	public boolean				restart			= false;
-
 	// private boolean useFixedDelta = false;
 	protected ScoreList			scoreList		= new ScoreList(3);
-
 	public Object				selected		= null;
-
 	public StoneList			stoneList		= new StoneList();
-
 	public long					timeDelta		= 0L;
-
 	public ModelList<Turtle>	turtleList		= new ModelList<>();
-
 	public RandomGenerator		universeRG;
 
 	public Context() {
@@ -153,6 +146,22 @@ public class Context extends ApplicationProperties {
 				configFolderName = getHomeFolderName() + "/config";
 			}
 			break;
+		case osx:
+			if (isRunningInEclipse()) {
+				logger.info("Detected macos system and we are running inside of Eclipse.");
+				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
+				logger.info("Detected installation folder " + installationFolder);
+				appFolderName = installationFolder + "/app";
+				configFolderName = appFolderName + "/config";
+			} else {
+				logger.info("Detected macos system.");
+				installationFolder = cleanupPath(getInstallationFolder() + "/../../../bin");
+				logger.info("Detected installation folder " + installationFolder);
+				appFolderName = cleanupPath(installationFolder + "/../lib/app");
+				configFolderName = getHomeFolderName() + "/config";
+			}
+			break;
+			
 		}
 		createFolder(homeFolderName);
 		createFolder(configFolderName);

@@ -1,4 +1,10 @@
 #define varying in
+#ifdef GLSL3
+#define varying in
+out vec4 out_FragColor;
+#else
+#define out_FragColor gl_FragColor
+#endif
 
 uniform sampler2D u_refractionTexture;
 uniform sampler2D u_reflectionTexture;
@@ -71,12 +77,12 @@ void main(void) {
 		}
 	#else
 	specularHighlights = vec3(0.0, 0.0, 0.0);
-	gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+	out_FragColor = vec4(1.0,0.0,0.0,1.0);
 	#endif
 
 	refractiveFactor = pow(refractiveFactor, 2);
 	vec4 diffuse = mix(reflectColor, refractColor, refractiveFactor*u_refractiveMultiplicator) + vec4(specularHighlights, 0.0);
-	gl_FragColor = mix( diffuse, vec4(0.1, 0.4, 0.3, 1.0), 0.3);
+	out_FragColor = mix( diffuse, vec4(0.1, 0.4, 0.3, 1.0), 0.3);
 //	gl_FragColor = vec4(waterDepth/1000.0);
 //	gl_FragColor.a = clamp(waterDepth/100.0, 0.0, 1.0);
 }

@@ -17,6 +17,9 @@
 		<libgdxVersion>1.11.0</libgdxVersion>
 		<client.version>1.0.0</client.version>
 		<exec.maven.plugin.version>1.6.0</exec.maven.plugin.version>
+		<!-- 
+		<guacamoleVersion>0.3.1</guacamoleVersion>
+		-->
 	</properties>
 
 	<dependencies>
@@ -46,6 +49,15 @@
 			<classifier>natives-desktop</classifier>
 			<version>${libgdxVersion}</version>
 		</dependency>
+
+		<!-- 
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-lwjgl3-glfw-awt-macos</artifactId>
+			<version>${libgdxVersion}</version>
+		</dependency>
+		-->
+
 		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
@@ -53,10 +65,22 @@
 			<version>${libgdxVersion}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.mgsx-dev.gdx-gltf</groupId> <!-- Different group -->
-			<artifactId>gltf</artifactId> <!-- Different artifact -->
+			<groupId>com.github.mgsx-dev.gdx-gltf</groupId>
+			<artifactId>gltf</artifactId>
 			<version>master-SNAPSHOT</version>
 		</dependency>
+		<!--
+		<dependency>
+			<groupId>com.github.crykn.guacamole</groupId>
+			<artifactId>gdx</artifactId>
+			<version>${guacamoleVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.crykn.guacamole</groupId>
+			<artifactId>gdx-desktop</artifactId>
+			<version>${guacamoleVersion}</version>
+		</dependency>
+-->
 
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
 		<dependency>

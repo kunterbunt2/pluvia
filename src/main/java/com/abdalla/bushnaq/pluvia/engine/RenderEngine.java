@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL30C;
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.camera.MovingCamera;
 import com.abdalla.bushnaq.pluvia.engine.camera.MyCameraInputController;
+import com.abdalla.bushnaq.pluvia.engine.shader.DepthOfFieldEffect;
 import com.abdalla.bushnaq.pluvia.engine.shader.GamePbrShaderProvider;
 import com.abdalla.bushnaq.pluvia.engine.shader.GameSettings;
 import com.abdalla.bushnaq.pluvia.engine.shader.GameShaderProvider;
@@ -70,6 +71,8 @@ import com.crashinvaders.vfx.effects.BloomEffect;
 import com.crashinvaders.vfx.effects.BloomEffect.Settings;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect.BlurType;
+import com.scottlogic.util.GL32CMacIssueHandler;
+import com.scottlogic.util.ShaderCompatibilityHelper;
 
 import net.mgsx.gltf.scene3d.attributes.FogAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
@@ -173,7 +176,7 @@ public class RenderEngine {
 	private float							timeOfDay							= 8;																	// 24h time
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
-	// private DepthOfFieldEffect vfxEffect;
+	private DepthOfFieldEffect				vfxEffect;
 	private final VfxManager				vfxManager;
 	public int								visibleDynamicGameObjectCount		= 0;
 	public int								visibleDynamicLightCount			= 0;
@@ -197,8 +200,8 @@ public class RenderEngine {
 		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
 //		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
 //		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
-		createBlurEffect();
-		createBloomEffect();
+//		createBlurEffect();
+//		createBloomEffect();
 //		vfxManager.addEffect(new FxaaEffect());
 //		vfxManager.addEffect(new FilmGrainEffect());
 //		vfxManager.addEffect(new OldTvEffect());
@@ -458,7 +461,7 @@ public class RenderEngine {
 		atlasManager.init();
 		renderableSorter = new SceneRenderableSorter();
 		if (isPbr()) {
-			depthBatch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
+			depthBatch = new ModelBatch(GamePbrShaderProvider.createDefaultDepth(0));
 		} else {
 			depthBatch = new ModelBatch(new DepthShaderProvider());
 		}
@@ -466,7 +469,9 @@ public class RenderEngine {
 		// depthOfFieldBatch = new ModelBatch(new DepthOfFieldShaderProvider());
 		batch = new ModelBatch(createShaderProvider(), renderableSorter);
 		// batch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
-		batch2D = new CustomizedSpriteBatch(5460);
+//		batch2D = new CustomizedSpriteBatch(5460);
+		batch2D = new CustomizedSpriteBatch(1000, ShaderCompatibilityHelper.mustUse32CShader() ? GL32CMacIssueHandler.createSpriteBatchShader() : null);
+
 	}
 
 	private ShaderProvider createShaderProvider() {

@@ -4,6 +4,7 @@
 #ifdef diffuseColorFlag
 uniform vec4 u_diffuseColor;
 #endif
+out vec4 fragColor;
 //varying vec4 v_color;
 //#endif
 //uniform sampler2D u_refractionTexture;
@@ -78,5 +79,5 @@ void main(void) {
 //	refractiveFactor = pow(refractiveFactor, 2);
 //	vec4 diffuse = mix(reflectColor, v_color, refractiveFactor*(1.0-u_reflectivity)/**2.0*4.0*/) + vec4(specularHighlights, 0.0);
 	vec4 diffuse = mix(u_diffuseColor,reflectColor , u_reflectivity);
-	gl_FragColor = diffuse;//mix( diffuse, vec4(0.1, 0.3, 0.3, 1.0), 0.1);
+	fragColor = diffuse;//mix( diffuse, vec4(0.1, 0.3, 0.3, 1.0), 0.1);
 }
