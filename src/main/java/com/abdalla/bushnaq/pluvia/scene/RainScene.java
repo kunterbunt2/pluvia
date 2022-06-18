@@ -22,7 +22,7 @@ public class RainScene extends AbstractScene {
 		super.create();
 		logo.setColor(getInfoColor());
 		version.setColor(getInfoColor());
-		gameEngine.renderEngine.setSkyBox(true);
+		gameEngine.renderEngine.setSkyBox(false);
 		gameEngine.renderEngine.setShadowEnabled(false);
 		// time
 		gameEngine.renderEngine.setAlwaysDay(true);

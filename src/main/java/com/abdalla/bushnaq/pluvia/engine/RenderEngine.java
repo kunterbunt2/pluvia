@@ -177,7 +177,7 @@ public class RenderEngine {
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
 	private DepthOfFieldEffect				vfxEffect;
-	private final VfxManager				vfxManager;
+	private final VfxManager				vfxManager							= null;
 	public int								visibleDynamicGameObjectCount		= 0;
 	public int								visibleDynamicLightCount			= 0;
 	private final Array<ModelInstance>		visibleDynamicModelInstances		= new Array<>();
@@ -197,7 +197,7 @@ public class RenderEngine {
 		createInputProcessor(inputProcessor);
 		createStage();
 //		createRayCube();
-		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
+//		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
 //		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
 //		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
 //		createBlurEffect();
@@ -542,7 +542,7 @@ public class RenderEngine {
 	public void dispose() throws Exception {
 		staticCache.dispose();
 		dynamicCache.dispose();
-		vfxManager.dispose();
+//		vfxManager.dispose();
 		gameShaderProvider.dispose();
 		cpuGraph.dispose();
 		gpuGraph.dispose();
