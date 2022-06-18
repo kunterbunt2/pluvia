@@ -149,7 +149,7 @@ public class RenderEngine {
 	private boolean							pbr;
 	private final PointLightsAttribute		pointLights							= new PointLightsAttribute();
 	private final Vector3					position							= new Vector3();
-	private FrameBuffer						postFbo;
+//	private FrameBuffer						postFbo;
 	public Model							rayCube;
 	// private final Ray ray = new Ray(new Vector3(), new Vector3());
 	private Plane							reflectionClippingPlane				= new Plane(new Vector3(0f, 1f, 0f), 0.1f);								// render everything above the
@@ -385,12 +385,12 @@ public class RenderEngine {
 	private void createFrameBuffer() {
 		water.createFrameBuffer();
 		getMirror().createFrameBuffer();
-		{
-			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
-			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
-			postFbo = frameBufferBuilder.build();
-		}
+//		{
+//			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+//			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
+//			postFbo = frameBufferBuilder.build();
+//		}
 	}
 
 	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
@@ -546,7 +546,7 @@ public class RenderEngine {
 		gameShaderProvider.dispose();
 		cpuGraph.dispose();
 		gpuGraph.dispose();
-		postFbo.dispose();
+//		postFbo.dispose();
 		water.dispose();
 		mirror.dispose();
 		getInfo().dispose();
@@ -567,16 +567,17 @@ public class RenderEngine {
 	public void end() {
 	}
 
-	private void fboToScreen() {
-		clearViewport();
-		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
-		batch2D.disableBlending();
-		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
-		batch2D.begin();
-		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
-		batch2D.end();
-		batch2D.enableBlending();
-	}
+//	private void fboToScreen() {
+//		clearViewport();
+//		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
+//		batch2D.enableBlending();
+//		batch2D.disableBlending();
+//		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
+//		batch2D.begin();
+//		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
+//		batch2D.end();
+//		batch2D.enableBlending();
+//	}
 
 	public AtlasManager getAtlasManager() {
 		return atlasManager;
@@ -753,59 +754,48 @@ public class RenderEngine {
 		return water.isPresent() /* && isPbr() */;
 	}
 
-	public void postProcessRender() throws Exception {
-		// Apply the effects chain to the captured frame.
-		// In our case, only one effect (gaussian blur) will be applied.
-		if (isEnableDepthOfField()) {
-			// Clean up the screen.
-//			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
-//			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			// Clean up internal buffers, as we don't need any information from the last
-			// render.
-			vfxManager.cleanUpBuffers();
-			vfxManager.beginInputCapture();
-			batch2D.getProjectionMatrix().setToOrtho2D(0, 0, 1, 1);
-//			batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
-			batch2D.begin();
-			batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
-//			batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
-			batch2D.end();
-			vfxManager.endInputCapture();
-
+//	public void postProcessRender() throws Exception {
+//		// Apply the effects chain to the captured frame.
+//		// In our case, only one effect (gaussian blur) will be applied.
+//		if (isEnableDepthOfField()) {
+//			// Clean up the screen.
+//			// Clean up internal buffers, as we don't need any information from the last
+//			// render.
 //			vfxManager.cleanUpBuffers();
-			vfxManager.applyEffects();
-			// Render result to the screen.
-//			vfxManager.renderToScreen();
-			postFbo.begin();
-			batch2D.begin();
-			batch2D.draw(vfxManager.getPingPongWrapper().getDstTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
-			batch2D.end();
-			postFbo.end();
-
-		} else {
-			// vfxManager.setDisabled(true);
-			// vfxManager.useAsInput(postFbo.getColorBufferTexture());
-			// vfxManager.applyEffects();
-			clearViewport();
-			Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
-			batch2D.disableBlending();
-			batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
-			batch2D.begin();
-			// // batch2D.draw(waterRefractionFbo.getColorBufferTexture(), 0, 1080 - 1080 /
-			// 4, 1920 / 4, 1080 / 4, 0, 0, 1920, 1080, false, true);
-			// batch2D.draw(waterReflectionFbo.getColorBufferTexture(), 1920 - 1920 / 4,
-			// 1080 - 1080 / 4, 1920 / 4, 1080 / 4, 0, 0, 1920, 1080, false, true);
-			batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
-//			renderStage();
-			//// batch2D.draw(postFbo.getTextureAttachments().get(1), 0, 0, 1920, 1080, 0,
-			//// 0, 1920, 1080, false, true);
-			// batch2D.draw(waterRefractionFbo.getTextureAttachments().get(1), 0, 0, 1920,
-			//// 1080, 0, 0, 1920, 1080, false, true);
-			batch2D.end();
-			batch2D.enableBlending();
-
-		}
-	}
+//			vfxManager.beginInputCapture();
+//			batch2D.getProjectionMatrix().setToOrtho2D(0, 0, 1, 1);
+//			batch2D.begin();
+//			batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
+//			batch2D.end();
+//			vfxManager.endInputCapture();
+//
+//			vfxManager.applyEffects();
+//			// Render result to the screen.
+//			postFbo.begin();
+//			batch2D.begin();
+//			batch2D.draw(vfxManager.getPingPongWrapper().getDstTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
+//			batch2D.end();
+//			postFbo.end();
+//
+//		} else {
+//			clearViewport();
+//			Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
+//			batch2D.disableBlending();
+//			batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
+//			batch2D.begin();
+//			// // batch2D.draw(waterRefractionFbo.getColorBufferTexture(), 0, 1080 - 1080 /
+//			// 4, 1920 / 4, 1080 / 4, 0, 0, 1920, 1080, false, true);
+//			// batch2D.draw(waterReflectionFbo.getColorBufferTexture(), 1920 - 1920 / 4,
+//			// 1080 - 1080 / 4, 1920 / 4, 1080 / 4, 0, 0, 1920, 1080, false, true);
+//			batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
+//			//// batch2D.draw(postFbo.getTextureAttachments().get(1), 0, 0, 1920, 1080, 0,
+//			//// 0, 1920, 1080, false, true);
+//			// batch2D.draw(waterRefractionFbo.getTextureAttachments().get(1), 0, 0, 1920,
+//			//// 1080, 0, 0, 1920, 1080, false, true);
+//			batch2D.end();
+//			batch2D.enableBlending();
+//		}
+//	}
 
 	public void remove(final PointLight pointLight, final boolean dynamic) {
 		if (dynamic) {
@@ -939,7 +929,7 @@ public class RenderEngine {
 			Gdx.gl.glDisable(GL30C.GL_CLIP_DISTANCE0);
 		}
 		// if (firstTime) {
-		postFbo.begin();
+//		postFbo.begin();
 //		createCameraCube();
 //		createLookatCube();
 //		createDepthOfFieldMeter();
@@ -947,18 +937,18 @@ public class RenderEngine {
 //		renderFbos();
 		render2DText();
 		render3DText();
-		postFbo.end();
+//		postFbo.end();
 		renderGraphs();
 
 		camera.setDirty(false);
 		staticCacheDirtyCount = 0;
 //		postProcessRender();
 
-		postFbo.begin();
+//		postFbo.begin();
 		renderFbos(takeScreenShot);
-		postFbo.end();
+//		postFbo.end();
 
-		fboToScreen();
+//		fboToScreen();
 	}
 
 	private void render2DText() {
