@@ -24,12 +24,23 @@ Pluvia is written in Java using
 
 
 # Installation
-Pluvia is released as a msi installer for Windows platform. This installer is however not digitally signed. This means that your Windows will warn you with a popup that the software could be 
-![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/windows-protected-your-pc-1.png)
+## How to install PLuvia on Windows
+Pluvia is released as a msi installer for Windows platform. This installer is however not digitally signed. This means that your Windows will warn you with a popup that the software could be harmful  
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/windows-protected-your-pc-1.png)  
 
-You need to select More info to see the next popup
-![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/windows-protected-your-pc-2.png)
+You need to select More info to see the next popup  
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/windows-protected-your-pc-2.png)  
 Now you can seelect Run anyway to start the installer.
+
+## How to install PLuvia on MacOS
+Pluvia is released as a pkg installer for the MacOS platform. This installer is however not digitally signed. This means that if you double click the file your MacOS will warn you with a popup that the software could be harmful  
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/macos-cannot-be-opened.png)  
+
+You need to Control-click the pkg file and select open.  
+Now another warning is shown  
+![alt tag](https://pluvia.bushnaq.de/wp-content/uploads/2022/06/macos-cannot-verify-the-developer.png)  
+If you select open, the installer will open and you can just click continue until it is finished installing Pluvia.  
+You can find Pluvia in the finder under Applications.
 
 
 
