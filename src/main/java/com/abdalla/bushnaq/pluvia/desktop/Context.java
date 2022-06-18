@@ -155,9 +155,9 @@ public class Context extends ApplicationProperties {
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected macos system.");
-				installationFolder = cleanupPath(getInstallationFolder() + "/../../../bin");
+				installationFolder = cleanupPath(getInstallationFolder() + "/../../MacOS");
 				logger.info("Detected installation folder " + installationFolder);
-				appFolderName = cleanupPath(installationFolder + "/../lib/app");
+				appFolderName = cleanupPath(installationFolder + "/../app");
 				configFolderName = getHomeFolderName() + "/config";
 			}
 			break;
