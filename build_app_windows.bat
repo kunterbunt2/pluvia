@@ -103,7 +103,7 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --win-shortcut ^
   --win-per-user-install ^
   --win-menu ^
-  --win-upgrade-uuid e99dd49e-e4d2-11ec-8fea-0242ac120002
+  --win-upgrade-uuid e99dd49e-e4d2-11ec-8fea-0242ac120002 ^
   --temp target/temp
 rem   --verbose ^
-rem   --win-console
+rem   --win-console ^

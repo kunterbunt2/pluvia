@@ -56,7 +56,9 @@ public class Context extends ApplicationProperties {
 		try {
 			String path = new File(DesktopLauncher.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
 			if (path.endsWith(".jar")) {
-				path = path.substring(0, path.lastIndexOf("/") - 1);
+				logger.info("path = " + path);
+				logger.info("last index = " + path.lastIndexOf(File.separator));
+				path = path.substring(0, path.lastIndexOf(File.separator) - 1);
 			}
 			path = cleanupPath(path);
 			return path;
@@ -125,7 +127,7 @@ public class Context extends ApplicationProperties {
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected Windows system.");
-				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
+				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
 				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = getHomeFolderName() + "/config";
@@ -161,7 +163,7 @@ public class Context extends ApplicationProperties {
 				configFolderName = getHomeFolderName() + "/config";
 			}
 			break;
-			
+
 		}
 		createFolder(homeFolderName);
 		createFolder(configFolderName);
