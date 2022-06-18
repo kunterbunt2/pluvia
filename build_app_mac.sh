@@ -103,6 +103,7 @@ $JAVA_HOME/bin/jpackage \
 --main-class com.abdalla.bushnaq.pluvia.desktop.DesktopLauncher \
 --main-jar libs/${MAIN_JAR} \
 --java-options -Xmx2048m \
+--java-options -XstartOnFirstThread \
 --runtime-image target/java-runtime \
 --icon src/main/logo/macosx/pluvia-icon.icns \
 --app-version ${APP_VERSION} \
