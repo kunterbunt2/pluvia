@@ -43,11 +43,11 @@ public class ApplicationProperties {
 	}
 
 	public boolean getAmbientAudioProperty() {
-		return readBooleanProperty(PLUVIA_AMBIENT_AUDIO, false);
+		return readBooleanProperty(PLUVIA_AMBIENT_AUDIO, true);
 	}
 
 	public int getAmbientAudioVolumenProperty() {
-		return readIntegerProperty(PLUVIA_AMBIENT_AUDIO_VOLUMEN, 1, 1, 100);
+		return readIntegerProperty(PLUVIA_AMBIENT_AUDIO_VOLUMEN, 10, 1, 100);
 	}
 
 	public boolean getDebugModeProperty() {
