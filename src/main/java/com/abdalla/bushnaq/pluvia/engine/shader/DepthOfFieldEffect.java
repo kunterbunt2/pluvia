@@ -43,7 +43,7 @@ public class DepthOfFieldEffect extends ShaderVfxEffect implements ChainVfxEffec
 	private int					vertical			= 0;
 
 	public DepthOfFieldEffect(final FrameBuffer postFbo, final MovingCamera camera, int vertical) {
-		super(MyVfxGLUtils.compileShader(Gdx.files.classpath("shader/screenspace.vert"), Gdx.files.classpath("shader/depthOfField.fragment.glsl"), ""));
+		super(MyVfxGLUtils.compileShader(Gdx.files.classpath("shader/depthOfField.vs.glsl"), Gdx.files.classpath("shader/depthOfField.fs.glsl"), ""));
 		this.postFbo = postFbo;
 		this.camera = camera;
 		this.vertical = vertical;
@@ -140,7 +140,6 @@ class MyVfxGLUtils extends VfxGLUtils {
 
 	public static String exchange(String shader) {
 		shader = shader.replaceAll("MAX_BLUR", String.valueOf(maxBlur));
-//		shader = shader.replaceAll("UNPACK_FUNCTION;", Gdx.files.classpath("shader/unpackVec3ToFloat.glsl").readString());
 		shader = shader.replaceAll("BLUR_BACKGROUND", String.valueOf(blurBackground));
 		return shader;
 	}

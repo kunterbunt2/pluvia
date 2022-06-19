@@ -1,6 +1,10 @@
-#version 300 es
-#define GLSL3
+//depthOfField.fs.glsl
+#if __VERSION__ >= 130
+out vec4 fragColor;
 #define varying in
+#else
+#define fragColor gl_FragColor
+#endif
 
 #ifdef GL_ES
 	#define PRECISION mediump
@@ -151,7 +155,7 @@ void main() {
 		}
 	}
 
-	gl_FragColor = sampleAccum;
+	fragColor = sampleAccum;
 //	if ((depth) == u_cameraClipping.y)
 //				gl_FragColor = vec4(1, 0, 0, 1.0);
 

@@ -1,10 +1,15 @@
+//mirror.fs.glsl
+#if __VERSION__ >= 130
+out vec4 fragColor;
 #define varying in
+#else
+#define fragColor gl_FragColor
+#endif
 
 //#if defined(colorFlag)
 #ifdef diffuseColorFlag
 uniform vec4 u_diffuseColor;
 #endif
-out vec4 fragColor;
 //varying vec4 v_color;
 //#endif
 //uniform sampler2D u_refractionTexture;

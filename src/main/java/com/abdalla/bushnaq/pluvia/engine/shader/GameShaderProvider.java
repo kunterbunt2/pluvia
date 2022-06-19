@@ -42,8 +42,8 @@ public class GameShaderProvider extends DefaultShaderProvider implements GameSha
 		final String prefix = createPrefixBase(renderable, config);
 //		final String	prefix	= "";
 //		final Config	config	= new Config();
-		config.vertexShader = Gdx.files.internal("shader/mirror.vertex.glsl").readString();
-		config.fragmentShader = Gdx.files.internal("shader/mirror.fragment.glsl").readString();
+		config.vertexShader = Gdx.files.internal("shader/mirror.vs.glsl").readString();
+		config.fragmentShader = Gdx.files.internal("shader/mirror.fs.glsl").readString();
 		mirrorShader = new MirrorShader(renderable, config, prefix, mirror);
 //		setWaterAttribute(waterAttribute);
 		mirrorShader.setClippingPlane(clippingPlane);
@@ -58,7 +58,9 @@ public class GameShaderProvider extends DefaultShaderProvider implements GameSha
 		if (isGL3()) {
 			if (Gdx.app.getType() == ApplicationType.Desktop) {
 				if (version == null)
-					version = /* "#version 130\n" + */ "#define GLSL3\n";
+				{
+//					version = /* "#version 130\n" + */ "#define GLSL3\n";
+				}
 			} else if (Gdx.app.getType() == ApplicationType.Android) {
 				if (version == null)
 					version = "#version 300 es\n" + "#define GLSL3\n";
@@ -98,8 +100,8 @@ public class GameShaderProvider extends DefaultShaderProvider implements GameSha
 		final String	prefix	= createPrefixBase(renderable, config);
 //		final String	prefix	= "";
 		final Config	config	= new Config();
-		config.vertexShader = Gdx.files.internal("shader/water.vertex.glsl").readString();
-		config.fragmentShader = Gdx.files.internal("shader/water.fragment.glsl").readString();
+		config.vertexShader = Gdx.files.internal("shader/water.vs.glsl").readString();
+		config.fragmentShader = Gdx.files.internal("shader/water.fs.glsl").readString();
 		waterShader = new WaterShader(renderable, config, prefix, water);
 //		setWaterAttribute(waterAttribute);
 		waterShader.setClippingPlane(clippingPlane);

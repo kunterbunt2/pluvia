@@ -46,8 +46,8 @@ public class GamePbrShaderProvider extends PBRShaderProvider implements GameShad
 	private Shader createMirrorShader(final Renderable renderable) {
 		final String	prefix	= createPrefixBase(renderable, config);
 		final Config	config	= new Config();
-		config.vertexShader = Gdx.files.internal("shader/mirror.vertex.glsl").readString();
-		config.fragmentShader = Gdx.files.internal("shader/mirror.fragment.glsl").readString();
+		config.vertexShader = Gdx.files.internal("shader/mirror.vs.glsl").readString();
+		config.fragmentShader = Gdx.files.internal("shader/mirror.fs.glsl").readString();
 		mirrorShader = new MirrorShader(renderable, config, prefix, mirror);
 		mirrorShader.setClippingPlane(clippingPlane);
 		return mirrorShader;
@@ -125,8 +125,8 @@ public class GamePbrShaderProvider extends PBRShaderProvider implements GameShad
 	private Shader createWaterShader(final Renderable renderable) {
 		final String	prefix	= createPrefixBase(renderable, config);
 		final Config	config	= new Config();
-		config.vertexShader = Gdx.files.internal("shader/water.vertex.glsl").readString();
-		config.fragmentShader = Gdx.files.internal("shader/water.fragment.glsl").readString();
+		config.vertexShader = Gdx.files.internal("shader/water.vs.glsl").readString();
+		config.fragmentShader = Gdx.files.internal("shader/water.fs.glsl").readString();
 		waterShader = new WaterShader(renderable, config, prefix, water);
 //		setWaterAttribute(waterAttribute);
 		waterShader.setClippingPlane(clippingPlane);

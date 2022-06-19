@@ -1,6 +1,10 @@
-#ifdef GLSL3
+//depthOfField.vs.glsl
+#if __VERSION__ >= 130
+out vec4 fragColor;
 #define attribute in
 #define varying out
+#else
+#define fragColor gl_FragColor
 #endif
 /*
 #ifdef GL_ES
