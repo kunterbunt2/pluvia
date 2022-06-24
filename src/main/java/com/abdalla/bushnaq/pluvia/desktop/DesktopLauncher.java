@@ -55,7 +55,6 @@ public class DesktopLauncher {
 					+ "#ifdef GLSL3\n"//
 					+ "#define textureCube texture\n"//
 					+ "#define texture2D texture\n"//
-//					+ "out vec4 out_FragColor;\n"//
 					+ "#define varying in\n"//
 					+ "#endif\n";//
 		}

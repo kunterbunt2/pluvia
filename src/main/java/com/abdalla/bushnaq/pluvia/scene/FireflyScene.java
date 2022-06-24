@@ -45,6 +45,8 @@ public class FireflyScene extends AbstractScene {
 		gameEngine.renderEngine.getMirror().setPresent(false);
 		gameEngine.renderEngine.getMirror().setReflectivity(0.9f);
 		createMirror(Color.BLACK);
+		//effect
+//		gameEngine.renderEngine.addBloomEffect();
 
 		createPlane(Color.BLACK);
 
@@ -59,7 +61,7 @@ public class FireflyScene extends AbstractScene {
 		for (int i = 0; i < Math.min(gameEngine.context.getMaxSceneObjects(), 500); i++) {
 			int			type	= rand.nextInt(ModelManager.MAX_NUMBER_OF_FIRELY_MODELS);
 			float		size	= minSize + (float) Math.random() * (maxSize - minSize);
-			BoundingBox	b		= new BoundingBox(new Vector3(min.x + 4f, 1 + size / 2, min.z), new Vector3(max.x - 4f, 4f, -1));
+			BoundingBox	b		= new BoundingBox(new Vector3(min.x + 4f, 1 + size / 2, min.z), new Vector3(max.x - 4f, 4f, -10));
 			Firefly		fly		= new Firefly(gameEngine, type, size, b);
 			gameEngine.context.flyList.add(fly);
 		}

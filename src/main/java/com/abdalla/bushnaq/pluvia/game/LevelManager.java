@@ -146,6 +146,7 @@ public class LevelManager extends Level implements Serializable {
 			}
 		}
 //		logger.info(String.format("count=%d", count));
+		gameEngine.renderEngine.removeAllEffects();
 		sceneList.get(game.name).create();
 		infoColor = sceneList.get(game.name).getInfoColor();
 		addToEngine();

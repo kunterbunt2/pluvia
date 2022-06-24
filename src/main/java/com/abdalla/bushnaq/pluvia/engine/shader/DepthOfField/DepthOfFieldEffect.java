@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.abdalla.bushnaq.pluvia.engine.shader;
+package com.abdalla.bushnaq.pluvia.engine.shader.DepthOfField;
 
 import com.abdalla.bushnaq.pluvia.engine.camera.MovingCamera;
 import com.badlogic.gdx.Gdx;
@@ -35,9 +35,9 @@ public class DepthOfFieldEffect extends ShaderVfxEffect implements ChainVfxEffec
 	private static final String	Texture0			= "u_sourceTexture";
 	private static final String	Texture1			= "u_depthTexture";
 	private final MovingCamera	camera;										// 2-100
-	private final float			farDistanceBlur		= 50f;
+	private final float			farDistanceBlur		= 150f;
 	private final Vector2		focusDistance		= new Vector2(5, 15);	// FousDistance-FacusRange,FousDistance+FacusRange
-	private final float			nearDistanceBlur	= 50f;
+	private final float			nearDistanceBlur	= 150f;
 	private final FrameBuffer	postFbo;
 	private final Vector2		resolution			= new Vector2();
 	private int					vertical			= 0;

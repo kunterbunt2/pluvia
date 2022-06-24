@@ -9,11 +9,11 @@ import org.lwjgl.opengl.GL30C;
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.camera.MovingCamera;
 import com.abdalla.bushnaq.pluvia.engine.camera.MyCameraInputController;
-import com.abdalla.bushnaq.pluvia.engine.shader.DepthOfFieldEffect;
 import com.abdalla.bushnaq.pluvia.engine.shader.GamePbrShaderProvider;
 import com.abdalla.bushnaq.pluvia.engine.shader.GameSettings;
 import com.abdalla.bushnaq.pluvia.engine.shader.GameShaderProvider;
 import com.abdalla.bushnaq.pluvia.engine.shader.GameShaderProviderInterface;
+import com.abdalla.bushnaq.pluvia.engine.shader.DepthOfField.DepthOfFieldEffect;
 import com.abdalla.bushnaq.pluvia.engine.shader.mirror.Mirror;
 import com.abdalla.bushnaq.pluvia.engine.shader.water.Water;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
@@ -69,6 +69,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.crashinvaders.vfx.VfxManager;
 import com.crashinvaders.vfx.effects.BloomEffect;
 import com.crashinvaders.vfx.effects.BloomEffect.Settings;
+import com.crashinvaders.vfx.effects.FxaaEffect;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect.BlurType;
 import com.scottlogic.util.GL32CMacIssueHandler;
@@ -149,13 +150,11 @@ public class RenderEngine {
 	private boolean							pbr;
 	private final PointLightsAttribute		pointLights							= new PointLightsAttribute();
 	private final Vector3					position							= new Vector3();
-//	private FrameBuffer						postFbo;
+	private FrameBuffer						postFbo;
 	public Model							rayCube;
 	// private final Ray ray = new Ray(new Vector3(), new Vector3());
 	private Plane							reflectionClippingPlane				= new Plane(new Vector3(0f, 1f, 0f), 0.1f);								// render everything above the
-	// water
 	private Plane							refractionClippingPlane				= new Plane(new Vector3(0f, -1f, 0f), (-0.1f));							// render everything below the
-	// water
 	private final Array<ModelInstance>		renderableProviders					= new Array<>();
 	private RenderableSorter				renderableSorter;
 	public final BoundingBox				sceneBox							= new BoundingBox(new Vector3(-20, -50, -30), new Vector3(20, 20, 2));
@@ -177,7 +176,7 @@ public class RenderEngine {
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
 	private DepthOfFieldEffect				vfxEffect;
-	private final VfxManager				vfxManager							= null;
+	private final VfxManager				vfxManager;
 	public int								visibleDynamicGameObjectCount		= 0;
 	public int								visibleDynamicLightCount			= 0;
 	private final Array<ModelInstance>		visibleDynamicModelInstances		= new Array<>();
@@ -197,12 +196,12 @@ public class RenderEngine {
 		createInputProcessor(inputProcessor);
 		createStage();
 //		createRayCube();
-//		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
-//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
-//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
+		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
+		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
+		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
 //		createBlurEffect();
 //		createBloomEffect();
-//		vfxManager.addEffect(new FxaaEffect());
+		vfxManager.addEffect(new FxaaEffect());
 //		vfxManager.addEffect(new FilmGrainEffect());
 //		vfxManager.addEffect(new OldTvEffect());
 		cpuGraph = new TimeGraph(new Color(1f, 0f, 0f, 1f), new Color(1f, 0, 0, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
@@ -385,12 +384,12 @@ public class RenderEngine {
 	private void createFrameBuffer() {
 		water.createFrameBuffer();
 		getMirror().createFrameBuffer();
-//		{
-//			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
-//			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
-//			postFbo = frameBufferBuilder.build();
-//		}
+		{
+			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
+			postFbo = frameBufferBuilder.build();
+		}
 	}
 
 	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
@@ -466,10 +465,8 @@ public class RenderEngine {
 			depthBatch = new ModelBatch(new DepthShaderProvider());
 		}
 		// oceanBatch = new ModelBatch(new OceanShaderProvider());
-		// depthOfFieldBatch = new ModelBatch(new DepthOfFieldShaderProvider());
 		batch = new ModelBatch(createShaderProvider(), renderableSorter);
 		// batch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
-//		batch2D = new CustomizedSpriteBatch(5460);
 		batch2D = new CustomizedSpriteBatch(1000, ShaderCompatibilityHelper.mustUse32CShader() ? GL32CMacIssueHandler.createSpriteBatchShader() : null);
 
 	}
@@ -570,11 +567,10 @@ public class RenderEngine {
 //	private void fboToScreen() {
 //		clearViewport();
 //		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
-//		batch2D.enableBlending();
 //		batch2D.disableBlending();
 //		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
 //		batch2D.begin();
-//		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, true);
+//		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0,postFbo.getWidth(),postFbo.getHeight(), false, true);
 //		batch2D.end();
 //		batch2D.enableBlending();
 //	}
@@ -754,22 +750,22 @@ public class RenderEngine {
 		return water.isPresent() /* && isPbr() */;
 	}
 
-//	public void postProcessRender() throws Exception {
-//		// Apply the effects chain to the captured frame.
-//		// In our case, only one effect (gaussian blur) will be applied.
+	public void postProcessRender() throws Exception {
+
 //		if (isEnableDepthOfField()) {
 //			// Clean up the screen.
 //			// Clean up internal buffers, as we don't need any information from the last
 //			// render.
-//			vfxManager.cleanUpBuffers();
-//			vfxManager.beginInputCapture();
-//			batch2D.getProjectionMatrix().setToOrtho2D(0, 0, 1, 1);
-//			batch2D.begin();
-//			batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
-//			batch2D.end();
-//			vfxManager.endInputCapture();
-//
-//			vfxManager.applyEffects();
+		vfxManager.cleanUpBuffers();
+		vfxManager.beginInputCapture();
+		batch2D.getProjectionMatrix().setToOrtho2D(0, 0, 1, 1);
+		batch2D.begin();
+		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
+		batch2D.end();
+		vfxManager.endInputCapture();
+		vfxManager.applyEffects();
+		vfxManager.renderToScreen();
+//			vfxManager.renderToFbo(postFbo);
 //			// Render result to the screen.
 //			postFbo.begin();
 //			batch2D.begin();
@@ -795,7 +791,7 @@ public class RenderEngine {
 //			batch2D.end();
 //			batch2D.enableBlending();
 //		}
-//	}
+	}
 
 	public void remove(final PointLight pointLight, final boolean dynamic) {
 		if (dynamic) {
@@ -828,6 +824,10 @@ public class RenderEngine {
 
 	public void removeBlurEffect() {
 		vfxManager.removeEffect(effect1);
+	}
+
+	public void removeAllEffects() {
+//		vfxManager.removeAllEffects();
 	}
 
 	public boolean removeDynamic(final GameObject instance) {
@@ -929,20 +929,19 @@ public class RenderEngine {
 			Gdx.gl.glDisable(GL30C.GL_CLIP_DISTANCE0);
 		}
 		// if (firstTime) {
-//		postFbo.begin();
+		postFbo.begin();
 //		createCameraCube();
 //		createLookatCube();
 //		createDepthOfFieldMeter();
 		renderColors(takeScreenShot);
-//		renderFbos();
 		render2DText();
 		render3DText();
-//		postFbo.end();
-		renderGraphs();
+		postFbo.end();
 
 		camera.setDirty(false);
 		staticCacheDirtyCount = 0;
-//		postProcessRender();
+		postProcessRender();
+		renderGraphs();
 
 //		postFbo.begin();
 		renderFbos(takeScreenShot);
