@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.abdalla.bushnaq</groupId>
 	<artifactId>pluvia</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<name>abdalla.bushnaq.pluvia</name>
 	<description>pluvia</description>
 
@@ -17,9 +17,6 @@
 		<libgdxVersion>1.11.0</libgdxVersion>
 		<client.version>1.0.0</client.version>
 		<exec.maven.plugin.version>1.6.0</exec.maven.plugin.version>
-		<!-- 
-		<guacamoleVersion>0.3.1</guacamoleVersion>
-		-->
 	</properties>
 
 	<dependencies>
@@ -50,14 +47,6 @@
 			<version>${libgdxVersion}</version>
 		</dependency>
 
-		<!-- 
-		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-lwjgl3-glfw-awt-macos</artifactId>
-			<version>${libgdxVersion}</version>
-		</dependency>
-		-->
-
 		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
@@ -69,19 +58,6 @@
 			<artifactId>gltf</artifactId>
 			<version>master-SNAPSHOT</version>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>com.github.crykn.guacamole</groupId>
-			<artifactId>gdx</artifactId>
-			<version>${guacamoleVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.crykn.guacamole</groupId>
-			<artifactId>gdx-desktop</artifactId>
-			<version>${guacamoleVersion}</version>
-		</dependency>
--->
-
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -212,29 +188,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- create zip-->
-			<!-- 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>do-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<finalName>pluvia-${version}</finalName>
-							<descriptors>
-								<descriptor>src/assembly/zip-assembly.xml</descriptor>
-							</descriptors>
-							<appendAssemblyId>false</appendAssemblyId>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			-->
 		</plugins>
 	</build>
 	<profiles>
