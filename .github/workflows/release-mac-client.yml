@@ -36,12 +36,12 @@ jobs:
         draft: false
         prerelease: false
     - name: upload PKG artifact
-        id: create_release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/installer/*.pkg
-          asset_name: pluvia.pkg
-          asset_content_type: application/vnd.apple.installer+xml
+      id: upload_pkg
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: target/installer/*.pkg
+        asset_name: pluvia.pkg
+        asset_content_type: application/vnd.apple.installer+xml
