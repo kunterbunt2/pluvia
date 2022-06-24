@@ -1,13 +1,13 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Release Mac Client
-
 on:
    push:
 # Sequence of patterns matched against refs/tags
       tags:
       - v* # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Release Mac Client
 
 jobs:
    build:
