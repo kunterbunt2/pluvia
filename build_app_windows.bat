@@ -15,6 +15,17 @@ set MAIN_JAR=pluvia-%PROJECT_VERSION%.jar
 rem Set desired installer type: "app-image" "msi" "exe".
 set INSTALLER_TYPE=msi
 
+IF "%TAG_NAME%"=="" SET TAG_NAME=%PROJECT_VERSION%
+
+echo "java home: %JAVA_HOME%"
+echo "project version: %PROJECT_VERSION%"
+echo "app version: %APP_VERSION%"
+echo "tag name: %TAG_NAME%"
+echo "main JAR file: %MAIN_JAR%"
+
+
+
+
 rem ------ SETUP DIRECTORIES AND FILES ----------------------------------------
 rem Remove previously generated java runtime and installers. Copy all required
 rem jar files into the input/libs folder.
