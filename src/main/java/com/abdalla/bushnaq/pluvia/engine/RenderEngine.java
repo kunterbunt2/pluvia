@@ -150,7 +150,7 @@ public class RenderEngine {
 	private boolean							pbr;
 	private final PointLightsAttribute		pointLights							= new PointLightsAttribute();
 	private final Vector3					position							= new Vector3();
-	private FrameBuffer						postFbo;
+//	private FrameBuffer						postFbo;
 	public Model							rayCube;
 	// private final Ray ray = new Ray(new Vector3(), new Vector3());
 	private Plane							reflectionClippingPlane				= new Plane(new Vector3(0f, 1f, 0f), 0.1f);								// render everything above the
@@ -176,7 +176,7 @@ public class RenderEngine {
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
 	private DepthOfFieldEffect				vfxEffect;
-	private final VfxManager				vfxManager;
+	private final VfxManager				vfxManager							= null;
 	public int								visibleDynamicGameObjectCount		= 0;
 	public int								visibleDynamicLightCount			= 0;
 	private final Array<ModelInstance>		visibleDynamicModelInstances		= new Array<>();
@@ -196,12 +196,12 @@ public class RenderEngine {
 		createInputProcessor(inputProcessor);
 		createStage();
 //		createRayCube();
-		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
-		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
-		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
+//		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
+//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
+//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
 //		createBlurEffect();
 //		createBloomEffect();
-		vfxManager.addEffect(new FxaaEffect());
+//		vfxManager.addEffect(new FxaaEffect());
 //		vfxManager.addEffect(new FilmGrainEffect());
 //		vfxManager.addEffect(new OldTvEffect());
 		cpuGraph = new TimeGraph(new Color(1f, 0f, 0f, 1f), new Color(1f, 0, 0, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
@@ -384,12 +384,12 @@ public class RenderEngine {
 	private void createFrameBuffer() {
 		water.createFrameBuffer();
 		getMirror().createFrameBuffer();
-		{
-			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
-			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
-			postFbo = frameBufferBuilder.build();
-		}
+//		{
+//			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+//			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
+//			postFbo = frameBufferBuilder.build();
+//		}
 	}
 
 	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
@@ -756,15 +756,17 @@ public class RenderEngine {
 //			// Clean up the screen.
 //			// Clean up internal buffers, as we don't need any information from the last
 //			// render.
-		vfxManager.cleanUpBuffers();
-		vfxManager.beginInputCapture();
-		batch2D.getProjectionMatrix().setToOrtho2D(0, 0, 1, 1);
-		batch2D.begin();
-		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
-		batch2D.end();
-		vfxManager.endInputCapture();
-		vfxManager.applyEffects();
-		vfxManager.renderToScreen();
+
+//		vfxManager.cleanUpBuffers();
+//		vfxManager.beginInputCapture();
+//		batch2D.getProjectionMatrix().setToOrtho2D(0, 0, 1, 1);
+//		batch2D.begin();
+//		batch2D.draw(postFbo.getColorBufferTexture(), 0, 0, 1, 1, 0, 0, 1, 1);
+//		batch2D.end();
+//		vfxManager.endInputCapture();
+//		vfxManager.applyEffects();
+//		vfxManager.renderToScreen();
+
 //			vfxManager.renderToFbo(postFbo);
 //			// Render result to the screen.
 //			postFbo.begin();
@@ -929,18 +931,18 @@ public class RenderEngine {
 			Gdx.gl.glDisable(GL30C.GL_CLIP_DISTANCE0);
 		}
 		// if (firstTime) {
-		postFbo.begin();
+//		postFbo.begin();
 //		createCameraCube();
 //		createLookatCube();
 //		createDepthOfFieldMeter();
 		renderColors(takeScreenShot);
 		render2DText();
 		render3DText();
-		postFbo.end();
+//		postFbo.end();
 
 		camera.setDirty(false);
 		staticCacheDirtyCount = 0;
-		postProcessRender();
+//		postProcessRender();
 		renderGraphs();
 
 //		postFbo.begin();
