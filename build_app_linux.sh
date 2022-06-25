@@ -18,6 +18,7 @@ INSTALLER_TYPE=deb
 echo "java home: $JAVA_HOME"
 echo "project version: $PROJECT_VERSION"
 echo "app version: $APP_VERSION"
+echo "tag name: $TAG_NAME"
 echo "main JAR file: $MAIN_JAR"
 
 # ------ SETUP DIRECTORIES AND FILES ----------------------------------------
@@ -105,7 +106,7 @@ $JAVA_HOME/bin/jpackage \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
 --icon src/main/logo/linux/pluvia-icon.png \
---app-version ${APP_VERSION} \
+--app-version ${TAG_NAME} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
 --license-file LICENSE \
@@ -123,7 +124,7 @@ $JAVA_HOME/bin/jpackage \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
 --icon src/main/logo/linux/pluvia-icon.png \
---app-version ${APP_VERSION} \
+--app-version ${TAG_NAME} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
 --license-file LICENSE \
