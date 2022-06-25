@@ -127,6 +127,7 @@ $JAVA_HOME/bin/jpackage \
 --app-version ${TAG_NAME} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
+--verbose \
 --license-file LICENSE \
 --linux-shortcut \
 --linux-menu-group games \

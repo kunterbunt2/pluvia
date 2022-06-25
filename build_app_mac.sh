@@ -109,5 +109,6 @@ $JAVA_HOME/bin/jpackage \
 --app-version ${APP_VERSION} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
+--verbose \
 --mac-package-identifier com.abdalla.bushnaq.pluvia \
 --mac-package-name pluvia
