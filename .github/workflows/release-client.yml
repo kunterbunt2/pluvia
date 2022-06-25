@@ -38,7 +38,7 @@ jobs:
             prerelease: false
    build-windows-job:
       name: build-windows-job
-      runs-on: self-hosted
+      runs-on: windows-latest
       needs: create-release-job
       steps:
       -  name: checkout-code-step
