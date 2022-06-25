@@ -15,6 +15,7 @@ jobs:
       runs-on: self-hosted
       outputs:
          output1: ${{ steps.create_release.outputs.upload_url }}
+         output2: ${{ github.ref }}
       steps:
       -  name: checkout-code-step
          uses: actions/checkout@v3
@@ -30,7 +31,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
          with:
             tag_name: ${{ github.ref }}
-            release_name: Release ${{ github.ref }}
+            release_name: ${{ github.ref }}
             body: |
                TBD
             draft: false
@@ -48,6 +49,8 @@ jobs:
             java-version: '17'
             distribution: adopt
       -  name: build-with-maven-step
+         env:
+           TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
          run: mvn verify --batch-mode --update-snapshots package
       -  name: upload-msi-step
          uses: actions/upload-release-asset@v1
@@ -55,6 +58,6 @@ jobs:
             GITHUB_TOKEN: ${{ github.token }}
          with:
             upload_url: ${{ needs.create-release-job.outputs.output1 }}
-            asset_path: ./target/installer/pluvia-1.2.0.msi
+            asset_path: ./target/installer/pluvia-${TAG_NAME}.msi
             asset_name: pluvia.msi
-            asset_content_type: application/vnd.apple.installer+xml
+            asset_content_type:  	application/octet-stream
