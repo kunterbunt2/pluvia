@@ -12,7 +12,6 @@ name: release-pluvia
 jobs:
    create-release-job:
       name: create-release-job
-      id: create-release-job
       runs-on: self-hosted
       steps:
       -  name: checkout-code-step
