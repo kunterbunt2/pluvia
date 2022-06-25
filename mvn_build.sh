@@ -3,4 +3,4 @@
 mvn -version
 mvn clean verify
 
-read -p "Press any key to resume ..."
+read -p "Press any key to resume ..." 
