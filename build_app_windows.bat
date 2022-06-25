@@ -10,7 +10,7 @@ rem PROJECT_VERSION: version used in pom.xml, e.g. 1.0-SNAPSHOT
 rem APP_VERSION: the application version, e.g. 1.0.0, shown in "about" dialog
 
 set JAVA_VERSION=17
-set MAIN_JAR=pluvia-%TAG_NAME%.jar
+set MAIN_JAR=pluvia-%PROJECT_VERSION%.jar
 
 rem Set desired installer type: "app-image" "msi" "exe".
 set INSTALLER_TYPE=msi
@@ -95,7 +95,7 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --java-options -Xmx2048m ^
   --runtime-image target/java-runtime ^
   --icon src/main/logo/windows/pluvia-icon.ico ^
-  --app-version %APP_VERSION% ^
+  --app-version %TAG_NAME% ^
   --vendor "Kunterbunt" ^
   --copyright "Copyright © 2022 Kunterbunt." ^
   --license-file LICENSE ^
