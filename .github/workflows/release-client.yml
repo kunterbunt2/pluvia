@@ -3,25 +3,25 @@
 
 on:
    push:
-# Sequence of patterns matched against refs/tags
       tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+# Sequence of patterns matched against refs/tags
+      - v* # Push events to matching v*, i.e. v1.0, v20.15.10
 
-name: release_pluvia
+name: release-pluvia
 
 jobs:
-   build:
-      name: Create Release
+   create-release-job:
+      name: create-release-job
       runs-on: self-hosted
       steps:
-      -  name: Checkout code
+      -  name: checkout-code-step
          uses: actions/checkout@v3
-      -  name: Set up JDK 17
+      -  name: set-up-jdk-17-step
          uses: actions/setup-java@v3
          with:
             java-version: '17'
             distribution: adopt
-      -  name: Create Release
+      -  name: create-release-step
          id: create_release
          uses: actions/create-release@v1
          env:
@@ -33,20 +33,20 @@ jobs:
                TBD
             draft: false
             prerelease: false
-   build_windows:
-      name: buid_windows_version
+   build-windows-job:
+      name: build-windows-job
       runs-on: self-hosted
       steps:
-      -  name: Checkout code
+      -  name: checkout-code-step
          uses: actions/checkout@v3
-      -  name: Set up JDK 17
+      -  name: set-up-jdk-17-step
          uses: actions/setup-java@v3
          with:
             java-version: '17'
             distribution: adopt
-      -  name: Build with Maven
+      -  name: build-with-maven-step
          run: mvn verify --batch-mode --update-snapshots package
-      -  name: upload MSI
+      -  name: upload-msi-step
          uses: actions/upload-release-asset@v1
          env:
             GITHUB_TOKEN: ${{ github.token }}
