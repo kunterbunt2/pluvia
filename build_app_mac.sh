@@ -106,7 +106,7 @@ $JAVA_HOME/bin/jpackage \
 --java-options -XstartOnFirstThread \
 --runtime-image target/java-runtime \
 --icon src/main/logo/macosx/pluvia-icon.icns \
---app-version ${APP_VERSION} \
+--app-version ${TAG_NAME} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
 --verbose \
