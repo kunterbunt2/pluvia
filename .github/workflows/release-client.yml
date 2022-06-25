@@ -36,69 +36,68 @@ jobs:
                TBD
             draft: false
             prerelease: false
-#   build-windows-job:
+   build-windows-job:
+      name: build-windows-job
+      runs-on: self-hosted
+      needs: create-release-job
+      steps:
+      -  name: checkout-code-step
+         uses: actions/checkout@v3
+      -  name: set-up-jdk-17-step
+         uses: actions/setup-java@v3
+         with:
+            java-version: '17'
+            distribution: adopt
+      -  name: build-with-maven-step
+         env:
+            TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
+         run: mvn verify --batch-mode --update-snapshots package
+      -  name: upload-msi-step
+         uses: actions/upload-release-asset@v1
+         env:
+            GITHUB_TOKEN: ${{ github.token }}
+         with:
+            upload_url: ${{ needs.create-release-job.outputs.output1 }}
+            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}.msi
+            asset_name: pluvia.msi
+            asset_content_type: application/octet-stream
+   build-ubuntu-job:
+      name: build-ubuntu-job
+      runs-on: ubuntu-latest
+      needs: create-release-job
+      steps:
+      -  name: checkout-code-step
+         uses: actions/checkout@v3
+      -  name: set-up-jdk-17-step
+         uses: actions/setup-java@v3
+         with:
+            java-version: '17'
+            distribution: adopt
+      -  name: build-with-maven-step
+         env:
+            TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
+         run: mvn verify --batch-mode --update-snapshots package
+      -  name: upload-deb-step
+         uses: actions/upload-release-asset@v1
+         env:
+            GITHUB_TOKEN: ${{ github.token }}
+         with:
+            upload_url: ${{ needs.create-release-job.outputs.output1 }}
+            asset_path: ./target/installer/pluvia_${{ needs.create-release-job.outputs.output2 }}-1_amd64.deb
+            asset_name: pluvia.deb
+            asset_content_type: application/octet-stream
+      -  name: upload-rpm-step
+         uses: actions/upload-release-asset@v1
+         env:
+            GITHUB_TOKEN: ${{ github.token }}
+         with:
+            upload_url: ${{ needs.create-release-job.outputs.output1 }}
+            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}-1.x86_64.rpm
+            asset_name: pluvia.rpm
+            asset_content_type: application/octet-stream
    build-mac-job:
       name: build-mac-job
       runs-on: macos-latest
-#      name: build-windows-job
-#      runs-on: windows-latest
-#      runs-on: self-hosted
-#      needs: create-release-job
-#      steps:
-#      -  name: checkout-code-step
-#         uses: actions/checkout@v3
-#      -  name: set-up-jdk-17-step
-#         uses: actions/setup-java@v3
-#         with:
-#            java-version: '17'
-#            distribution: adopt
-#      -  name: build-with-maven-step
-#         env:
-#           TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
-#         run: mvn verify --batch-mode --update-snapshots package
-#      -  name: upload-msi-step
-#         uses: actions/upload-release-asset@v1
-#         env:
-#            GITHUB_TOKEN: ${{ github.token }}
-#         with:
-#            upload_url: ${{ needs.create-release-job.outputs.output1 }}
-#            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}.msi
-#            asset_name: pluvia.msi
-#            asset_content_type:  	application/octet-stream
-#   build-ubuntu-job:
-#      name: build-ubuntu-job
-#      runs-on: ubuntu-latest
-#      needs: create-release-job
-#      steps:
-#      -  name: checkout-code-step
-#         uses: actions/checkout@v3
-#      -  name: set-up-jdk-17-step
-#         uses: actions/setup-java@v3
-#         with:
-#            java-version: '17'
-#            distribution: adopt
-#      -  name: build-with-maven-step
-#         env:
-#           TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
-#         run: mvn verify --batch-mode --update-snapshots package
-#      -  name: upload-deb-step
-#         uses: actions/upload-release-asset@v1
-#         env:
-#            GITHUB_TOKEN: ${{ github.token }}
-#         with:
-#            upload_url: ${{ needs.create-release-job.outputs.output1 }}
-#            asset_path: ./target/installer/pluvia_${{ needs.create-release-job.outputs.output2 }}-1_amd64.deb
-#            asset_name: pluvia.deb
-#            asset_content_type:  	application/octet-stream
-#      -  name: upload-rpm-step
-#         uses: actions/upload-release-asset@v1
-#         env:
-#            GITHUB_TOKEN: ${{ github.token }}
-#         with:
-#            upload_url: ${{ needs.create-release-job.outputs.output1 }}
-#            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}-1.x86_64.rpm
-#            asset_name: pluvia.rpm
-#            asset_content_type:  	application/octet-stream
       needs: create-release-job
       steps:
       -  name: checkout-code-step
