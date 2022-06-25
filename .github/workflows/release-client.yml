@@ -15,7 +15,7 @@ jobs:
       runs-on: self-hosted
       outputs:
          output1: ${{ steps.create_release.outputs.upload_url }}
-         output2: ${{ github.ref }}
+         output2: ${{ github.ref_name }}
       steps:
       -  name: checkout-code-step
          uses: actions/checkout@v3

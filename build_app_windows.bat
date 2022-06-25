@@ -99,11 +99,11 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --vendor "Kunterbunt" ^
   --copyright "Copyright © 2022 Kunterbunt." ^
   --license-file LICENSE ^
+  --verbose ^
   --win-dir-chooser ^
   --win-shortcut ^
   --win-per-user-install ^
   --win-menu ^
   --win-upgrade-uuid e99dd49e-e4d2-11ec-8fea-0242ac120002 ^
   --temp target/temp
-rem   --verbose ^
 rem   --win-console ^
