@@ -15,6 +15,11 @@ MAIN_JAR="pluvia-$PROJECT_VERSION.jar"
 # Set desired installer type: "app-image", "rpm" or "deb".
 INSTALLER_TYPE=deb
 
+if [ -z "$TAG_NAME" ]
+then
+  TAG_NAME=$PROJECT_VERSION
+fi
+
 echo "java home: $JAVA_HOME"
 echo "project version: $PROJECT_VERSION"
 echo "app version: $APP_VERSION"
