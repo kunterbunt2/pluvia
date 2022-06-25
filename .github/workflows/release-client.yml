@@ -84,7 +84,16 @@ jobs:
             GITHUB_TOKEN: ${{ github.token }}
          with:
             upload_url: ${{ needs.create-release-job.outputs.output1 }}
-            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}.deb
+            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}-1_amd64.deb
             asset_name: pluvia.deb
+            asset_content_type:  	application/octet-stream      
+      -  name: upload-rpm-step
+         uses: actions/upload-release-asset@v1
+         env:
+            GITHUB_TOKEN: ${{ github.token }}
+         with:
+            upload_url: ${{ needs.create-release-job.outputs.output1 }}
+            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}-1.x86_64.rpm
+            asset_name: pluvia.rpm
             asset_content_type:  	application/octet-stream      
       
