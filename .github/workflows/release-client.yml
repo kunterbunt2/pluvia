@@ -13,6 +13,8 @@ jobs:
    create-release-job:
       name: create-release-job
       runs-on: self-hosted
+      outputs:
+         output1: ${{ steps.create_release.outputs.upload_url }}
       steps:
       -  name: checkout-code-step
          uses: actions/checkout@v3
@@ -52,7 +54,7 @@ jobs:
          env:
             GITHUB_TOKEN: ${{ github.token }}
          with:
-            upload_url: ${{ needs.create-release-job.steps.create_release.outputs.upload_url }}
+            upload_url: ${{ needs.create-release-job.outputs.output1 }}
             asset_path: ./target/installer/*.msi
             asset_name: pluvia.msi
             asset_content_type: application/vnd.apple.installer+xml
