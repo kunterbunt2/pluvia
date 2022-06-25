@@ -58,6 +58,6 @@ jobs:
             GITHUB_TOKEN: ${{ github.token }}
          with:
             upload_url: ${{ needs.create-release-job.outputs.output1 }}
-            asset_path: ./target/installer/pluvia-${{TAG_NAME}}.msi
+            asset_path: ./target/installer/pluvia-${{ needs.create-release-job.outputs.output2 }}.msi
             asset_name: pluvia.msi
             asset_content_type:  	application/octet-stream
