@@ -67,6 +67,9 @@ public class Digit extends Renderable {
 		case name:
 			text = level.getName();
 			break;
+		case seed:
+			sI = String.format("%4d", level.getSeed());
+			break;
 		}
 		if (getDigitPosition() >= sI.length())
 			setDigit('0');

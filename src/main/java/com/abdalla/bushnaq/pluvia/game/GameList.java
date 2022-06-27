@@ -65,13 +65,6 @@ public class GameList extends LinkedList<Game> {
 		return UserList.size();
 	}
 
-//	public void readFromDisk(XMLDecoder aDecoder) {
-//		SelectedGame = ((Integer) aDecoder.readObject()).intValue();
-//		SelectedUser = ((Integer) aDecoder.readObject()).intValue();
-//		UserList = (LinkedList<User>) aDecoder.readObject();
-//		GameList = (LinkedList<Game>) aDecoder.readObject();
-//	}
-
 	public void removeUser(int aIndex) {
 		UserList.remove(aIndex);
 	}
@@ -84,10 +77,4 @@ public class GameList extends LinkedList<Game> {
 		SelectedUser = aSelectedUser;
 	}
 
-//	protected void writeToDisk(XMLEncoder aEncoder) {
-//		aEncoder.writeObject(SelectedGame);
-//		aEncoder.writeObject(SelectedUser);
-//		aEncoder.writeObject(UserList);
-//		aEncoder.writeObject(GameList);
-//	}
 }

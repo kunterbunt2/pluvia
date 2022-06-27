@@ -72,8 +72,9 @@ public class PauseDialog extends AbstractDialog {
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(final InputEvent event, final float x, final float y) {
-					getGameEngine().context.levelManager.disposeLevel();
-					getGameEngine().context.levelManager.createLevel();
+//					getGameEngine().context.levelManager.disposeLevel();
+//					getGameEngine().context.levelManager.createLevel();
+					createGame(getGameEngine().context.getGameIndex(), false, -1);
 					close();
 				}
 			});
@@ -89,6 +90,7 @@ public class PauseDialog extends AbstractDialog {
 				@Override
 				public void clicked(final InputEvent event, final float x, final float y) {
 					setVisible(false);
+					getGameEngine().context.game.updateTimer();
 					getGameEngine().context.levelManager.writeToDisk();
 					getGameEngine().getMainDialog().setVisible(true);
 				}

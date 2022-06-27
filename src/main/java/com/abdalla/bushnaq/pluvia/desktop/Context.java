@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.GameList;
 import com.abdalla.bushnaq.pluvia.game.LevelManager;
+import com.abdalla.bushnaq.pluvia.game.Score;
 import com.abdalla.bushnaq.pluvia.game.ScoreList;
 import com.abdalla.bushnaq.pluvia.game.model.stone.StoneList;
 import com.abdalla.bushnaq.pluvia.scene.model.bubble.Bubble;
@@ -19,7 +20,10 @@ import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
-import com.abdalla.bushnaq.pluvia.util.RandomGenerator;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 /**
  * @author kunterbunt
@@ -111,7 +115,7 @@ public class Context extends ApplicationProperties {
 	public StoneList			stoneList		= new StoneList();
 	public long					timeDelta		= 0L;
 	public ModelList<Turtle>	turtleList		= new ModelList<>();
-	public RandomGenerator		universeRG;
+//	public RandomGenerator		universeRG;
 
 	public Context() {
 		homeFolderName = System.getProperty("user.home") + "/.pluvia";
@@ -168,7 +172,31 @@ public class Context extends ApplicationProperties {
 		createFolder(homeFolderName);
 		createFolder(configFolderName);
 		init();
-		scoreList.init(gameList);
+
+//		scoreList.init(gameList);
+		readScoreFromDisk();
+	}
+
+	protected void readScoreFromDisk() {
+		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+		try {
+			scoreList = mapper.readValue(new File(Context.getConfigFolderName() + "/score.yaml"), ScoreList.class);
+		} catch (StreamReadException e) {
+			logger.warn(e.getMessage(), e);
+			logger.warn("score file corrupt, cleared score!");
+			scoreList.clear();
+		} catch (DatabindException e) {
+			logger.warn(e.getMessage(), e);
+			logger.warn("score file corrupt, cleared score!");
+			scoreList.clear();
+		} catch (IOException e) {
+			logger.warn(e.getMessage(), e);
+			logger.warn("score file corrupt, cleared score!");
+			scoreList.clear();
+		}
+//		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.getConfigFolderName() + "/score.xml")));
+//		read(encoder);
+//		encoder.close();
 	}
 
 	public void advanceInTime() throws Exception {
@@ -214,7 +242,7 @@ public class Context extends ApplicationProperties {
 
 	public void create(final int randomGeneratorSeed, final long age) throws Exception {
 		{
-			universeRG = new RandomGenerator(randomGeneratorSeed);
+//			universeRG = new RandomGenerator(randomGeneratorSeed);
 		}
 	}
 
@@ -238,12 +266,48 @@ public class Context extends ApplicationProperties {
 		game = gameList.get(gameIndex);
 	}
 
+	public void selectGame(String name) {
+		for (Game g : gameList) {
+			if (g.getName().equals(name))
+				game = g;
+		}
+	}
+
 	public void setScoreList(ScoreList aScoreList) {
 		scoreList = aScoreList;
 	}
 
 	public void setSelected(final Object selected, final boolean setDirty) throws Exception {
 		this.selected = selected;
+	}
+
+	public int getGameIndex(String name) {
+		int index = 0;
+		for (Game g : gameList) {
+			if (g.getName().equals(name))
+				return index;
+			index++;
+		}
+		return -1;
+	}
+
+	public int getGameIndex() {
+		int index = 0;
+		for (Game g : gameList) {
+			if (g.getName().equals(game.getName()))
+				return index;
+			index++;
+		}
+		return -1;
+	}
+
+	public int getLastGameSeed() {
+		int lastGameSeed = -1;
+		for (Score s : scoreList) {
+			if (game.getName().equals(s.getGame()))
+				lastGameSeed = Math.max(lastGameSeed, s.getSeed());
+		}
+		return lastGameSeed;
 	}
 
 }

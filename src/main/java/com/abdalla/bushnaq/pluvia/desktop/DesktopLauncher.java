@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;
-import com.abdalla.bushnaq.pluvia.util.TimeUnit;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -85,7 +84,7 @@ public class DesktopLauncher {
 			if (restart)
 				logger.info(String.format("Restarting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
 			final Context context = new Context();
-			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
+//			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
 			final GameEngine						gameEngine	= new GameEngine(context);
 			final Lwjgl3ApplicationConfiguration	config		= createConfig(context);
 			config.disableAudio(true);

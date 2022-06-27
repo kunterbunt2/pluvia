@@ -10,12 +10,10 @@ import com.abdalla.bushnaq.audio.synthesis.Mp3Player;
 import com.abdalla.bushnaq.audio.synthesis.OpenAlException;
 import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
-import com.abdalla.bushnaq.pluvia.game.LevelManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -151,29 +149,6 @@ public class MainDialog extends AbstractDialog {
 
 	}
 
-	private void createGame(int gameIndex) {
-		if (getGameEngine().context.levelManager != null)
-			getGameEngine().context.levelManager.disposeLevel();
-		getGameEngine().context.selectGame(gameIndex);
-		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
-//		universe.GameThread.clearLevel();
-		getGameEngine().context.levelManager.readFromDisk();
-		getGameEngine().context.levelManager.createLevel();
-		{
-			float	z			= getGameEngine().context.game.cameraZPosition;
-			Vector3	position	= getGameEngine().renderEngine.getCamera().position;
-			position.z = z;
-			if (getGameEngine().context.game.getNrOfRows() == 0) {
-				position.y = 4;
-				getGameEngine().renderEngine.getCamera().lookat.y = 4.5f;
-			} else {
-				position.y = getGameEngine().context.game.getNrOfRows() / 2;
-				getGameEngine().renderEngine.getCamera().lookat.y = getGameEngine().context.game.getNrOfRows() / 2 + 0.5f;
-			}
-			getGameEngine().renderEngine.getCamera().update();
-		}
-	}
-
 	@Override
 	public void dispose() {
 		disposeAudio();
@@ -223,7 +198,7 @@ public class MainDialog extends AbstractDialog {
 	public void setVisible(final boolean visible) {
 		super.setVisible(visible);
 		if (visible) {
-			createGame(6);
+			createGame(6, false, -1);
 			if (getGameEngine().context.getAmbientAudioProperty()) {
 //				oggSound = Gdx.audio.newSound(Gdx.files.internal(AtlasManager.ASSETS_FOLDER + "/sound/drop.wav"));
 //				oggSound.play(((float) getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
@@ -247,7 +222,7 @@ public class MainDialog extends AbstractDialog {
 	private void startAction() {
 		setVisible(false);
 		int checkedIndex = listView.getSelectedIndex();
-		createGame(checkedIndex);
+		createGame(checkedIndex, true, -1);
 	}
 
 	private void updateDesciption(Sizes sizes) {

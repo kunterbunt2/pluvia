@@ -3,9 +3,7 @@
  */
 package com.abdalla.bushnaq.pluvia.game;
 
-import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
-import com.abdalla.bushnaq.pluvia.util.sound.Tools;
 
 public class Game {
 	public float		cameraZPosition;
@@ -20,12 +18,19 @@ public class Game {
 	protected int		preview				= 0;			// ---Rows of visible stones that will drop in the next moves
 	protected long		relativeTime		= 0;
 	protected boolean	reset				= false;
-
 	protected int		score				= 0;
-
 	protected int		steps				= 0;
-
 	protected String	userName			= "Test User";
+	private long		timer;
+
+	public void startTimer() {
+		timer = System.currentTimeMillis();
+	}
+
+	public void updateTimer() {
+		relativeTime += System.currentTimeMillis() - timer;
+		timer = 0;
+	}
 
 	public Game(String aName, int aNrOfColumns, int aNrOfRows, int aNrOfFallingStones, int aNrOfStones, int aPreview, int aNrOfFallenRows, float cameraZPosition, boolean aReset) {
 		name = aName;
@@ -35,7 +40,6 @@ public class Game {
 		nrOfStones = aNrOfStones;
 		preview = aPreview;
 		nrOfFallenRows = aNrOfFallenRows;
-//		helpPath = "doc/" + Name + ".html";
 		reset = aReset;
 		this.cameraZPosition = cameraZPosition;
 	}
@@ -44,24 +48,9 @@ public class Game {
 		score += getStoneScore();
 	}
 
-//	public Game() {
-//		helpPath = "doc/" + Name + ".html";
-//	}
-
 	public String getName() {
 		return name;
 	}
-
-//	public void addScore() {
-//		if (score > 0) {
-////			scoreList.add(new Score(userName, System.currentTimeMillis(), relativeTime, score, steps));
-//		} else {
-//		}
-//	}
-
-//	public String getHelpPath() {
-//		return helpPath;
-//	}
 
 	public int getNrOfColumns() {
 		return nrOfColumns;
@@ -92,9 +81,7 @@ public class Game {
 	}
 
 	public int getScore(Stone patch[][]) {
-//		if (queryHeapHeight(patch) == 0)
 		return score;
-//		return -1;
 	}
 
 	public int getSteps() {
@@ -127,7 +114,6 @@ public class Game {
 	protected boolean queryTilt(Stone patch[][]) {
 		for (int x = 0; x < nrOfColumns; x++) {
 			if (patch[x][preview] != null) {
-				Tools.play(AtlasManager.getAssetsFolderName() + "/sound/tilt.wav");
 				return true;
 			}
 		}
@@ -137,10 +123,6 @@ public class Game {
 	protected boolean queryWin(Stone patch[][]) {
 		return false;
 	}
-
-//	public void setHelpPath(String aHelpPath) {
-//		helpPath = aHelpPath;
-//	}
 
 	protected void reset() {
 		score = -nrOfColumns * nrOfRows * getStoneScore();
@@ -187,35 +169,8 @@ public class Game {
 		score = aScore;
 	}
 
-//	public void updatePatchScore(Stone aPatch[][]) {
-//		for (int y = preview; y < nrOfRows; y++) {
-//			for (int x = 0; x < nrOfColumns; x++) {
-//				if (aPatch[x][y] != null) {
-//					if (aPatch[x][y].score == 0) {
-//						aPatch[x][y].score = 1;
-//					}
-//				}
-//			}
-//		}
-//	}
-
-//	public void updateScore(int aHeapHeight) {
-//	}
-
 	public void setUserName(String aUserName) {
 		userName = aUserName;
 	}
 
-//	public void updateScore(Stone aPatch[][]) {
-//		for (int y = preview; y < nrOfRows; y++) {
-//			for (int x = 0; x < nrOfColumns; x++) {
-//				if ((aPatch[x][y] != null) && aPatch[x][y].isVanishing()) {
-////					if (!aPatch[x][y].isCanDrop())
-//					{
-//						score += aPatch[x][y].score;
-//					}
-//				}
-//			}
-//		}
-//	}
 }

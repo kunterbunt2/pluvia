@@ -2,12 +2,14 @@ package com.abdalla.bushnaq.pluvia.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
-import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.Score;
 import com.abdalla.bushnaq.pluvia.game.ScoreList;
+import com.abdalla.bushnaq.pluvia.util.TimeUnit;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -31,21 +33,27 @@ public class ScoreDialog extends AbstractDialog {
 		createStage("", true);
 	}
 
-//	@Override
-//	protected void close() {
-//		pop();
-//	};
-//	@Override
-//	protected void enterAction() {
-//		close();
-////		close();
-//	}
+	Map<VisTextButton, Score> buttonToScoreMap = new HashMap<>();
 
-	private void addRow(String userName, String score, String steps, String date) {
+	private void addRow(Score s) {
+
+		String	gameName	= "" + s.getGame();
+		String	seed		= "" + s.getSeed();
+		String	userName	= "" + s.getUserName();
+		String	score		= "" + s.getScore();
+		String	steps		= "" + s.getSteps();
+		String	time		= TimeUnit.createDurationString(s.getRelativeTime(), true, true, false);
+		String	date		= simpleDateFormat.format(new Date(s.getTime()));
 		{
-			VisLabel label = new VisLabel("");
+			VisTextField label = new VisTextField(gameName);
 			label.setAlignment(Align.left);
 			getTable().add(label).width(100 * sizes.scaleFactor).left();
+		}
+		{
+			VisTextField label = new VisTextField(seed);
+			label.setReadOnly(true);
+			label.setAlignment(Align.right);
+			getTable().add(label).width(50 * sizes.scaleFactor).right();
 		}
 		{
 			VisTextField label = new VisTextField(userName);
@@ -64,9 +72,29 @@ public class ScoreDialog extends AbstractDialog {
 			getTable().add(label).width(50 * sizes.scaleFactor).right();
 		}
 		{
+			VisTextField label = new VisTextField(time);
+			label.setAlignment(Align.right);
+			getTable().add(label).width(100 * sizes.scaleFactor).right();
+		}
+		{
 			VisTextField label = new VisTextField(date);
 			label.setAlignment(Align.right);
 			getTable().add(label).width(150 * sizes.scaleFactor).right();
+		}
+		{
+			VisTextButton button = new VisTextButton("Replay", "blue");
+			buttonToScoreMap.put(button, s);
+			addHoverEffect(button);
+			button.addListener(new ClickListener() {
+				@Override
+				public void clicked(final InputEvent event, final float x, final float y) {
+					logger.info("replay");
+					Score buttonScore = buttonToScoreMap.get(button);
+					setVisible(false);
+					createGame(getGameEngine().context.getGameIndex(buttonScore.getGame()), false,buttonScore.getSeed());
+				}
+			});
+			getTable().add(button).width(BUTTON_WIDTH * sizes.scaleFactor);
 		}
 	}
 
@@ -75,37 +103,26 @@ public class ScoreDialog extends AbstractDialog {
 		getTable().clear();
 		{
 			getTable().row();
-			VisLabel label = new VisLabel("");
-			getTable().add(label).pad(0, 16, 16, 16).center();
+//			VisLabel label = new VisLabel("");
+//			getTable().add(label).pad(0, 16, 16, 16).center();
 		}
 		{
 			VisLabel label = new VisLabel("High Score");
 			label.setColor(LIGHT_BLUE_COLOR);
 			label.setAlignment(Align.center);
-			getTable().add(label).colspan(4).width(DIALOG_WIDTH * sizes.scaleFactor).pad(0, 16, 16, 16).center();
+			getTable().add(label).colspan(8).width(DIALOG_WIDTH * sizes.scaleFactor).pad(0, 16, 16, 16).center();
 		}
+		createHeader();
 		ScoreList scoreList = getGameEngine().context.getScoreList();
-
-		for (Game game : getGameEngine().context.gameList) {
-			int index = scoreList.getSize();
-			if (scoreList.get(game.getName()) != null) {
-				createHeader(game);
-				for (Score score : scoreList.get(game.getName())) {
-					getTable().row();
-					addRow("" + score.getUserName(), "" + score.getScore(), "" + score.getSteps(), simpleDateFormat.format(new Date(score.getAbsoluteTime())));
-					index--;
-				}
-				for (int i = 0; i < index; i++) {
-					getTable().row();
-					addRow("", "", "", "");
-				}
-			}
+		for (Score score : scoreList) {
+			getTable().row();
+			addRow(score);
 		}
 		// close button
 		{
 			getTable().row();
-			VisLabel label = new VisLabel("");
-			getTable().add(label).pad(0, 16, 16, 16).center();
+//			VisLabel label = new VisLabel("");
+//			getTable().add(label).pad(0, 16, 16, 16).center();
 		}
 		{
 			VisTextButton button = new VisTextButton("Close", "blue");
@@ -116,19 +133,24 @@ public class ScoreDialog extends AbstractDialog {
 					close();
 				}
 			});
-			getTable().add(button).colspan(4).center().width(BUTTON_WIDTH * sizes.scaleFactor).pad(16);
+			getTable().add(button).colspan(8).center().width(BUTTON_WIDTH * sizes.scaleFactor).pad(16);
 		}
 		changed = getGameEngine().context.getScoreList().getChanged();
 	}
 
-	private void createHeader(Game game) {
+	private void createHeader() {
 		getTable().row();
 		{
 			getTable().row();
-			VisLabel label = new VisLabel(game.getName());
-			label.setColor(LIGHT_BLUE_COLOR);
+			VisLabel label = new VisLabel("Game");
+//			label.setColor(LIGHT_BLUE_COLOR);
 			label.setAlignment(Align.center);
-			getTable().add(label).colspan(1).width(DIALOG_WIDTH * sizes.scaleFactor).pad(16, 16, 0, 16).center();
+			getTable().add(label).width(100).center();
+		}
+		{
+			VisLabel label = new VisLabel("Level");
+			label.setAlignment(Align.right);
+			getTable().add(label).width(100).center();
 		}
 		{
 			VisLabel label = new VisLabel("User Name");
@@ -146,7 +168,17 @@ public class ScoreDialog extends AbstractDialog {
 			getTable().add(label).width(100).center();
 		}
 		{
+			VisLabel label = new VisLabel("Time");
+			label.setAlignment(Align.right);
+			getTable().add(label).width(100).center();
+		}
+		{
 			VisLabel label = new VisLabel("Date");
+			label.setAlignment(Align.right);
+			getTable().add(label).width(100).center();
+		}
+		{
+			VisLabel label = new VisLabel("Replay");
 			label.setAlignment(Align.right);
 			getTable().add(label).width(100).center();
 		}

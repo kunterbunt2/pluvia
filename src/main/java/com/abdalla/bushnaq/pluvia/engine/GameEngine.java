@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.game.Game;
+import com.abdalla.bushnaq.pluvia.game.LevelManager;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.scene.model.bubble.Bubble;
 import com.abdalla.bushnaq.pluvia.scene.model.digit.Digit;
@@ -21,6 +22,7 @@ import com.abdalla.bushnaq.pluvia.ui.MainDialog;
 import com.abdalla.bushnaq.pluvia.ui.OptionsDialog;
 import com.abdalla.bushnaq.pluvia.ui.PauseDialog;
 import com.abdalla.bushnaq.pluvia.ui.ScoreDialog;
+import com.abdalla.bushnaq.pluvia.util.sound.Tools;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -411,9 +413,19 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			if (context.levelManager.update()) {
 				// game was won or ended
 				Game game = context.game;
-				context.getScoreList().add(game.getName(), context.levelManager.getScore(), game.getSteps(), game.getRelativeTime(), System.getProperty("user.name")/* game.getUserName() */);
+				game.updateTimer();
+				if (context.getScoreList().add(game.getName(), context.levelManager.getSeed(), context.levelManager.getScore(), game.getSteps(), game.getRelativeTime(), System.getProperty("user.name"))) {
+					// new highscore
+					Tools.play(AtlasManager.getAssetsFolderName() + "/sound/score.wav");
+				} else {
+					Tools.play(AtlasManager.getAssetsFolderName() + "/sound/tilt.wav");
+				}
 				context.levelManager.tilt();
 				context.levelManager.disposeLevel();
+				context.levelManager = new LevelManager(this, context.game);
+				// What is the next seed?
+				int lastGameSeed = context.getLastGameSeed();
+				context.levelManager.setGaneSeed(lastGameSeed + 1);
 				context.levelManager.writeToDisk();
 				if (!mainDialog.isVisible())
 					mainDialog.setVisible(true);
@@ -502,8 +514,8 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	}
 
 	private void renderStones(final long currentTime) throws Exception {
-		float	dx	= ((float) context.levelManager.width) / 2;
-		float	dy	= (context.levelManager.height);
+		float	dx	= ((float) context.levelManager.nrOfColumns) / 2;
+		float	dy	= (context.levelManager.nrOfRows);
 		for (Stone stone : context.stoneList) {
 			stone.get3DRenderer().update(stone.x - dx, stone.y - dy, stone.z, this, currentTime, renderEngine.getTimeOfDay(), 0, false);
 		}

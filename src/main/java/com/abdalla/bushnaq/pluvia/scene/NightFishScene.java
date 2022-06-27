@@ -1,7 +1,6 @@
 package com.abdalla.bushnaq.pluvia.scene;
 
 import java.util.List;
-import java.util.Random;
 
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.engine.GameObject;
@@ -9,8 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 
 public class NightFishScene extends AbstractScene {
 
-	public NightFishScene(GameEngine gameEngine, Random rand, List<GameObject> renderModelInstances) {
-		super(gameEngine, rand, renderModelInstances);
+	public NightFishScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {
+		super(gameEngine, renderModelInstances);
 	}
 
 	@Override

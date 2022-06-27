@@ -16,10 +16,6 @@ public class FourGameDragon extends Game {
 		super(GameName.Dragon.name(), 5, 13, 3, 8, 0, 11, 11, false);
 	}
 
-//	@Override
-//	public void newStone() {
-//	}
-
 	@Override
 	public void addStoneScore() {
 		// do not increment score for every stone that is in the level
@@ -59,38 +55,4 @@ public class FourGameDragon extends Game {
 		relativeTime = 0;
 	}
 
-//	@Override
-//	public void updatePatchScore(Stone aPatch[][]) {
-//		for (int y = preview; y < nrOfRows; y++) {
-//			for (int x = 0; x < nrOfColumns; x++) {
-//				if (aPatch[x][y] != null) {
-//					if (aPatch[x][y].isLeftAttached()) {
-//						int newScore = aPatch[x - 1][y].score * 2;
-//						if (newScore > aPatch[x][y].score) {
-//							aPatch[x][y].score = newScore;
-//						} else {
-//						}
-//					} else if (aPatch[x][y].isRightAttached()) {
-//						int newScore = 2;
-//						if (newScore > aPatch[x][y].score) {
-//							aPatch[x][y].score = newScore;
-//						} else {
-//						}
-//					}
-//				}
-//			}
-//		}
-	/*
-	 * for( int y = Preview; y < NrOfRows; y++ ) { for( int x = 0; x < NrOfColumns; x++ ) { if( aPatch[x][y] != null ) { if( aPatch[x][y].Score == 0 ) { //---Find the sum of all attached patched //---Find the left side
-	 * int sum = 0; boolean attached = false; int tempX = x; while( (tempX > 0) && aPatch[tempX][y].isLeftAttached() ) { tempX--; sum += aPatch[tempX][y].Score; attached = true; } tempX = x; while( (tempX <
-	 * NrOfColumns-1) && aPatch[tempX][y].isRightAttached() ) { tempX++; sum += aPatch[tempX][y].Score; attached = true; } if( (sum == 0) && attached ) { aPatch[x][y].Score = 2; } else { aPatch[x][y].Score = sum; } }
-	 * else { if( !aPatch[x][y].isLeftAttached() && !aPatch[x][y].isRightAttached() ) { aPatch[x][y].Score = 0; } } } } }
-	 */
-	/*
-	 * for( int y = Preview; y < NrOfRows; y++ ) { for( int x = 0; x < NrOfColumns; x++ ) { if( aPatch[x][y] != null ) { if( aPatch[x][y].Score == 0 ) { //---Find the sum of all attached patched //---Find the left side
-	 * int sum = 0; boolean attached = false; int tempX = x; while( (tempX > 0) && aPatch[tempX][y].isLeftAttached() ) { tempX--; sum += aPatch[tempX][y].Score; attached = true; } tempX = x; while( (tempX <
-	 * NrOfColumns-1) && aPatch[tempX][y].isRightAttached() ) { tempX++; sum += aPatch[tempX][y].Score; attached = true; } if( (sum == 0) && attached ) { aPatch[x][y].Score = 2; } else { aPatch[x][y].Score = sum; } }
-	 * else { if( !aPatch[x][y].isLeftAttached() && !aPatch[x][y].isRightAttached() ) { aPatch[x][y].Score = 0; } } } } }
-	 */
-//	}
 }

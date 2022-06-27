@@ -3,15 +3,9 @@
  */
 package com.abdalla.bushnaq.pluvia.game;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -20,53 +14,58 @@ import org.slf4j.LoggerFactory;
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
+import com.abdalla.bushnaq.pluvia.util.PersistentRandomGenerator;
 import com.abdalla.bushnaq.pluvia.util.RcBoolean;
 import com.abdalla.bushnaq.pluvia.util.sound.Tools;
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 public abstract class Level {
-	public int			animationPhase			= 0;
-	Set<Stone>			droppingStones			= new HashSet<>();
-	Set<Stone>			droppingStonesBuffer	= new HashSet<>();
-	protected Game		game					= null;
-	public GamePhase	gamePhase				= GamePhase.waiting;
-	public int			height					= 0;										// number of rows in the level
-	protected Logger	logger					= LoggerFactory.getLogger(this.getClass());
-	public int			maxAnimaltionPhase		= 12;
-	protected int		nrOfFallenRows			= 0;
-	protected int		nrOfFallingStones		= 0;										// Number of stones that can drop simultanuously from top
-	protected int		nrOfStones				= 0;										// Number of different patches (colors) in the game
-	protected int		NrOfTotalStones			= 0;										// The sum of all follen patches within this game
-	protected Stone[][]	patch					= null;
-	protected int		preview					= 0;										// Number of rows that the user can preview before they actually drop into the game
-	Set<Stone>			pushingLeftStones		= new HashSet<>();
-	Set<Stone>			pushingRightStones		= new HashSet<>();
-	protected Random	rand					= null;
-	private long		randomSeed				= System.currentTimeMillis();				// System.currentTimeMillis();
-	private boolean		tilt					= false;									// mark that game has finished
-	private boolean		userReacted				= false;									// user has either moved a stones left or right and we need to generate new stones.
-	public int			width					= 0;										// number of columns
+	public int					animationPhase			= 0;
+	Set<Stone>					droppingStones			= new HashSet<>();
+	Set<Stone>					droppingStonesBuffer	= new HashSet<>();
+	protected Game				game					= null;
+	public GamePhase			gamePhase				= GamePhase.waiting;
+	public int					nrOfRows				= 0;										// number of rows in the level
+	protected Logger			logger					= LoggerFactory.getLogger(this.getClass());
+	public int					maxAnimaltionPhase		= 12;
+	protected int				nrOfFallenRows			= 0;
+	protected int				nrOfFallingStones		= 0;										// Number of stones that can drop simultanuously from top
+	protected int				nrOfStones				= 0;										// Number of different patches (colors) in the game
+	protected int				NrOfTotalStones			= 0;										// The sum of all follen patches within this game
+	protected Stone[][]			patch					= null;
+	protected int				preview					= 0;										// Number of rows that the user can preview before they actually drop into the game
+	Set<Stone>					pushingLeftStones		= new HashSet<>();
+	Set<Stone>					pushingRightStones		= new HashSet<>();
+	PersistentRandomGenerator	rand;
+	private boolean				tilt					= false;									// mark that game has finished
+	private boolean				userReacted				= false;									// user has either moved a stones left or right and we need to generate new stones.
+	public int					nrOfColumns				= 0;										// number of columns
 
 	public Level(Game game) {
-		this.width = game.nrOfColumns;
-		this.height = game.nrOfRows;
+		this.nrOfColumns = game.nrOfColumns;
+		this.nrOfRows = game.nrOfRows;
 		this.preview = game.preview;
 		this.nrOfFallingStones = game.nrOfFallingStones;
 		this.nrOfStones = game.nrOfStones;
 		this.nrOfFallenRows = game.nrOfFallenRows;
 		this.game = game;
-		patch = new Stone[width][];
+		patch = new Stone[nrOfColumns][];
 		for (int x = 0; x < patch.length; x++) {
-			patch[x] = new Stone[height];
+			patch[x] = new Stone[nrOfRows];
 		}
-		rand = new Random(randomSeed);
+		rand = new PersistentRandomGenerator();
 		game.reset();
 		game.setReset(false);
 	}
 
 	protected boolean clearCommandAttributes() {
 		boolean somethingHasChanged = false;
-		for (int y = height - 1; y >= 0; y--) {
-			for (int x = 0; x < width; x++) {
+		for (int y = nrOfRows - 1; y >= 0; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				if (patch[x][y] != null) {
 					if (patch[x][y].clearCommandAttributes())
 						somethingHasChanged = true;
@@ -79,8 +78,8 @@ public abstract class Level {
 
 	protected boolean clearPuchingAttributes() {
 		boolean somethingHasChanged = false;
-		for (int y = height - 1; y >= 0; y--) {
-			for (int x = 0; x < width; x++) {
+		for (int y = nrOfRows - 1; y >= 0; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				if (patch[x][y] != null) {
 					if (patch[x][y].clearPushingAttributes())
 						somethingHasChanged = true;
@@ -92,8 +91,8 @@ public abstract class Level {
 	}
 
 	protected void clearTemporaryAttributes() {
-		for (int y = height - 1; y >= 0; y--) {
-			for (int x = 0; x < width; x++) {
+		for (int y = nrOfRows - 1; y >= 0; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				if (patch[x][y] != null) {
 					patch[x][y].clearTemporaryAttributes();
 				} else {
@@ -123,8 +122,8 @@ public abstract class Level {
 	public abstract void disposeLevel();
 
 	protected void dropStones() {
-		for (int y = height - 2; y >= preview; y--) {
-			for (int x = 0; x < width; x++) {
+		for (int y = nrOfRows - 2; y >= preview; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				if ((patch[x][y] != null) && patch[x][y].isCanDrop() /* && !Patch[x][y].isVanishing() */) {
 					patch[x][y].y++;
 					patch[x][y + 1] = patch[x][y];
@@ -137,8 +136,8 @@ public abstract class Level {
 
 	public void fillLevel() {
 		for (int y = 0; y < nrOfFallenRows; y++) {
-			for (int x = 0; x < width; x++) {
-				patch[x][height - 1 - y] = createStoneAndUpdateScore(x, height - 1 - y, rand.nextInt(nrOfStones));
+			for (int x = 0; x < nrOfColumns; x++) {
+				patch[x][nrOfRows - 1 - y] = createStoneAndUpdateScore(x, nrOfRows - 1 - y, rand.nextInt(nrOfStones));
 				NrOfTotalStones++;
 			}
 			// GenerateStones();
@@ -148,7 +147,7 @@ public abstract class Level {
 
 	public void generateStones() {
 		for (int y = preview; y > 0; y--) {
-			for (int x = 0; x < width; x++) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				if (patch[x][y - 1] != null) {
 					patch[x][y] = patch[x][y - 1];
 					patch[x][y - 1] = null;
@@ -156,7 +155,7 @@ public abstract class Level {
 			}
 		}
 		for (int i = 0; i < nrOfFallingStones; i++) {
-			int location = rand.nextInt(width);
+			int location = rand.nextInt(nrOfColumns);
 			if (patch[location][0] == null) {
 				patch[location][0] = createStoneAndUpdateScore(location, 0, rand.nextInt(nrOfStones));
 				NrOfTotalStones++;
@@ -197,8 +196,8 @@ public abstract class Level {
 		RcBoolean changedOnce = new RcBoolean(false);
 		do {
 			changedOnce.setFalse();
-			for (int y = height - 1; y >= preview; y--) {
-				for (int x = 0; x < width; x++) {
+			for (int y = nrOfRows - 1; y >= preview; y--) {
+				for (int x = 0; x < nrOfColumns; x++) {
 					if (patch[x][y] != null) {
 						markStoneMoveLeftOption(changedOnce, x, y);
 					}
@@ -213,8 +212,8 @@ public abstract class Level {
 		RcBoolean changedOnce = new RcBoolean(false);
 		do {
 			changedOnce.setFalse();
-			for (int y = height - 1; y >= preview; y--) {
-				for (int x = 0; x < width; x++) {
+			for (int y = nrOfRows - 1; y >= preview; y--) {
+				for (int x = 0; x < nrOfColumns; x++) {
 					if (patch[x][y] != null) {
 						markStoneMoveRightOption(changedOnce, x, y);
 					}
@@ -224,8 +223,8 @@ public abstract class Level {
 	}
 
 	protected void markStickyPatches() {
-		for (int y = preview; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+		for (int y = preview; y < nrOfRows; y++) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				boolean	stickyLeft	= false;
 				boolean	stickyRight	= false;
 				// int attribute =
@@ -233,7 +232,7 @@ public abstract class Level {
 				// ;
 				// ---CHECK FOR STICKY STONES
 				if (patch[x][y] != null) {
-					if ((x < width - 1) && (patch[x + 1][y] != null) && (patch[x][y].getType() == patch[x + 1][y].getType()))
+					if ((x < nrOfColumns - 1) && (patch[x + 1][y] != null) && (patch[x][y].getType() == patch[x + 1][y].getType()))
 //						if ((Patch[x][y].isDropping() == Patch[x + 1][y].isDropping())
 //								&& (Patch[x][y].isMovingRight() == Patch[x + 1][y].isMovingRight())
 //								&& (Patch[x][y].isMovingLeft() == Patch[x + 1][y].isMovingLeft()))
@@ -270,7 +269,7 @@ public abstract class Level {
 			cannotDrop = true;
 
 		// ---WE ARE At THE BOTTOM
-		else if (y == height - 1)
+		else if (y == nrOfRows - 1)
 			cannotDrop = true;
 
 		// ---THERE IS A STONE UNDER US THAT CANNOT DROP
@@ -281,7 +280,7 @@ public abstract class Level {
 		else if ((x != 0) && (patch[x - 1][y] != null) && (patch[x][y].getType() == patch[x - 1][y].getType()) && patch[x - 1][y].isCannotDrop())
 			cannotDrop = true;
 		// ---THERE IS A STICKY STONE RIGHT FROM US THAT CANNOT DROP
-		else if ((x != width - 1) && (patch[x + 1][y] != null) && (patch[x][y].getType() == patch[x + 1][y].getType()) && patch[x + 1][y].isCannotDrop())
+		else if ((x != nrOfColumns - 1) && (patch[x + 1][y] != null) && (patch[x][y].getType() == patch[x + 1][y].getType()) && patch[x + 1][y].isCannotDrop())
 			cannotDrop = true;
 		if (cannotDrop && !patch[x][y].isCannotDrop()) {
 			aThereWasAChange.setTrue();
@@ -298,11 +297,11 @@ public abstract class Level {
 		// ---CHECK IF WE CAN DROP
 		if (!cannotDrop) {
 			// ---THERE IS SPACE FOR DROPPING OR A DROPPING STONE UNDER US
-			if ((y != height - 1) && ((patch[x][y + 1] == null) || patch[x][y + 1].isCanDrop())) {
+			if ((y != nrOfRows - 1) && ((patch[x][y + 1] == null) || patch[x][y + 1].isCanDrop())) {
 				// ---THERE IS NO STICKY STONE LEFT FROM US OR IT CAN DROP TOO
 				if ((x == 0) || (patch[x - 1][y] == null) || (patch[x][y].getType() != patch[x - 1][y].getType()) || !patch[x - 1][y].isCannotDrop()) {
 					// ---THERE IS NO STICKY STONE RIGHT FROM US OR IT CAN DROP TOO
-					if ((x == width - 1) || (patch[x + 1][y] == null) || (patch[x][y].getType() != patch[x + 1][y].getType()) || !patch[x + 1][y].isCannotDrop()) {
+					if ((x == nrOfColumns - 1) || (patch[x + 1][y] == null) || (patch[x][y].getType() != patch[x + 1][y].getType()) || !patch[x + 1][y].isCannotDrop()) {
 //						if (x == 1 && y == 5)
 //							logger.info(String.format("1=%b 2=%b 3=%b", (x == width - 1) || (patch[x + 1][y] == null), (patch[x + 1][y] != null) && (patch[x][y].getType() != patch[x + 1][y].getType()),(patch[x + 1][y] != null) && !patch[x + 1][y].isCannotDrop()));
 						if (!patch[x][y].isCanDrop()) {
@@ -366,7 +365,7 @@ public abstract class Level {
 						pushingLeftStones.add(patch[x - 1][y]);
 						aThereWasAChange.setTrue();
 					}
-					if ((x != width - 1) && (patch[x + 1][y] != null) && (patch[x][y].getType() == patch[x + 1][y].getType()) && !patch[x + 1][y].isPushingLeft()) {
+					if ((x != nrOfColumns - 1) && (patch[x + 1][y] != null) && (patch[x][y].getType() == patch[x + 1][y].getType()) && !patch[x + 1][y].isPushingLeft()) {
 						patch[x + 1][y].setPushingLeft(true);
 						pushingLeftStones.add(patch[x + 1][y]);
 						aThereWasAChange.setTrue();
@@ -387,7 +386,7 @@ public abstract class Level {
 		else if (patch[x][y].isCanDrop())
 			notFree = true;
 		// ---CHECK IF WE CANNOT MOVE RIGHT
-		else if ((x == width - 1) || ((patch[x + 1][y] != null) && patch[x + 1][y].isCannotMoveRight()))
+		else if ((x == nrOfColumns - 1) || ((patch[x + 1][y] != null) && patch[x + 1][y].isCannotMoveRight()))
 			notFree = true;
 		if (notFree && !patch[x][y].isCannotMoveRight()) {
 			patch[x][y].setCannotMoveRight(true);
@@ -404,7 +403,7 @@ public abstract class Level {
 			// ---CHECK IF WE CAN MOVE RIGHT
 			{
 				if (!notFree)
-					if ((x != width - 1) && ((patch[x + 1][y] == null) || patch[x + 1][y].isCanMoveRight()))
+					if ((x != nrOfColumns - 1) && ((patch[x + 1][y] == null) || patch[x + 1][y].isCanMoveRight()))
 						isfree = true;
 				if (isfree && !patch[x][y].isCanMoveRight()) {
 					patch[x][y].setCanMoveRight(true);
@@ -420,7 +419,7 @@ public abstract class Level {
 			if (isfree) {
 				if (patch[x][y].isPushingRight()) {
 					pushingRightStones.add(patch[x][y]);
-					if ((x != width - 1) && (patch[x + 1][y] != null) && !patch[x + 1][y].isPushingRight()) {
+					if ((x != nrOfColumns - 1) && (patch[x + 1][y] != null) && !patch[x + 1][y].isPushingRight()) {
 						patch[x + 1][y].setPushingRight(true);
 						pushingRightStones.add(patch[x + 1][y]);
 						aThereWasAChange.setTrue();
@@ -441,7 +440,7 @@ public abstract class Level {
 	protected boolean markVanishingOption(RcBoolean aThereWasAChange, int x, int y) {
 		boolean vanish = false;
 		// ---The patch below us might be the same
-		if ((y != height - 1) && (patch[x][y + 1] != null))
+		if ((y != nrOfRows - 1) && (patch[x][y + 1] != null))
 			if (patch[x][y].getType() == patch[x][y + 1].getType())
 				vanish = true;
 		// ---The patch above us might be the same
@@ -463,8 +462,8 @@ public abstract class Level {
 		markMoveLeftOption();
 		// setStoneOptions();
 		boolean ChangedOnce = false;
-		for (int y = height - 1; y >= preview; y--) {
-			for (int x = 0; x < width; x++) {
+		for (int y = nrOfRows - 1; y >= preview; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				if ((patch[x][y] != null) && patch[x][y].isCanMoveLeft() && patch[x][y].isPushingLeft()) {
 					patch[x - 1][y] = patch[x][y];
 					patch[x][y].x--;
@@ -481,8 +480,8 @@ public abstract class Level {
 		markMoveRightOption();
 		// setStoneOptions();
 		boolean ChangedOnce = false;
-		for (int y = height - 1; y >= preview; y--) {
-			for (int x = width - 1; x >= 0; x--) {
+		for (int y = nrOfRows - 1; y >= preview; y--) {
+			for (int x = nrOfColumns - 1; x >= 0; x--) {
 				if ((patch[x][y] != null) && (patch[x][y].isCanMoveRight()) && (patch[x][y].isPushingRight())) {
 					patch[x + 1][y] = patch[x][y];
 					patch[x][y].x++;
@@ -502,10 +501,10 @@ public abstract class Level {
 	}
 
 	protected int queryHeapHeight() {
-		for (int y = preview; y < height; y++)
-			for (int x = 0; x < width; x++)
+		for (int y = preview; y < nrOfRows; y++)
+			for (int x = 0; x < nrOfColumns; x++)
 				if (patch[x][y] != null)
-					return height - y;
+					return nrOfRows - y;
 		return 0;
 	}
 
@@ -516,33 +515,6 @@ public abstract class Level {
 	protected boolean queryWin() {
 		return game.queryWin(patch);
 	}
-
-//	protected void readFromDisk() {
-//		try {
-//			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(getLastGameName())));
-//			readFromDisk(decoder);
-//			NrOfTotalStones = ((Integer) decoder.readObject()).intValue();
-//			game.score = ((Integer) decoder.readObject()).intValue();
-//			game.relativeTime = ((Long) decoder.readObject()).longValue();
-//			decoder.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	protected void readFromDisk(XMLDecoder aDecoder) {
-//		for (int y = height - 1; y >= 0; y--) {
-//			for (int x = 0; x < width; x++) {
-//				boolean exits = ((Boolean) aDecoder.readObject()).booleanValue();
-//				if (exits) {
-//					int type = ((Integer) aDecoder.readObject()).intValue();
-//					patch[x][y] = createStone(x, y, type);
-//					patch[x][y].readFromDisk(aDecoder);
-//				} else {
-//				}
-//			}
-//		}
-//	}
 
 	public void reactLeft(Object selected) {
 		if (selected != null && userCanReact()) {
@@ -580,35 +552,34 @@ public abstract class Level {
 		}
 	}
 
-	private void read(XMLDecoder decoder) {
+	public boolean readFromDisk() {
 		// only if this is a real game type and not the UI type
 		if (!game.name.equals(GameName.UI.name())) {
-			game.score = (int) decoder.readObject();
-			game.steps = (int) decoder.readObject();
-			game.relativeTime = (long) decoder.readObject();
-			for (int y = height - 1; y >= 0; y--) {
-				for (int x = 0; x < width; x++) {
-					boolean exists = (boolean) decoder.readObject();
-					if (exists) {
-						int type = (int) decoder.readObject();
-						patch[x][y] = createStoneAndUpdateScore(x, y, type);
-						patch[x][y].read(decoder);
-					}
-				}
+			ObjectMapper	mapper	= new ObjectMapper(new YAMLFactory());
+			GameDataObject	gdo;
+			try {
+				gdo = mapper.readValue(new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)), GameDataObject.class);
+				update(gdo);
+				return true;
+			} catch (IOException e) {
+				logger.info(e.getMessage(), e);
 			}
 		}
+		return false;
 	}
 
-	public void readFromDisk() {
-		// only if this is a real game type and not the UI type
-		if (!game.name.equals(GameName.UI.name())) {
-			try {
-				XMLDecoder encoder;
-				encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
-				read(encoder);
-				encoder.close();
-			} catch (FileNotFoundException e) {
-				logger.info(e.getMessage(), e);
+	private void update(GameDataObject gdo) {
+		this.game.score = gdo.getScore();
+		this.game.steps = gdo.getSteps();
+		rand.set(gdo.getSeed(), gdo.getRandCalls());
+		this.game.relativeTime = gdo.getRelativeTime();
+
+		for (int y = nrOfRows - 1; y >= 0; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
+				if (gdo.getPatch()[x][y] != null) {
+					patch[x][y] = createStoneAndUpdateScore(x, y, gdo.getPatch()[x][y].getType());
+					patch[x][y].score = gdo.getPatch()[x][y].getScore();
+				}
 			}
 		}
 	}
@@ -620,8 +591,8 @@ public abstract class Level {
 		do {
 			Changed = false;
 			{
-				for (int y = preview; y < height; y++) {
-					for (int x = 0; x < width; x++) {
+				for (int y = preview; y < nrOfRows; y++) {
+					for (int x = 0; x < nrOfColumns; x++) {
 						if (patch[x][y] != null && patch[x][y].isVanishing()) {
 							removeStone(patch[x][y]);
 							patch[x][y] = null;
@@ -643,8 +614,8 @@ public abstract class Level {
 		boolean		canVanish	= false;
 		do {
 			changedOnce.setFalse();
-			for (int y = height - 1; y >= preview; y--) {
-				for (int x = 0; x < width; x++) {
+			for (int y = nrOfRows - 1; y >= preview; y--) {
+				for (int x = 0; x < nrOfColumns; x++) {
 					if (patch[x][y] != null) {
 						if (markVanishingOption(changedOnce, x, y))
 							canVanish = true;
@@ -657,8 +628,8 @@ public abstract class Level {
 		droppingStones.clear();
 		do {
 			changedOnce.setFalse();
-			for (int y = height - 1; y >= preview; y--) {
-				for (int x = 0; x < width; x++) {
+			for (int y = nrOfRows - 1; y >= preview; y--) {
+				for (int x = 0; x < nrOfColumns; x++) {
 					if (patch[x][y] != null) {
 						markStoneDroppingOption(changedOnce, x, y);
 						markStoneMoveLeftOption(changedOnce, x, y);
@@ -695,8 +666,8 @@ public abstract class Level {
 	}
 
 	private void testIntegrity() {
-		for (int y = height - 1; y >= preview; y--) {
-			for (int x = 0; x < width; x++) {
+		for (int y = nrOfRows - 1; y >= preview; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
 				Stone stone = patch[x][y];
 				if (stone != null) {
 					if (stone.isPushingLeft() && stone.isCanMoveLeft() && pushingLeftStones.isEmpty()) {
@@ -768,34 +739,23 @@ public abstract class Level {
 		return gamePhase.equals(GamePhase.waiting) && animationPhase == 0;
 	}
 
-	protected void write(XMLEncoder encoder) {
-//		encoder.writeObject(game.Name);
-//		encoder.writeObject(game.nrOfRows);
-//		encoder.writeObject(game.nrOfFallingStones);
-//		encoder.writeObject(game.nrOfStones);
-		encoder.writeObject(game.score);
-		encoder.writeObject(game.steps);
-		encoder.writeObject(game.relativeTime);
-		for (int y = height - 1; y >= 0; y--) {
-			for (int x = 0; x < width; x++) {
-				if (patch[x][y] != null) {
-					encoder.writeObject(true);
-					patch[x][y].write(encoder);
-				} else {
-					encoder.writeObject(false);
-				}
-			}
+	public void writeToDisk() {
+		GameDataObject gdo = new GameDataObject(this);
+		try {
+			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+			mapper.writeValue(new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)), gdo);
+		} catch (StreamWriteException e) {
+			logger.warn(e.getMessage(), e);
+		} catch (DatabindException e) {
+			logger.warn(e.getMessage(), e);
+		} catch (IOException e) {
+			logger.warn(e.getMessage(), e);
 		}
 	}
 
-	public void writeToDisk() {
-		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(String.format(Context.getConfigFolderName() + "/%s.xml", game.name))));
-			write(encoder);
-			encoder.close();
-		} catch (FileNotFoundException e) {
-			logger.warn(e.getMessage(), e);
-		}
+	public int getSeed() {
+		return rand.getSeed();
 	}
 
 }

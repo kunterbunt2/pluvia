@@ -3,9 +3,6 @@
  */
 package com.abdalla.bushnaq.pluvia.game.model.stone;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.engine.Renderable;
 import com.abdalla.bushnaq.pluvia.util.RcBoolean;
@@ -243,10 +240,6 @@ public class Stone extends Renderable implements Comparable<Stone> {
 		return vanishing.getBooleanValue();
 	}
 
-	public void read(XMLDecoder aDecoder) {
-		score = ((Integer) aDecoder.readObject()).intValue();
-	}
-
 	public void setCanDrop(boolean aCanDrop) {
 		canDrop.setBooleanValue(aCanDrop);
 	}
@@ -309,11 +302,6 @@ public class Stone extends Renderable implements Comparable<Stone> {
 
 	public void setTy(float ty) {
 		this.ty = ty;
-	}
-
-	public void write(XMLEncoder encoder) {
-		encoder.writeObject(type);
-		encoder.writeObject(score);
 	}
 
 }

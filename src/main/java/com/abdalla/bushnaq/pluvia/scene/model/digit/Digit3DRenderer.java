@@ -67,6 +67,14 @@ public class Digit3DRenderer extends ObjectRenderer {
 		case name: {
 			if (stone.getDigitPosition() == 0) {
 				renderTextOnFrontSide(sceneManager, -TRADER_SIZE_X / 2 + (4f * TRADER_SIZE_X) / 2.0f, 0, stone.getText(), TRADER_SIZE_Y, color);
+				renderTextOnTopSide(sceneManager, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Game", TRADER_SIZE_Y, color);
+			}
+		}
+			break;
+		case seed: {
+			renderTextOnFrontSide(sceneManager, 0, 0, "" + stone.getDigit(), TRADER_SIZE_Y, color);
+			if (stone.getDigitPosition() == 0) {
+				renderTextOnTopSide(sceneManager, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Level", TRADER_SIZE_Y, color);
 			}
 		}
 			break;

@@ -1,7 +1,6 @@
 package com.abdalla.bushnaq.pluvia.scene;
 
 import java.util.List;
-import java.util.Random;
 
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.engine.GameObject;
@@ -13,8 +12,8 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 
 public class BubblesScene extends AbstractScene {
 
-	public BubblesScene(GameEngine gameEngine, Random rand, List<GameObject> renderModelInstances) {
-		super(gameEngine, rand, renderModelInstances);
+	public BubblesScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {
+		super(gameEngine, renderModelInstances);
 	}
 
 	@Override

@@ -38,10 +38,10 @@ public abstract class AbstractScene {
 	protected List<GameObject>		renderModelInstances;
 	protected Text2D				version;
 
-	public AbstractScene(GameEngine gameEngine, Random rand, List<GameObject> renderModelInstances) {
+	public AbstractScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {
 		this.gameEngine = gameEngine;
 		this.renderModelInstances = renderModelInstances;
-		this.rand = rand;
+		this.rand = new Random(System.currentTimeMillis());
 	}
 
 	public void create() {
