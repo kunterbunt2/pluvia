@@ -4,17 +4,30 @@ import java.util.Random;
 
 /**
  * A random generator that can be resumed later
- * 
+ *
  * @author abdal
  *
  */
 public class PersistentRandomGenerator {
-	protected Random	rand	= null;
 	protected int		calls	= 0;
+	protected Random	rand	= null;
 	protected int		seed	= 0;
 
 	public PersistentRandomGenerator() {
 		rand = new Random(seed);
+	}
+
+	public int getCalls() {
+		return calls;
+	}
+
+	public int getSeed() {
+		return seed;
+	}
+
+	public int nextInt(int bound) {
+		calls++;
+		return rand.nextInt(bound);
 	}
 
 	public void set(int randomSeed, int randCalls) {
@@ -25,19 +38,6 @@ public class PersistentRandomGenerator {
 			this.calls++;
 			rand.nextInt(1);
 		}
-	}
-
-	public int nextInt(int bound) {
-		calls++;
-		return rand.nextInt(bound);
-	}
-
-	public int getCalls() {
-		return calls;
-	}
-
-	public int getSeed() {
-		return seed;
 	}
 
 	public void setSeed(int seed) {

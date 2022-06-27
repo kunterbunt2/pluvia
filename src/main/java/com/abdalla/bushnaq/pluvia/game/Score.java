@@ -12,34 +12,6 @@ public class Score implements Comparable<Score> {
 	private long	time;
 	private String	userName;
 
-	public void setGame(String game) {
-		this.game = game;
-	}
-
-	public void setSeed(int seed) {
-		this.seed = seed;
-	}
-
-	public void setTime(long time) {
-		this.time = time;
-	}
-
-	public void setRelativeTime(long relativeTime) {
-		this.relativeTime = relativeTime;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public void setSteps(int steps) {
-		this.steps = steps;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
 	public Score() {
 	}
 
@@ -69,10 +41,6 @@ public class Score implements Comparable<Score> {
 		}
 	}
 
-	public long getTime() {
-		return time;
-	}
-
 	public String getGame() {
 		return game;
 	}
@@ -93,8 +61,44 @@ public class Score implements Comparable<Score> {
 		return steps;
 	}
 
+	public long getTime() {
+		return time;
+	}
+
 	public String getUserName() {
 		return userName;
+	}
+
+	public void set(Score score) {
+		this.userName = score.userName;
+		this.score = score.score;
+		this.steps = score.steps;
+		this.relativeTime = score.relativeTime;
+		this.time = score.time;
+	}
+
+	public void setGame(String game) {
+		this.game = game;
+	}
+
+	public void setRelativeTime(long relativeTime) {
+		this.relativeTime = relativeTime;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setSeed(int seed) {
+		this.seed = seed;
+	}
+
+	public void setSteps(int steps) {
+		this.steps = steps;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
 	}
 
 //	public void read(XMLDecoder e) {
@@ -117,11 +121,7 @@ public class Score implements Comparable<Score> {
 //		encoder.writeObject(userName);
 //	}
 
-	public void set(Score score) {
-		this.userName = score.userName;
-		this.score = score.score;
-		this.steps = score.steps;
-		this.relativeTime = score.relativeTime;
-		this.time = score.time;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

@@ -41,7 +41,7 @@ public class DesktopLauncher {
 		config.setResizable(true);
 //		config.useOpenGL3(true, 3, 2);
 		config.setOpenGLEmulation(GLEmulation.GL30, 3, 2);
-//		if (Context.getOeratingSystemType() == OperatingSystem.osx) 
+//		if (Context.getOeratingSystemType() == OperatingSystem.osx)
 		{
 			ShaderProgram.prependVertexCode = "#version 150\n"//
 					+ "#define GLSL3\n"//
@@ -83,7 +83,7 @@ public class DesktopLauncher {
 		do {
 			if (restart)
 				logger.info(String.format("Restarting pluvia v%s.", MavenPropertiesProvider.getProperty("module.version")));
-			final Context context = new Context();
+			final Context							context		= new Context();
 //			context.create(UNIVERSE_GENERATION_RANDOM_SEED, 10L * TimeUnit.TICKS_PER_DAY);
 			final GameEngine						gameEngine	= new GameEngine(context);
 			final Lwjgl3ApplicationConfiguration	config		= createConfig(context);

@@ -457,7 +457,7 @@ public class RenderEngine {
 		atlasManager.init();
 		renderableSorter = new SceneRenderableSorter();
 		if (isPbr()) {
-			depthBatch = new ModelBatch(GamePbrShaderProvider.createDefaultDepth(0));
+			depthBatch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
 		} else {
 			depthBatch = new ModelBatch(new DepthShaderProvider());
 		}
@@ -805,6 +805,10 @@ public class RenderEngine {
 		return true;
 	}
 
+	public void removeAllEffects() {
+//		vfxManager.removeAllEffects();
+	}
+
 	public boolean removeAllStatic() {
 		staticCacheDirty = true;
 		staticCacheDirtyCount = 0;
@@ -823,10 +827,6 @@ public class RenderEngine {
 
 	public void removeBlurEffect() {
 		vfxManager.removeEffect(effect1);
-	}
-
-	public void removeAllEffects() {
-//		vfxManager.removeAllEffects();
 	}
 
 	public boolean removeDynamic(final GameObject instance) {

@@ -177,28 +177,6 @@ public class Context extends ApplicationProperties {
 		readScoreFromDisk();
 	}
 
-	protected void readScoreFromDisk() {
-		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-		try {
-			scoreList = mapper.readValue(new File(Context.getConfigFolderName() + "/score.yaml"), ScoreList.class);
-		} catch (StreamReadException e) {
-			logger.warn(e.getMessage(), e);
-			logger.warn("score file corrupt, cleared score!");
-			scoreList.clear();
-		} catch (DatabindException e) {
-			logger.warn(e.getMessage(), e);
-			logger.warn("score file corrupt, cleared score!");
-			scoreList.clear();
-		} catch (IOException e) {
-			logger.warn(e.getMessage(), e);
-			logger.warn("score file corrupt, cleared score!");
-			scoreList.clear();
-		}
-//		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.getConfigFolderName() + "/score.xml")));
-//		read(encoder);
-//		encoder.close();
-	}
-
 	public void advanceInTime() throws Exception {
 		advanceInTime(enableTime);
 	}
@@ -258,8 +236,59 @@ public class Context extends ApplicationProperties {
 		levelManager = null;
 	}
 
+	public int getGameIndex() {
+		int index = 0;
+		for (Game g : gameList) {
+			if (g.getName().equals(game.getName()))
+				return index;
+			index++;
+		}
+		return -1;
+	}
+
+	public int getGameIndex(String name) {
+		int index = 0;
+		for (Game g : gameList) {
+			if (g.getName().equals(name))
+				return index;
+			index++;
+		}
+		return -1;
+	}
+
+	public int getLastGameSeed() {
+		int lastGameSeed = -1;
+		for (Score s : scoreList) {
+			if (game.getName().equals(s.getGame()))
+				lastGameSeed = Math.max(lastGameSeed, s.getSeed());
+		}
+		return lastGameSeed;
+	}
+
 	public ScoreList getScoreList() {
 		return scoreList;
+	}
+
+	protected void readScoreFromDisk() {
+		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+		try {
+			scoreList = mapper.readValue(new File(Context.getConfigFolderName() + "/score.yaml"), ScoreList.class);
+		} catch (StreamReadException e) {
+			logger.warn(e.getMessage(), e);
+			logger.warn("score file corrupt, cleared score!");
+			scoreList.clear();
+		} catch (DatabindException e) {
+			logger.warn(e.getMessage(), e);
+			logger.warn("score file corrupt, cleared score!");
+			scoreList.clear();
+		} catch (IOException e) {
+			logger.warn(e.getMessage(), e);
+			logger.warn("score file corrupt, cleared score!");
+			scoreList.clear();
+		}
+//		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.getConfigFolderName() + "/score.xml")));
+//		read(encoder);
+//		encoder.close();
 	}
 
 	public void selectGame(int gameIndex) {
@@ -279,35 +308,6 @@ public class Context extends ApplicationProperties {
 
 	public void setSelected(final Object selected, final boolean setDirty) throws Exception {
 		this.selected = selected;
-	}
-
-	public int getGameIndex(String name) {
-		int index = 0;
-		for (Game g : gameList) {
-			if (g.getName().equals(name))
-				return index;
-			index++;
-		}
-		return -1;
-	}
-
-	public int getGameIndex() {
-		int index = 0;
-		for (Game g : gameList) {
-			if (g.getName().equals(game.getName()))
-				return index;
-			index++;
-		}
-		return -1;
-	}
-
-	public int getLastGameSeed() {
-		int lastGameSeed = -1;
-		for (Score s : scoreList) {
-			if (game.getName().equals(s.getGame()))
-				lastGameSeed = Math.max(lastGameSeed, s.getSeed());
-		}
-		return lastGameSeed;
 	}
 
 }

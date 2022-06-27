@@ -22,18 +22,18 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 
 public class ScoreDialog extends AbstractDialog {
-	private long		changed;
-	final String		pattern	= "yyyy-MMM-dd HH:mm";
-	SimpleDateFormat	simpleDateFormat;
-	Sizes				sizes	= VisUI.getSizes();
+	Map<VisTextButton, Score>	buttonToScoreMap	= new HashMap<>();
+	private long				changed;
+	final String				pattern				= "yyyy-MMM-dd HH:mm";
+	SimpleDateFormat			simpleDateFormat;
+
+	Sizes						sizes				= VisUI.getSizes();
 
 	public ScoreDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {
 		super(gameEngine, batch, inputMultiplexer);
 		simpleDateFormat = new SimpleDateFormat(pattern);
 		createStage("", true);
 	}
-
-	Map<VisTextButton, Score> buttonToScoreMap = new HashMap<>();
 
 	private void addRow(Score s) {
 
@@ -91,7 +91,7 @@ public class ScoreDialog extends AbstractDialog {
 					logger.info("replay");
 					Score buttonScore = buttonToScoreMap.get(button);
 					setVisible(false);
-					createGame(getGameEngine().context.getGameIndex(buttonScore.getGame()), false,buttonScore.getSeed());
+					createGame(getGameEngine().context.getGameIndex(buttonScore.getGame()), false, buttonScore.getSeed());
 				}
 			});
 			getTable().add(button).width(BUTTON_WIDTH * sizes.scaleFactor);

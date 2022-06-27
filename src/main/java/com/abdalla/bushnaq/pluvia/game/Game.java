@@ -20,17 +20,8 @@ public class Game {
 	protected boolean	reset				= false;
 	protected int		score				= 0;
 	protected int		steps				= 0;
-	protected String	userName			= "Test User";
 	private long		timer;
-
-	public void startTimer() {
-		timer = System.currentTimeMillis();
-	}
-
-	public void updateTimer() {
-		relativeTime += System.currentTimeMillis() - timer;
-		timer = 0;
-	}
+	protected String	userName			= "Test User";
 
 	public Game(String aName, int aNrOfColumns, int aNrOfRows, int aNrOfFallingStones, int aNrOfStones, int aPreview, int aNrOfFallenRows, float cameraZPosition, boolean aReset) {
 		name = aName;
@@ -171,6 +162,15 @@ public class Game {
 
 	public void setUserName(String aUserName) {
 		userName = aUserName;
+	}
+
+	public void startTimer() {
+		timer = System.currentTimeMillis();
+	}
+
+	public void updateTimer() {
+		relativeTime += System.currentTimeMillis() - timer;
+		timer = 0;
 	}
 
 }

@@ -44,7 +44,7 @@ public class FireflyScene extends AbstractScene {
 		gameEngine.renderEngine.getMirror().setPresent(false);
 		gameEngine.renderEngine.getMirror().setReflectivity(0.9f);
 		createMirror(Color.BLACK);
-		//effect
+		// effect
 //		gameEngine.renderEngine.addBloomEffect();
 
 		createPlane(Color.BLACK);

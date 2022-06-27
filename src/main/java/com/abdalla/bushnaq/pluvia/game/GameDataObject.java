@@ -1,61 +1,17 @@
 package com.abdalla.bushnaq.pluvia.game;
 
 public class GameDataObject {
-	private int score = 0;
+	private StoneDataObject[][]	patch			= null;
 
-	public int getScore() {
-		return score;
-	}
+	private int					randCalls		= 0;
 
-	public void setScore(int score) {
-		this.score = score;
-	}
+	private long				relativeTime	= 0;
 
-	public int getSteps() {
-		return steps;
-	}
+	private int					score			= 0;
 
-	public void setSteps(int steps) {
-		this.steps = steps;
-	}
-
-	public int getSeed() {
-		return seed;
-	}
-
-	public void setSeed(int seed) {
-		this.seed = seed;
-	}
-
-	public int getRandCalls() {
-		return randCalls;
-	}
-
-	public void setRandCalls(int randCalls) {
-		this.randCalls = randCalls;
-	}
-
-	public long getRelativeTime() {
-		return relativeTime;
-	}
-
-	public void setRelativeTime(long relativeTime) {
-		this.relativeTime = relativeTime;
-	}
-
-	public StoneDataObject[][] getPatch() {
-		return patch;
-	}
-
-	public void setPatch(StoneDataObject[][] patch) {
-		this.patch = patch;
-	}
+	private int					seed			= 0;
 
 	private int					steps			= 0;
-	private int					seed			= 0;
-	private int					randCalls		= 0;
-	private long				relativeTime	= 0;
-	private StoneDataObject[][]	patch			= null;
 
 	public GameDataObject() {
 
@@ -78,6 +34,54 @@ public class GameDataObject {
 				}
 			}
 		}
+	}
+
+	public StoneDataObject[][] getPatch() {
+		return patch;
+	}
+
+	public int getRandCalls() {
+		return randCalls;
+	}
+
+	public long getRelativeTime() {
+		return relativeTime;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public int getSeed() {
+		return seed;
+	}
+
+	public int getSteps() {
+		return steps;
+	}
+
+	public void setPatch(StoneDataObject[][] patch) {
+		this.patch = patch;
+	}
+
+	public void setRandCalls(int randCalls) {
+		this.randCalls = randCalls;
+	}
+
+	public void setRelativeTime(long relativeTime) {
+		this.relativeTime = relativeTime;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setSeed(int seed) {
+		this.seed = seed;
+	}
+
+	public void setSteps(int steps) {
+		this.steps = steps;
 	}
 
 }

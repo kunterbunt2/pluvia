@@ -83,6 +83,45 @@ public abstract class AbstractDialog {
 
 	protected abstract void create();
 
+	protected void createGame(int gameIndex, boolean resume, int seed) {
+		if (getGameEngine().context.levelManager != null)
+			getGameEngine().context.levelManager.disposeLevel();
+		getGameEngine().context.selectGame(gameIndex);
+		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
+//		universe.GameThread.clearLevel();
+		if (resume) {
+			if (!getGameEngine().context.levelManager.readFromDisk()) {
+				// What is the next seed?
+				int lastGameSeed = getGameEngine().context.getLastGameSeed();
+				getGameEngine().context.levelManager.setGaneSeed(lastGameSeed + 1);
+			}
+		} else {
+			if (seed == -1) {
+				// next seed
+				int lastGameSeed = getGameEngine().context.getLastGameSeed();
+				getGameEngine().context.levelManager.setGaneSeed(lastGameSeed + 1);
+			} else {
+				// seed is defined by user choice (high score)
+				getGameEngine().context.levelManager.setGaneSeed(seed);
+			}
+		}
+		getGameEngine().context.levelManager.createLevel();
+		getGameEngine().context.game.startTimer();
+		{
+			float	z			= getGameEngine().context.game.cameraZPosition;
+			Vector3	position	= getGameEngine().renderEngine.getCamera().position;
+			position.z = z;
+			if (getGameEngine().context.game.getNrOfRows() == 0) {
+				position.y = 4;
+				getGameEngine().renderEngine.getCamera().lookat.y = 4.5f;
+			} else {
+				position.y = getGameEngine().context.game.getNrOfRows() / 2;
+				getGameEngine().renderEngine.getCamera().lookat.y = getGameEngine().context.game.getNrOfRows() / 2 + 0.5f;
+			}
+			getGameEngine().renderEngine.getCamera().update();
+		}
+	}
+
 	public void createStage(String title, boolean closeOnEscape) {
 		if (stage == null) {
 			stage = new Stage(new ScreenViewport(), batch);
@@ -130,14 +169,14 @@ public abstract class AbstractDialog {
 		return dialog;
 	}
 
+//	public void disposeWindow() {
+//		stage.clear();
+//	}
+
 	public void dispose() {
 		inputMultiplexer.removeProcessor(stage);
 		stage.dispose();
 	}
-
-//	public void disposeWindow() {
-//		stage.clear();
-//	}
 
 	public void draw() {
 //		switch (blurMode) {
@@ -246,45 +285,6 @@ public abstract class AbstractDialog {
 	}
 
 	public void update(final Context universe) {
-	}
-
-	protected void createGame(int gameIndex, boolean resume, int seed) {
-		if (getGameEngine().context.levelManager != null)
-			getGameEngine().context.levelManager.disposeLevel();
-		getGameEngine().context.selectGame(gameIndex);
-		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
-//		universe.GameThread.clearLevel();
-		if (resume) {
-			if (!getGameEngine().context.levelManager.readFromDisk()) {
-				// What is the next seed?
-				int lastGameSeed = getGameEngine().context.getLastGameSeed();
-				getGameEngine().context.levelManager.setGaneSeed(lastGameSeed + 1);
-			}
-		} else {
-			if (seed == -1) {
-				// next seed
-				int lastGameSeed = getGameEngine().context.getLastGameSeed();
-				getGameEngine().context.levelManager.setGaneSeed(lastGameSeed + 1);
-			} else {
-				// seed is defined by user choice (high score)
-				getGameEngine().context.levelManager.setGaneSeed(seed);
-			}
-		}
-		getGameEngine().context.levelManager.createLevel();
-		getGameEngine().context.game.startTimer();
-		{
-			float	z			= getGameEngine().context.game.cameraZPosition;
-			Vector3	position	= getGameEngine().renderEngine.getCamera().position;
-			position.z = z;
-			if (getGameEngine().context.game.getNrOfRows() == 0) {
-				position.y = 4;
-				getGameEngine().renderEngine.getCamera().lookat.y = 4.5f;
-			} else {
-				position.y = getGameEngine().context.game.getNrOfRows() / 2;
-				getGameEngine().renderEngine.getCamera().lookat.y = getGameEngine().context.game.getNrOfRows() / 2 + 0.5f;
-			}
-			getGameEngine().renderEngine.getCamera().update();
-		}
 	}
 
 }

@@ -37,7 +37,7 @@ public class Fish extends Renderable {
 	public Fish(GameEngine gameEngine, int type, float size, BoundingBox cage) {
 		this.gameEngine = gameEngine;
 		set3DRenderer(new Fish3DRenderer(this));
-		type = type;
+		this.type = type;
 		this.size = size;
 		this.cage = cage;
 		position = new Vector3(0, 0, 0);

@@ -33,7 +33,8 @@ public class CustomizedSpriteBatch extends PolygonSpriteBatch {
 	public CustomizedSpriteBatch(final int size) {
 		super(size);
 	}
-	public CustomizedSpriteBatch (int size, ShaderProgram defaultShader) {
+
+	public CustomizedSpriteBatch(int size, ShaderProgram defaultShader) {
 		super(size, size * 2, defaultShader);
 	}
 

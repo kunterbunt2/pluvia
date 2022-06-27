@@ -201,12 +201,12 @@ public class LevelManager extends Level implements Serializable {
 		gameEngine.context.stoneList.remove(stone);
 	}
 
-	public void updateFps() {
-		maxAnimaltionPhase = Gdx.graphics.getFramesPerSecond() / 10;
-	}
-
 	public void setGaneSeed(int seed) {
 		rand.setSeed(seed);
+	}
+
+	public void updateFps() {
+		maxAnimaltionPhase = Gdx.graphics.getFramesPerSecond() / 10;
 	}
 
 }

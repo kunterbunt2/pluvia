@@ -27,6 +27,13 @@ public class ScoreList extends TreeSet<Score> {
 		this.size = size;
 	}
 
+	public boolean add(String game, int seed, int score, int steps, long relativeTime, String userName) {
+		if (score > 0) {
+			return addScore(new Score(game, seed, score, steps, relativeTime, System.currentTimeMillis(), userName));
+		}
+		return false;
+	}
+
 	private boolean addScore(Score score) {
 		boolean	newHeiscore	= false;
 		Score	s			= findScore(score);
@@ -53,13 +60,6 @@ public class ScoreList extends TreeSet<Score> {
 				return s;
 		}
 		return null;
-	}
-
-	public boolean add(String game, int seed, int score, int steps, long relativeTime, String userName) {
-		if (score > 0) {
-			return addScore(new Score(game, seed, score, steps, relativeTime, System.currentTimeMillis(), userName));
-		}
-		return false;
 	}
 
 	public long getChanged() {

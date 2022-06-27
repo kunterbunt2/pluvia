@@ -57,8 +57,7 @@ public class GameShaderProvider extends DefaultShaderProvider implements GameSha
 		String			version			= null;
 		if (isGL3()) {
 			if (Gdx.app.getType() == ApplicationType.Desktop) {
-				if (version == null)
-				{
+				if (version == null) {
 //					version = /* "#version 130\n" + */ "#define GLSL3\n";
 				}
 			} else if (Gdx.app.getType() == ApplicationType.Android) {

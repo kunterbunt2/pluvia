@@ -16,17 +16,13 @@ class RcTimeStruct {
  * @author abdalla Keeps the number accurate to the second decimal
  */
 public class TimeUnit {
-	public static final long	DAYS_PER_YEAR	= 100L;
-	public static final long	TICKS_PER_DAY	= 100L;
-	public static final long	TICKS_PER_YEAR	= DAYS_PER_YEAR * TICKS_PER_DAY;
+	private static final int	DAY_INDEX			= 3;
+	public static final long	DAYS_PER_YEAR		= 100L;
+	private static final int	HOUR_INDEX			= 2;
 
-	public static long days(final long time) {
-		return time / TimeUnit.TICKS_PER_DAY;
-	}
+	private static final int	MINUTE_INDEX		= 1;
 
-	public static boolean isInt(final long currentTime) {
-		return ((currentTime / 100) * 100 - currentTime) == 0L;
-	}
+	private static final int	SECONDS_INDEX		= 0;
 
 //	public static String toString(final long time) {
 //		return toString(time, TimeAccuracy.HOUR_ACCURACY);
@@ -45,19 +41,14 @@ public class TimeUnit {
 //		}
 //	}
 
-	public static long years(final long time) {
-		return time / (TimeUnit.DAYS_PER_YEAR * TimeUnit.TICKS_PER_DAY);
-	}
-
-	private static final int	DAY_INDEX			= 3;
-	private static final int	HOUR_INDEX			= 2;
-	private static final int	MINUTE_INDEX		= 1;
-	private static final int	SECONDS_INDEX		= 0;
 	private static final long	serialVersionUID	= 2573182506689782820L;
+
+	public static final long	TICKS_PER_DAY		= 100L;
+	public static final long	TICKS_PER_YEAR		= DAYS_PER_YEAR * TICKS_PER_DAY;
 
 	/**
 	 * If aUseCharacters is true, seconds will be followed with s, hours with h... Result will be xd xh:xm:xs or x x:x:x
-	 * 
+	 *
 	 * @param aTime
 	 * @param aUseSeconds
 	 * @param aUseCharacters
@@ -120,12 +111,24 @@ public class TimeUnit {
 		return _result;
 	}
 
+	public static long days(final long time) {
+		return time / TimeUnit.TICKS_PER_DAY;
+	}
+
+	public static boolean isInt(final long currentTime) {
+		return ((currentTime / 100) * 100 - currentTime) == 0L;
+	}
+
 	private static String longToString(final long aValue, final boolean aCreateLeadingZero) {
 		if (!aCreateLeadingZero || (aValue > 9)) {
 			return Long.toString(aValue);
 		} else {
 			return "0" + aValue;
 		}
+	}
+
+	public static long years(final long time) {
+		return time / (TimeUnit.DAYS_PER_YEAR * TimeUnit.TICKS_PER_DAY);
 	}
 
 }

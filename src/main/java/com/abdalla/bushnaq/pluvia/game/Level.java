@@ -29,11 +29,12 @@ public abstract class Level {
 	Set<Stone>					droppingStonesBuffer	= new HashSet<>();
 	protected Game				game					= null;
 	public GamePhase			gamePhase				= GamePhase.waiting;
-	public int					nrOfRows				= 0;										// number of rows in the level
 	protected Logger			logger					= LoggerFactory.getLogger(this.getClass());
 	public int					maxAnimaltionPhase		= 12;
+	public int					nrOfColumns				= 0;										// number of columns
 	protected int				nrOfFallenRows			= 0;
 	protected int				nrOfFallingStones		= 0;										// Number of stones that can drop simultanuously from top
+	public int					nrOfRows				= 0;										// number of rows in the level
 	protected int				nrOfStones				= 0;										// Number of different patches (colors) in the game
 	protected int				NrOfTotalStones			= 0;										// The sum of all follen patches within this game
 	protected Stone[][]			patch					= null;
@@ -43,7 +44,6 @@ public abstract class Level {
 	PersistentRandomGenerator	rand;
 	private boolean				tilt					= false;									// mark that game has finished
 	private boolean				userReacted				= false;									// user has either moved a stones left or right and we need to generate new stones.
-	public int					nrOfColumns				= 0;										// number of columns
 
 	public Level(Game game) {
 		this.nrOfColumns = game.nrOfColumns;
@@ -180,6 +180,10 @@ public abstract class Level {
 
 	public int getScore() {
 		return game.getScore(patch);
+	}
+
+	public int getSeed() {
+		return rand.getSeed();
 	}
 
 	public int getSteps() {
@@ -568,22 +572,6 @@ public abstract class Level {
 		return false;
 	}
 
-	private void update(GameDataObject gdo) {
-		this.game.score = gdo.getScore();
-		this.game.steps = gdo.getSteps();
-		rand.set(gdo.getSeed(), gdo.getRandCalls());
-		this.game.relativeTime = gdo.getRelativeTime();
-
-		for (int y = nrOfRows - 1; y >= 0; y--) {
-			for (int x = 0; x < nrOfColumns; x++) {
-				if (gdo.getPatch()[x][y] != null) {
-					patch[x][y] = createStoneAndUpdateScore(x, y, gdo.getPatch()[x][y].getType());
-					patch[x][y].score = gdo.getPatch()[x][y].getScore();
-				}
-			}
-		}
-	}
-
 	protected abstract void removeStone(Stone stone);
 
 	private void removeValishedStones() {
@@ -735,6 +723,22 @@ public abstract class Level {
 		return tilt;
 	}
 
+	private void update(GameDataObject gdo) {
+		this.game.score = gdo.getScore();
+		this.game.steps = gdo.getSteps();
+		rand.set(gdo.getSeed(), gdo.getRandCalls());
+		this.game.relativeTime = gdo.getRelativeTime();
+
+		for (int y = nrOfRows - 1; y >= 0; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
+				if (gdo.getPatch()[x][y] != null) {
+					patch[x][y] = createStoneAndUpdateScore(x, y, gdo.getPatch()[x][y].getType());
+					patch[x][y].score = gdo.getPatch()[x][y].getScore();
+				}
+			}
+		}
+	}
+
 	protected boolean userCanReact() {
 		return gamePhase.equals(GamePhase.waiting) && animationPhase == 0;
 	}
@@ -752,10 +756,6 @@ public abstract class Level {
 		} catch (IOException e) {
 			logger.warn(e.getMessage(), e);
 		}
-	}
-
-	public int getSeed() {
-		return rand.getSeed();
 	}
 
 }
