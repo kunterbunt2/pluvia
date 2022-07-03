@@ -2,15 +2,10 @@ package com.abdalla.bushnaq.pluvia.game;
 
 public class GameDataObject {
 	private StoneDataObject[][]	patch			= null;
-
 	private int					randCalls		= 0;
-
 	private long				relativeTime	= 0;
-
 	private int					score			= 0;
-
 	private int					seed			= 0;
-
 	private int					steps			= 0;
 
 	public GameDataObject() {

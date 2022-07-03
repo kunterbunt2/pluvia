@@ -5,7 +5,7 @@ package com.abdalla.bushnaq.pluvia.game;
 
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 
-public class Game {
+public class Game implements Cloneable {
 	public float		cameraZPosition;
 	protected String	description;
 	// protected String helpPath = null;
@@ -37,6 +37,15 @@ public class Game {
 
 	public void addStoneScore() {
 		score += getStoneScore();
+	}
+
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 
 	public String getName() {

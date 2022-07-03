@@ -42,7 +42,7 @@ public class Stone3DRenderer extends ObjectRenderer {
 
 	@Override
 	public void create(final GameEngine gameEngine) {
-		if (instance == null) {
+		if (instance == null && gameEngine != null) {
 			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.stone[stone.getType()].scene.model), stone);
 			gameEngine.renderEngine.addDynamic(instance);
 			instance.update();
@@ -51,9 +51,11 @@ public class Stone3DRenderer extends ObjectRenderer {
 
 	@Override
 	public void destroy(final GameEngine gameEngine) {
-		gameEngine.renderEngine.removeDynamic(instance);
-		for (PointLight pl : pointLight) {
-			gameEngine.renderEngine.remove(pl, true);
+		if (gameEngine != null) {
+			gameEngine.renderEngine.removeDynamic(instance);
+			for (PointLight pl : pointLight) {
+				gameEngine.renderEngine.remove(pl, true);
+			}
 		}
 	}
 

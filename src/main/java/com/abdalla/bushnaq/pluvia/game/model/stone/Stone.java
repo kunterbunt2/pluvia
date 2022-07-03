@@ -18,11 +18,9 @@ public class Stone extends Renderable implements Comparable<Stone> {
 	private RcBoolean	cannotMoveLeft	= new RcBoolean(false);
 	private RcBoolean	cannotMoveRight	= new RcBoolean(false);
 	private RcBoolean	dropping		= new RcBoolean(false);
-//	int					height;									// level height
 	private RcBoolean	leftAttached	= new RcBoolean(false);
 	private RcBoolean	movingLeft		= new RcBoolean(false);
 	private RcBoolean	movingRight		= new RcBoolean(false);
-	// private Image patchBuffer = null;
 	private RcBoolean	pushingLeft		= new RcBoolean(false);
 	private RcBoolean	pushingRight	= new RcBoolean(false);
 	private RcBoolean	rightAttached	= new RcBoolean(false);
@@ -31,15 +29,12 @@ public class Stone extends Renderable implements Comparable<Stone> {
 	public float		ty				= 0;
 	public int			type			= 0;
 	private RcBoolean	vanishing		= new RcBoolean(false);
-//	int					width;									// level width
 	public int			x				= 0;
 	public int			y				= 0;
 	public int			z				= 0;
 
-	public Stone(GameEngine gameEngine, /* int width, int height, */ int x, int y, int aType) {
+	public Stone(GameEngine gameEngine, int x, int y, int aType) {
 		set3DRenderer(new Stone3DRenderer(this));
-//		this.width = width;
-//		this.height = height;
 		type = aType;
 		this.x = x;
 		this.y = y;

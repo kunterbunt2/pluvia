@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.game.Game;
-import com.abdalla.bushnaq.pluvia.game.LevelManager;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.scene.model.bubble.Bubble;
 import com.abdalla.bushnaq.pluvia.scene.model.digit.Digit;
@@ -415,18 +414,23 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 				Game game = context.game;
 				game.updateTimer();
 				if (context.getScoreList().add(game.getName(), context.levelManager.getSeed(), context.levelManager.getScore(), game.getSteps(), game.getRelativeTime(), System.getProperty("user.name"))) {
-					// new highscore
-					Tools.play(AtlasManager.getAssetsFolderName() + "/sound/score.wav");
+					{
+						// new highscore
+						Tools.play(AtlasManager.getAssetsFolderName() + "/sound/score.wav");
+						context.levelManager.writeResultToDisk();// save recording of our result
+					}
 				} else {
-					Tools.play(AtlasManager.getAssetsFolderName() + "/sound/tilt.wav");
+					{
+						Tools.play(AtlasManager.getAssetsFolderName() + "/sound/tilt.wav");
+					}
 				}
+				context.levelManager.deleteFile();
 				context.levelManager.tilt();
 				context.levelManager.disposeLevel();
-				context.levelManager = new LevelManager(this, context.game);
+//				context.levelManager = new LevelManager(this, context.game);
 				// What is the next seed?
-				int lastGameSeed = context.getLastGameSeed();
-				context.levelManager.setGaneSeed(lastGameSeed + 1);
-				context.levelManager.writeToDisk();
+//				int lastGameSeed = context.getLastGameSeed();
+//				context.levelManager.setGameSeed(lastGameSeed + 1);
 				if (!mainDialog.isVisible())
 					mainDialog.setVisible(true);
 			}

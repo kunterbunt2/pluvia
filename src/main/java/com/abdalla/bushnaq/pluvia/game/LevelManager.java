@@ -56,107 +56,95 @@ public class LevelManager extends Level implements Serializable {
 		}
 	}
 
-	protected void clear() {
-		for (int y = nrOfRows - 1; y >= 0; y--) {
-			for (int x = 0; x < nrOfColumns; x++) {
-				Stone stone = patch[x][y];
-				if (stone != null) {
-					removeStone(stone);
-					patch[x][y] = null;
-				} else {
-				}
-			}
-		}
-	}
-
 	@Override
 	public void createLevelBackground() {
-		float	cubeSize	= 0.5f;
-		float	dx			= ((float) nrOfColumns) / 2;
-		float	dy			= (nrOfRows);
-
-		Model	model;
-		model = gameEngine.modelManager.levelCube;
-		// level back
-		int count = 0;
-		if (game.nrOfRows != 0) {
-			// back side
-//			{
-//				Model m;
-//				m = gameEngine.modelManager.backPlate;
-//				GameObject cube = new GameObject(new ModelInstanceHack(m), null);
-//				cube.instance.transform.setToTranslationAndScaling(-0.5f, height / 2 + 0.75f, -0.5f, width, height - 0.5f, 1);
-//				cube.instance.transform.rotate(Vector3.X, 90);
-//				renderModelInstances.add(cube);
-//			}
-			// left side
-			for (float y = nrOfRows - 0.75f; y >= preview; y -= 0.5f) {
-				GameObject cube = new GameObject(new ModelInstanceHack(model), null);
-				cube.instance.transform.setToTranslationAndScaling(-0.75f - dx, -(y - dy), -0.25f, cubeSize, cubeSize, cubeSize);
-				renderModelInstances.add(cube);
-				count++;
+		if (gameEngine != null) {
+			float	cubeSize	= 0.5f;
+			float	dx			= ((float) nrOfColumns) / 2;
+			float	dy			= (nrOfRows);
+			Model	model		= gameEngine.modelManager.levelCube;
+			// level back
+			int		count		= 0;
+			if (game.nrOfRows != 0) {
+				// back side
+//		{
+//			Model m;
+//			m = gameEngine.modelManager.backPlate;
+//			GameObject cube = new GameObject(new ModelInstanceHack(m), null);
+//			cube.instance.transform.setToTranslationAndScaling(-0.5f, height / 2 + 0.75f, -0.5f, width, height - 0.5f, 1);
+//			cube.instance.transform.rotate(Vector3.X, 90);
+//			renderModelInstances.add(cube);
+//		}
+				// left side
+				for (float y = nrOfRows - 0.75f; y >= preview; y -= 0.5f) {
+					GameObject cube = new GameObject(new ModelInstanceHack(model), null);
+					cube.instance.transform.setToTranslationAndScaling(-0.75f - dx, -(y - dy), -0.25f, cubeSize, cubeSize, cubeSize);
+					renderModelInstances.add(cube);
+					count++;
+				}
+				// right side
+				for (float y = nrOfRows - 0.75f; y >= preview; y -= 0.5f) {
+					GameObject cube = new GameObject(new ModelInstanceHack(model), null);
+					cube.instance.transform.setToTranslationAndScaling(nrOfColumns - 0.25f - dx, -(y - dy), 0 - 0.25f, cubeSize, cubeSize, cubeSize);
+					renderModelInstances.add(cube);
+					count++;
+				}
+				// left lower side
+				for (float x = -0.75f; x <= nrOfColumns / 2 - 1.5f - 1f; x += 0.5f) {
+					GameObject cube = new GameObject(new ModelInstanceHack(model), null);
+					cube.instance.transform.setToTranslationAndScaling(x - dx, -(nrOfRows - dy) + 0.25f, 0 - 0.25f, cubeSize, cubeSize, cubeSize);
+					renderModelInstances.add(cube);
+					count++;
+				}
+				// game name
+				int position = 0;
+				for (float x = -0.75f + nrOfColumns / 2 - 0.5f - 1f; x <= nrOfColumns / 2 + .75f - 1.5f; x += 0.5f) {
+					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.name));
+					position++;
+					count++;
+				}
+				// game seed
+				position = 0;
+				for (float x = nrOfColumns / 2 + .75f - 1.5f + 0.5f; x <= -0.75f + nrOfColumns / 2 + 1.5f + 1f - 0.5f; x += 0.5f) {
+					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.seed));
+					position++;
+					count++;
+				}
+				// right lower side
+				for (float x = -0.75f + nrOfColumns / 2 + 1.5f + 1f; x <= nrOfColumns; x += 0.5f) {
+					GameObject cube = new GameObject(new ModelInstanceHack(model), null);
+					cube.instance.transform.setToTranslationAndScaling(x - dx, -(nrOfRows - dy) + 0.25f, 0 - 0.25f, cubeSize, cubeSize, cubeSize);
+					renderModelInstances.add(cube);
+					count++;
+				}
+				// score
+				position = 0;
+				for (float x = -0.75f - 2.5f; x <= -1.25; x += 0.5f) {
+					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.score));
+					position++;
+					count++;
+				}
+				// steps
+				position = 0;
+				for (float x = nrOfColumns + 0.25f; x <= nrOfColumns + 0.5 + 2f; x += 0.5f) {
+					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.steps));
+					position++;
+					count++;
+				}
 			}
-			// right side
-			for (float y = nrOfRows - 0.75f; y >= preview; y -= 0.5f) {
-				GameObject cube = new GameObject(new ModelInstanceHack(model), null);
-				cube.instance.transform.setToTranslationAndScaling(nrOfColumns - 0.25f - dx, -(y - dy), 0 - 0.25f, cubeSize, cubeSize, cubeSize);
-				renderModelInstances.add(cube);
-				count++;
-			}
-			// left lower side
-			for (float x = -0.75f; x <= nrOfColumns / 2 - 1.5f - 1f; x += 0.5f) {
-				GameObject cube = new GameObject(new ModelInstanceHack(model), null);
-				cube.instance.transform.setToTranslationAndScaling(x - dx, -(nrOfRows - dy) + 0.25f, 0 - 0.25f, cubeSize, cubeSize, cubeSize);
-				renderModelInstances.add(cube);
-				count++;
-			}
-			// game name
-			int position = 0;
-			for (float x = -0.75f + nrOfColumns / 2 - 0.5f - 1f; x <= nrOfColumns / 2 + .75f - 1.5f; x += 0.5f) {
-				gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.name));
-				position++;
-				count++;
-			}
-			// game seed
-			position = 0;
-			for (float x = nrOfColumns / 2 + .75f - 1.5f + 0.5f; x <= -0.75f + nrOfColumns / 2 + 1.5f + 1f - 0.5f; x += 0.5f) {
-				gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.seed));
-				position++;
-				count++;
-			}
-			// right lower side
-			for (float x = -0.75f + nrOfColumns / 2 + 1.5f + 1f; x <= nrOfColumns; x += 0.5f) {
-				GameObject cube = new GameObject(new ModelInstanceHack(model), null);
-				cube.instance.transform.setToTranslationAndScaling(x - dx, -(nrOfRows - dy) + 0.25f, 0 - 0.25f, cubeSize, cubeSize, cubeSize);
-				renderModelInstances.add(cube);
-				count++;
-			}
-			// score
-			position = 0;
-			for (float x = -0.75f - 2.5f; x <= -1.25; x += 0.5f) {
-				gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.score));
-				position++;
-				count++;
-			}
-			// steps
-			position = 0;
-			for (float x = nrOfColumns + 0.25f; x <= nrOfColumns + 0.5 + 2f; x += 0.5f) {
-				gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.steps));
-				position++;
-				count++;
-			}
+//	logger.info(String.format("count=%d", count));
+			gameEngine.renderEngine.removeAllEffects();
+			sceneList.get(game.name).create();
+			infoColor = sceneList.get(game.name).getInfoColor();
+			addToEngine();
 		}
-//		logger.info(String.format("count=%d", count));
-		gameEngine.renderEngine.removeAllEffects();
-		sceneList.get(game.name).create();
-		infoColor = sceneList.get(game.name).getInfoColor();
-		addToEngine();
 	}
 
 	@Override
 	protected Stone createStone(int x, int y, int type) {
 		Stone stone = new Stone(gameEngine, x, y, type);
-		gameEngine.context.stoneList.add(stone);
+		if (gameEngine != null)
+			gameEngine.context.stoneList.add(stone);
 		return stone;
 	}
 
@@ -165,24 +153,25 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	public void destroyLevelBackground() {
-		gameEngine.renderEngine.removeAllText2D();
-		for (GameObject go : renderModelInstances) {
-			gameEngine.renderEngine.removeStatic(go);
+		if (gameEngine != null) {
+			gameEngine.renderEngine.removeAllText2D();
+			for (GameObject go : renderModelInstances) {
+				gameEngine.renderEngine.removeStatic(go);
+			}
+			gameEngine.context.fishList.destroy(gameEngine);
+			gameEngine.context.fireflyList.destroy(gameEngine);
+			gameEngine.context.flyList.destroy(gameEngine);
+			gameEngine.context.rainList.destroy(gameEngine);
+			gameEngine.context.bubbleList.destroy(gameEngine);
+			gameEngine.context.turtleList.destroy(gameEngine);
+			gameEngine.context.digitList.destroy(gameEngine);
 		}
-		gameEngine.context.fishList.destroy(gameEngine);
-		gameEngine.context.fireflyList.destroy(gameEngine);
-		gameEngine.context.flyList.destroy(gameEngine);
-		gameEngine.context.rainList.destroy(gameEngine);
-		gameEngine.context.bubbleList.destroy(gameEngine);
-		gameEngine.context.turtleList.destroy(gameEngine);
-		gameEngine.context.digitList.destroy(gameEngine);
 	}
 
 	@Override
 	public void disposeLevel() {
 		clear();
 		destroyLevelBackground();
-//		gameEngine.universe.selectRandomGame();
 		game.reset();
 		NrOfTotalStones = 0;
 	}
@@ -191,18 +180,16 @@ public class LevelManager extends Level implements Serializable {
 		return infoColor;
 	}
 
-	public boolean isTilt() {
-		return gamePhase.equals(GamePhase.tilt);
-	}
-
 	@Override
 	protected void removeStone(Stone stone) {
-		stone.get3DRenderer().destroy(gameEngine);
-		gameEngine.context.stoneList.remove(stone);
+		if (gameEngine != null) {
+			stone.get3DRenderer().destroy(gameEngine);
+			gameEngine.context.stoneList.remove(stone);
+		}
 	}
 
-	public void setGaneSeed(int seed) {
-		rand.setSeed(seed);
+	public boolean testValidity() {
+		return recording.testValidity(gameEngine);
 	}
 
 	public void updateFps() {

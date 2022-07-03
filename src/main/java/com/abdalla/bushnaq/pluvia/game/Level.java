@@ -14,13 +14,14 @@ import org.slf4j.LoggerFactory;
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.AtlasManager;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
+import com.abdalla.bushnaq.pluvia.game.recording.Interaction;
+import com.abdalla.bushnaq.pluvia.game.recording.Recording;
 import com.abdalla.bushnaq.pluvia.util.PersistentRandomGenerator;
 import com.abdalla.bushnaq.pluvia.util.RcBoolean;
 import com.abdalla.bushnaq.pluvia.util.sound.Tools;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 public abstract class Level {
@@ -42,6 +43,7 @@ public abstract class Level {
 	Set<Stone>					pushingLeftStones		= new HashSet<>();
 	Set<Stone>					pushingRightStones		= new HashSet<>();
 	PersistentRandomGenerator	rand;
+	Recording					recording;
 	private boolean				tilt					= false;									// mark that game has finished
 	private boolean				userReacted				= false;									// user has either moved a stones left or right and we need to generate new stones.
 
@@ -60,6 +62,20 @@ public abstract class Level {
 		rand = new PersistentRandomGenerator();
 		game.reset();
 		game.setReset(false);
+		recording = new Recording();
+	}
+
+	protected void clear() {
+		for (int y = nrOfRows - 1; y >= 0; y--) {
+			for (int x = 0; x < nrOfColumns; x++) {
+				Stone stone = patch[x][y];
+				if (stone != null) {
+					removeStone(stone);
+					patch[x][y] = null;
+				} else {
+				}
+			}
+		}
 	}
 
 	protected boolean clearCommandAttributes() {
@@ -102,7 +118,7 @@ public abstract class Level {
 	}
 
 	public void createLevel() {
-		// if this is a level that already (resumed game) has stones, we do nto fill it and we do nto generate stones right at thestart
+		// if this is a level that already (resumed game) has stones, we do not fill it and we do nto generate stones right at thestart
 		if (queryHeapHeight() == 0) {
 			fillLevel();
 			generateStones();
@@ -117,6 +133,14 @@ public abstract class Level {
 	protected Stone createStoneAndUpdateScore(int x, int y, int type) {
 		game.addStoneScore();
 		return createStone(x, y, type);
+	}
+
+	public void deleteFile() {
+		deleteFile(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name));
+	}
+
+	private void deleteFile(String fileName) {
+		new File(fileName).delete();
 	}
 
 	public abstract void disposeLevel();
@@ -164,6 +188,12 @@ public abstract class Level {
 		game.steps++;
 	}
 
+//	public int getScore() {
+//		if (queryHeapHeight() == 0)
+//			return game.getScore();
+//		return -1;
+//	}
+
 	protected String getLastGameName() {
 		return "save/" + game.getUserName() + "/" + game.getName() + ".xml";
 	}
@@ -171,12 +201,6 @@ public abstract class Level {
 	public String getName() {
 		return game.name;
 	}
-
-//	public int getScore() {
-//		if (queryHeapHeight() == 0)
-//			return game.getScore();
-//		return -1;
-//	}
 
 	public int getScore() {
 		return game.getScore(patch);
@@ -188,6 +212,14 @@ public abstract class Level {
 
 	public int getSteps() {
 		return game.steps;
+	}
+
+	public Stone getStone(int x, int y) {
+		return patch[x][y];
+	}
+
+	public boolean isTilt() {
+		return gamePhase.equals(GamePhase.tilt);
 	}
 
 	protected boolean isUserReacted() {
@@ -500,7 +532,11 @@ public abstract class Level {
 
 	public void nextRound() {
 		if (userCanReact()) {
+			recording.addFrame(Interaction.next);
 			generateStones();
+			removeValishedStones();
+			clearCommandAttributes();
+			gamePhase = setStoneOptions();
 		}
 	}
 
@@ -520,50 +556,68 @@ public abstract class Level {
 		return game.queryWin(patch);
 	}
 
-	public void reactLeft(Object selected) {
+	public boolean reactLeft(Object selected) {
 		if (selected != null && userCanReact()) {
 			if (Stone.class.isInstance(selected)) {
 				Stone selectedStone = (Stone) selected;
 				if ((selectedStone.y >= preview)) {
 					selectedStone.setPushingLeft(true);
 					pushingLeftStones.add(selectedStone);
+					int	x	= selectedStone.x;
+					int	y	= selectedStone.y;
 					if (moveOneStepLeft()) {
+						recording.addFrame(x, y, Interaction.left);
 						animationPhase = maxAnimaltionPhase;
 						setUserReacted(true);
+						return true;
 					}
 				}
 
 			}
 		} else {
 		}
+		return false;
 	}
 
-	public void reactRight(Object selected) {
+	public boolean reactRight(Object selected) {
 		if (selected != null && userCanReact()) {
 			if (Stone.class.isInstance(selected)) {
 				Stone selectedStone = (Stone) selected;
 				if ((selectedStone.y >= preview)) {
 					selectedStone.setPushingRight(true);
 					pushingRightStones.add(selectedStone);
+					int	x	= selectedStone.x;
+					int	y	= selectedStone.y;
 					if (moveOneStepRight()) {
+						recording.addFrame(x, y, Interaction.right);
 						animationPhase = maxAnimaltionPhase;
 						setUserReacted(true);
+						return true;
 					}
 				}
 
 			}
 		} else {
 		}
+		return false;
 	}
 
 	public boolean readFromDisk() {
 		// only if this is a real game type and not the UI type
 		if (!game.name.equals(GameName.UI.name())) {
-			ObjectMapper	mapper	= new ObjectMapper(new YAMLFactory());
-			GameDataObject	gdo;
 			try {
-				gdo = mapper.readValue(new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)), GameDataObject.class);
-				update(gdo);
+//				{
+//					ObjectMapper	mapper	= new ObjectMapper(new YAMLFactory());
+//					GameDataObject	gdo		= mapper.readValue(new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)), GameDataObject.class);
+//					update(gdo);
+//				}
+				{
+//					String			recordingFileName	= getRecordingFileName();
+					File			recordingFile	= new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name));
+					ObjectMapper	mapper			= new ObjectMapper(new YAMLFactory());
+					recording = mapper.readValue(recordingFile, recording.getClass());
+					update(recording.getGdo());
+				}
 				return true;
 			} catch (IOException e) {
 				logger.info(e.getMessage(), e);
@@ -591,6 +645,10 @@ public abstract class Level {
 			}
 		} while (Changed);
 //		game.updateScore(queryHeapHeight());
+	}
+
+	public void setGameSeed(int seed) {
+		rand.setSeed(seed);
 	}
 
 	public GamePhase setStoneOptions() {
@@ -696,7 +754,6 @@ public abstract class Level {
 				moveOneStepRight();
 				moveOneStepLeft();
 				animationPhase = maxAnimaltionPhase;
-				animationPhase = maxAnimaltionPhase;
 			}
 				break;
 			case waiting:
@@ -711,6 +768,9 @@ public abstract class Level {
 					generateStones();
 				}
 				clearPuchingAttributes();
+				removeValishedStones();
+				clearCommandAttributes();
+				gamePhase = setStoneOptions();
 				break;
 			case tilt:
 				break;
@@ -732,7 +792,7 @@ public abstract class Level {
 		for (int y = nrOfRows - 1; y >= 0; y--) {
 			for (int x = 0; x < nrOfColumns; x++) {
 				if (gdo.getPatch()[x][y] != null) {
-					patch[x][y] = createStoneAndUpdateScore(x, y, gdo.getPatch()[x][y].getType());
+					patch[x][y] = createStone(x, y, gdo.getPatch()[x][y].getType());
 					patch[x][y].score = gdo.getPatch()[x][y].getScore();
 				}
 			}
@@ -743,12 +803,30 @@ public abstract class Level {
 		return gamePhase.equals(GamePhase.waiting) && animationPhase == 0;
 	}
 
+	public void writeResultToDisk() {
+		writeToDisk(String.format("%s/%s-%d.yaml", Context.getConfigFolderName(), game.name, rand.getSeed()));
+	}
+
 	public void writeToDisk() {
-		GameDataObject gdo = new GameDataObject(this);
+		writeToDisk(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name));
+	}
+
+	public void writeToDisk(String fileName) {
 		try {
-			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-			mapper.writeValue(new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)), gdo);
+			recording.setGdo(new GameDataObject(this));
+			// store the level
+//			{
+//				ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+//				mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//				mapper.writeValue(new File(fileName), recording.getGdo());
+//			}
+			// store the recording
+			{
+//				String			recordingFileName	= getRecordingFileName();
+				File			recordingFile	= new File(fileName);
+				ObjectMapper	mapper			= new ObjectMapper(new YAMLFactory());
+				mapper.writeValue(recordingFile, recording);
+			}
 		} catch (StreamWriteException e) {
 			logger.warn(e.getMessage(), e);
 		} catch (DatabindException e) {

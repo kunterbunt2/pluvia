@@ -92,17 +92,26 @@ public abstract class AbstractDialog {
 		if (resume) {
 			if (!getGameEngine().context.levelManager.readFromDisk()) {
 				// What is the next seed?
+				getGameEngine().context.levelManager.disposeLevel();
 				int lastGameSeed = getGameEngine().context.getLastGameSeed();
-				getGameEngine().context.levelManager.setGaneSeed(lastGameSeed + 1);
+				getGameEngine().context.levelManager.setGameSeed(lastGameSeed + 1);
+			} else {
+				if (!getGameEngine().context.levelManager.testValidity()) {
+					logger.error("invalid recording file");
+					System.exit(1);
+					// What is the next seed?
+					int lastGameSeed = getGameEngine().context.getLastGameSeed();
+					getGameEngine().context.levelManager.setGameSeed(lastGameSeed + 1);
+				}
 			}
 		} else {
 			if (seed == -1) {
 				// next seed
 				int lastGameSeed = getGameEngine().context.getLastGameSeed();
-				getGameEngine().context.levelManager.setGaneSeed(lastGameSeed + 1);
+				getGameEngine().context.levelManager.setGameSeed(lastGameSeed + 1);
 			} else {
 				// seed is defined by user choice (high score)
-				getGameEngine().context.levelManager.setGaneSeed(seed);
+				getGameEngine().context.levelManager.setGameSeed(seed);
 			}
 		}
 		getGameEngine().context.levelManager.createLevel();
