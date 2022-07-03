@@ -50,7 +50,7 @@ public class Recording {
 		LevelManager levelManager = new LevelManager(null, (Game) gameEngine.context.game.clone());
 		levelManager.setGameSeed(gdo.getSeed());
 		levelManager.createLevel();
-		if (((gdo.getSteps() == 0 || recording.size() == 0) && (gdo.getSteps() != recording.size())) || ((gdo.getSteps() != 0) && (gdo.getSteps() != recording.size() + 1))) {
+		if (((gdo.getSteps() == 0 ) && (gdo.getSteps() != recording.size())) || ((gdo.getSteps() != 0) && (gdo.getSteps() != recording.size() + 1))) {
 			logger.error("Recording length does not match number of steps. Recording is not genuine.");
 			return false;
 		}
