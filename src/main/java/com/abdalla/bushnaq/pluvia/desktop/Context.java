@@ -98,7 +98,9 @@ public class Context extends ApplicationProperties {
 	public ModelList<Digit>		digitList		= new ModelList<>();
 	private boolean				enableTime		= true;
 	public ModelList<Fly>		fireflyList		= new ModelList<>();
+
 	public ModelList<Fish>		fishList		= new ModelList<>();
+
 	public ModelList<Firefly>	flyList			= new ModelList<>();
 	// private final long fixedDelta = 20L;
 	public Game					game			= null;				// the current game
@@ -115,8 +117,8 @@ public class Context extends ApplicationProperties {
 	public StoneList			stoneList		= new StoneList();
 	public long					timeDelta		= 0L;
 	public ModelList<Turtle>	turtleList		= new ModelList<>();
-//	public RandomGenerator		universeRG;
 
+//	public RandomGenerator		universeRG;
 	public Context() {
 		homeFolderName = System.getProperty("user.home") + "/.pluvia";
 		operatingSystem = getOeratingSystemType();
@@ -269,6 +271,10 @@ public class Context extends ApplicationProperties {
 		return scoreList;
 	}
 
+	public boolean isEnableTime() {
+		return enableTime;
+	}
+
 	protected void readScoreFromDisk() {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		try {
@@ -300,6 +306,10 @@ public class Context extends ApplicationProperties {
 			if (g.getName().equals(name))
 				game = g;
 		}
+	}
+
+	public void setEnableTime(boolean enableTime) {
+		this.enableTime = enableTime;
 	}
 
 	public void setScoreList(ScoreList aScoreList) {

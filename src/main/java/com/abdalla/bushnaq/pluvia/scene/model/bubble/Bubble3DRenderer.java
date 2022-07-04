@@ -105,7 +105,7 @@ public class Bubble3DRenderer extends ObjectRenderer {
 
 	@Override
 	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		bubble.calculateEngineSpeed();
+		bubble.calculateEngineSpeed(gameEngine.context.isEnableTime());
 		if (bubble.position != null)
 			bubble.speed.set(bubble.poi.x - bubble.position.x, 0, bubble.poi.z - bubble.position.z);
 		else
@@ -125,9 +125,11 @@ public class Bubble3DRenderer extends ObjectRenderer {
 		lightDelta.rotate(Vector3.X, (float) Math.random());
 		lightDelta.rotate(Vector3.Z, (float) Math.random());
 
-		bubble.rotation.x += .05f;
-		bubble.rotation.y += .05f;
-		bubble.rotation.z += .05f;
+		if (gameEngine.context.isEnableTime()) {
+			bubble.rotation.x += .05f;
+			bubble.rotation.y += .05f;
+			bubble.rotation.z += .05f;
+		}
 		// fly.positionDelta.rotate(Vector3.Y, (float) Math.random() * 2);
 //		fly.positionDelta.rotate(Vector3.X, (float) Math.random() * 2);
 //		fly.positionDelta.rotate(Vector3.Z, (float) Math.random() * 2);

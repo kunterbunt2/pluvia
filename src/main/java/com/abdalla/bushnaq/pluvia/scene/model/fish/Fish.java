@@ -60,13 +60,17 @@ public class Fish extends Renderable {
 
 	}
 
-	public void calculateEngineSpeed() {
-		if (destinationPlanetDistanceProgress <= accellerationDistance && (destinationPlanetDistance - destinationPlanetDistanceProgress <= accellerationDistance)) {
-			currentMaxEngineSpeed = minSpeed + (float) Math.sin((Math.PI / 2) * destinationPlanetDistanceProgress / accellerationDistance) * (maxSpeed - minSpeed);
-		} else if (destinationPlanetDistance - destinationPlanetDistanceProgress <= accellerationDistance) {
-			currentMaxEngineSpeed = minSpeed + (float) Math.sin((Math.PI / 2) * (1.0f - (destinationPlanetDistance - destinationPlanetDistanceProgress) / accellerationDistance)) * (maxSpeed - minSpeed);
+	public void calculateEngineSpeed(boolean isEnableTime) {
+		if (isEnableTime) {
+			if (destinationPlanetDistanceProgress <= accellerationDistance && (destinationPlanetDistance - destinationPlanetDistanceProgress <= accellerationDistance)) {
+				currentMaxEngineSpeed = minSpeed + (float) Math.sin((Math.PI / 2) * destinationPlanetDistanceProgress / accellerationDistance) * (maxSpeed - minSpeed);
+			} else if (destinationPlanetDistance - destinationPlanetDistanceProgress <= accellerationDistance) {
+				currentMaxEngineSpeed = minSpeed + (float) Math.sin((Math.PI / 2) * (1.0f - (destinationPlanetDistance - destinationPlanetDistanceProgress) / accellerationDistance)) * (maxSpeed - minSpeed);
+			} else {
+				currentMaxEngineSpeed = minSpeed + (maxSpeed - minSpeed);
+			}
 		} else {
-			currentMaxEngineSpeed = minSpeed + (maxSpeed - minSpeed);
+			currentMaxEngineSpeed = 0f;
 		}
 	}
 

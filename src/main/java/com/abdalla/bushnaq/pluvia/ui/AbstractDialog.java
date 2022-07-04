@@ -46,6 +46,7 @@ public abstract class AbstractDialog {
 //	private int						blurPasses			= 1;
 //	private BlurMode				blurMode			= BlurMode.up;
 	final Logger					logger				= LoggerFactory.getLogger(this.getClass());
+	protected boolean				modal				= false;
 	private AbstractDialog			parent;
 	private Stage					stage;
 	private VisTable				table				= new VisTable(true);
@@ -91,15 +92,18 @@ public abstract class AbstractDialog {
 //		universe.GameThread.clearLevel();
 		if (resume) {
 			if (!getGameEngine().context.levelManager.readFromDisk()) {
+				// we failed to read the level
 				// What is the next seed?
 				getGameEngine().context.levelManager.disposeLevel();
 				int lastGameSeed = getGameEngine().context.getLastGameSeed();
 				getGameEngine().context.levelManager.setGameSeed(lastGameSeed + 1);
 			} else {
 				if (!getGameEngine().context.levelManager.testValidity()) {
+					// we failed to validate the level
 					logger.error("invalid recording file");
-					System.exit(1);
+//					System.exit(1);
 					// What is the next seed?
+					getGameEngine().context.levelManager.disposeLevel();
 					int lastGameSeed = getGameEngine().context.getLastGameSeed();
 					getGameEngine().context.levelManager.setGameSeed(lastGameSeed + 1);
 				}

@@ -218,6 +218,8 @@ public abstract class Level {
 		return patch[x][y];
 	}
 
+	protected abstract boolean isEnableTime();
+
 	public boolean isTilt() {
 		return gamePhase.equals(GamePhase.tilt);
 	}
@@ -778,7 +780,8 @@ public abstract class Level {
 				break;
 			}
 		} else {
-			animationPhase--;
+			if (isEnableTime())
+				animationPhase--;
 		}
 		return tilt;
 	}

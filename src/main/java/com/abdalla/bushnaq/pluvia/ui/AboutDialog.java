@@ -45,7 +45,8 @@ public class AboutDialog extends AbstractDialog {
 			getTable().row();
 			VisLabel textArea = new VisLabel("Pluvia\nCopyright 2001 - 2022\nA & J Bushnaq");
 			textArea.setAlignment(Align.left);
-			getTable().add(textArea).width(DIALOG_WIDTH * sizes.scaleFactor).pad(16).center();
+			getTable().add(textArea).expand().fillX();
+//			width(DIALOG_WIDTH * sizes.scaleFactor).pad(16).center();
 		}
 		{
 			getTable().row();

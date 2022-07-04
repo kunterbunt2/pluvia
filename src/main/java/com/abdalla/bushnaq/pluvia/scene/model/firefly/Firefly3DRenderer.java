@@ -104,7 +104,7 @@ public class Firefly3DRenderer extends ObjectRenderer {
 
 	@Override
 	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		firefly.calculateEngineSpeed();
+		firefly.calculateEngineSpeed(gameEngine.context.isEnableTime());
 		if (firefly.position != null)
 			firefly.speed.set(firefly.poi.x - firefly.position.x, 0, firefly.poi.z - firefly.position.z);
 		else
@@ -124,9 +124,11 @@ public class Firefly3DRenderer extends ObjectRenderer {
 		lightDelta.rotate(Vector3.X, (float) Math.random());
 		lightDelta.rotate(Vector3.Z, (float) Math.random());
 
-		firefly.rotation.x += .2f;
-		firefly.rotation.y += .2f;
-		firefly.rotation.z += .2f;
+		if (gameEngine.context.isEnableTime()) {
+			firefly.rotation.x += .2f;
+			firefly.rotation.y += .2f;
+			firefly.rotation.z += .2f;
+		}
 		// fly.positionDelta.rotate(Vector3.Y, (float) Math.random() * 2);
 //		fly.positionDelta.rotate(Vector3.X, (float) Math.random() * 2);
 //		fly.positionDelta.rotate(Vector3.Z, (float) Math.random() * 2);

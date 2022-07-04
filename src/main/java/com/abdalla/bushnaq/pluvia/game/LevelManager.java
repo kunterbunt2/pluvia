@@ -181,6 +181,14 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	@Override
+	protected boolean isEnableTime() {
+		if (gameEngine != null)
+			return gameEngine.context.isEnableTime();
+		else
+			return true;
+	}
+
+	@Override
 	protected void removeStone(Stone stone) {
 		if (gameEngine != null) {
 			stone.get3DRenderer().destroy(gameEngine);
@@ -193,7 +201,8 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	public void updateFps() {
-		maxAnimaltionPhase = Gdx.graphics.getFramesPerSecond() / 10;
+		if (gameEngine.context.isEnableTime()) {
+			maxAnimaltionPhase = Gdx.graphics.getFramesPerSecond() / 10;
+		}
 	}
-
 }

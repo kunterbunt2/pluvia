@@ -99,7 +99,7 @@ public class Fish3DRenderer extends ObjectRenderer {
 
 	@Override
 	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		fish.calculateEngineSpeed();
+		fish.calculateEngineSpeed(gameEngine.context.isEnableTime());
 		if (fish.position != null)
 			fish.speed.set(fish.poi.x - fish.position.x, 0, fish.poi.z - fish.position.z);
 		else

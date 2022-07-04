@@ -104,7 +104,7 @@ public class Turtle3DRenderer extends ObjectRenderer {
 
 	@Override
 	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		turtle.calculateEngineSpeed();
+		turtle.calculateEngineSpeed(gameEngine.context.isEnableTime());
 		if (turtle.position != null)
 			turtle.speed.set(turtle.poi.x - turtle.position.x, 0, turtle.poi.z - turtle.position.z);
 		else

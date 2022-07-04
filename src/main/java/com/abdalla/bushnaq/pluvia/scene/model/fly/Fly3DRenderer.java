@@ -104,7 +104,7 @@ public class Fly3DRenderer extends ObjectRenderer {
 
 	@Override
 	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		fly.calculateEngineSpeed();
+		fly.calculateEngineSpeed(gameEngine.context.isEnableTime());
 		if (fly.position != null)
 			fly.speed.set(fly.poi.x - fly.position.x, 0, fly.poi.z - fly.position.z);
 		else

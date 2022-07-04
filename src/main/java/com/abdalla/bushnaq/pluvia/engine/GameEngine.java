@@ -18,6 +18,7 @@ import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
 import com.abdalla.bushnaq.pluvia.ui.AboutDialog;
 import com.abdalla.bushnaq.pluvia.ui.MainDialog;
+import com.abdalla.bushnaq.pluvia.ui.MessageDialog;
 import com.abdalla.bushnaq.pluvia.ui.OptionsDialog;
 import com.abdalla.bushnaq.pluvia.ui.PauseDialog;
 import com.abdalla.bushnaq.pluvia.ui.ScoreDialog;
@@ -80,6 +81,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private final Logger			logger						= LoggerFactory.getLogger(this.getClass());
 	private MainDialog				mainDialog;
 	private int						maxFramesPerSecond;
+	private MessageDialog			messageDialog;
 	public ModelManager				modelManager;
 	private OptionsDialog			optionsDialog;
 	private PauseDialog				pauseDialog;
@@ -173,6 +175,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		mainDialog = new MainDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		aboutDialog = new AboutDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		pauseDialog = new PauseDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
+		messageDialog = new MessageDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		optionsDialog = new OptionsDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		scoreDialog = new ScoreDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		mainDialog.setVisible(true);
@@ -190,6 +193,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			mainDialog.dispose();
 			scoreDialog.dispose();
 			pauseDialog.dispose();
+			messageDialog.dispose();
 			aboutDialog.dispose();
 		} catch (final Exception e) {
 			logger.error(e.getMessage(), e);
@@ -219,6 +223,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	public int getMaxFramesPerSecond() {
 		return maxFramesPerSecond;
+	}
+
+	public MessageDialog getMessageDialog() {
+		return messageDialog;
 	}
 
 	public OptionsDialog getOptionsDialog() {
@@ -503,6 +511,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 		if (getAboutDialog().isVisible()) {
 			getAboutDialog().draw();
+		}
+		if (getMessageDialog().isVisible()) {
+			getMessageDialog().draw();
 		}
 		if (pauseDialog.isVisible()) {
 			pauseDialog.draw();
