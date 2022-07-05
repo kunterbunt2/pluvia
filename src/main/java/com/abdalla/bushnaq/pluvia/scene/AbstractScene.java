@@ -48,7 +48,7 @@ public abstract class AbstractScene {
 		logo = new Text2D("Pluvia", 100, Gdx.graphics.getHeight() - 200, Color.WHITE, gameEngine.renderEngine.getAtlasManager().logoFont);
 		gameEngine.renderEngine.add(logo);
 		try {
-			String				v		= MavenPropertiesProvider.getProperty("module.version");
+			String				v		= gameEngine.context.getAppVersion();
 			final GlyphLayout	layout	= new GlyphLayout();
 			layout.setText(gameEngine.renderEngine.getAtlasManager().logoFont, "Pluvia");
 			float h1 = layout.height;

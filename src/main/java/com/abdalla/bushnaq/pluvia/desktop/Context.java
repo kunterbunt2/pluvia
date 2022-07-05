@@ -20,6 +20,7 @@ import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
+import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -96,11 +97,8 @@ public class Context extends ApplicationProperties {
 	public ModelList<Digit>		digitList		= new ModelList<>();
 	private boolean				enableTime		= true;
 	public ModelList<Fly>		fireflyList		= new ModelList<>();
-
 	public ModelList<Fish>		fishList		= new ModelList<>();
-
 	public ModelList<Firefly>	flyList			= new ModelList<>();
-	// private final long fixedDelta = 20L;
 	public Game					game			= null;				// the current game
 	public GameList				gameList		= new GameList();
 	private String				installationFolder;
@@ -109,15 +107,23 @@ public class Context extends ApplicationProperties {
 	private OperatingSystem		operatingSystem;
 	public ModelList<Rain>		rainList		= new ModelList<>();
 	public boolean				restart			= false;
-	// private boolean useFixedDelta = false;
 	protected ScoreList			scoreList		= new ScoreList(3);
 	public Object				selected		= null;
 	public StoneList			stoneList		= new StoneList();
 	public long					timeDelta		= 0L;
 	public ModelList<Turtle>	turtleList		= new ModelList<>();
+	private String				appVersion		= "0.0.0";
 
-//	public RandomGenerator		universeRG;
+	public String getAppVersion() {
+		return appVersion;
+	}
+
 	public Context() {
+		try {
+			appVersion = MavenPropertiesProvider.getProperty("module.version");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 		homeFolderName = System.getProperty("user.home") + "/.pluvia";
 		operatingSystem = getOeratingSystemType();
 		switch (operatingSystem) {
