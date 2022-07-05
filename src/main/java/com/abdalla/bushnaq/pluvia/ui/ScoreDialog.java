@@ -7,8 +7,8 @@ import java.util.Map;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
-import com.abdalla.bushnaq.pluvia.game.Score;
-import com.abdalla.bushnaq.pluvia.game.ScoreList;
+import com.abdalla.bushnaq.pluvia.game.score.Score;
+import com.abdalla.bushnaq.pluvia.game.score.ScoreList;
 import com.abdalla.bushnaq.pluvia.util.TimeUnit;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -188,6 +188,7 @@ public class ScoreDialog extends AbstractDialog {
 	public void update(final Context universe) {
 		if (changed != getGameEngine().context.getScoreList().getChanged()) {
 			create();
+			packAndPosition();
 		}
 	}
 
