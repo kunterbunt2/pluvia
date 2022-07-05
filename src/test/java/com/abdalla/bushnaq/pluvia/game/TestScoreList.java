@@ -3,10 +3,12 @@ package com.abdalla.bushnaq.pluvia.game;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.abdalla.bushnaq.pluvia.game.score.Score;
+import com.abdalla.bushnaq.pluvia.game.score.ScoreList;
 
 public class TestScoreList {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -27,34 +29,34 @@ public class TestScoreList {
 //		}
 	}
 
-	@Test
-	public void sortOneGame() {
-		ScoreList scoreList = new ScoreList(3);
-		{
-			scoreList.add("game1", 0, 100, 15, 0, "user-1");
-			scoreList.add("game1", 0, 101, 16, 0, "user-2");
-			scoreList.add("game1", 0, 102, 17, 0, "user-3");
-			scoreList.add("game1", 0, 103, 18, 0, "user-4");
-		}
-
-		printResult(scoreList);
-	}
-
-	@Test
-	public void sortTwoGames() {
-		ScoreList scoreList = new ScoreList(3);
-		{
-			scoreList.add("game1", 0, 103, 18, 0, "user-4");
-			scoreList.add("game2", 0, 103, 18, 0, "user-4");
-			scoreList.add("game1", 0, 50, 18, 0, "user-4");
-			scoreList.add("game2", 0, 117, 18, 0, "user-4");
-			scoreList.add("game1", 0, 100, 15, 0, "user-1");
-			scoreList.add("game2", 0, 101, 16, 0, "user-2");
-			scoreList.add("game1", 0, 102, 17, 0, "user-3");
-			scoreList.add("game1", 0, 103, 18, 0, "user-4");
-		}
-
-		printResult(scoreList);
-	}
+//	@Test
+//	public void sortOneGame() {
+//		ScoreList scoreList = new ScoreList(3);
+//		{
+//			scoreList.add("game1", 0, 100, 15, 0, "user-1");
+//			scoreList.add("game1", 0, 101, 16, 0, "user-2");
+//			scoreList.add("game1", 0, 102, 17, 0, "user-3");
+//			scoreList.add("game1", 0, 103, 18, 0, "user-4");
+//		}
+//
+//		printResult(scoreList);
+//	}
+//
+//	@Test
+//	public void sortTwoGames() {
+//		ScoreList scoreList = new ScoreList(3);
+//		{
+//			scoreList.add("game1", 0, 103, 18, 0, "user-4");
+//			scoreList.add("game2", 0, 103, 18, 0, "user-4");
+//			scoreList.add("game1", 0, 50, 18, 0, "user-4");
+//			scoreList.add("game2", 0, 117, 18, 0, "user-4");
+//			scoreList.add("game1", 0, 100, 15, 0, "user-1");
+//			scoreList.add("game2", 0, 101, 16, 0, "user-2");
+//			scoreList.add("game1", 0, 102, 17, 0, "user-3");
+//			scoreList.add("game1", 0, 103, 18, 0, "user-4");
+//		}
+//
+//		printResult(scoreList);
+//	}
 
 }

@@ -421,7 +421,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 				// game was won or ended
 				Game game = context.game;
 				game.updateTimer();
-				if (context.getScoreList().add(game.getName(), context.levelManager.getSeed(), context.levelManager.getScore(), game.getSteps(), game.getRelativeTime(), System.getProperty("user.name"))) {
+				if (context.getScoreList().add(this.context.levelManager)) {
 					{
 						// new highscore
 						Tools.play(AtlasManager.getAssetsFolderName() + "/sound/score.wav");

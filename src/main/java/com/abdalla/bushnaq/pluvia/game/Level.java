@@ -202,6 +202,10 @@ public abstract class Level {
 		return game.name;
 	}
 
+	public Recording getRecording() {
+		return recording;
+	}
+
 	public int getScore() {
 		return game.getScore(patch);
 	}
@@ -534,7 +538,7 @@ public abstract class Level {
 
 	public void nextRound() {
 		if (userCanReact()) {
-			recording.addFrame(Interaction.next);
+			getRecording().addFrame(Interaction.next);
 			generateStones();
 			removeValishedStones();
 			clearCommandAttributes();
@@ -568,7 +572,7 @@ public abstract class Level {
 					int	x	= selectedStone.x;
 					int	y	= selectedStone.y;
 					if (moveOneStepLeft()) {
-						recording.addFrame(x, y, Interaction.left);
+						getRecording().addFrame(x, y, Interaction.left);
 						animationPhase = maxAnimaltionPhase;
 						setUserReacted(true);
 						return true;
@@ -591,7 +595,7 @@ public abstract class Level {
 					int	x	= selectedStone.x;
 					int	y	= selectedStone.y;
 					if (moveOneStepRight()) {
-						recording.addFrame(x, y, Interaction.right);
+						getRecording().addFrame(x, y, Interaction.right);
 						animationPhase = maxAnimaltionPhase;
 						setUserReacted(true);
 						return true;
@@ -617,8 +621,8 @@ public abstract class Level {
 //					String			recordingFileName	= getRecordingFileName();
 					File			recordingFile	= new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name));
 					ObjectMapper	mapper			= new ObjectMapper(new YAMLFactory());
-					recording = mapper.readValue(recordingFile, recording.getClass());
-					update(recording.getGdo());
+					recording = mapper.readValue(recordingFile, getRecording().getClass());
+					update(getRecording().getGdo());
 				}
 				return true;
 			} catch (IOException e) {
@@ -816,20 +820,10 @@ public abstract class Level {
 
 	public void writeToDisk(String fileName) {
 		try {
-			recording.setGdo(new GameDataObject(this));
-			// store the level
-//			{
-//				ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-//				mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//				mapper.writeValue(new File(fileName), recording.getGdo());
-//			}
+			getRecording().setGdo(new GameDataObject(this));
 			// store the recording
-			{
-//				String			recordingFileName	= getRecordingFileName();
-				File			recordingFile	= new File(fileName);
-				ObjectMapper	mapper			= new ObjectMapper(new YAMLFactory());
-				mapper.writeValue(recordingFile, recording);
-			}
+			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+			mapper.writeValue(new File(fileName), getRecording());
 		} catch (StreamWriteException e) {
 			logger.warn(e.getMessage(), e);
 		} catch (DatabindException e) {

@@ -21,8 +21,8 @@ public class Recording {
 	private static final String	RECORDING_TOO_LONG											= "Recording not fully played back, but game is already exited. Recording is not genuine.\n\nResetting level...";
 	private static final String	STONE_CANNOT_MOVE_LEFT										= "Recording is trying to move a stone to the left, but it cannot move. Recording is not genuine.\n\nResetting level...";
 	private static final String	STONE_CANNOT_MOVE_TO_THE_RIGHT								= "Recording is trying to move a stone to the right, but it cannot move. Recording is not genuine.\n\nResetting level...";
-	GameDataObject				gdo															= new GameDataObject();
-	protected Logger			logger														= LoggerFactory.getLogger(this.getClass());
+	private GameDataObject		gdo															= new GameDataObject();
+	private Logger				logger														= LoggerFactory.getLogger(this.getClass());
 	private List<Frame>			recording													= new ArrayList<>();
 
 	public Recording() {

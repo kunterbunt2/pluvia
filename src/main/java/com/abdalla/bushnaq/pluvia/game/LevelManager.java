@@ -197,7 +197,7 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	public boolean testValidity() {
-		return recording.testValidity(gameEngine);
+		return getRecording().testValidity(gameEngine);
 	}
 
 	public void updateFps() {

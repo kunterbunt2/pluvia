@@ -1,12 +1,15 @@
 package com.abdalla.bushnaq.pluvia.game;
 
 public class GameDataObject {
+	private String				name;
 	private StoneDataObject[][]	patch			= null;
 	private int					randCalls		= 0;
 	private long				relativeTime	= 0;
 	private int					score			= 0;
 	private int					seed			= 0;
 	private int					steps			= 0;
+	private long				time			= 0;
+	private String				userName;
 
 	public GameDataObject() {
 
@@ -18,6 +21,9 @@ public class GameDataObject {
 		this.seed = level.rand.getSeed();
 		this.randCalls = level.rand.getCalls();
 		this.relativeTime = level.game.relativeTime;
+		this.name = level.game.getName();
+		this.time = System.currentTimeMillis();
+		this.userName = System.getProperty("user.name");
 		patch = new StoneDataObject[level.game.nrOfColumns][];
 		for (int x = 0; x < patch.length; x++) {
 			patch[x] = new StoneDataObject[level.game.nrOfRows];
@@ -29,6 +35,10 @@ public class GameDataObject {
 				}
 			}
 		}
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public StoneDataObject[][] getPatch() {
@@ -55,6 +65,18 @@ public class GameDataObject {
 		return steps;
 	}
 
+	public long getTime() {
+		return time;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public void setPatch(StoneDataObject[][] patch) {
 		this.patch = patch;
 	}
@@ -77,6 +99,14 @@ public class GameDataObject {
 
 	public void setSteps(int steps) {
 		this.steps = steps;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

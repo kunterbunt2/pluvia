@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.GameList;
 import com.abdalla.bushnaq.pluvia.game.LevelManager;
-import com.abdalla.bushnaq.pluvia.game.Score;
-import com.abdalla.bushnaq.pluvia.game.ScoreList;
 import com.abdalla.bushnaq.pluvia.game.model.stone.StoneList;
+import com.abdalla.bushnaq.pluvia.game.score.Score;
+import com.abdalla.bushnaq.pluvia.game.score.ScoreList;
 import com.abdalla.bushnaq.pluvia.scene.model.bubble.Bubble;
 import com.abdalla.bushnaq.pluvia.scene.model.digit.Digit;
 import com.abdalla.bushnaq.pluvia.scene.model.firefly.Firefly;
@@ -20,8 +20,6 @@ import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.scene.model.fly.Fly;
 import com.abdalla.bushnaq.pluvia.scene.model.rain.Rain;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -279,22 +277,11 @@ public class Context extends ApplicationProperties {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		try {
 			scoreList = mapper.readValue(new File(Context.getConfigFolderName() + "/score.yaml"), ScoreList.class);
-		} catch (StreamReadException e) {
-			logger.warn(e.getMessage(), e);
-			logger.warn("score file corrupt, cleared score!");
-			scoreList.clear();
-		} catch (DatabindException e) {
-			logger.warn(e.getMessage(), e);
-			logger.warn("score file corrupt, cleared score!");
-			scoreList.clear();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.warn(e.getMessage(), e);
 			logger.warn("score file corrupt, cleared score!");
 			scoreList.clear();
 		}
-//		XMLDecoder encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(Context.getConfigFolderName() + "/score.xml")));
-//		read(encoder);
-//		encoder.close();
 	}
 
 	public void selectGame(int gameIndex) {
