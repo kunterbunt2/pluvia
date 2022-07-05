@@ -121,6 +121,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			renderEngine = new RenderEngine(context, this);
 			modelManager.create(renderEngine.isPbr());
 			createStage();
+			context.readScoreFromDisk(this);
 //			createMonument();
 //			createGame(0);
 //			context.selectGamee(0);

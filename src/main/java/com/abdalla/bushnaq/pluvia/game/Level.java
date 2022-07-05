@@ -692,8 +692,7 @@ public abstract class Level {
 		} while (changedOnce.getBooleanValue());
 		droppingStonesBuffer.removeAll(droppingStones);
 		for (Stone stone : droppingStonesBuffer) {
-			// stones that where droopping but now cannto drop
-			// Vis.PlaySoundEffect(SOUND_EFFECT_DROP);
+			// stones that where dropping but now cannot drop
 			Tools.play(AtlasManager.getAssetsFolderName() + "/sound/drop.wav");
 		}
 		droppingStonesBuffer.clear();

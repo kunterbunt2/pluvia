@@ -12,7 +12,6 @@ import com.abdalla.bushnaq.pluvia.engine.ModelManager;
 import com.abdalla.bushnaq.pluvia.engine.Text2D;
 import com.abdalla.bushnaq.pluvia.scene.model.fish.Fish;
 import com.abdalla.bushnaq.pluvia.scene.model.turtle.Turtle;
-import com.abdalla.bushnaq.pluvia.util.MavenPropertiesProvider;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;

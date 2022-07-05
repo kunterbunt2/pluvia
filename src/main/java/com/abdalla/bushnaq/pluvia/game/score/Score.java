@@ -3,13 +3,17 @@
  */
 package com.abdalla.bushnaq.pluvia.game.score;
 
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
+import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.GameDataObject;
 import com.abdalla.bushnaq.pluvia.game.Level;
 import com.abdalla.bushnaq.pluvia.game.recording.Recording;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Score implements Comparable<Score> {
-	private Recording recording;
+	private static final String	INVALID_SCORE_DETECTED	= "Invalid Score Detected";
+	private static final String	RESETTING_HIGH_SCORE	= "\n\nResetting high score...";
+	private Recording			recording;
 
 	public Score() {
 	}
@@ -80,6 +84,11 @@ public class Score implements Comparable<Score> {
 
 	public void setRecording(Recording recording) {
 		this.recording = recording;
+	}
+
+	public boolean testValidity(GameEngine gameEngine) {
+		Game game = (Game) gameEngine.context.gameList.get(gameEngine.context.getGameIndex(getGame())).clone();
+		return recording.testValidity(INVALID_SCORE_DETECTED, RESETTING_HIGH_SCORE, gameEngine, game);
 	}
 
 }

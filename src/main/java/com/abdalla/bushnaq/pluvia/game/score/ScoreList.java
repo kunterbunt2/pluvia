@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.game.Level;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -27,13 +28,6 @@ public class ScoreList extends TreeSet<Score> {
 	public ScoreList(int size) {
 		this.size = size;
 	}
-
-//	public boolean add(String game, int seed, int score, int steps, long relativeTime, String userName) {
-//		if (score > 0) {
-//			return addScore(new Score(game, seed, score, steps, relativeTime, System.currentTimeMillis(), userName));
-//		}
-//		return false;
-//	}
 
 	public boolean add(Level level) {
 		if (level.getScore() > 0) {
@@ -55,11 +49,15 @@ public class ScoreList extends TreeSet<Score> {
 			newHeiscore = true;
 		}
 		if (newHeiscore) {
-			changed = System.currentTimeMillis();
+			changed();
 			writeToDisk();
 
 		}
 		return newHeiscore;
+	}
+
+	public void changed() {
+		changed = System.currentTimeMillis();
 	}
 
 	private Score findScore(Score score) {
@@ -80,10 +78,17 @@ public class ScoreList extends TreeSet<Score> {
 		return size;
 	}
 
+	public boolean testValidity(GameEngine gameEngine) {
+		for (Score s : this) {
+			if (!s.testValidity(gameEngine))
+				return false;
+		}
+		return true;
+	}
+
 	protected void writeToDisk() {
 		try {
-			ObjectMapper	mapper	= new ObjectMapper(new YAMLFactory());
-			Score			first	= this.first();
+			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 			mapper.writeValue(new File(Context.getConfigFolderName() + "/score.yaml"), this);
 		} catch (StreamWriteException e) {
 			logger.warn(e.getMessage(), e);

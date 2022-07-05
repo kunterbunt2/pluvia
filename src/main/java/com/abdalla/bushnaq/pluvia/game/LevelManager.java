@@ -30,13 +30,15 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 public class LevelManager extends Level implements Serializable {
-	private static final long	serialVersionUID		= 1L;
+	private static final String	INVALID_LEVEL_RECORDING_DETECTED	= "Invalid Level Recording Detected";
+	private static final String	RESETTING_LEVEL						= "\n\nResetting level...";
+	private static final long	serialVersionUID					= 1L;
 	private GameEngine			gameEngine;
-	int							index					= 0;
+	int							index								= 0;
 	private Color				infoColor;
-	final List<GameObject>		renderModelInstances	= new ArrayList<>();
-	Map<String, AbstractScene>	sceneList				= new HashMap<>();
-	protected Font				TextFont				= new Font("SansSerif", Font.BOLD, 14);
+	final List<GameObject>		renderModelInstances				= new ArrayList<>();
+	Map<String, AbstractScene>	sceneList							= new HashMap<>();
+	protected Font				TextFont							= new Font("SansSerif", Font.BOLD, 14);
 
 	public LevelManager(GameEngine gameEngine, Game game) {
 		super(game);
@@ -197,7 +199,7 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	public boolean testValidity() {
-		return getRecording().testValidity(gameEngine);
+		return getRecording().testValidity(INVALID_LEVEL_RECORDING_DETECTED, RESETTING_LEVEL, gameEngine, (Game) gameEngine.context.game.clone());
 	}
 
 	public void updateFps() {

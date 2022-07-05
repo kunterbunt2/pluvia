@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.game.Game;
 import com.abdalla.bushnaq.pluvia.game.GameList;
 import com.abdalla.bushnaq.pluvia.game.LevelManager;
@@ -92,6 +93,7 @@ public class Context extends ApplicationProperties {
 		return isEclipse;
 	}
 
+	private String				appVersion		= "0.0.0";
 	public ModelList<Bubble>	bubbleList		= new ModelList<>();
 	public long					currentTime		= 8L * 10000;
 	public ModelList<Digit>		digitList		= new ModelList<>();
@@ -112,11 +114,6 @@ public class Context extends ApplicationProperties {
 	public StoneList			stoneList		= new StoneList();
 	public long					timeDelta		= 0L;
 	public ModelList<Turtle>	turtleList		= new ModelList<>();
-	private String				appVersion		= "0.0.0";
-
-	public String getAppVersion() {
-		return appVersion;
-	}
 
 	public Context() {
 		try {
@@ -179,8 +176,6 @@ public class Context extends ApplicationProperties {
 		createFolder(configFolderName);
 		init();
 
-//		scoreList.init(gameList);
-		readScoreFromDisk();
 	}
 
 	public void advanceInTime() throws Exception {
@@ -242,6 +237,10 @@ public class Context extends ApplicationProperties {
 		levelManager = null;
 	}
 
+	public String getAppVersion() {
+		return appVersion;
+	}
+
 	public int getGameIndex() {
 		int index = 0;
 		for (Game g : gameList) {
@@ -279,10 +278,17 @@ public class Context extends ApplicationProperties {
 		return enableTime;
 	}
 
-	protected void readScoreFromDisk() {
+	public void readScoreFromDisk(GameEngine gameEngine) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		try {
-			scoreList = mapper.readValue(new File(Context.getConfigFolderName() + "/score.yaml"), ScoreList.class);
+			File file = new File(Context.getConfigFolderName() + "/score.yaml");
+			scoreList = mapper.readValue(file, ScoreList.class);
+			if (!scoreList.testValidity(gameEngine)) {
+				logger.error("invalid score file");
+				scoreList.clear();
+				file.delete();
+			}
+			scoreList.changed();
 		} catch (Exception e) {
 			logger.warn(e.getMessage(), e);
 			logger.warn("score file corrupt, cleared score!");
