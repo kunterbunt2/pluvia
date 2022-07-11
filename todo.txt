@@ -1,0 +1,4 @@
+1. ensure random generator will always return same series on any system and java version
+2. disable sound while validating recording
+3. add app version to any saved file
+4. change sound engine
