@@ -68,7 +68,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	public static final float		SPACE_BETWEEN_OBJECTS		= 0.1f / Context.WORLD_SCALE;
 	public static final Color		TEXT_COLOR					= Color.WHITE;								// 0xffffffff;
 	private static final int		TOUCH_DELTA_X				= 32;
-	private static final int		TOUCH_DELTA_Y				= 64;
+	private static final int		TOUCH_DELTA_Y				= 32;
 	private AboutDialog				aboutDialog;
 	private AudioManager			audioManager;
 	private float					centerXD;
@@ -106,7 +106,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	public void create() {
 		try {
 			if (context == null)// ios
+			{
 				context = contextFactory.create();
+				evaluateConfiguation();
+			}
 			showFps = context.getShowFpsProperty();
 //			Gdx.gl.glEnable(0x884F);
 //			if (Gdx.gl.glGetError() != 0)
@@ -135,6 +138,11 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			logger.error(e.getMessage(), e);
 			System.exit(1);
 		}
+	}
+
+	private void evaluateConfiguation() {
+		Gdx.graphics.setForegroundFPS(context.getForegroundFPSProperty());
+		Gdx.graphics.setVSync(context.getVsyncProperty());
 	}
 
 	public void createMonument() {
@@ -409,8 +417,13 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			logger.error(e.getMessage(), e);
 			System.exit(0);
 		}
-		if (context.restart)
-			Gdx.app.exit();
+		if (context.restart) {
+			if (!Context.isIos())
+				Gdx.app.exit();
+			else {
+				evaluateConfiguation();
+			}
+		}
 	}
 
 	private void render(final long currentTime) throws Exception {
@@ -609,7 +622,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	@Override
 	public boolean touchDragged(final int screenX, final int screenY, final int pointer) {
 		if (Context.isIos()) {
-			logger.info(String.format("x=%d, y=%d", screenX, screenY));
+//			logger.info(String.format("x=%d, y=%d", screenX, screenY));
 			if (touchX == null || touchY == null) {
 				touchX = screenX;
 				touchY = screenY;
@@ -622,8 +635,8 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 						// did we select an object?
 						// renderMaster.sceneClusterManager.createCoordinates();
 						final GameObject selected = renderEngine.getGameObject(touchX, touchY);
-						System.out.println("react right dx " + dx);
-						System.out.println("selected " + selected);
+//						System.out.println("react right dx " + dx);
+//						System.out.println("selected " + selected);
 						if (selected != null)
 							context.levelManager.reactRight(selected.interactive);
 					} else {
@@ -631,8 +644,8 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 						// did we select an object?
 						// renderMaster.sceneClusterManager.createCoordinates();
 						final GameObject selected = renderEngine.getGameObject(touchX, touchY);
-						System.out.println("react left dx " + dx);
-						System.out.println("selected " + selected);
+//						System.out.println("react left dx " + dx);
+//						System.out.println("selected " + selected);
 						if (selected != null)
 							context.levelManager.reactLeft(selected.interactive);
 					}
@@ -656,7 +669,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	public boolean touchUp(final int screenX, final int screenY, final int pointer, final int button) {
 		touchX = null;
 		touchY = null;
-		System.out.println("reset touch");
+//		System.out.println("reset touch");
 		return true;
 	}
 

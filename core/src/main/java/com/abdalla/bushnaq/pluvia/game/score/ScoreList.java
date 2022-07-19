@@ -9,6 +9,7 @@ import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.game.Level;
 import com.abdalla.bushnaq.pluvia.util.logger.Logger;
 import com.abdalla.bushnaq.pluvia.util.logger.LoggerFactory;
+import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -88,7 +89,7 @@ public class ScoreList extends TreeSet<Score> {
 	protected void writeToDisk() {
 		try {
 			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-			mapper.writeValue(new File(Context.getConfigFolderName() + "/score.yaml"), this);
+			mapper.writeValue(Gdx.files.external(Context.getConfigFolderName() + "/score.yaml").file(), this);
 		} catch (StreamWriteException e) {
 			logger.warn(e.getMessage(), e);
 		} catch (DatabindException e) {

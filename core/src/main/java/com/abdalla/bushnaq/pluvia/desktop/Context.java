@@ -133,7 +133,8 @@ public abstract class Context extends ApplicationProperties {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		homeFolderName = System.getProperty("user.home") + "/.pluvia";
+//		homeFolderName = System.getProperty("user.home") + "/.pluvia";
+		homeFolderName = ".pluvia";
 		operatingSystem = getOeratingSystemType();
 		switch (operatingSystem) {
 		case windows:
@@ -141,79 +142,77 @@ public abstract class Context extends ApplicationProperties {
 			if (isRunningInEclipse()) {
 				logger.info("Detected Windows system and we are running inside of Eclipse.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
-				logger.info("Detected installation folder " + installationFolder);
+//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected Windows system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
-				logger.info("Detected installation folder " + installationFolder);
+//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
-				configFolderName = getHomeFolderName() + "/config";
+				configFolderName = homeFolderName + "/config";
 			}
 			break;
 		case linux:
 			if (isRunningInEclipse()) {
 				logger.info("Detected linux system and we are running inside of Eclipse.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
-				logger.info("Detected installation folder " + installationFolder);
+//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected linux system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../../bin");
-				logger.info("Detected installation folder " + installationFolder);
+//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = cleanupPath(installationFolder + "/../lib/app");
-				configFolderName = getHomeFolderName() + "/config";
+				configFolderName = homeFolderName + "/config";
 			}
 			break;
 		case osx:
 			if (isRunningInEclipse()) {
 				logger.info("Detected macos system and we are running inside of Eclipse.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
-				logger.info("Detected installation folder " + installationFolder);
+//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
-				configFolderName = appFolderName + "/config";
+				configFolderName = homeFolderName + "/config";
 			} else {
 				logger.info("Detected macos system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../MacOS");
-				logger.info("Detected installation folder " + installationFolder);
+//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = cleanupPath(installationFolder + "/../app");
-				configFolderName = getHomeFolderName() + "/config";
+				configFolderName = homeFolderName + "/config";
 			}
 			break;
 		case iosSimulator: {
 			logger.info("Detected ios system and we are running inside of simulator.");
 			homeFolderName = ".";
 			installationFolder = ".";
-			logger.info(new File(installationFolder).getAbsolutePath());
-			String directory = System.getProperty("user.dir");
-
-			logger.info("Detected installation folder " + installationFolder);
+//			logger.info(new File(installationFolder).getAbsolutePath());
+//			String directory = System.getProperty("user.dir");
+//			logger.info("Detected installation folder " + installationFolder);
 			appFolderName = installationFolder;
 			configFolderName = getHomeFolderName() + "/config";
 		}
 			break;
 		case ios: {
 			logger.info("Detected ios system.");
-//			installationFolder = cleanupPath(getInstallationFolder() + "/../../MacOS");
-//			logger.info("Detected installation folder " + installationFolder);
-//			appFolderName = cleanupPath(installationFolder + "/../app");
-//			configFolderName = getHomeFolderName() + "/config";
 			homeFolderName = ".";
 			installationFolder = ".";
-			logger.info(new File(installationFolder).getAbsolutePath());
-			String directory = System.getProperty("user.dir");
-			logger.info("Detected installation folder " + installationFolder);
+//			logger.info(new File(installationFolder).getAbsolutePath());
+//			String directory = System.getProperty("user.dir");
+//			logger.info("Detected installation folder " + installationFolder);
 			appFolderName = installationFolder;
-			configFolderName = getHomeFolderName() + "/config";
+			configFolderName = homeFolderName + "/config";
 		}
 			break;
 
 		}
-		System.out.println("context-1");
-//		createFolder(homeFolderName);
-		System.out.println("context-2");
+		String extRoot = Gdx.files.getExternalStoragePath();
+		String locRoot = Gdx.files.getLocalStoragePath();
+
+		logger.info("Detected installation folder " + installationFolder);
+		logger.info("Detected configuration folder " + configFolderName);
+		createFolder(homeFolderName);
 		createFolder(configFolderName);
 		init();
 
@@ -267,8 +266,7 @@ public abstract class Context extends ApplicationProperties {
 	}
 
 	private void createFolder(String folderName) {
-
-		FileHandle local = Gdx.files.local(folderName);
+		FileHandle local = Gdx.files.external(folderName);
 		if (!local.exists()) {
 			local.mkdirs(); // If you require it to make the entire directory path including parents, use directory.mkdirs(); here instead.
 		}
@@ -323,7 +321,7 @@ public abstract class Context extends ApplicationProperties {
 	public void readScoreFromDisk(GameEngine gameEngine) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		try {
-			File file = new File(Context.getConfigFolderName() + "/score.yaml");
+			File file = Gdx.files.external(Context.getConfigFolderName() + "/score.yaml").file();
 			scoreList = mapper.readValue(file, ScoreList.class);
 			if (!scoreList.testValidity(gameEngine)) {
 				logger.error("invalid score file");

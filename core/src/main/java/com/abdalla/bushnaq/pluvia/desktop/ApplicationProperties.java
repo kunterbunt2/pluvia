@@ -135,7 +135,7 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 
 	private void read() {
 		try {
-			InputStream inStream = Gdx.files.local(propertyFileName).read();
+			InputStream inStream = Gdx.files.external(propertyFileName).read();
 			properties.load(inStream);
 			inStream.close();
 		} catch (Exception e) {
@@ -298,7 +298,7 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 	@Override
 	public void write() {
 		try {
-			OutputStream inStream = Gdx.files.local(propertyFileName).write(false);
+			OutputStream inStream = Gdx.files.external(propertyFileName).write(false);
 			properties.store(inStream, "test");
 			inStream.close();
 		} catch (Exception e) {

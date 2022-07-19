@@ -3,6 +3,8 @@ package com.abdalla.bushnaq.pluvia.launcher;
 import java.io.IOException;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
+import org.robovm.apple.glkit.GLKViewDrawableDepthFormat;
+import org.robovm.apple.glkit.GLKViewDrawableMultisample;
 import org.robovm.apple.uikit.UIApplication;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
@@ -49,18 +51,20 @@ public class IOSLauncher extends IOSApplication.Delegate {
 			System.out.println("start-3");
 			IOSApplicationConfiguration config = new IOSApplicationConfiguration();
 			config.useGL30 = true;
+			config.multisample = GLKViewDrawableMultisample._4X;
+			config.depthFormat = GLKViewDrawableDepthFormat._24;
 //		        config.useHaptics = false;
-			System.out.println("start-4");
+//			System.out.println("start-4");
 //				final Context context = new Context();
-			System.out.println("start-5");
-			System.out.println("start-6");
+//			System.out.println("start-5");
+//			System.out.println("start-6");
 			final GameEngine gameEngine = new GameEngine(new IosContextFactory());
-			System.out.println("start-7");
+//			System.out.println("start-7");
 			return new IOSApplication(gameEngine, config);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("start-10");
+//		System.out.println("start-10");
 		return null;
 	}
 

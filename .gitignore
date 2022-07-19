@@ -13,3 +13,5 @@ screenshots/*
 app/config/*
 /bin/
 /.gradle/
+
+ios/robovm-logs/

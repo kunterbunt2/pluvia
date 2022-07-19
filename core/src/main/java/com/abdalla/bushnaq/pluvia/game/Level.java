@@ -17,6 +17,7 @@ import com.abdalla.bushnaq.pluvia.util.PersistentRandomGenerator;
 import com.abdalla.bushnaq.pluvia.util.RcBoolean;
 import com.abdalla.bushnaq.pluvia.util.logger.Logger;
 import com.abdalla.bushnaq.pluvia.util.logger.LoggerFactory;
+import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -186,9 +187,9 @@ public abstract class Level {
 		game.steps++;
 	}
 
-	protected String getLastGameName() {
-		return "save/" + game.getUserName() + "/" + game.getName() + ".xml";
-	}
+//	protected String getLastGameName() {
+//		return "save/" + game.getUserName() + "/" + game.getName() + ".xml";
+//	}
 
 //	public int getScore() {
 //		if (queryHeapHeight() == 0)
@@ -621,7 +622,7 @@ public abstract class Level {
 //				}
 				{
 //					String			recordingFileName	= getRecordingFileName();
-					File			recordingFile	= new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name));
+					File			recordingFile	= Gdx.files.external(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)).file();
 					ObjectMapper	mapper			= new ObjectMapper(new YAMLFactory());
 					recording = mapper.readValue(recordingFile, getRecording().getClass());
 					update(getRecording().getGdo());
@@ -826,7 +827,7 @@ public abstract class Level {
 			getRecording().setGdo(new GameDataObject(this));
 			// store the recording
 			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-			mapper.writeValue(new File(fileName), getRecording());
+			mapper.writeValue( Gdx.files.external(fileName).file(), getRecording());
 		} catch (StreamWriteException e) {
 			logger.warn(e.getMessage(), e);
 		} catch (DatabindException e) {
