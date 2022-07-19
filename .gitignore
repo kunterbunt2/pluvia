@@ -12,3 +12,4 @@ pluvia.log
 screenshots/*
 app/config/*
 /bin/
+/.gradle/
