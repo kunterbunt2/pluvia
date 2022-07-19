@@ -133,12 +133,12 @@ public abstract class Context extends ApplicationProperties {
 		case windows:
 		default:
 			if (isRunningInEclipse()) {
-				logger.info("Detected Windows system and we are running inside of Eclipse.");
-				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
+				logger.info("Detected 'Windows' system and we are running inside of 'Eclipse'.");
+				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
 				appFolderName = installationFolder + "/app";
-				configFolderName = appFolderName + "/config";
+				configFolderName = homeFolderName + "/config";
 			} else {
-				logger.info("Detected Windows system.");
+				logger.info("Detected 'Windows' system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
 				appFolderName = installationFolder + "/app";
 				configFolderName = homeFolderName + "/config";
@@ -146,12 +146,12 @@ public abstract class Context extends ApplicationProperties {
 			break;
 		case linux:
 			if (isRunningInEclipse()) {
-				logger.info("Detected linux system and we are running inside of Eclipse.");
-				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
+				logger.info("Detected 'Linux' system and we are running inside of 'Eclipse'.");
+				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
 				appFolderName = installationFolder + "/app";
-				configFolderName = appFolderName + "/config";
+				configFolderName = homeFolderName + "/config";
 			} else {
-				logger.info("Detected linux system.");
+				logger.info("Detected 'Linux' system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../../bin");
 				appFolderName = cleanupPath(installationFolder + "/../lib/app");
 				configFolderName = homeFolderName + "/config";
@@ -159,19 +159,19 @@ public abstract class Context extends ApplicationProperties {
 			break;
 		case osx:
 			if (isRunningInEclipse()) {
-				logger.info("Detected macos system and we are running inside of Eclipse.");
+				logger.info("Detected 'macOS' system and we are running inside of 'Eclipse'.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
 				appFolderName = installationFolder + "/app";
 				configFolderName = homeFolderName + "/config";
 			} else {
-				logger.info("Detected macos system.");
+				logger.info("Detected 'macOS' system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../MacOS");
 				appFolderName = cleanupPath(installationFolder + "/../app");
 				configFolderName = homeFolderName + "/config";
 			}
 			break;
 		case iosSimulator: {
-			logger.info("Detected ios system and we are running inside of simulator.");
+			logger.info("Detected 'iOS' system and we are running inside of 'simulator'.");
 			homeFolderName = ".";
 			installationFolder = ".";
 			appFolderName = installationFolder;
@@ -179,7 +179,7 @@ public abstract class Context extends ApplicationProperties {
 		}
 			break;
 		case ios: {
-			logger.info("Detected ios system.");
+			logger.info("Detected 'iOS' system.");
 			homeFolderName = ".";
 			installationFolder = ".";
 			appFolderName = installationFolder;
@@ -188,8 +188,10 @@ public abstract class Context extends ApplicationProperties {
 			break;
 
 		}
-		logger.info("Detected installation folder " + installationFolder);
-		logger.info("Detected configuration folder " + configFolderName);
+		logger.info("Detected 'home' folder = " + homeFolderName);
+		logger.info("Detected 'installation' folder = " + installationFolder);
+		logger.info("Detected 'app' folder = " + appFolderName);
+		logger.info("Detected 'configuration' folder = " + configFolderName);
 		createFolder(homeFolderName);
 		createFolder(configFolderName);
 		init();
