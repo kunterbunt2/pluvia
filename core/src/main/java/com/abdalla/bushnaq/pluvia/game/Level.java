@@ -827,7 +827,7 @@ public abstract class Level {
 			getRecording().setGdo(new GameDataObject(this));
 			// store the recording
 			ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-			mapper.writeValue( Gdx.files.external(fileName).file(), getRecording());
+			mapper.writeValue(Gdx.files.external(fileName).file(), getRecording());
 		} catch (StreamWriteException e) {
 			logger.warn(e.getMessage(), e);
 		} catch (DatabindException e) {

@@ -73,30 +73,24 @@ public abstract class Context extends ApplicationProperties {
 		return "";
 	}
 
-	public static boolean isIos() {
-		return getOeratingSystemType().equals(OperatingSystem.ios) || getOeratingSystemType().equals(OperatingSystem.iosSimulator);
-	}
-
 	public static OperatingSystem getOeratingSystemType() {
 		String os = System.getProperty("os.name").toLowerCase();
-//		logger.info(os);
 		if (os.contains("win")) {
 			return OperatingSystem.windows;
-			// Operating system is based on Windows
 		} else if (os.contains("mac")) {
 			return OperatingSystem.osx;
-			// Operating system is Apple OSX based
 		} else if (os.contains("nix") || os.contains("nux")) {
 			return OperatingSystem.linux;
-			// Operating system is based on Linux/Unix/*AIX
 		} else if (os.contains("ios simulator")) {
 			return OperatingSystem.iosSimulator;
-			// Operating system is based on Windows
 		} else if (os.contains("ios")) {
 			return OperatingSystem.ios;
-			// Operating system is based on Windows
 		} else
 			return OperatingSystem.unknonw;
+	}
+
+	public static boolean isIos() {
+		return getOeratingSystemType().equals(OperatingSystem.ios) || getOeratingSystemType().equals(OperatingSystem.iosSimulator);
 	}
 
 	public static boolean isRunningInEclipse() {
@@ -133,7 +127,6 @@ public abstract class Context extends ApplicationProperties {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-//		homeFolderName = System.getProperty("user.home") + "/.pluvia";
 		homeFolderName = ".pluvia";
 		operatingSystem = getOeratingSystemType();
 		switch (operatingSystem) {
@@ -142,13 +135,11 @@ public abstract class Context extends ApplicationProperties {
 			if (isRunningInEclipse()) {
 				logger.info("Detected Windows system and we are running inside of Eclipse.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
-//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected Windows system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
-//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = homeFolderName + "/config";
 			}
@@ -157,13 +148,11 @@ public abstract class Context extends ApplicationProperties {
 			if (isRunningInEclipse()) {
 				logger.info("Detected linux system and we are running inside of Eclipse.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
-//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = appFolderName + "/config";
 			} else {
 				logger.info("Detected linux system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../../bin");
-//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = cleanupPath(installationFolder + "/../lib/app");
 				configFolderName = homeFolderName + "/config";
 			}
@@ -172,13 +161,11 @@ public abstract class Context extends ApplicationProperties {
 			if (isRunningInEclipse()) {
 				logger.info("Detected macos system and we are running inside of Eclipse.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
-//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = installationFolder + "/app";
 				configFolderName = homeFolderName + "/config";
 			} else {
 				logger.info("Detected macos system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../MacOS");
-//				logger.info("Detected installation folder " + installationFolder);
 				appFolderName = cleanupPath(installationFolder + "/../app");
 				configFolderName = homeFolderName + "/config";
 			}
@@ -187,9 +174,6 @@ public abstract class Context extends ApplicationProperties {
 			logger.info("Detected ios system and we are running inside of simulator.");
 			homeFolderName = ".";
 			installationFolder = ".";
-//			logger.info(new File(installationFolder).getAbsolutePath());
-//			String directory = System.getProperty("user.dir");
-//			logger.info("Detected installation folder " + installationFolder);
 			appFolderName = installationFolder;
 			configFolderName = getHomeFolderName() + "/config";
 		}
@@ -198,18 +182,12 @@ public abstract class Context extends ApplicationProperties {
 			logger.info("Detected ios system.");
 			homeFolderName = ".";
 			installationFolder = ".";
-//			logger.info(new File(installationFolder).getAbsolutePath());
-//			String directory = System.getProperty("user.dir");
-//			logger.info("Detected installation folder " + installationFolder);
 			appFolderName = installationFolder;
 			configFolderName = homeFolderName + "/config";
 		}
 			break;
 
 		}
-		String extRoot = Gdx.files.getExternalStoragePath();
-		String locRoot = Gdx.files.getLocalStoragePath();
-
 		logger.info("Detected installation folder " + installationFolder);
 		logger.info("Detected configuration folder " + configFolderName);
 		createFolder(homeFolderName);
@@ -225,16 +203,10 @@ public abstract class Context extends ApplicationProperties {
 	public void advanceInTime(final boolean enable) throws Exception {
 		if (enable) {
 			levelManager.updateFps();
-//			if (useFixedDelta)
-//				timeDelta = fixedDelta;
-//			else
 			timeDelta = System.currentTimeMillis() - lastTime;
 			if (timeDelta > 1000)
 				timeDelta = 0;// we probably just started
-//			if (timeDelta >= fixedDelta)
-			// float[] before = queryDetailedCredits(false);
 			{
-//				timeDelta -= fixedDelta;
 				currentTime += timeDelta;
 				for (Fish fish : fishList) {
 					fish.advanceInTime(currentTime);
@@ -256,12 +228,6 @@ public abstract class Context extends ApplicationProperties {
 				}
 			}
 			lastTime = System.currentTimeMillis();
-		}
-	}
-
-	public void create(final int randomGeneratorSeed, final long age) {
-		{
-//			universeRG = new RandomGenerator(randomGeneratorSeed);
 		}
 	}
 

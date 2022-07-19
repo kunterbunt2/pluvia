@@ -1,6 +1,5 @@
 package com.abdalla.bushnaq.pluvia.game.score;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.TreeSet;
 

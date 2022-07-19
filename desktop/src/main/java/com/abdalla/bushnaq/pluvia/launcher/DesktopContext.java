@@ -14,6 +14,19 @@ public class DesktopContext extends Context {
 	private static final String PLUVIA_MONITOR = "pluvia.monitor";
 
 	@Override
+	public void disableClipping() {
+		if (!Context.isIos())
+			Gdx.gl.glDisable(GL30C.GL_CLIP_DISTANCE0);
+	}
+
+	@Override
+	public void enableClipping() {
+		if (!Context.isIos())
+			Gdx.gl.glEnable(GL30C.GL_CLIP_DISTANCE0);
+
+	}
+
+	@Override
 	public int getMonitorProperty() {
 		final Monitor[]	monitors	= Lwjgl3ApplicationConfiguration.getMonitors();
 		int				monitor		= readIntegerProperty(PLUVIA_MONITOR, 0, 0, monitors.length);
@@ -33,19 +46,6 @@ public class DesktopContext extends Context {
 	@Override
 	public void setMonitor(int value) {
 		properties.setProperty(PLUVIA_MONITOR, "" + value);
-	}
-
-	@Override
-	public void enableClipping() {
-		if (!Context.isIos())
-			Gdx.gl.glEnable(GL30C.GL_CLIP_DISTANCE0);
-
-	}
-
-	@Override
-	public void disableClipping() {
-		if (!Context.isIos())
-			Gdx.gl.glDisable(GL30C.GL_CLIP_DISTANCE0);
 	}
 
 }

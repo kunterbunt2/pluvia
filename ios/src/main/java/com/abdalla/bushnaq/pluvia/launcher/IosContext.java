@@ -8,6 +8,14 @@ import com.abdalla.bushnaq.pluvia.desktop.Context;
 public class IosContext extends Context {
 
 	@Override
+	public void disableClipping() {
+	}
+
+	@Override
+	public void enableClipping() {
+	}
+
+	@Override
 	public int getMonitorProperty() {
 		return 0;
 	}
@@ -19,14 +27,6 @@ public class IosContext extends Context {
 
 	@Override
 	public void setMonitor(int value) {
-	}
-
-	@Override
-	public void enableClipping() {
-	}
-
-	@Override
-	public void disableClipping() {
 	}
 
 }

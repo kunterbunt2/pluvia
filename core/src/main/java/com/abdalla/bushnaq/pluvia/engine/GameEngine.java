@@ -94,6 +94,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private Stage					stage;
 	private StringBuilder			stringBuilder;
 	private boolean					takeScreenShot;
+	private Integer					touchX						= null;
+
+	private Integer					touchY						= null;
+
 	private boolean					vsyncEnabled				= true;
 
 	public GameEngine(final IContextFactory contextFactory) throws Exception {
@@ -140,24 +144,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 	}
 
-	private void evaluateConfiguation() {
-		Gdx.graphics.setForegroundFPS(context.getForegroundFPSProperty());
-		Gdx.graphics.setVSync(context.getVsyncProperty());
-	}
-
-	public void createMonument() {
-		{
-			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCube[0]), null);
-			cube.instance.transform.setToTranslationAndScaling(0, -5, 0, 1f, 10f, 1f);
-			renderEngine.addStatic(cube.instance);
-		}
-		{
-			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCube[0]), null);
-			cube.instance.transform.setToTranslationAndScaling(0, -10, 0, 10f, 1f, 10f);
-			renderEngine.addStatic(cube.instance);
-		}
-	}
-
 //	private void createGame(int gameIndex) {
 //		if (context.levelManager != null)
 //			context.levelManager.destroyLevel();
@@ -174,6 +160,19 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 //			renderEngine.getCamera().update();
 //		}
 //	}
+
+	public void createMonument() {
+		{
+			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCube[0]), null);
+			cube.instance.transform.setToTranslationAndScaling(0, -5, 0, 1f, 10f, 1f);
+			renderEngine.addStatic(cube.instance);
+		}
+		{
+			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCube[0]), null);
+			cube.instance.transform.setToTranslationAndScaling(0, -10, 0, 10f, 1f, 10f);
+			renderEngine.addStatic(cube.instance);
+		}
+	}
 
 	private void createStage() throws Exception {
 		final int height = 12 * 2;
@@ -215,16 +214,13 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 	}
 
+	private void evaluateConfiguation() {
+		Gdx.graphics.setForegroundFPS(context.getForegroundFPSProperty());
+		Gdx.graphics.setVSync(context.getVsyncProperty());
+	}
+
 	public AboutDialog getAboutDialog() {
 		return aboutDialog;
-	}
-
-	public AudioManager getAudioManager() {
-		return audioManager;
-	}
-
-	public MainDialog getMainDialog() {
-		return mainDialog;
 	}
 
 //	private void exit() {
@@ -239,6 +235,14 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 //		}
 //		printWriter.close();
 //	}
+
+	public AudioManager getAudioManager() {
+		return audioManager;
+	}
+
+	public MainDialog getMainDialog() {
+		return mainDialog;
+	}
 
 	public int getMaxFramesPerSecond() {
 		return maxFramesPerSecond;
@@ -615,9 +619,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 		return false;
 	}
-
-	private Integer	touchX	= null;
-	private Integer	touchY	= null;
 
 	@Override
 	public boolean touchDragged(final int screenX, final int screenY, final int pointer) {

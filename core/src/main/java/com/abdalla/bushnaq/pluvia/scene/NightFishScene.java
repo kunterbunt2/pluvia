@@ -29,11 +29,9 @@ public class NightFishScene extends AbstractScene {
 		gameEngine.renderEngine.getFog().setFullDistance(50f);
 		gameEngine.renderEngine.getFog().setColor(Color.BLACK);
 		// water
-		if (Context.isIos())
-		{
+		if (Context.isIos()) {
 			gameEngine.renderEngine.getWater().setPresent(false);
-		}
-		else {
+		} else {
 			gameEngine.renderEngine.getWater().setPresent(true);
 			gameEngine.renderEngine.getWater().setWaveStrength(0.05f);
 			gameEngine.renderEngine.getWater().setRefractiveMultiplicator(50f);
