@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>de.abdalla.bushnaq</groupId>
 		<artifactId>pluvia</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.3</version>
 	</parent>
 
 	<artifactId>pluvia-ios</artifactId>
@@ -17,6 +17,18 @@
 			<artifactId>pluvia-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.mobidevelop.robovm</groupId>
+			<artifactId>robovm-rt</artifactId>
+			<version>${roboVMVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mobidevelop.robovm</groupId>
+			<artifactId>robovm-cocoatouch</artifactId>
+			<version>${roboVMVersion}</version>
+		</dependency>
+
 
 		<!-- requires robovm upgrades -->
 		<dependency>

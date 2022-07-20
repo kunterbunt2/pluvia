@@ -54,7 +54,7 @@ detected_modules=`$JAVA_HOME/bin/jdeps \
   --ignore-missing-deps \
   --print-module-deps \
   --class-path "target/installer/input/libs/*" \
-    target/classes/com/abdalla/bushnaq/pluvia/desktop/DesktopLauncher.class`
+    target/classes/com/abdalla/bushnaq/pluvia/launcher/DesktopLauncher.class`
 echo "detected modules: ${detected_modules}"
 
 

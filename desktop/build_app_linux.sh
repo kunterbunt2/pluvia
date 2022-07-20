@@ -106,7 +106,7 @@ $JAVA_HOME/bin/jpackage \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \
---main-class com.abdalla.bushnaq.pluvia.desktop.DesktopLauncher \
+--main-class com.abdalla.bushnaq.pluvia.launcher.DesktopLauncher \
 --main-jar libs/${MAIN_JAR} \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
