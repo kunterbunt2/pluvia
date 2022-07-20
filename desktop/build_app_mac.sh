@@ -40,7 +40,7 @@ cp target/libs/* target/installer/input/libs/
 cp -r target/assets/* target/installer/input/assets/
 cp target/config/* target/installer/input/config/
 cp target/${MAIN_JAR} target/installer/input/libs/
-cp README.md target/installer/input/
+cp ../README.md target/installer/input/
 
 # ------ REQUIRED MODULES ---------------------------------------------------
 # Use jlink to detect all modules that are required to run the application.

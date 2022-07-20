@@ -10,7 +10,7 @@
 # APP_VERSION: the application version, e.g. 1.0.0, shown in "about" dialog
 
 JAVA_VERSION=17
-MAIN_JAR="pluvia-$PROJECT_VERSION.jar"
+MAIN_JAR="pluvia-desktop-$PROJECT_VERSION.jar"
 
 # Set desired installer type: "app-image", "rpm" or "deb".
 INSTALLER_TYPE=deb
@@ -41,7 +41,7 @@ cp target/libs/* target/installer/input/libs/
 cp -r target/assets/* target/installer/input/assets/
 cp target/config/* target/installer/input/config/
 cp target/${MAIN_JAR} target/installer/input/libs/
-cp README.md target/installer/input/
+cp ../README.md target/installer/input/
 
 # ------ REQUIRED MODULES ---------------------------------------------------
 # Use jlink to detect all modules that are required to run the application.
@@ -55,7 +55,7 @@ detected_modules=`$JAVA_HOME/bin/jdeps \
   --ignore-missing-deps \
   --print-module-deps \
   --class-path "target/installer/input/libs/*" \
-    target/classes/com/abdalla/bushnaq/pluvia/desktop/DesktopLauncher.class`
+    target/classes/com/abdalla/bushnaq/pluvia/launcher/DesktopLauncher.class`
 echo "detected modules: ${detected_modules}"
 
 
@@ -114,7 +114,7 @@ $JAVA_HOME/bin/jpackage \
 --app-version ${TAG_NAME} \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
---license-file LICENSE \
+--license-file ../LICENSE \
 --linux-shortcut \
 --linux-menu-group games \
 --verbose
@@ -124,7 +124,7 @@ $JAVA_HOME/bin/jpackage \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \
---main-class com.abdalla.bushnaq.pluvia.desktop.DesktopLauncher \
+--main-class com.abdalla.bushnaq.pluvia.launcher.DesktopLauncher \
 --main-jar libs/${MAIN_JAR} \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
@@ -133,7 +133,7 @@ $JAVA_HOME/bin/jpackage \
 --vendor "Kunterbunt" \
 --copyright "Copyright © 2022 Kunterbunt." \
 --verbose \
---license-file LICENSE \
+--license-file ../LICENSE \
 --linux-shortcut \
 --linux-menu-group games \
 --verbose
