@@ -9,8 +9,6 @@
 
 	<properties>
 		<!-- Java Code Compliance Level -->
-		<source.level>17</source.level>
-		<target.level>17</target.level>
 		<file.encoding>utf-8</file.encoding>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.libraray.path>${env.JAVA_HOME}\bin</java.libraray.path>

@@ -10,7 +10,7 @@ rem PROJECT_VERSION: version used in pom.xml, e.g. 1.0-SNAPSHOT
 rem APP_VERSION: the application version, e.g. 1.0.0, shown in "about" dialog
 
 set JAVA_VERSION=17
-set MAIN_JAR=pluvia-%PROJECT_VERSION%.jar
+set MAIN_JAR=pluvia-desktop-%PROJECT_VERSION%.jar
 
 rem Set desired installer type: "app-image" "msi" "exe".
 set INSTALLER_TYPE=msi
@@ -37,7 +37,7 @@ xcopy /S /Q target\libs\* target\installer\input\libs\
 xcopy /S /Q target\assets\* target\installer\input\assets\
 xcopy /S /Q target\config\* target\installer\input\config\
 copy target\%MAIN_JAR% target\installer\input\libs\
-copy README.md target\installer\input\
+copy ../README.md target\installer\input\
 
 rem ------ REQUIRED MODULES ---------------------------------------------------
 rem Use jlink to detect all modules that are required to run the application.
@@ -101,7 +101,7 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --dest target/installer ^
   --input target/installer/input ^
   --name pluvia ^
-  --main-class com.abdalla.bushnaq.pluvia.desktop.DesktopLauncher ^
+  --main-class com.abdalla.bushnaq.pluvia.launcher.DesktopLauncher ^
   --main-jar libs/%MAIN_JAR% ^
   --java-options -Xmx2048m ^
   --runtime-image target/java-runtime ^
@@ -109,7 +109,7 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --app-version %TAG_NAME% ^
   --vendor "Kunterbunt" ^
   --copyright "Copyright © 2022 Kunterbunt." ^
-  --license-file LICENSE ^
+  --license-file ../LICENSE ^
   --verbose ^
   --win-dir-chooser ^
   --win-shortcut ^
@@ -117,4 +117,5 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --win-menu ^
   --win-upgrade-uuid e99dd49e-e4d2-11ec-8fea-0242ac120002 ^
   --temp target/temp
-rem   --win-console ^
+rem  --win-console ^
+  

@@ -1,3 +1,3 @@
 call mvn -version
-call mvn clean verify
+call mvn clean install -U
 pause

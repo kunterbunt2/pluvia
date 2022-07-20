@@ -11,6 +11,11 @@
 	<name>abdalla.bushnaq.pluvia-desktop</name>
 	<description>pluvia-desktop</description>
 
+	<properties>
+		<!-- Java Code Compliance Level -->
+		<source.level>1.7</source.level>
+		<target.level>1.7</target.level>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>de.abdalla.bushnaq</groupId>
@@ -74,7 +79,7 @@
 							<outputDirectory>${project.build.directory}/assets</outputDirectory>
 							<resources>
 								<resource>
-									<directory>app/assets</directory>
+									<directory>../app/assets</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
@@ -106,7 +111,7 @@
 							<outputDirectory>${project.build.directory}/config</outputDirectory>
 							<resources>
 								<resource>
-									<directory>pluvia/config</directory>
+									<directory>../pluvia/config</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
@@ -129,7 +134,7 @@
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
-						<phase>varify</phase>
+						<phase>verify</phase>
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>
@@ -168,7 +173,7 @@
 						<executions>
 							<execution>
 								<id>Build Native Linux App</id>
-								<phase>verify</phase>
+								<phase>install</phase>
 								<goals>
 									<goal>exec</goal>
 								</goals>
@@ -208,7 +213,7 @@
 						<executions>
 							<execution>
 								<id>Build Native Windows App</id>
-								<phase>verify</phase>
+								<phase>install</phase>
 								<goals>
 									<goal>exec</goal>
 								</goals>
@@ -248,7 +253,7 @@
 						<executions>
 							<execution>
 								<id>Build Native Mac App</id>
-								<phase>verify</phase>
+								<phase>install</phase>
 								<goals>
 									<goal>exec</goal>
 								</goals>
