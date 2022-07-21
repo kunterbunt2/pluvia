@@ -1,4 +1,5 @@
 #line 1
+#extension GL_APPLE_clip_distance : require
 // required to have same precision in both shader for light structure
 #ifdef GL_ES
 #define LOWP lowp
@@ -16,9 +17,8 @@ precision highp float;
 #define varying out
 #endif
 uniform vec4 u_clippingPlane; //clipping plane for water refraction and reflections
-
+varying float gl_ClipDistance[4];
 varying vec3 v_position;
-
 attribute vec3 a_position;
 uniform mat4 u_projViewTrans;
 
@@ -315,9 +315,9 @@ void main() {
 	#endif
 	v_position = vec3(pos.xyz) / pos.w;
 	gl_Position = u_projViewTrans * pos;
-	#ifdef u_clippingPlane
+//	#ifdef u_clippingPlane
 		gl_ClipDistance[0] = dot(pos, u_clippingPlane);
-	#endif
+//	#endif
 	
 	#ifdef shadowMapFlag
 		vec4 spos = u_shadowMapProjViewTrans * pos;

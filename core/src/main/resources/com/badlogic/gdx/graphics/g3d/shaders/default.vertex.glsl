@@ -1,3 +1,4 @@
+#extension GL_APPLE_clip_distance : require
 #if defined(diffuseTextureFlag) || defined(specularTextureFlag) || defined(emissiveTextureFlag)
 #define textureFlag
 #endif
@@ -10,6 +11,7 @@
 #define cameraPositionFlag
 #endif
 uniform vec4 u_clippingPlane; //clipping plane for water refraction and reflections
+varying float gl_ClipDistance[4];
 
 attribute vec3 a_position;
 uniform mat4 u_projViewTrans;
@@ -249,9 +251,9 @@ void main() {
 	#endif
 		
 	gl_Position = u_projViewTrans * pos;
-	#ifdef u_clippingPlane
+//	#ifdef u_clippingPlane
 		gl_ClipDistance[0] = dot(pos, u_clippingPlane);
-	#endif
+//	#endif
 		
 	#ifdef shadowMapFlag
 		vec4 spos = u_shadowMapProjViewTrans * pos;

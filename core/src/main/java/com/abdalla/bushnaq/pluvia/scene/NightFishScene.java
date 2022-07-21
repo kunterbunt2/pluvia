@@ -2,7 +2,6 @@ package com.abdalla.bushnaq.pluvia.scene;
 
 import java.util.List;
 
-import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.engine.GameObject;
 import com.badlogic.gdx.graphics.Color;
@@ -29,14 +28,10 @@ public class NightFishScene extends AbstractScene {
 		gameEngine.renderEngine.getFog().setFullDistance(50f);
 		gameEngine.renderEngine.getFog().setColor(Color.BLACK);
 		// water
-		if (Context.isIos()) {
-			gameEngine.renderEngine.getWater().setPresent(false);
-		} else {
-			gameEngine.renderEngine.getWater().setPresent(true);
-			gameEngine.renderEngine.getWater().setWaveStrength(0.05f);
-			gameEngine.renderEngine.getWater().setRefractiveMultiplicator(50f);
-			createWater();
-		}
+		gameEngine.renderEngine.getWater().setPresent(true);
+		gameEngine.renderEngine.getWater().setWaveStrength(0.05f);
+		gameEngine.renderEngine.getWater().setRefractiveMultiplicator(50f);
+		createWater();
 		// mirror
 		gameEngine.renderEngine.getMirror().setPresent(false);
 		createCity(gameEngine, 0, 0, -CITY_SIZE * 5, false, 2f);

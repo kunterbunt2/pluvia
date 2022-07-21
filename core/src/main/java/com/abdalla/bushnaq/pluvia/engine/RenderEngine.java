@@ -175,6 +175,14 @@ public class RenderEngine {
 	private Water							water								= new Water();
 
 	public RenderEngine(final Context context, final InputProcessor inputProcessor) throws Exception {
+		{
+			String	exts	= Gdx.gl.glGetString(GL20.GL_EXTENSIONS);
+			int		i		= 0;
+			for (String ext : exts.split(" ")) {
+				System.out.println(i++ + " " + ext);
+			}
+		}
+
 		this.context = context;
 		pbr = context.getPbrModeProperty();
 		createFrameBuffer();

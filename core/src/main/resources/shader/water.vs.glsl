@@ -1,4 +1,5 @@
 //water.vs.glsl
+#extension GL_APPLE_clip_distance : require
 #ifdef GL_ES
 	#define LOWP lowp
 	#define MED mediump
@@ -23,7 +24,8 @@ attribute vec3 a_position;
 attribute vec2 a_texCoord0;
 uniform mat4 u_projViewTrans;
 uniform mat4 u_worldTrans;
-uniform vec4 u_clippingPlane = vec4(-1.0,-1.0,-1.0,-1.0); //clipping plane for water refraction and reflections
+uniform vec4 u_clippingPlane; //clipping plane for water refraction and reflections
+varying float gl_ClipDistance[4];
 uniform vec4 u_cameraPosition;
 uniform float u_tiling;
 varying vec2 v_texCoord0;
@@ -34,7 +36,7 @@ void main() {
 	//clipping
 	vec4 worldPosition = u_worldTrans * vec4(a_position, 1.0);
 //	#ifdef u_clippingPlane
-	if(u_clippingPlane.w != -1.0)
+//	if(u_clippingPlane.w != -1.0)
 		gl_ClipDistance[0] = dot(worldPosition, u_clippingPlane);
 //	#endif
 	//coords
