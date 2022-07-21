@@ -51,10 +51,11 @@ jobs:
       -  name: build-with-maven-step
          env:
             TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
-         run: cd core
-         run: mvn install --batch-mode --update-snapshots package
-         run: cd ../desktop
-         run: mvn install --batch-mode --update-snapshots package
+         run: |
+           cd core
+           mvn install --batch-mode --update-snapshots package
+           cd ../desktop
+           mvn install --batch-mode --update-snapshots package
       -  name: upload-msi-step
          uses: actions/upload-release-asset@v1
          env:
@@ -79,10 +80,11 @@ jobs:
       -  name: build-with-maven-step
          env:
             TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
-         run: cd core
-         run: mvn install --batch-mode --update-snapshots package
-         run: cd ../desktop
-         run: mvn verify --batch-mode --update-snapshots package
+         run: |
+           cd core
+           mvn install --batch-mode --update-snapshots package
+           cd ../desktop
+           mvn install --batch-mode --update-snapshots package
       -  name: upload-deb-step
          uses: actions/upload-release-asset@v1
          env:
@@ -116,10 +118,11 @@ jobs:
       -  name: build-with-maven-step
          env:
             TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
-         run: cd core
-         run: mvn install --batch-mode --update-snapshots package
-         run: cd ../desktop
-         run: mvn verify --batch-mode --update-snapshots package
+         run: |
+           cd core
+           mvn install --batch-mode --update-snapshots package
+           cd ../desktop
+           mvn install --batch-mode --update-snapshots package
       -  name: upload-pkg-step
          uses: actions/upload-release-asset@v1
          env:
