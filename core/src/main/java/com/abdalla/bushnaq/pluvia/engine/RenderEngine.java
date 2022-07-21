@@ -176,10 +176,12 @@ public class RenderEngine {
 
 	public RenderEngine(final Context context, final InputProcessor inputProcessor) throws Exception {
 		{
-			String	exts	= Gdx.gl.glGetString(GL20.GL_EXTENSIONS);
-			int		i		= 0;
-			for (String ext : exts.split(" ")) {
-				System.out.println(i++ + " " + ext);
+			String exts = Gdx.gl.glGetString(GL20.GL_EXTENSIONS);
+			if (exts != null) {
+				int i = 0;
+				for (String ext : exts.split(" ")) {
+					System.out.println(i++ + " " + ext);
+				}
 			}
 		}
 

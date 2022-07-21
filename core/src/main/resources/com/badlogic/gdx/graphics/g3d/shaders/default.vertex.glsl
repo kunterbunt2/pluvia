@@ -1,4 +1,7 @@
-#extension GL_APPLE_clip_distance : require
+#ifdef GL_ES
+	#extension GL_APPLE_clip_distance : require
+#endif
+
 #if defined(diffuseTextureFlag) || defined(specularTextureFlag) || defined(emissiveTextureFlag)
 #define textureFlag
 #endif

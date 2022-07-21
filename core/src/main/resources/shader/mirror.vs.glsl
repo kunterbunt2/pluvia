@@ -1,6 +1,6 @@
 //mirror.vs.glsl
-#extension GL_APPLE_clip_distance : require
 #ifdef GL_ES
+	#extension GL_APPLE_clip_distance : require
 	#define LOWP lowp
 	#define MED mediump
 	#define HIGH highp
