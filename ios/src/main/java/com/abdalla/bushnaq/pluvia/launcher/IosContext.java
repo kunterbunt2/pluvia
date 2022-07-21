@@ -1,5 +1,8 @@
 package com.abdalla.bushnaq.pluvia.launcher;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.badlogic.gdx.Gdx;
 
@@ -31,6 +34,11 @@ public class IosContext extends Context {
 
 	@Override
 	public void setMonitor(int value) {
+	}
+
+	protected String getInstallationFolder() {
+		// dummy implementation, as this is never used for ios
+		return null;
 	}
 
 }

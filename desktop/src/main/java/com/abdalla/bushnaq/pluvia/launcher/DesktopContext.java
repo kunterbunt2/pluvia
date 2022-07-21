@@ -1,5 +1,8 @@
 package com.abdalla.bushnaq.pluvia.launcher;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import org.lwjgl.opengl.GL30C;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
@@ -46,6 +49,23 @@ public class DesktopContext extends Context {
 	@Override
 	public void setMonitor(int value) {
 		properties.setProperty(PLUVIA_MONITOR, "" + value);
+	}
+
+	@Override
+	protected String getInstallationFolder() {
+		try {
+			String path = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+			if (path.endsWith(".jar")) {
+				logger.info("path = " + path);
+				logger.info("last index = " + path.lastIndexOf(File.separator));
+				path = path.substring(0, path.lastIndexOf(File.separator) - 1);
+			}
+			path = cleanupPath(path);
+			return path;
+		} catch (URISyntaxException e) {
+			logger.error(e.getMessage(), e);
+		}
+		return "";
 	}
 
 }

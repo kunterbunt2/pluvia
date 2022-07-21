@@ -36,7 +36,7 @@ public abstract class Context extends ApplicationProperties {
 	protected static Logger		logger				= LoggerFactory.getLogger(Context.class);
 	public static final float	WORLD_SCALE			= 2.0f;
 
-	private static String cleanupPath(String path) {
+	protected static String cleanupPath(String path) {
 		try {
 			path = new File(path).getCanonicalPath();// get rid of all the /..
 		} catch (IOException e) {
@@ -57,21 +57,7 @@ public abstract class Context extends ApplicationProperties {
 		return homeFolderName;
 	}
 
-	private static String getInstallationFolder() {
-		try {
-			String path = new File(Context.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
-			if (path.endsWith(".jar")) {
-				logger.info("path = " + path);
-				logger.info("last index = " + path.lastIndexOf(File.separator));
-				path = path.substring(0, path.lastIndexOf(File.separator) - 1);
-			}
-			path = cleanupPath(path);
-			return path;
-		} catch (URISyntaxException e) {
-			logger.error(e.getMessage(), e);
-		}
-		return "";
-	}
+	protected abstract String getInstallationFolder();
 
 	public static OperatingSystem getOeratingSystemType() {
 		String os = System.getProperty("os.name").toLowerCase();
