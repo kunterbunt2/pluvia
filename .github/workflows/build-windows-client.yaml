@@ -4,8 +4,10 @@
 name: Windows Client
 
 on:
-  push:
-    branches: [ main ]
+  workflow_call:
+#on:
+#  push:
+#    branches: [ main ]
 
 jobs:
    build:
