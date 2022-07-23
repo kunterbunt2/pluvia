@@ -2,7 +2,6 @@ package com.abdalla.bushnaq.pluvia.desktop;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.abdalla.bushnaq.pluvia.game.Game;
@@ -57,8 +56,6 @@ public abstract class Context extends ApplicationProperties {
 		return homeFolderName;
 	}
 
-	protected abstract String getInstallationFolder();
-
 	public static OperatingSystem getOeratingSystemType() {
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.contains("win")) {
@@ -86,6 +83,7 @@ public abstract class Context extends ApplicationProperties {
 	}
 
 	private String				appVersion		= "0.0.0";
+
 	public ModelList<Bubble>	bubbleList		= new ModelList<>();
 	public long					currentTime		= 8L * 10000;
 	public ModelList<Digit>		digitList		= new ModelList<>();
@@ -254,6 +252,8 @@ public abstract class Context extends ApplicationProperties {
 		}
 		return -1;
 	}
+
+	protected abstract String getInstallationFolder();
 
 	public int getLastGameSeed() {
 		int lastGameSeed = -1;

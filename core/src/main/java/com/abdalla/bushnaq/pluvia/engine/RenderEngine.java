@@ -27,7 +27,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
@@ -134,6 +133,7 @@ public class RenderEngine {
 	private Matrix4							identityMatrix						= new Matrix4();
 	private InfoDialog						info;
 	private final InputMultiplexer			inputMultiplexer					= new InputMultiplexer();
+	private Logger							logger								= LoggerFactory.getLogger(this.getClass());
 	private GameObject						lookatCube;
 	private Mirror							mirror								= new Mirror();
 	private SceneSkybox						nightSkyBox;
@@ -141,7 +141,7 @@ public class RenderEngine {
 	private boolean							pbr;
 	private final PointLightsAttribute		pointLights							= new PointLightsAttribute();
 	private final Vector3					position							= new Vector3();
-//	private FrameBuffer						postFbo;
+	// private FrameBuffer postFbo;
 	public Model							rayCube;
 	// private final Ray ray = new Ray(new Vector3(), new Vector3());
 	private Plane							reflectionClippingPlane				= new Plane(new Vector3(0f, 1f, 0f), 0.1f);								// render everything above the
@@ -166,7 +166,7 @@ public class RenderEngine {
 	private float							timeOfDay							= 8;																	// 24h time
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
-//	private DepthOfFieldEffect				vfxEffect;
+	// private DepthOfFieldEffect vfxEffect;
 //	private final VfxManager				vfxManager							= null;
 	public int								visibleDynamicGameObjectCount		= 0;
 	public int								visibleDynamicLightCount			= 0;
@@ -176,14 +176,13 @@ public class RenderEngine {
 	private final Array<ModelInstance>		visibleStaticModelInstances			= new Array<>();
 	private final Array<RenderableProvider>	visibleStaticRenderableProviders	= new Array<>();
 	private Water							water								= new Water();
-	private Logger							logger								= LoggerFactory.getLogger(this.getClass());
 
 	public RenderEngine(final Context context, final InputProcessor inputProcessor) throws Exception {
-		logger.info(String.format("GL_VERSION = %s", Gdx.gl.glGetString(GL30.GL_VERSION)));
-		logger.info(String.format("GL_ES_VERSION_2_0 = %s", Gdx.gl.glGetString(GL30.GL_ES_VERSION_2_0)));
-		logger.info(String.format("GL_SHADING_LANGUAGE_VERSION = %s", Gdx.gl.glGetString(GL30.GL_SHADING_LANGUAGE_VERSION)));
+		logger.info(String.format("GL_VERSION = %s", Gdx.gl.glGetString(GL20.GL_VERSION)));
+		logger.info(String.format("GL_ES_VERSION_2_0 = %s", Gdx.gl.glGetString(GL20.GL_ES_VERSION_2_0)));
+		logger.info(String.format("GL_SHADING_LANGUAGE_VERSION = %s", Gdx.gl.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION)));
 		{
-			String exts = Gdx.gl.glGetString(GL30.GL_EXTENSIONS);
+			String exts = Gdx.gl.glGetString(GL20.GL_EXTENSIONS);
 			if (exts != null) {
 				int i = 0;
 				for (String ext : exts.split(" ")) {

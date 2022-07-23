@@ -9,17 +9,9 @@ package com.abdalla.bushnaq.pluvia.game.recording;
 
 public class Frame {
 	private Interaction	interaction;
+	private Integer		step;
 	private Integer		x;
 	private Integer		y;
-	private Integer		step;
-
-	public Integer getStep() {
-		return step;
-	}
-
-	public void setStep(Integer step) {
-		this.step = step;
-	}
 
 	public Frame() {
 	}
@@ -40,6 +32,10 @@ public class Frame {
 		return interaction;
 	}
 
+	public Integer getStep() {
+		return step;
+	}
+
 	public Integer getX() {
 		return x;
 	}
@@ -50,6 +46,10 @@ public class Frame {
 
 	public void setInteraction(Interaction interaction) {
 		this.interaction = interaction;
+	}
+
+	public void setStep(Integer step) {
+		this.step = step;
 	}
 
 	public void setX(Integer x) {
