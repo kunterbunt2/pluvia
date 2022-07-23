@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 public abstract class ApplicationProperties implements IApplicationProperties {
 	private static final String		PLUVIA_AMBIENT_AUDIO			= "pluvia.ambientAudio";
 	private static final String		PLUVIA_AMBIENT_AUDIO_VOLUMEN	= "pluvia.ambientAudioVolumen";
+	private static final String		PLUVIA_AUDIO_VOLUMEN			= "pluvia.audioVolumen";
 	private static final String		PLUVIA_DEBUG_MODE				= "pluvia.debugMode";
 	private static final String		PLUVIA_FOREGROUND_FPS			= "pluvia.foregroundFPS";
 	private static final String		PLUVIA_FULLSCREEN_MODE			= "pluvia.fullscreenMode";
@@ -45,6 +46,11 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 	@Override
 	public int getAmbientAudioVolumenProperty() {
 		return readIntegerProperty(PLUVIA_AMBIENT_AUDIO_VOLUMEN, 10, 1, 100);
+	}
+
+	@Override
+	public int getAudioVolumenProperty() {
+		return readIntegerProperty(PLUVIA_AUDIO_VOLUMEN, 50, 1, 100);
 	}
 
 	@Override
@@ -205,6 +211,11 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 	@Override
 	public void setAmbientAudioVolumen(int value) {
 		properties.setProperty(PLUVIA_AMBIENT_AUDIO_VOLUMEN, "" + value);
+	}
+
+	@Override
+	public void setAudioVolumen(int value) {
+		properties.setProperty(PLUVIA_AUDIO_VOLUMEN, "" + value);
 	}
 
 	@Override

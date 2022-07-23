@@ -12,6 +12,8 @@ public interface IApplicationProperties {
 
 	int getAmbientAudioVolumenProperty();
 
+	int getAudioVolumenProperty();
+
 	boolean getDebugModeProperty();
 
 	int getForegroundFPSProperty();
@@ -47,6 +49,8 @@ public interface IApplicationProperties {
 	void setAmbientAudio(boolean checked);
 
 	void setAmbientAudioVolumen(int value);
+
+	void setAudioVolumen(int value);
 
 	void setDebugMode(boolean checked);
 

@@ -3,6 +3,7 @@ package com.abdalla.bushnaq.pluvia.engine;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
@@ -12,9 +13,11 @@ public class AudioManager {
 	public static final String	STICKY	= "sticky";
 	public static final String	TILT	= "score";
 	public static final String	VANISH	= "vanish";
+	private Context				context;
 	Map<String, Sound>			map		= new HashMap<>();
 
-	public AudioManager() {
+	public AudioManager(Context context) {
+		this.context = context;
 		add(SCORE, "/sound/score.mp3");
 		add(TILT, "/sound/tilt.mp3");
 		add(STICKY, "/sound/sticky.mp3");
@@ -34,7 +37,11 @@ public class AudioManager {
 		map.clear();
 	}
 
-	public Sound get(String tag) {
-		return map.get(tag);
+//	public Sound get(String tag) {
+//		return map.get(tag);
+//	}
+
+	public void play(String tag) {
+		map.get(tag).play((context.getAmbientAudioVolumenProperty()) / 100f);
 	}
 }

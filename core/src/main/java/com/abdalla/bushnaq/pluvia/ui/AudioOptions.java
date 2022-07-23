@@ -15,6 +15,8 @@ public class AudioOptions {
 	private VisCheckBox	ambientAudioCheckBox;
 	private VisLabel	ambientAudioVolumenLabel;
 	private VisSlider	ambientAudioVolumenSlider;
+	private VisLabel	audioVolumenLabel;
+	private VisSlider	audioVolumenSlider;
 	private GameEngine	gameEngine;
 	private Sizes		sizes;
 
@@ -25,6 +27,7 @@ public class AudioOptions {
 		table.row().pad(16);
 		createAmbientAudio(table);
 		createAmbientVolumen(table);
+		createAudioVolumen(table);
 	}
 
 	private void createAmbientAudio(Table table) {
@@ -66,8 +69,35 @@ public class AudioOptions {
 		table.row().pad(16);
 	}
 
+	private void createAudioVolumen(Table table) {
+		{
+			VisLabel label = new VisLabel("Audio Volumen");
+			label.setAlignment(Align.right);
+			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
+		}
+		{
+			audioVolumenSlider = new VisSlider(1f, 100f, 1f, false);
+			audioVolumenSlider.setValue(gameEngine.context.getAudioVolumenProperty());
+			audioVolumenSlider.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					audioVolumenLabel.setText((int) audioVolumenSlider.getValue());
+				}
+
+			});
+			table.add(audioVolumenSlider).center().width(AbstractDialog.BUTTON_WIDTH * sizes.scaleFactor);
+		}
+		{
+			audioVolumenLabel = new VisLabel("" + gameEngine.context.getAudioVolumenProperty());
+			audioVolumenLabel.setAlignment(Align.right);
+			table.add(audioVolumenLabel).width(100).center();
+		}
+		table.row().pad(16);
+	}
+
 	public void save() {
 		gameEngine.context.setAmbientAudio(ambientAudioCheckBox.isChecked());
 		gameEngine.context.setAmbientAudioVolumen((int) ambientAudioVolumenSlider.getValue());
+		gameEngine.context.setAudioVolumen((int) audioVolumenSlider.getValue());
 	}
 }

@@ -131,7 +131,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			}
 			renderEngine = new RenderEngine(context, this);
 			modelManager.create(renderEngine.isPbr());
-			audioManager = new AudioManager();
+			audioManager = new AudioManager(context);
 			createStage();
 			context.readScoreFromDisk(this);
 //			createMonument();
@@ -452,14 +452,12 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 				if (context.getScoreList().add(this.context.levelManager)) {
 					{
 						// new highscore
-						audioManager.get(AudioManager.SCORE).play();
-//						Tools.play(AtlasManager.getAssetsFolderName() + "/sound/score.wav");
+						context.levelManager.playSound(AudioManager.SCORE);
 						context.levelManager.writeResultToDisk();// save recording of our result
 					}
 				} else {
 					{
-						audioManager.get(AudioManager.TILT).play();
-//						Tools.play(AtlasManager.getAssetsFolderName() + "/sound/tilt.wav");
+						context.levelManager.playSound(AudioManager.TILT);
 					}
 				}
 				context.levelManager.deleteFile();

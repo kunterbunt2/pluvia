@@ -190,9 +190,9 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	@Override
-	protected void playSound(String tag) {
+	public void playSound(String tag) {
 		if (gameEngine != null)
-			gameEngine.getAudioManager().get(tag).play();
+			gameEngine.getAudioManager().play(tag);
 	}
 
 	@Override
