@@ -18,10 +18,16 @@ jobs:
             java-version: '17'
             distribution: adopt
       -  name: Build with Maven
-         run: cd core
-      -  run: mvn install --batch-mode --update-snapshots package
-      -  run: cd ../desktop
-      -  run: mvn install --batch-mode --update-snapshots package
+         run: |
+           cd core
+           mvn install --batch-mode --update-snapshots package
+           if exist "/home/runner/.m2/repository/de/abdalla/bushnaq/pluvia-core/1.2.4/pluvia-core-1.2.4.jar" (
+             echo "file exists"
+           ) else (
+             echo "file doesn't exist"
+           )
+           cd ../desktop
+           mvn install --batch-mode --update-snapshots package
       -  name: Upload MSI
          uses: actions/upload-artifact@v2
          with:
