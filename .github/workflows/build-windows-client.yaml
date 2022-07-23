@@ -32,4 +32,4 @@ jobs:
          uses: actions/upload-artifact@v2
          with:
             name: MSI file
-            path: target/installer/*.msi
+            path: desktop/target/installer/*.msi
