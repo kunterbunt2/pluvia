@@ -539,7 +539,7 @@ public abstract class Level {
 
 	public void nextRound() {
 		if (userCanReact()) {
-			getRecording().addFrame(Interaction.next);
+			getRecording().addFrame(game.steps, Interaction.next);
 			generateStones();
 			removeValishedStones();
 			clearCommandAttributes();
@@ -575,7 +575,7 @@ public abstract class Level {
 					int	x	= selectedStone.x;
 					int	y	= selectedStone.y;
 					if (moveOneStepLeft()) {
-						getRecording().addFrame(x, y, Interaction.left);
+						getRecording().addFrame(x, y, game.steps, Interaction.left);
 						animationPhase = maxAnimaltionPhase;
 						setUserReacted(true);
 						return true;
@@ -598,7 +598,7 @@ public abstract class Level {
 					int	x	= selectedStone.x;
 					int	y	= selectedStone.y;
 					if (moveOneStepRight()) {
-						getRecording().addFrame(x, y, Interaction.right);
+						getRecording().addFrame(x, y, game.steps, Interaction.right);
 						animationPhase = maxAnimaltionPhase;
 						setUserReacted(true);
 						return true;

@@ -11,17 +11,28 @@ public class Frame {
 	private Interaction	interaction;
 	private Integer		x;
 	private Integer		y;
+	private Integer		step;
+
+	public Integer getStep() {
+		return step;
+	}
+
+	public void setStep(Integer step) {
+		this.step = step;
+	}
 
 	public Frame() {
 	}
 
-	public Frame(int x, int y, Interaction interaction) {
+	public Frame(int x, int y, int step, Interaction interaction) {
 		this.x = x;
 		this.y = y;
+		this.step = step;
 		this.interaction = interaction;
 	}
 
-	public Frame(Interaction interaction) {
+	public Frame(int step, Interaction interaction) {
+		this.step = step;
 		this.interaction = interaction;
 	}
 

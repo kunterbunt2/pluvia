@@ -67,7 +67,7 @@ public class DesktopLauncher implements ApplicationListener {
 					+ "#endif\n";//
 		}
 
-		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, context.getMSAASamples());
+		config.setBackBufferConfig(8, 8, 8, 8, 24, 0, context.getMSAASamples());
 		config.setTitle("Pluvia");
 		config.setAutoIconify(true);
 		final Monitor[]		monitors		= Lwjgl3ApplicationConfiguration.getMonitors();

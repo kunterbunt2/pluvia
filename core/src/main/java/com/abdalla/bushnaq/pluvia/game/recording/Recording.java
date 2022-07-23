@@ -27,12 +27,12 @@ public class Recording {
 
 	}
 
-	public void addFrame(int x, int y, Interaction interaction) {
-		recording.add(new Frame(x, y, interaction));
+	public void addFrame(int x, int y, int step, Interaction interaction) {
+		recording.add(new Frame(x, y, step, interaction));
 	}
 
-	public void addFrame(Interaction interaction) {
-		recording.add(new Frame(interaction));
+	public void addFrame(int step, Interaction interaction) {
+		recording.add(new Frame(step, interaction));
 	}
 
 	public GameDataObject getGdo() {

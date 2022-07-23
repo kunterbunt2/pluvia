@@ -16,6 +16,8 @@ import com.abdalla.bushnaq.pluvia.engine.shader.water.Water;
 import com.abdalla.bushnaq.pluvia.game.model.stone.Stone;
 import com.abdalla.bushnaq.pluvia.scene.model.digit.Digit;
 import com.abdalla.bushnaq.pluvia.ui.InfoDialog;
+import com.abdalla.bushnaq.pluvia.util.logger.Logger;
+import com.abdalla.bushnaq.pluvia.util.logger.LoggerFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -25,6 +27,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
@@ -173,10 +176,14 @@ public class RenderEngine {
 	private final Array<ModelInstance>		visibleStaticModelInstances			= new Array<>();
 	private final Array<RenderableProvider>	visibleStaticRenderableProviders	= new Array<>();
 	private Water							water								= new Water();
+	private Logger							logger								= LoggerFactory.getLogger(this.getClass());
 
 	public RenderEngine(final Context context, final InputProcessor inputProcessor) throws Exception {
+		logger.info(String.format("GL_VERSION = %s", Gdx.gl.glGetString(GL30.GL_VERSION)));
+		logger.info(String.format("GL_ES_VERSION_2_0 = %s", Gdx.gl.glGetString(GL30.GL_ES_VERSION_2_0)));
+		logger.info(String.format("GL_SHADING_LANGUAGE_VERSION = %s", Gdx.gl.glGetString(GL30.GL_SHADING_LANGUAGE_VERSION)));
 		{
-			String exts = Gdx.gl.glGetString(GL20.GL_EXTENSIONS);
+			String exts = Gdx.gl.glGetString(GL30.GL_EXTENSIONS);
 			if (exts != null) {
 				int i = 0;
 				for (String ext : exts.split(" ")) {
