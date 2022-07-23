@@ -139,7 +139,7 @@ public abstract class Level {
 	}
 
 	private void deleteFile(String fileName) {
-		new File(fileName).delete();
+		Gdx.files.external(fileName).delete();
 	}
 
 	public abstract void disposeLevel();
@@ -615,13 +615,7 @@ public abstract class Level {
 		// only if this is a real game type and not the UI type
 		if (!game.name.equals(GameName.UI.name())) {
 			try {
-//				{
-//					ObjectMapper	mapper	= new ObjectMapper(new YAMLFactory());
-//					GameDataObject	gdo		= mapper.readValue(new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)), GameDataObject.class);
-//					update(gdo);
-//				}
 				{
-//					String			recordingFileName	= getRecordingFileName();
 					File			recordingFile	= Gdx.files.external(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)).file();
 					ObjectMapper	mapper			= new ObjectMapper(new YAMLFactory());
 					recording = mapper.readValue(recordingFile, getRecording().getClass());
