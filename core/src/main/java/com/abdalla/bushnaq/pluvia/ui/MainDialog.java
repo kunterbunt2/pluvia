@@ -151,7 +151,8 @@ public class MainDialog extends AbstractDialog {
 
 	private void createAudio() {
 		if (music == null) {
-			music = Gdx.audio.newMusic(Gdx.files.internal(AtlasManager.getAssetsFolderName() + "/sound/pluvia-01.mp3"));
+			
+			music = Gdx.audio.newMusic(Gdx.files.internal(AtlasManager.getAssetsFolderName() + String.format("/sound/pluvia-%02d.mp3",(int)(Math.random()*2+1))));
 		}
 		music.setVolume((getGameEngine().context.getAmbientAudioVolumenProperty()) / 100f);
 		music.play();
