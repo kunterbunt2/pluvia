@@ -11,6 +11,7 @@ import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.abdalla.bushnaq.pluvia.engine.GameEngine;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import com.badlogic.gdx.graphics.glutils.HdpiMode;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class IOSLauncher extends IOSApplication.Delegate {
@@ -53,6 +54,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
 			config.useGL30 = true;
 			config.multisample = GLKViewDrawableMultisample._4X;
 			config.depthFormat = GLKViewDrawableDepthFormat._24;
+			config.hdpiMode = HdpiMode.Pixels;
 //		        config.useHaptics = false;
 //			System.out.println("start-4");
 //				final Context context = new Context();
