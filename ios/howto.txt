@@ -3,4 +3,12 @@ ensure that automatic provisioning profile includes the device
 first installation will fail, as developer needs to be trusted in config/General/Device Management
 you can drag the provisioning profile to the desktop and open in editor to check if a device is listed
 	this is better than looking at i menu, as it is not always listed corectly.
+force creation of new provisioning profile by deleting the old one using finder 
 
+UPDATE LOGO
+- delete app
+- turn iPad off, restarting ipad after 10s
+- reinstall app
+- trust developer
+- reinstall app
+ 
