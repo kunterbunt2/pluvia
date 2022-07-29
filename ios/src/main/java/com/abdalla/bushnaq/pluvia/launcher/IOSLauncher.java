@@ -56,6 +56,8 @@ public class IOSLauncher extends IOSApplication.Delegate {
 			config.depthFormat = GLKViewDrawableDepthFormat._24;
 			config.hdpiMode = HdpiMode.Pixels;
 			config.preferredFramesPerSecond = 60;
+			config.orientationLandscape = false;
+			config.orientationPortrait = true;
 //		        config.useHaptics = false;
 //				final Context context = new Context();
 			final GameEngine gameEngine = new GameEngine(new IosContextFactory());

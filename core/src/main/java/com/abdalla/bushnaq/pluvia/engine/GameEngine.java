@@ -554,6 +554,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	@Override
 	public void resize(final int width, final int height) {
+		scheduleContextUpdate();
 //		render2DMaster.width = width;
 //		render2DMaster.height = height;
 	}
