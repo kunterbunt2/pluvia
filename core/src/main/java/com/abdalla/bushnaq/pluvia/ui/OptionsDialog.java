@@ -105,11 +105,14 @@ public class OptionsDialog extends AbstractDialog {
 
 				@Override
 				public void clicked(final InputEvent event, final float x, final float y) {
-					getGameEngine().context.restart = true;
+					if (getGameEngine().context.isRestartSuported())
+						getGameEngine().context.restart = true;
 					graphicsQualityOptions.save();
 					graphicsOptions.save();
 					audioOptions.save();
 					getGameEngine().context.write();
+					if (!getGameEngine().context.isRestartSuported())
+						getGameEngine().scheduleContextUpdate();
 					close();
 				}
 			});

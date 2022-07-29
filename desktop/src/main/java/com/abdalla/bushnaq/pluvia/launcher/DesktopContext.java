@@ -6,8 +6,10 @@ import java.net.URISyntaxException;
 import org.lwjgl.opengl.GL30C;
 
 import com.abdalla.bushnaq.pluvia.desktop.Context;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.Monitor;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 /**
@@ -66,6 +68,46 @@ public class DesktopContext extends Context {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
+	}
+
+	@Override
+	public boolean isFullscreenModeSupported() {
+		return true;
+	}
+
+	@Override
+	public boolean isMSAASamplesSupported() {
+		return true;
+	}
+
+	@Override
+	public boolean isPbrModeSupported() {
+		return false;
+	}
+
+	@Override
+	public boolean isForegroundFpsSupported() {
+		return true;
+	}
+
+	@Override
+	public boolean isMonitorSupported() {
+		return true;
+	}
+
+	@Override
+	public boolean isVsyncSupported() {
+		return true;
+	}
+
+	@Override
+	public boolean isRestartSuported() {
+		return true;
+	}
+
+	@Override
+	public boolean isDebugModeSupported() {
+		return true;
 	}
 
 }

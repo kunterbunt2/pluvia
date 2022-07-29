@@ -56,16 +56,19 @@ public class GraphicsQualityOptions {
 							setMaxPointLights(gameEngine.context.predefinedMaxPointLights[value]);
 							setMaxSceneObjects(gameEngine.context.predefinedMaxSceneObjects[value]);
 							setShadowMapSize(gameEngine.context.predefinedShadowMapSize[value]);
-							setMsaaSamples(gameEngine.context.predefinedMssaSamples[value]);
+							if (gameEngine.context.isMSAASamplesSupported())
+								setMsaaSamples(gameEngine.context.predefinedMssaSamples[value]);
 							maxPointLightsSlider.setDisabled(true);
 							maxSceneObjectsSlider.setDisabled(true);
 							shadowMapSizeSelectBox.setDisabled(true);
-							msaaSamplesSlider.setDisabled(true);
+							if (gameEngine.context.isMSAASamplesSupported())
+								msaaSamplesSlider.setDisabled(true);
 						} else {
 							maxPointLightsSlider.setDisabled(false);
 							maxSceneObjectsSlider.setDisabled(false);
 							shadowMapSizeSelectBox.setDisabled(false);
-							msaaSamplesSlider.setDisabled(false);
+							if (gameEngine.context.isMSAASamplesSupported())
+								msaaSamplesSlider.setDisabled(false);
 						}
 					} else {
 					}
@@ -139,31 +142,33 @@ public class GraphicsQualityOptions {
 	}
 
 	private void createMsaaSamples(Table table) {
-		{
-			VisLabel label = new VisLabel("Multisample Anti-Aliasing Samples");
-			label.setAlignment(Align.right);
-			table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
-		}
-		{
-			msaaSamplesSlider = new VisSlider(0f, 16f, 1f, false);
-			if (!isCustomMode())
-				msaaSamplesSlider.setDisabled(true);
-			msaaSamplesSlider.setValue(gameEngine.context.getMSAASamples());
-			msaaSamplesSlider.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					msaaSamplesLabel.setText((int) msaaSamplesSlider.getValue());
-				}
+		if (gameEngine.context.isMSAASamplesSupported()) {
+			{
+				VisLabel label = new VisLabel("Multisample Anti-Aliasing Samples");
+				label.setAlignment(Align.right);
+				table.add(label).width(AbstractDialog.LABEL_WIDTH * sizes.scaleFactor);
+			}
+			{
+				msaaSamplesSlider = new VisSlider(0f, 16f, 1f, false);
+				if (!isCustomMode())
+					msaaSamplesSlider.setDisabled(true);
+				msaaSamplesSlider.setValue(gameEngine.context.getMSAASamples());
+				msaaSamplesSlider.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						msaaSamplesLabel.setText((int) msaaSamplesSlider.getValue());
+					}
 
-			});
-			table.add(msaaSamplesSlider).center().width(AbstractDialog.BUTTON_WIDTH * sizes.scaleFactor);
+				});
+				table.add(msaaSamplesSlider).center().width(AbstractDialog.BUTTON_WIDTH * sizes.scaleFactor);
+			}
+			{
+				msaaSamplesLabel = new VisLabel("" + gameEngine.context.getMSAASamples());
+				msaaSamplesLabel.setAlignment(Align.right);
+				table.add(msaaSamplesLabel).width(100).center();
+			}
+			table.row().pad(16);
 		}
-		{
-			msaaSamplesLabel = new VisLabel("" + gameEngine.context.getMSAASamples());
-			msaaSamplesLabel.setAlignment(Align.right);
-			table.add(msaaSamplesLabel).width(100).center();
-		}
-		table.row().pad(16);
 	}
 
 	private void createShadowMapSize(Table table) {
@@ -205,7 +210,8 @@ public class GraphicsQualityOptions {
 			gameEngine.context.setMaxPointLights((int) maxPointLightsSlider.getValue());
 			gameEngine.context.setMaxSceneObjects((int) maxSceneObjectsSlider.getValue());
 			gameEngine.context.setShadowMapSize(shadowMapSizeSelectBox.getSelected());
-			gameEngine.context.setMsaaSamples((int) msaaSamplesSlider.getValue());
+			if (gameEngine.context.isMSAASamplesSupported())
+				gameEngine.context.setMsaaSamples((int) msaaSamplesSlider.getValue());
 		} else {
 		}
 	}

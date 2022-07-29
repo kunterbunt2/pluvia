@@ -2,6 +2,8 @@ package com.abdalla.bushnaq.pluvia.desktop;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.abdalla.bushnaq.pluvia.util.logger.Logger;
@@ -25,15 +27,18 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 	private static final String		PLUVIA_SHOW_GRAPHS				= "pluvia.showGraphs";
 	private static final String		PLUVIA_VSYNC					= "pluvia.vsync";
 	private static String			propertyFileName;
-	private boolean					debugMode;																	// debug mode is allowed
+	Map<String, Boolean>			booleanPropertiesMap			= new HashMap<>();
+	Map<String, Integer>			integerPropertiesMap			= new HashMap<>();
+//	private boolean					debugMode;																	// debug mode is allowed
 	private Logger					logger							= LoggerFactory.getLogger(this.getClass());
-	private int						maxSceneObjects;
+//	private int						maxSceneObjects;
 	public int						predefinedMaxPointLights[]		= { 0, 5, 10, 20 };
 	public int						predefinedMaxSceneObjects[]		= { 0, 25, 50, 100 };
 	public int						predefinedMssaSamples[]			= { 0, 4, 8, 16 };
 	public int						predefinedShadowMapSize[]		= { 1024, 2048, 4096, 8192 };
 	public Properties				properties						= new Properties();
-	private boolean					showGraphs;
+
+//	private boolean					showGraphs;
 
 	public ApplicationProperties() {
 	}
@@ -80,7 +85,7 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 
 	@Override
 	public int getMaxSceneObjects() {
-		return maxSceneObjects;
+		return readIntegerProperty(PLUVIA_MAX_SCENE_OBJECTS, 10, 0, 500);
 	}
 
 	@Override
@@ -117,13 +122,13 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 		propertyFileName = Context.getConfigFolderName() + "/pluvia.properties";
 		read();
 		updateGrphicsQuality();
-		debugMode = getDebugModeProperty();
-		showGraphs = getShowGraphsProperty();
+//		debugMode = getDebugModeProperty();
+//		showGraphs = getShowGraphsProperty();
 	}
 
 	@Override
 	public boolean isDebugMode() {
-		return debugMode;
+		return getDebugModeProperty();
 	}
 
 	private boolean isMultipleOf2(int propertyValue, int propertyMinValue, int propertyMaxValue) {
@@ -136,7 +141,7 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 
 	@Override
 	public boolean isShowGraphs() {
-		return showGraphs;
+		return getShowGraphsProperty();
 	}
 
 	private void read() {
@@ -151,54 +156,66 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 
 	private boolean readBooleanProperty(String propertyName, boolean propertyDefaultValue) {
 		boolean	propertyValue		= propertyDefaultValue;
-		String	propertyStringValue	= properties.getProperty(propertyName);
-		if (propertyStringValue != null) {
-			try {
-				propertyValue = Boolean.parseBoolean(propertyStringValue);
-			} catch (NumberFormatException e) {
-				logger.error(String.format("%s=%s must be a boolean value.", propertyName, propertyStringValue));
+		Boolean	cachedPropertyValue	= booleanPropertiesMap.get(propertyName);
+		if (cachedPropertyValue == null) {
+			String propertyStringValue = properties.getProperty(propertyName);
+			if (propertyStringValue != null) {
+				try {
+					propertyValue = Boolean.parseBoolean(propertyStringValue);
+				} catch (NumberFormatException e) {
+					logger.error(String.format("%s=%s must be a boolean value.", propertyName, propertyStringValue));
+				}
 			}
+			booleanPropertiesMap.put(propertyStringValue, propertyValue);
 		}
 		return propertyValue;
 	}
 
 	protected int readIntegerProperty(String propertyName, int propertyDefaultValue, int propertyMinValue, int propertyMaxValue) {
 		int		propertyValue		= propertyDefaultValue;
-		String	propertyStringValue	= properties.getProperty(propertyName);
-		if (propertyStringValue != null) {
-			try {
-				propertyValue = Integer.parseInt(propertyStringValue);
-				if (propertyValue < propertyMinValue || propertyValue > propertyMaxValue) {
+		Integer	cachedPropertyValue	= integerPropertiesMap.get(propertyName);
+		if (cachedPropertyValue == null) {
+			String propertyStringValue = properties.getProperty(propertyName);
+			if (propertyStringValue != null) {
+				try {
+					propertyValue = Integer.parseInt(propertyStringValue);
+					if (propertyValue < propertyMinValue || propertyValue > propertyMaxValue) {
+						propertyValue = propertyDefaultValue;
+						logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue, propertyMinValue, propertyMaxValue));
+					}
+				} catch (NumberFormatException e) {
 					propertyValue = propertyDefaultValue;
 					logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue, propertyMinValue, propertyMaxValue));
 				}
-			} catch (NumberFormatException e) {
-				propertyValue = propertyDefaultValue;
-				logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue, propertyMinValue, propertyMaxValue));
 			}
+			integerPropertiesMap.put(propertyStringValue, propertyValue);
 		}
 		return propertyValue;
 	}
 
 	private int readMultipleOf2Property(String propertyName, int propertyDefaultValue, int propertyMinValue, int propertyMaxValue) {
 		int		propertyValue		= propertyDefaultValue;
-		String	propertyStringValue	= properties.getProperty(propertyName);
-		if (propertyStringValue != null) {
-			try {
-				propertyValue = Integer.parseInt(propertyStringValue);
-				if (propertyValue < propertyMinValue || propertyValue > propertyMaxValue) {
-					propertyValue = propertyDefaultValue;
-					logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue, propertyMinValue, propertyMaxValue));
-				} else {
-					if (!isMultipleOf2(propertyValue, propertyMinValue, propertyMaxValue)) {
+		Integer	cachedPropertyValue	= integerPropertiesMap.get(propertyName);
+		if (cachedPropertyValue == null) {
+			String propertyStringValue = properties.getProperty(propertyName);
+			if (propertyStringValue != null) {
+				try {
+					propertyValue = Integer.parseInt(propertyStringValue);
+					if (propertyValue < propertyMinValue || propertyValue > propertyMaxValue) {
 						propertyValue = propertyDefaultValue;
-						logger.error(String.format("%s=%s must be a nultiple of 2.", propertyName, propertyStringValue));
+						logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue, propertyMinValue, propertyMaxValue));
+					} else {
+						if (!isMultipleOf2(propertyValue, propertyMinValue, propertyMaxValue)) {
+							propertyValue = propertyDefaultValue;
+							logger.error(String.format("%s=%s must be a nultiple of 2.", propertyName, propertyStringValue));
+						}
 					}
+				} catch (NumberFormatException e) {
+					propertyValue = propertyDefaultValue;
+					logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue));
 				}
-			} catch (NumberFormatException e) {
-				propertyValue = propertyDefaultValue;
-				logger.error(String.format("%s=%s must be a number bigger or equal %d and smaller or equal %d.", propertyName, propertyStringValue));
 			}
+			integerPropertiesMap.put(propertyStringValue, propertyValue);
 		}
 		return propertyValue;
 	}
@@ -303,7 +320,6 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 			logger.info(String.format("%s=%s", property, properties.get(property)));
 		}
 		logger.info("---");
-		maxSceneObjects = readIntegerProperty(PLUVIA_MAX_SCENE_OBJECTS, 10, 0, 500);
 	}
 
 	@Override

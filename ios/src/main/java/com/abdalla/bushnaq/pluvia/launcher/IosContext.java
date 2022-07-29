@@ -1,8 +1,5 @@
 package com.abdalla.bushnaq.pluvia.launcher;
 
-import java.io.File;
-import java.net.URISyntaxException;
-
 import com.abdalla.bushnaq.pluvia.desktop.Context;
 import com.badlogic.gdx.Gdx;
 
@@ -23,6 +20,12 @@ public class IosContext extends Context {
 	}
 
 	@Override
+	protected String getInstallationFolder() {
+		// dummy implementation, as this is never used for ios
+		return null;
+	}
+
+	@Override
 	public int getMonitorProperty() {
 		return 0;
 	}
@@ -33,12 +36,46 @@ public class IosContext extends Context {
 	}
 
 	@Override
+	public boolean isDebugModeSupported() {
+		return false;
+	}
+
+	@Override
+	public boolean isForegroundFpsSupported() {
+		return false;
+	}
+
+	@Override
+	public boolean isFullscreenModeSupported() {
+		return false;
+	}
+
+	@Override
+	public boolean isMonitorSupported() {
+		return false;
+	}
+
+	@Override
+	public boolean isMSAASamplesSupported() {
+		return false;
+	}
+
+	@Override
+	public boolean isPbrModeSupported() {
+		return false;
+	}
+
+	@Override
+	public boolean isRestartSuported() {
+		return false;
+	}
+
+	@Override
+	public boolean isVsyncSupported() {
+		return false;
+	}
+
+	@Override
 	public void setMonitor(int value) {
 	}
-
-	protected String getInstallationFolder() {
-		// dummy implementation, as this is never used for ios
-		return null;
-	}
-
 }

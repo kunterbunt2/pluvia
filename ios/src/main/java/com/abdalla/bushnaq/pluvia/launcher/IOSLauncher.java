@@ -52,21 +52,17 @@ public class IOSLauncher extends IOSApplication.Delegate {
 			System.out.println("start-3");
 			IOSApplicationConfiguration config = new IOSApplicationConfiguration();
 			config.useGL30 = true;
-			config.multisample = GLKViewDrawableMultisample._4X;
+			config.multisample = GLKViewDrawableMultisample.None;
 			config.depthFormat = GLKViewDrawableDepthFormat._24;
 			config.hdpiMode = HdpiMode.Pixels;
+			config.preferredFramesPerSecond = 60;
 //		        config.useHaptics = false;
-//			System.out.println("start-4");
 //				final Context context = new Context();
-//			System.out.println("start-5");
-//			System.out.println("start-6");
 			final GameEngine gameEngine = new GameEngine(new IosContextFactory());
-//			System.out.println("start-7");
 			return new IOSApplication(gameEngine, config);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		System.out.println("start-10");
 		return null;
 	}
 

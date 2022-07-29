@@ -79,6 +79,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private GameObject				cube						= null;
 	boolean							enableProfiling				= true;
 	private boolean					followMode;
+	private boolean					isUpdateContext;
 	private final List<VisLabel>	labels						= new ArrayList<>();
 	private final Logger			logger						= LoggerFactory.getLogger(this.getClass());
 	private MainDialog				mainDialog;
@@ -95,14 +96,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private StringBuilder			stringBuilder;
 	private boolean					takeScreenShot;
 	private Integer					touchX						= null;
-
 	private Integer					touchY						= null;
-
-	private boolean					vsyncEnabled				= true;
 
 	public GameEngine(final IContextFactory contextFactory) throws Exception {
 		this.contextFactory = contextFactory;
-//		universe.setScreenListener(this);
 		modelManager = new ModelManager();
 	}
 
@@ -115,9 +112,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 				evaluateConfiguation();
 			}
 			showFps = context.getShowFpsProperty();
-//			Gdx.gl.glEnable(0x884F);
-//			if (Gdx.gl.glGetError() != 0)
-//				logger.error("" + Gdx.gl.glGetError());
 			profiler = new GLProfiler(Gdx.graphics);
 			profiler.setListener(GLErrorListener.LOGGING_LISTENER);// ---enable exception throwing in case of error
 			profiler.setListener(new MyGLErrorListener());
@@ -144,23 +138,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		}
 	}
 
-//	private void createGame(int gameIndex) {
-//		if (context.levelManager != null)
-//			context.levelManager.destroyLevel();
-//		context.selectGamee(gameIndex);
-//		context.levelManager = new LevelManager(this, context.game);
-////		universe.GameThread.clearLevel();
-//		context.levelManager.createLevel();
-//		{
-//			float	z			= context.game.cameraZPosition;
-//			Vector3	position	= renderEngine.getCamera().position;
-//			position.z = z;
-//			position.y = context.game.getNrOfRows() / 2;
-//			renderEngine.getCamera().lookat.y = context.game.getNrOfRows() / 2 + 0.5f;
-//			renderEngine.getCamera().update();
-//		}
-//	}
-
 	public void createMonument() {
 		{
 			GameObject cube = new GameObject(new ModelInstanceHack(modelManager.buildingCube[0]), null);
@@ -178,6 +155,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		final int height = 12 * 2;
 		stage = new Stage(new ScreenViewport(), renderEngine.batch2D);
 //		font = new BitmapFont();
+		labels.clear();
 		for (int i = 0; i < 8; i++) {
 			final VisLabel label = new VisLabel(" ");
 			label.setPosition(0, i * height);
@@ -197,21 +175,24 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	@Override
 	public void dispose() {
 		try {
+			disposeStage();
+			audioManager.dispose();
+			renderEngine.dispose();
 			if (profiler.isEnabled()) {
 				profiler.disable();
 			}
-			renderEngine.dispose();
-//			font.dispose();
-			stage.dispose();
-			mainDialog.dispose();
-			scoreDialog.dispose();
-			pauseDialog.dispose();
-			messageDialog.dispose();
-			aboutDialog.dispose();
-			audioManager.dispose();
 		} catch (final Exception e) {
 			logger.error(e.getMessage(), e);
 		}
+	}
+
+	private void disposeStage() {
+		stage.dispose();
+		mainDialog.dispose();
+		scoreDialog.dispose();
+		pauseDialog.dispose();
+		messageDialog.dispose();
+		aboutDialog.dispose();
 	}
 
 	private void evaluateConfiguation() {
@@ -346,10 +327,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			if (context.isDebugMode())
 				renderEngine.toggleDebugmode();
 			return true;
-		case Input.Keys.F6:
-			if (context.isShowGraphs())
-				renderEngine.toggleShowGraphs();
-			return true;
+//		case Input.Keys.F6:
+//			if (context.isShowGraphs())
+//				renderEngine.toggleShowGraphs();
+//			return true;
 		case Input.Keys.F:
 			followMode = !followMode;
 			return true;
@@ -432,6 +413,13 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	private void render(final long currentTime) throws Exception {
 		final float deltaTime = Gdx.graphics.getDeltaTime();
+
+		if (isUpdateContext) {
+			isUpdateContext = false;
+			dispose();
+			create();
+		}
+
 		renderEngine.updateCamera(centerXD, centerYD, centerZD);
 		updateScore();
 		renderStones(currentTime);
@@ -576,6 +564,15 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	}
 
+	/**
+	 * react to changes in the configuration within the context
+	 *
+	 * @throws Exception
+	 */
+	public void scheduleContextUpdate() {
+		isUpdateContext = true;
+	}
+
 	@Override
 	public boolean scrolled(final float amountX, final float amountY) {
 
@@ -670,6 +667,11 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		touchY = null;
 //		System.out.println("reset touch");
 		return true;
+	}
+
+	public void updateContext() {
+		dispose();
+		create();
 	}
 
 	public void updateScore() {

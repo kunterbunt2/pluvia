@@ -44,7 +44,23 @@ public interface IApplicationProperties {
 
 	boolean isDebugMode();
 
+	boolean isDebugModeSupported();
+
+	boolean isForegroundFpsSupported();
+
+	boolean isFullscreenModeSupported();
+
+	boolean isMonitorSupported();
+
+	boolean isMSAASamplesSupported();
+
+	boolean isPbrModeSupported();
+
+	boolean isRestartSuported();
+
 	boolean isShowGraphs();
+
+	boolean isVsyncSupported();
 
 	void setAmbientAudio(boolean checked);
 

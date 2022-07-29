@@ -133,6 +133,7 @@ public class RenderEngine {
 	private Matrix4							identityMatrix						= new Matrix4();
 	private InfoDialog						info;
 	private final InputMultiplexer			inputMultiplexer					= new InputMultiplexer();
+	private InputProcessor					inputProcessor;
 	private Logger							logger								= LoggerFactory.getLogger(this.getClass());
 	private GameObject						lookatCube;
 	private Mirror							mirror								= new Mirror();
@@ -153,7 +154,6 @@ public class RenderEngine {
 	private DirectionalShadowLight			shadowLight							= null;
 	private final Vector3					shadowLightDirection				= new Vector3();
 	// OrthographicCamera debugCamera;
-	private boolean							showGraphs;
 	private boolean							skyBox								= false;
 	private Cubemap							specularCubemap;
 	private final int						speed								= 5;																	// speed of time
@@ -190,26 +190,10 @@ public class RenderEngine {
 				}
 			}
 		}
-
+		logger.info(String.format("width = %d height = %d", Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		this.context = context;
-		pbr = context.getPbrModeProperty();
-		createFrameBuffer();
-		createShader();
-		createEnvironment();
-		createCamera();
-		createInputProcessor(inputProcessor);
-		createStage();
-//		createRayCube();
-//		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
-//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
-//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
-//		createBlurEffect();
-//		createBloomEffect();
-//		vfxManager.addEffect(new FxaaEffect());
-//		vfxManager.addEffect(new FilmGrainEffect());
-//		vfxManager.addEffect(new OldTvEffect());
-		cpuGraph = new TimeGraph(new Color(1f, 0f, 0f, 1f), new Color(1f, 0, 0, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
-		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
+		this.inputProcessor = inputProcessor;
+		create();
 	}
 
 	public void add(final PointLight pointLight, final boolean dynamic) {
@@ -258,6 +242,26 @@ public class RenderEngine {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	}
 
+	public void create() throws Exception {
+		pbr = context.getPbrModeProperty();
+		createFrameBuffer();
+		createShader();
+		createEnvironment();
+		createCamera();
+		createInputProcessor(inputProcessor);
+		createStage();
+//		createRayCube();
+//		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
+//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
+//		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 0));
+//		createBlurEffect();
+//		createBloomEffect();
+//		vfxManager.addEffect(new FxaaEffect());
+//		vfxManager.addEffect(new FilmGrainEffect());
+//		vfxManager.addEffect(new OldTvEffect());
+		createGraphs();
+	}
+
 	private void createBloomEffect() {
 //		Settings s = new Settings(50, 0.999f, 1.0f, 1.0f, 10.0f, 0.5f);
 //		effect2 = new BloomEffect(s);
@@ -271,7 +275,7 @@ public class RenderEngine {
 //		effect1.setPasses(32);
 	}
 
-	private void createCamera() throws Exception {
+	private void createCamera() {
 		camera = new MovingCamera(67f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		final Vector3 lookat = new Vector3(0, 0, 0);
 		camera.position.set(lookat.x + 0f / Context.WORLD_SCALE, lookat.y + 0f / Context.WORLD_SCALE, lookat.z + 8);
@@ -330,6 +334,38 @@ public class RenderEngine {
 		getFog().setFogEquation(environment);
 	}
 
+	private String createFileName(final Date date, final String append) {
+		final String			pattern				= "yyyy-MM-dd-HH-mm-ss";
+		final SimpleDateFormat	simpleDateFormat	= new SimpleDateFormat(pattern);
+		final String			dateAsString		= simpleDateFormat.format(date);
+		final String			fileName			= "screenshots/" + dateAsString + "-" + append + ".png";
+		return fileName;
+	}
+
+	private void createFrameBuffer() {
+		water.createFrameBuffer(context);
+		getMirror().createFrameBuffer();
+//		{
+//			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+//			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
+//			postFbo = frameBufferBuilder.build();
+//		}
+	}
+
+	private void createGraphs() {
+		cpuGraph = new TimeGraph(new Color(1f, 0f, 0f, 1f), new Color(1f, 0, 0, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
+		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
+	}
+
+	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
+		camController = new MyCameraInputController(camera);
+		camController.scrollFactor = -0.1f;
+		camController.translateUnits = 1000f;
+		inputMultiplexer.addProcessor(inputProcessor);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
+
 //	private void createDepthOfFieldMeter() {
 //		if (isDebugMode()) {
 //
@@ -370,33 +406,6 @@ public class RenderEngine {
 //		}
 //	}
 
-	private String createFileName(final Date date, final String append) {
-		final String			pattern				= "yyyy-MM-dd-HH-mm-ss";
-		final SimpleDateFormat	simpleDateFormat	= new SimpleDateFormat(pattern);
-		final String			dateAsString		= simpleDateFormat.format(date);
-		final String			fileName			= "screenshots/" + dateAsString + "-" + append + ".png";
-		return fileName;
-	}
-
-	private void createFrameBuffer() {
-		water.createFrameBuffer(context);
-		getMirror().createFrameBuffer();
-//		{
-//			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
-//			frameBufferBuilder.addDepthTextureAttachment(GL30.GL_DEPTH_COMPONENT24, GL20.GL_UNSIGNED_BYTE);
-//			postFbo = frameBufferBuilder.build();
-//		}
-	}
-
-	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
-		camController = new MyCameraInputController(camera);
-		camController.scrollFactor = -0.1f;
-		camController.translateUnits = 1000f;
-		inputMultiplexer.addProcessor(inputProcessor);
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
-
 	private GameObject createRay(final Ray ray, Float length) {
 		if (length == null)
 			length = 10000f;
@@ -431,27 +440,6 @@ public class RenderEngine {
 		}
 	}
 
-//	private void createLookatCube() {
-//		if (isDebugMode()) {
-//			if (lookatCube == null) {
-//				lookatCube = new GameObject(new ModelInstanceHack(rayCube), null);
-//				lookatCube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
-//				lookatCube.instance.transform.scale(0.5f, 0.5f, 0.5f);
-//				addDynamic(lookatCube);
-//			}
-//			final Vector3 position = new Vector3();
-//			lookatCube.instance.transform.getTranslation(position);
-//			if (!position.equals(camera.lookat)) {
-//				lookatCube.instance.transform.setToTranslation(camera.lookat);
-//				lookatCube.update();
-//			}
-//		} else {
-//			if (lookatCube != null) {
-//				removeDynamic(lookatCube);
-//			}
-//		}
-//	}
-
 	private void createShader() {
 		atlasManager = new AtlasManager();
 		atlasManager.init();
@@ -465,7 +453,6 @@ public class RenderEngine {
 		batch = new ModelBatch(createShaderProvider(), renderableSorter);
 		// batch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
 		batch2D = new CustomizedSpriteBatch(1000, ShaderCompatibilityHelper.mustUse32CShader() ? GL32CMacIssueHandler.createSpriteBatchShader() : null);
-
 	}
 
 	private ShaderProvider createShaderProvider() {
@@ -537,28 +524,79 @@ public class RenderEngine {
 		staticCache.dispose();
 		dynamicCache.dispose();
 //		vfxManager.dispose();
-		gameShaderProvider.dispose();
-		cpuGraph.dispose();
-		gpuGraph.dispose();
-//		postFbo.dispose();
-		water.dispose();
-		mirror.dispose();
-		getInfo().dispose();
-		batch.dispose();
-		batch2D.dispose();
-		depthBatch.dispose();
+		disposeGraphs();
+		disposeStage();
+		disposeInputProcessor();
+		disposeCamera();
+		disposeEnvironment();
+		disposeShader();
+		disposeFrameBuffer();
+	}
+
+//	private void createLookatCube() {
+//		if (isDebugMode()) {
+//			if (lookatCube == null) {
+//				lookatCube = new GameObject(new ModelInstanceHack(rayCube), null);
+//				lookatCube.instance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
+//				lookatCube.instance.transform.scale(0.5f, 0.5f, 0.5f);
+//				addDynamic(lookatCube);
+//			}
+//			final Vector3 position = new Vector3();
+//			lookatCube.instance.transform.getTranslation(position);
+//			if (!position.equals(camera.lookat)) {
+//				lookatCube.instance.transform.setToTranslation(camera.lookat);
+//				lookatCube.update();
+//			}
+//		} else {
+//			if (lookatCube != null) {
+//				removeDynamic(lookatCube);
+//			}
+//		}
+//	}
+
+	private void disposeCamera() {
+	}
+
+	private void disposeEnvironment() {
 		if (isPbr()) {
 			diffuseCubemap.dispose();
 			environmentNightCubemap.dispose();
 			environmentDayCubemap.dispose();
 			specularCubemap.dispose();
 			brdfLUT.dispose();
+			nightSkyBox.dispose();
+			daySkyBox.dispose();
 		}
-		atlasManager.dispose();
-		Gdx.input.setInputProcessor(null);
+		shadowLight.dispose();
+		environment.clear();
 	}
 
-	public void end() {
+	private void disposeFrameBuffer() {
+//		postFbo.dispose();
+		mirror.dispose();
+		water.dispose();
+	}
+
+	private void disposeGraphs() {
+		gpuGraph.dispose();
+		cpuGraph.dispose();
+	}
+
+	private void disposeInputProcessor() {
+		Gdx.input.setInputProcessor(null);
+		inputMultiplexer.clear();
+	}
+
+	private void disposeShader() {
+		gameShaderProvider.dispose();
+		batch2D.dispose();
+		batch.dispose();
+		depthBatch.dispose();
+		atlasManager.dispose();
+	}
+
+	private void disposeStage() throws Exception {
+		info.dispose();
 	}
 
 //	private void fboToScreen() {
@@ -571,6 +609,9 @@ public class RenderEngine {
 //		batch2D.end();
 //		batch2D.enableBlending();
 //	}
+
+	public void end() {
+	}
 
 	public AtlasManager getAtlasManager() {
 		return atlasManager;
@@ -730,7 +771,7 @@ public class RenderEngine {
 	}
 
 	private boolean isShowGraphs() {
-		return showGraphs;
+		return context.getShowGraphsProperty();
 	}
 
 	private boolean isSkyBox() {
@@ -1163,10 +1204,6 @@ public class RenderEngine {
 		this.fixedDayTime = fixedDayTime;
 	}
 
-	public void setPbr(boolean pbr) {
-		this.pbr = pbr;
-	}
-
 //	private void updateFog() {
 //		if (fogEquation != null) {
 //			// fogEquation.x is where the fog begins
@@ -1182,18 +1219,22 @@ public class RenderEngine {
 //		}
 //	}
 
+	public void setPbr(boolean pbr) {
+		this.pbr = pbr;
+	}
+
 	public void setShadowEnabled(boolean shadowEnabled) {
 		this.shadowEnabled = shadowEnabled;
 	}
+
+//	private void setShowGraphs(boolean showGraphs) {
+//		this.showGraphs = showGraphs;
+//	}
 
 	private void setShadowLight(final float lum) {
 //		shadowLight.intensity = lum;
 //		shadowLight.set(GameSettings.SHADOW_INTENSITY, GameSettings.SHADOW_INTENSITY, GameSettings.SHADOW_INTENSITY,shadowLightDirection.nor());
 		shadowLight.set(lum, lum, lum, shadowLightDirection.nor());
-	}
-
-	private void setShowGraphs(boolean showGraphs) {
-		this.showGraphs = showGraphs;
 	}
 
 	public void setSkyBox(boolean skyBox) {
@@ -1239,17 +1280,21 @@ public class RenderEngine {
 		// iblBuilder.dispose();
 	}
 
+//	public void toggleShowGraphs() {
+//		setShowGraphs(!isShowGraphs());
+//	}
+
 	public void toggleDebugmode() {
-		setDebugMode(!isDebugMode());
+		if (context.isDebugModeSupported()) {
+			setDebugMode(!isDebugMode());
+		} else {
+			setDebugMode(false);
+		}
 		if (isDebugMode()) {
 			getInputMultiplexer().addProcessor(getCamController());
 		} else {
 			getInputMultiplexer().removeProcessor(getCamController());
 		}
-	}
-
-	public void toggleShowGraphs() {
-		setShowGraphs(!isShowGraphs());
 	}
 
 	/**

@@ -30,7 +30,7 @@ public class NightFishScene extends AbstractScene {
 		// water
 		gameEngine.renderEngine.getWater().setPresent(true);
 		gameEngine.renderEngine.getWater().setWaveStrength(0.05f);
-		gameEngine.renderEngine.getWater().setRefractiveMultiplicator(50f);
+		gameEngine.renderEngine.getWater().setRefractiveMultiplicator(1f);
 		createWater();
 		// mirror
 		gameEngine.renderEngine.getMirror().setPresent(false);

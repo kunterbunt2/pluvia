@@ -12,9 +12,11 @@ public class Water {
 	private FrameBuffer	reflectionFbo;
 	private FrameBuffer	refractionFbo;
 	private float		refractiveMultiplicator	= 1.0f;
-	private float		tiling					= 4f;
-	private float		waveSpeed				= 0.01f;
-	private float		waveStrength			= 0.007f;
+	private float		tiling					= 1f;
+//	private float		waveSpeed				= 0.01f;
+//	private float		waveStrength			= 0.007f;
+	private float		waveSpeed				= 0.0f;
+	private float		waveStrength			= 0.00f;
 
 	public Water() {
 
