@@ -133,7 +133,13 @@ public class LevelManager extends Level implements Serializable {
 					count++;
 				}
 			}
-//	logger.info(String.format("count=%d", count));
+			for (Digit digit : gameEngine.context.digitList) {
+				gameEngine.renderEngine.add(digit.get3DRenderer());
+			}
+			for (Stone stone : gameEngine.context.stoneList) {
+				gameEngine.renderEngine.add(stone.get3DRenderer());
+			}
+			// logger.info(String.format("count=%d", count));
 			gameEngine.renderEngine.removeAllEffects();
 			sceneList.get(game.name).create();
 			infoColor = sceneList.get(game.name).getInfoColor();
@@ -144,8 +150,10 @@ public class LevelManager extends Level implements Serializable {
 	@Override
 	protected Stone createStone(int x, int y, int type) {
 		Stone stone = new Stone(gameEngine, x, y, type);
-		if (gameEngine != null)
+		if (gameEngine != null) {
 			gameEngine.context.stoneList.add(stone);
+			gameEngine.renderEngine.add(stone.get3DRenderer());
+		}
 		return stone;
 	}
 
@@ -156,6 +164,7 @@ public class LevelManager extends Level implements Serializable {
 	public void destroyLevelBackground() {
 		if (gameEngine != null) {
 			gameEngine.renderEngine.removeAllText2D();
+			gameEngine.renderEngine.removeAllText3D();
 			for (GameObject go : renderModelInstances) {
 				gameEngine.renderEngine.removeStatic(go);
 			}
@@ -200,6 +209,7 @@ public class LevelManager extends Level implements Serializable {
 		if (gameEngine != null) {
 			stone.get3DRenderer().destroy(gameEngine);
 			gameEngine.context.stoneList.remove(stone);
+			gameEngine.renderEngine.remove(stone.get3DRenderer());
 		}
 	}
 

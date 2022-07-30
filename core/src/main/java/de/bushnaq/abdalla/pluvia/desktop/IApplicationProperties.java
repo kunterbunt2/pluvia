@@ -4,10 +4,6 @@ public interface IApplicationProperties {
 
 	int MAX_GRAPHICS_QUALITY = 4;
 
-	void disableClipping();
-
-	void enableClipping();
-
 	boolean getAmbientAudioProperty();
 
 	int getAmbientAudioVolumenProperty();

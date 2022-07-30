@@ -47,6 +47,7 @@ public class InfoDialog {
 		this.batch = batch;
 		this.inputMultiplexer = inputMultiplexer;
 		debugTimer = new TimeStatistic();
+		createStage();
 	}
 
 	public void act(final float deltaTime) {

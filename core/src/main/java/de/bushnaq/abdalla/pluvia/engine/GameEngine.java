@@ -27,6 +27,7 @@ import de.bushnaq.abdalla.pluvia.scene.model.fly.Fly;
 import de.bushnaq.abdalla.pluvia.scene.model.rain.Rain;
 import de.bushnaq.abdalla.pluvia.scene.model.turtle.Turtle;
 import de.bushnaq.abdalla.pluvia.ui.AboutDialog;
+import de.bushnaq.abdalla.pluvia.ui.InfoDialog;
 import de.bushnaq.abdalla.pluvia.ui.MainDialog;
 import de.bushnaq.abdalla.pluvia.ui.MessageDialog;
 import de.bushnaq.abdalla.pluvia.ui.OptionsDialog;
@@ -65,7 +66,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	public static final float		SIM_HEIGHT					= 0.3f;
 	public static final float		SIM_WIDTH					= 0.3f;
 	public static final float		SOOM_SPEED					= 8.0f * 10;
-	public static final float		SPACE_BETWEEN_OBJECTS		= 0.1f / Context.WORLD_SCALE;
+	public static final float		SPACE_BETWEEN_OBJECTS		= 0.05f;
 	public static final Color		TEXT_COLOR					= Color.WHITE;								// 0xffffffff;
 	private static final int		TOUCH_DELTA_X				= 32;
 	private static final int		TOUCH_DELTA_Y				= 32;
@@ -79,6 +80,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private GameObject				cube						= null;
 	boolean							enableProfiling				= true;
 	private boolean					followMode;
+	private InfoDialog				info;
 	private boolean					isUpdateContext;
 	private final List<VisLabel>	labels						= new ArrayList<>();
 	private final Logger			logger						= LoggerFactory.getLogger(this.getClass());
@@ -163,6 +165,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			labels.add(label);
 		}
 		stringBuilder = new StringBuilder();
+		info = new InfoDialog(renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		mainDialog = new MainDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		aboutDialog = new AboutDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
 		pauseDialog = new PauseDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
@@ -193,6 +196,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		pauseDialog.dispose();
 		messageDialog.dispose();
 		aboutDialog.dispose();
+		info.dispose();
 	}
 
 	private void evaluateConfiguation() {
@@ -295,7 +299,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 //			return true;
 		case Input.Keys.I:
 			if (context.isDebugMode()) {
-				renderEngine.getInfo().setVisible(!renderEngine.getInfo().isVisible());
+				info.setVisible(!info.isVisible());
 			}
 			return true;
 //		case Input.Keys.N:
@@ -427,7 +431,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		renderEngine.cpuGraph.end();
 		renderEngine.gpuGraph.begin();
 		renderEngine.render(currentTime, deltaTime, takeScreenShot);
-		renderEngine.renderStage();
 		renderEngine.gpuGraph.end();
 		renderStage();
 		renderEngine.handleQueuedScreenshot(takeScreenShot);
@@ -521,6 +524,12 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 //			stringBuilder.append(" Rows ").append(context.game.getNrOfRows());
 //			labels.get(labelIndex++).setText(stringBuilder);
 //		}
+
+		if (info.isVisible()) {
+			info.update(context.selected, renderEngine);
+			info.act(Gdx.graphics.getDeltaTime());
+			info.draw();
+		}
 		stage.draw();
 		if (mainDialog.isVisible()) {
 			mainDialog.draw();

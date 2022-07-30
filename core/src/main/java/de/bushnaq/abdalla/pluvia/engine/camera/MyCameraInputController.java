@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 
-import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.util.logger.Logger;
 import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 
@@ -18,7 +17,7 @@ public class MyCameraInputController extends CameraInputController {
 	public MyCameraInputController(final Camera camera) throws Exception {
 		super(camera);
 		rotateButton = Buttons.MIDDLE;
-		pinchZoomFactor = 0.1f / Context.WORLD_SCALE;
+		pinchZoomFactor = 0.05f;
 	}
 
 //	@Override

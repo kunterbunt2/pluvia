@@ -2,6 +2,8 @@ package de.bushnaq.abdalla.pluvia.engine;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.Deflater;
 
 import com.badlogic.gdx.Gdx;
@@ -45,13 +47,15 @@ import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.scottlogic.util.GL32CMacIssueHandler;
 import com.scottlogic.util.ShaderCompatibilityHelper;
 
-import de.bushnaq.abdalla.pluvia.desktop.Context;
+import de.bushnaq.abdalla.pluvia.desktop.IContext;
 import de.bushnaq.abdalla.pluvia.engine.camera.MovingCamera;
 import de.bushnaq.abdalla.pluvia.engine.camera.MyCameraInputController;
 import de.bushnaq.abdalla.pluvia.engine.shader.GamePbrShaderProvider;
@@ -60,9 +64,6 @@ import de.bushnaq.abdalla.pluvia.engine.shader.GameShaderProvider;
 import de.bushnaq.abdalla.pluvia.engine.shader.GameShaderProviderInterface;
 import de.bushnaq.abdalla.pluvia.engine.shader.mirror.Mirror;
 import de.bushnaq.abdalla.pluvia.engine.shader.water.Water;
-import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
-import de.bushnaq.abdalla.pluvia.scene.model.digit.Digit;
-import de.bushnaq.abdalla.pluvia.ui.InfoDialog;
 import de.bushnaq.abdalla.pluvia.util.logger.Logger;
 import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 import net.mgsx.gltf.scene3d.attributes.FogAttribute;
@@ -109,7 +110,7 @@ public class RenderEngine {
 	private MovingCamera					camera;
 	private GameObject						cameraCube;
 	private final EnvironmentCache			computedEnvironement				= new EnvironmentCache();
-	private final Context					context;
+	private final IContext					context;
 	TimeGraph								cpuGraph;
 	private float							currentDayTime;
 	private SceneSkybox						daySkyBox;
@@ -131,7 +132,6 @@ public class RenderEngine {
 	public GameShaderProviderInterface		gameShaderProvider;
 	TimeGraph								gpuGraph;
 	private Matrix4							identityMatrix						= new Matrix4();
-	private InfoDialog						info;
 	private final InputMultiplexer			inputMultiplexer					= new InputMultiplexer();
 	private InputProcessor					inputProcessor;
 	private Logger							logger								= LoggerFactory.getLogger(this.getClass());
@@ -158,11 +158,13 @@ public class RenderEngine {
 	private Cubemap							specularCubemap;
 	private final int						speed								= 5;																	// speed of time
 	private final SpotLightsAttribute		spotLights							= new SpotLightsAttribute();
+	private Stage							stage;
 	private final ModelCache				staticCache							= new ModelCache();
 	private boolean							staticCacheDirty					= true;
 	private int								staticCacheDirtyCount				= 0;
 	public final Array<GameObject>			staticModelInstances				= new Array<>();
-	private Array<Text2D>					text2DList							= new Array<>();
+	private Set<Text2D>						text2DList							= new HashSet<>();
+	private Set<ObjectRenderer>				text3DList							= new HashSet<>();
 	private float							timeOfDay							= 8;																	// 24h time
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
@@ -175,9 +177,10 @@ public class RenderEngine {
 	public int								visibleStaticLightCount				= 0;
 	private final Array<ModelInstance>		visibleStaticModelInstances			= new Array<>();
 	private final Array<RenderableProvider>	visibleStaticRenderableProviders	= new Array<>();
+
 	private Water							water								= new Water();
 
-	public RenderEngine(final Context context, final InputProcessor inputProcessor) throws Exception {
+	public RenderEngine(final IContext context, final InputProcessor inputProcessor) throws Exception {
 		logger.info(String.format("GL_VERSION = %s", Gdx.gl.glGetString(GL20.GL_VERSION)));
 		logger.info(String.format("GL_ES_VERSION_2_0 = %s", Gdx.gl.glGetString(GL20.GL_ES_VERSION_2_0)));
 		logger.info(String.format("GL_SHADING_LANGUAGE_VERSION = %s", Gdx.gl.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION)));
@@ -194,6 +197,10 @@ public class RenderEngine {
 		this.context = context;
 		this.inputProcessor = inputProcessor;
 		create();
+	}
+
+	public void add(ObjectRenderer renderer) {
+		text3DList.add(renderer);
 	}
 
 	public void add(final PointLight pointLight, final boolean dynamic) {
@@ -249,7 +256,6 @@ public class RenderEngine {
 		createEnvironment();
 		createCamera();
 		createInputProcessor(inputProcessor);
-		createStage();
 //		createRayCube();
 //		vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
 //		vfxManager.addEffect(new DepthOfFieldEffect(postFbo, camera, 1));
@@ -278,13 +284,15 @@ public class RenderEngine {
 	private void createCamera() {
 		camera = new MovingCamera(67f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		final Vector3 lookat = new Vector3(0, 0, 0);
-		camera.position.set(lookat.x + 0f / Context.WORLD_SCALE, lookat.y + 0f / Context.WORLD_SCALE, lookat.z + 8);
+		camera.position.set(lookat.x + 0f / 2, lookat.y + 0f / 2, lookat.z + 8);
 		camera.up.set(0, 1, 0);
 		camera.lookAt(lookat);
 		camera.near = 2f;
 		camera.far = 100f;
 		camera.update();
 		camera.setDirty(true);
+
+		stage = new Stage(new ScreenViewport(), batch2D);
 	}
 
 	private void createCoordinates() {
@@ -358,14 +366,6 @@ public class RenderEngine {
 		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
 	}
 
-	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
-		camController = new MyCameraInputController(camera);
-		camController.scrollFactor = -0.1f;
-		camController.translateUnits = 1000f;
-		inputMultiplexer.addProcessor(inputProcessor);
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
-
 //	private void createDepthOfFieldMeter() {
 //		if (isDebugMode()) {
 //
@@ -405,6 +405,14 @@ public class RenderEngine {
 //			}
 //		}
 //	}
+
+	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
+		camController = new MyCameraInputController(camera);
+		camController.scrollFactor = -0.1f;
+		camController.translateUnits = 1000f;
+		inputMultiplexer.addProcessor(inputProcessor);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
 
 	private GameObject createRay(final Ray ray, Float length) {
 		if (length == null)
@@ -475,11 +483,6 @@ public class RenderEngine {
 		}
 	}
 
-	private void createStage() throws Exception {
-		info = new InfoDialog(batch2D, inputMultiplexer);
-		getInfo().createStage();
-	}
-
 	private void cullLights() {
 		visibleDynamicLightCount = 0;
 		final PointLightsAttribute pla = environment.get(PointLightsAttribute.class, PointLightsAttribute.Type);
@@ -520,19 +523,6 @@ public class RenderEngine {
 		}
 	}
 
-	public void dispose() throws Exception {
-		staticCache.dispose();
-		dynamicCache.dispose();
-//		vfxManager.dispose();
-		disposeGraphs();
-		disposeStage();
-		disposeInputProcessor();
-		disposeCamera();
-		disposeEnvironment();
-		disposeShader();
-		disposeFrameBuffer();
-	}
-
 //	private void createLookatCube() {
 //		if (isDebugMode()) {
 //			if (lookatCube == null) {
@@ -554,7 +544,20 @@ public class RenderEngine {
 //		}
 //	}
 
+	public void dispose() throws Exception {
+		staticCache.dispose();
+		dynamicCache.dispose();
+//		vfxManager.dispose();
+		disposeGraphs();
+		disposeInputProcessor();
+		disposeCamera();
+		disposeEnvironment();
+		disposeShader();
+		disposeFrameBuffer();
+	}
+
 	private void disposeCamera() {
+		stage.dispose();
 	}
 
 	private void disposeEnvironment() {
@@ -587,18 +590,6 @@ public class RenderEngine {
 		inputMultiplexer.clear();
 	}
 
-	private void disposeShader() {
-		gameShaderProvider.dispose();
-		batch2D.dispose();
-		batch.dispose();
-		depthBatch.dispose();
-		atlasManager.dispose();
-	}
-
-	private void disposeStage() throws Exception {
-		info.dispose();
-	}
-
 //	private void fboToScreen() {
 //		clearViewport();
 //		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
@@ -609,6 +600,14 @@ public class RenderEngine {
 //		batch2D.end();
 //		batch2D.enableBlending();
 //	}
+
+	private void disposeShader() {
+		gameShaderProvider.dispose();
+		batch2D.dispose();
+		batch.dispose();
+		depthBatch.dispose();
+		atlasManager.dispose();
+	}
 
 	public void end() {
 	}
@@ -671,10 +670,6 @@ public class RenderEngine {
 			}
 		}
 		return result;
-	}
-
-	InfoDialog getInfo() {
-		return info;
 	}
 
 	public InputMultiplexer getInputMultiplexer() {
@@ -828,6 +823,10 @@ public class RenderEngine {
 //		}
 	}
 
+	public void remove(ObjectRenderer renderer) {
+		text3DList.remove(renderer);
+	}
+
 	public void remove(final PointLight pointLight, final boolean dynamic) {
 		if (dynamic) {
 			environment.remove(pointLight);
@@ -855,6 +854,10 @@ public class RenderEngine {
 
 	public void removeAllText2D() {
 		text2DList.clear();
+	}
+
+	public void removeAllText3D() {
+		text3DList.clear();
 	}
 
 	public void removeBloomEffect() {
@@ -987,7 +990,7 @@ public class RenderEngine {
 	}
 
 	private void render2DText() {
-		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
+		batch2D.setProjectionMatrix(stage.getViewport().getCamera().combined);
 		batch2D.begin();
 		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
 		batch2D.enableBlending();
@@ -1002,12 +1005,15 @@ public class RenderEngine {
 		batch2D.begin();
 		batch2D.enableBlending();
 		batch2D.setProjectionMatrix(camera.combined);
-		for (final Stone stone : context.stoneList) {
-			stone.get3DRenderer().renderText(this, 0, false);
+		for (final ObjectRenderer renderer : text3DList) {
+			renderer.renderText(this, 0, false);
 		}
-		for (final Digit digit : context.digitList) {
-			digit.get3DRenderer().renderText(this, 0, false);
-		}
+//		for (final Stone stone : context.stoneList) {
+//			stone.get3DRenderer().renderText(this, 0, false);
+//		}
+//		for (final Digit digit : context.digitList) {
+//			digit.get3DRenderer().renderText(this, 0, false);
+//		}
 		batch2D.end();
 		batch2D.setTransformMatrix(identityMatrix);// fix transformMatrix
 	}
@@ -1061,7 +1067,7 @@ public class RenderEngine {
 		batch2D.begin();
 		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
 		batch2D.enableBlending();
-		batch2D.setProjectionMatrix(getInfo().getViewport().getCamera().combined);
+		batch2D.setProjectionMatrix(stage.getViewport().getCamera().combined);
 		if (debugMode) {
 			if (isWaterPresent()) {
 				// up left (water refraction)
@@ -1144,14 +1150,6 @@ public class RenderEngine {
 			environment.shadowMap = shadowLight;
 		} else {
 			environment.shadowMap = null;
-		}
-	}
-
-	protected void renderStage() throws Exception {
-		if (getInfo().isVisible()) {
-			getInfo().update(context.selected, this);
-			getInfo().act(Gdx.graphics.getDeltaTime());
-			getInfo().draw();
 		}
 	}
 

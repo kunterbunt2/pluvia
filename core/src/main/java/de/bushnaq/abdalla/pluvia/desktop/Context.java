@@ -29,12 +29,11 @@ import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 /**
  * @author kunterbunt
  */
-public abstract class Context extends ApplicationProperties {
-	private static String		appFolderName		= "app";
-	private static String		configFolderName	= "app/config";
-	private static String		homeFolderName;
-	protected static Logger		logger				= LoggerFactory.getLogger(Context.class);
-	public static final float	WORLD_SCALE			= 2.0f;
+public abstract class Context extends ApplicationProperties implements IContext {
+	private static String	appFolderName		= "app";
+	private static String	configFolderName	= "app/config";
+	private static String	homeFolderName;
+	protected static Logger	logger				= LoggerFactory.getLogger(Context.class);
 
 	protected static String cleanupPath(String path) {
 		try {
