@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>de.abdalla.bushnaq</groupId>
+		<groupId>de.bushnaq.abdalla</groupId>
 		<artifactId>pluvia</artifactId>
 		<version>1.3.0</version>
 	</parent>
 
 	<artifactId>pluvia-core</artifactId>
-	<name>abdalla.bushnaq.pluvia-core</name>
+	<name>de.bushnaq.abdalla.pluvia-core</name>
 	<description>pluvia-core</description>
 
 	<properties>

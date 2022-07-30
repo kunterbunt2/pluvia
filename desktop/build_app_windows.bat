@@ -51,7 +51,7 @@ echo detecting required modules
   --multi-release %JAVA_VERSION% ^
   --ignore-missing-deps ^
   --class-path "target\installer\input\libs\*" ^
-  --print-module-deps target\classes\com\abdalla\bushnaq\pluvia\launcher\DesktopLauncher.class > temp.txt
+  --print-module-deps target\classes\de\bushnaq\abdalla\pluvia\launcher\DesktopLauncher.class > temp.txt
 
 set /p detected_modules=<temp.txt
 
@@ -101,7 +101,7 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --dest target/installer ^
   --input target/installer/input ^
   --name pluvia ^
-  --main-class com.abdalla.bushnaq.pluvia.launcher.DesktopLauncher ^
+  --main-class de.bushnaq.abdalla.pluvia.launcher.DesktopLauncher ^
   --main-jar libs/%MAIN_JAR% ^
   --java-options -Xmx2048m ^
   --runtime-image target/java-runtime ^

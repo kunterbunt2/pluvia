@@ -55,7 +55,7 @@ detected_modules=`$JAVA_HOME/bin/jdeps \
   --ignore-missing-deps \
   --print-module-deps \
   --class-path "target/installer/input/libs/*" \
-    target/classes/com/abdalla/bushnaq/pluvia/launcher/DesktopLauncher.class`
+    target/classes/de/bushnaq/abdalla/pluvia/launcher/DesktopLauncher.class`
 echo "detected modules: ${detected_modules}"
 
 
@@ -106,7 +106,7 @@ $JAVA_HOME/bin/jpackage \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \
---main-class com.abdalla.bushnaq.pluvia.launcher.DesktopLauncher \
+--main-class de.bushnaq.abdalla.pluvia.launcher.DesktopLauncher \
 --main-jar libs/${MAIN_JAR} \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
@@ -124,7 +124,7 @@ $JAVA_HOME/bin/jpackage \
 --dest target/installer \
 --input target/installer/input \
 --name pluvia \
---main-class com.abdalla.bushnaq.pluvia.launcher.DesktopLauncher \
+--main-class de.bushnaq.abdalla.pluvia.launcher.DesktopLauncher \
 --main-jar libs/${MAIN_JAR} \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
