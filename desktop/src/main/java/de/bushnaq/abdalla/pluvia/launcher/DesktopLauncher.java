@@ -9,11 +9,11 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.util.MavenPropertiesProvider;
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 
 public class DesktopLauncher implements ApplicationListener {
 

@@ -5,9 +5,9 @@ package de.bushnaq.abdalla.pluvia.scene.model.digit;
 
 import java.util.List;
 
+import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.GameObject;
-import de.bushnaq.abdalla.pluvia.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.game.Level;
 
 public class Digit extends Renderable {

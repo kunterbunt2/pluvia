@@ -6,17 +6,26 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.profiling.GLErrorListener;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
+import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.IContextFactory;
+import de.bushnaq.abdalla.engine.MyGLErrorListener;
+import de.bushnaq.abdalla.engine.RenderEngine;
+import de.bushnaq.abdalla.engine.camera.MovingCamera;
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
-import de.bushnaq.abdalla.pluvia.desktop.IContextFactory;
+import de.bushnaq.abdalla.pluvia.engine.camera.MyCameraInputController;
 import de.bushnaq.abdalla.pluvia.game.Game;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
 import de.bushnaq.abdalla.pluvia.scene.model.bubble.Bubble;
@@ -33,8 +42,6 @@ import de.bushnaq.abdalla.pluvia.ui.MessageDialog;
 import de.bushnaq.abdalla.pluvia.ui.OptionsDialog;
 import de.bushnaq.abdalla.pluvia.ui.PauseDialog;
 import de.bushnaq.abdalla.pluvia.ui.ScoreDialog;
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
 /**
@@ -72,6 +79,8 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private static final int		TOUCH_DELTA_Y				= 32;
 	private AboutDialog				aboutDialog;
 	private AudioManager			audioManager;
+	private MyCameraInputController	camController;
+	private MovingCamera			camera;
 	private float					centerXD;
 	private float					centerYD;
 	private float					centerZD;
@@ -81,6 +90,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	boolean							enableProfiling				= true;
 	private boolean					followMode;
 	private InfoDialog				info;
+	private final InputMultiplexer	inputMultiplexer			= new InputMultiplexer();
 	private boolean					isUpdateContext;
 	private final List<VisLabel>	labels						= new ArrayList<>();
 	private final Logger			logger						= LoggerFactory.getLogger(this.getClass());
@@ -125,7 +135,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			} catch (final Exception e) {
 				logger.error(e.getMessage(), e);
 			}
-			renderEngine = new RenderEngine(context, this);
+			createCamera();
+			createInputProcessor(this);
+			renderEngine = new RenderEngine(context, this, camera);
 			modelManager.create(renderEngine.isPbr());
 			audioManager = new AudioManager(context);
 			createStage();
@@ -138,6 +150,27 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			logger.error(e.getMessage(), e);
 			System.exit(1);
 		}
+	}
+
+	private void createCamera() {
+		camera = new MovingCamera(67f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		final Vector3 lookat = new Vector3(0, 0, 0);
+		camera.position.set(lookat.x + 0f / 2, lookat.y + 0f / 2, lookat.z + 8);
+		camera.up.set(0, 1, 0);
+		camera.lookAt(lookat);
+		camera.near = 2f;
+		camera.far = 100f;
+		camera.update();
+		camera.setDirty(true);
+
+	}
+
+	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
+		camController = new MyCameraInputController(camera);
+		camController.scrollFactor = -0.1f;
+		camController.translateUnits = 1000f;
+		inputMultiplexer.addProcessor(inputProcessor);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	public void createMonument() {
@@ -165,13 +198,13 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			labels.add(label);
 		}
 		stringBuilder = new StringBuilder();
-		info = new InfoDialog(renderEngine.batch2D, renderEngine.getInputMultiplexer());
-		mainDialog = new MainDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
-		aboutDialog = new AboutDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
-		pauseDialog = new PauseDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
-		messageDialog = new MessageDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
-		optionsDialog = new OptionsDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
-		scoreDialog = new ScoreDialog(this, renderEngine.batch2D, renderEngine.getInputMultiplexer());
+		info = new InfoDialog(renderEngine.batch2D, getInputMultiplexer());
+		mainDialog = new MainDialog(this, renderEngine.batch2D, getInputMultiplexer());
+		aboutDialog = new AboutDialog(this, renderEngine.batch2D, getInputMultiplexer());
+		pauseDialog = new PauseDialog(this, renderEngine.batch2D, getInputMultiplexer());
+		messageDialog = new MessageDialog(this, renderEngine.batch2D, getInputMultiplexer());
+		optionsDialog = new OptionsDialog(this, renderEngine.batch2D, getInputMultiplexer());
+		scoreDialog = new ScoreDialog(this, renderEngine.batch2D, getInputMultiplexer());
 		mainDialog.setVisible(true);
 	}
 
@@ -181,12 +214,18 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			disposeStage();
 			audioManager.dispose();
 			renderEngine.dispose();
+			disposeInputProcessor();
 			if (profiler.isEnabled()) {
 				profiler.disable();
 			}
 		} catch (final Exception e) {
 			logger.error(e.getMessage(), e);
 		}
+	}
+
+	private void disposeInputProcessor() {
+		Gdx.input.setInputProcessor(null);
+		inputMultiplexer.clear();
 	}
 
 	private void disposeStage() {
@@ -208,6 +247,18 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		return aboutDialog;
 	}
 
+	public AudioManager getAudioManager() {
+		return audioManager;
+	}
+
+	public MyCameraInputController getCamController() {
+		return camController;
+	}
+
+	public InputMultiplexer getInputMultiplexer() {
+		return inputMultiplexer;
+	}
+
 //	private void exit() {
 //		Gdx.app.exit();
 //	}
@@ -220,10 +271,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 //		}
 //		printWriter.close();
 //	}
-
-	public AudioManager getAudioManager() {
-		return audioManager;
-	}
 
 	public MainDialog getMainDialog() {
 		return mainDialog;
@@ -329,7 +376,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 //			return true;
 		case Input.Keys.F5:
 			if (context.isDebugMode())
-				renderEngine.toggleDebugmode();
+				toggleDebugmode();
 			return true;
 //		case Input.Keys.F6:
 //			if (context.isShowGraphs())
@@ -592,6 +639,19 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	@Override
 	public void setCamera(final float x, final float z, final boolean setDirty) throws Exception {
 		renderEngine.setCameraTo(x, z, setDirty);
+	}
+
+	public void toggleDebugmode() {
+		if (context.isDebugModeSupported()) {
+			renderEngine.setDebugMode(!renderEngine.isDebugMode());
+		} else {
+			renderEngine.setDebugMode(false);
+		}
+		if (renderEngine.isDebugMode()) {
+			getInputMultiplexer().addProcessor(getCamController());
+		} else {
+			getInputMultiplexer().removeProcessor(getCamController());
+		}
 	}
 
 	public void togglePause() {

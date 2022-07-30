@@ -8,6 +8,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import de.bushnaq.abdalla.engine.IContext;
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.Game;
 import de.bushnaq.abdalla.pluvia.game.GameList;
@@ -23,8 +26,6 @@ import de.bushnaq.abdalla.pluvia.scene.model.fly.Fly;
 import de.bushnaq.abdalla.pluvia.scene.model.rain.Rain;
 import de.bushnaq.abdalla.pluvia.scene.model.turtle.Turtle;
 import de.bushnaq.abdalla.pluvia.util.MavenPropertiesProvider;
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 
 /**
  * @author kunterbunt

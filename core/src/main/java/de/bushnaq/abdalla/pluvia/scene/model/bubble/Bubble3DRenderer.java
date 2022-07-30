@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.Vector3;
 
+import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.ObjectRenderer;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.GameObject;
-import de.bushnaq.abdalla.pluvia.engine.ObjectRenderer;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 

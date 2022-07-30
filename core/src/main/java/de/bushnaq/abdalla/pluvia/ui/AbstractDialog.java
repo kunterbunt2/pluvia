@@ -22,11 +22,11 @@ import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.LevelManager;
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 
 //enum BlurMode {
 //	up, down

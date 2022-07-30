@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
 
+import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.GameObject;
 
 public class DeepSeaScene extends AbstractScene {
 	public DeepSeaScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {

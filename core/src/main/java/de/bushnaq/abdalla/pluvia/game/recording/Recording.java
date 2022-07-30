@@ -3,14 +3,14 @@ package de.bushnaq.abdalla.pluvia.game.recording;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.Game;
 import de.bushnaq.abdalla.pluvia.game.GameDataObject;
 import de.bushnaq.abdalla.pluvia.game.GamePhase;
 import de.bushnaq.abdalla.pluvia.game.LevelManager;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 
 public class Recording {
 	private static final String	NOT_EXPECTED_SCORE											= "Recording playback does not result in expected score. Recording is not genuine.";

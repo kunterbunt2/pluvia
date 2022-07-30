@@ -8,8 +8,8 @@ import java.util.Properties;
 
 import com.badlogic.gdx.Gdx;
 
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 
 public abstract class ApplicationProperties implements IApplicationProperties {
 	private static final String		PLUVIA_AMBIENT_AUDIO			= "pluvia.ambientAudio";

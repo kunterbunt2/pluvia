@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 
-import de.bushnaq.abdalla.pluvia.engine.GameObject;
+import de.bushnaq.abdalla.engine.GameObject;
 
 public class MeshMerger {
 

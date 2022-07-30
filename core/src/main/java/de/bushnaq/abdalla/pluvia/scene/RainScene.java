@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
+import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.GameObject;
 import de.bushnaq.abdalla.pluvia.engine.ModelManager;
 import de.bushnaq.abdalla.pluvia.scene.model.rain.Rain;
 

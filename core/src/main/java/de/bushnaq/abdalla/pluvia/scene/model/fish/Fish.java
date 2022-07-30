@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
+import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.util.TimeUnit;
 
 /**

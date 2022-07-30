@@ -13,8 +13,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Model;
 
+import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.GameObject;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
 import de.bushnaq.abdalla.pluvia.scene.AbstractScene;
 import de.bushnaq.abdalla.pluvia.scene.BubblesScene;

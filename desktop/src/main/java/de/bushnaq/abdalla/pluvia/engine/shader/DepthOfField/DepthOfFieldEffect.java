@@ -29,7 +29,7 @@ import com.crashinvaders.vfx.framebuffer.VfxFrameBuffer;
 import com.crashinvaders.vfx.framebuffer.VfxPingPongWrapper;
 import com.crashinvaders.vfx.gl.VfxGLUtils;
 
-import de.bushnaq.abdalla.pluvia.engine.camera.MovingCamera;
+import de.bushnaq.abdalla.engine.camera.MovingCamera;
 
 public class DepthOfFieldEffect extends ShaderVfxEffect implements ChainVfxEffect {
 

@@ -3,8 +3,8 @@
  */
 package de.bushnaq.abdalla.pluvia.game.model.stone;
 
+import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.util.RcBoolean;
 
 /**

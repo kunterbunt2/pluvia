@@ -12,14 +12,14 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
+import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.Text2D;
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.GameObject;
 import de.bushnaq.abdalla.pluvia.engine.ModelManager;
-import de.bushnaq.abdalla.pluvia.engine.Text2D;
 import de.bushnaq.abdalla.pluvia.scene.model.fish.Fish;
 import de.bushnaq.abdalla.pluvia.scene.model.turtle.Turtle;
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 

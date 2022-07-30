@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import de.bushnaq.abdalla.engine.util.logger.Logger;
+import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.AudioManager;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
@@ -21,8 +23,6 @@ import de.bushnaq.abdalla.pluvia.game.recording.Interaction;
 import de.bushnaq.abdalla.pluvia.game.recording.Recording;
 import de.bushnaq.abdalla.pluvia.util.PersistentRandomGenerator;
 import de.bushnaq.abdalla.pluvia.util.RcBoolean;
-import de.bushnaq.abdalla.pluvia.util.logger.Logger;
-import de.bushnaq.abdalla.pluvia.util.logger.LoggerFactory;
 
 public abstract class Level {
 	public int					animationPhase			= 0;

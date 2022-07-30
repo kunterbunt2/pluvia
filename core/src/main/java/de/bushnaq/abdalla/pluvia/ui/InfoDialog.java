@@ -22,9 +22,9 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
+import de.bushnaq.abdalla.engine.RenderEngine;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
-import de.bushnaq.abdalla.pluvia.engine.RenderEngine;
 import de.bushnaq.abdalla.pluvia.util.TimeStatistic;
 
 public class InfoDialog {
