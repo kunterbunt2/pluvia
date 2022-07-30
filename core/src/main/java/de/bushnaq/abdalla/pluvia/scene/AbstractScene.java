@@ -43,16 +43,16 @@ public abstract class AbstractScene {
 	}
 
 	public void create() {
-		logo = new Text2D("Pluvia", 100, Gdx.graphics.getHeight() - 200, Color.WHITE, gameEngine.renderEngine.getAtlasManager().logoFont);
+		logo = new Text2D("Pluvia", 100, Gdx.graphics.getHeight() - 200, Color.WHITE, gameEngine.getAtlasManager().logoFont);
 		gameEngine.renderEngine.add(logo);
 		try {
 			String				v		= gameEngine.context.getAppVersion();
 			final GlyphLayout	layout	= new GlyphLayout();
-			layout.setText(gameEngine.renderEngine.getAtlasManager().logoFont, "Pluvia");
+			layout.setText(gameEngine.getAtlasManager().logoFont, "Pluvia");
 			float h1 = layout.height;
-			layout.setText(gameEngine.renderEngine.getAtlasManager().versionFont, v);
+			layout.setText(gameEngine.getAtlasManager().versionFont, v);
 			float h2 = layout.height;
-			version = new Text2D(v, 400 + 20, Gdx.graphics.getHeight() - 200 - (int) (h1 - h2), Color.WHITE, gameEngine.renderEngine.getAtlasManager().versionFont);
+			version = new Text2D(v, 400 + 20, Gdx.graphics.getHeight() - 200 - (int) (h1 - h2), Color.WHITE, gameEngine.getAtlasManager().versionFont);
 			gameEngine.renderEngine.add(version);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

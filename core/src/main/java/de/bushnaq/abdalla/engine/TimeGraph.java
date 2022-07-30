@@ -7,13 +7,12 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import de.bushnaq.abdalla.pluvia.engine.AtlasManager;
 
 class Frame {
 	long delta;
@@ -21,19 +20,23 @@ class Frame {
 
 public class TimeGraph extends Array<Frame> {
 	private static final long	FACTOR		= 100000L;
-	long						absolute	= 0;
+	private long				absolute	= 0;
+	private AtlasRegion			atlasRegion;
 	private Color				backgroundColor;
-	long						delta		= 0;
+	private long				delta		= 0;
 	private FrameBuffer			fbo;
+	private BitmapFont			font;
 	private Color				highlightColor;
 	private int					maxFrames;
-	ScreenViewport				viewport	= new ScreenViewport();
+	private ScreenViewport		viewport	= new ScreenViewport();
 
-	public TimeGraph(Color highlightColor, Color backgroundColor, int width, int height) {
+	public TimeGraph(Color highlightColor, Color backgroundColor, int width, int height, BitmapFont font, AtlasRegion atlasRegion) {
 		this.highlightColor = highlightColor;
 		this.backgroundColor = backgroundColor;
 		this.maxFrames = width;
 		viewport.update(width, height, true);
+		this.font = font;
+		this.atlasRegion = atlasRegion;
 		{
 			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(width, height);
 			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
@@ -50,7 +53,7 @@ public class TimeGraph extends Array<Frame> {
 		fbo.dispose();
 	}
 
-	public void draw(PolygonSpriteBatch batch2D, AtlasManager atlasManager) {
+	public void draw(PolygonSpriteBatch batch2D) {
 		{
 			batch2D.setProjectionMatrix(viewport.getCamera().combined);
 			fbo.begin();
@@ -61,13 +64,12 @@ public class TimeGraph extends Array<Frame> {
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			{
 				for (int y = 50; y < 500; y += 50) {
-					BitmapFont			font	= atlasManager.smallFont;
 					String				text	= "" + y / 10 + "ms";
 					final GlyphLayout	layout	= new GlyphLayout();
 					layout.setText(font, text);
 					final float width = layout.width;// contains the width of the current set text
 					batch2D.setColor(Color.RED);
-					batch2D.draw(atlasManager.systemTextureRegion, 0, y, 5, 1);
+					batch2D.draw(atlasRegion, 0, y, 5, 1);
 					font.setColor(Color.RED);
 					font.draw(batch2D, text, 6, y + layout.height / 2, width, Align.left, false);
 				}
@@ -76,10 +78,10 @@ public class TimeGraph extends Array<Frame> {
 			for (int i = 0; i < size; i++) {
 				Frame frame = get(i);
 				batch2D.setColor(highlightColor);
-				batch2D.draw(atlasManager.systemTextureRegion, i, frame.delta, 1, 1);
+				batch2D.draw(atlasRegion, i, frame.delta, 1, 1);
 				batch2D.setColor(backgroundColor);
 				if (frame.delta > 0) {
-					batch2D.draw(atlasManager.systemTextureRegion, i, 0, 1, frame.delta - 1);
+					batch2D.draw(atlasRegion, i, 0, 1, frame.delta - 1);
 				}
 			}
 			batch2D.end();

@@ -18,7 +18,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -100,7 +102,7 @@ public class RenderEngine {
 	private boolean							alwaysDay							= true;
 	private ColorAttribute					ambientLight;
 	private float							angle;
-	private AtlasManager					atlasManager;
+	private AtlasRegion						atlasRegion;
 	private ModelBatch						batch;
 	public PolygonSpriteBatch				batch2D;
 	private Texture							brdfLUT;
@@ -118,7 +120,7 @@ public class RenderEngine {
 	private final ModelCache				dynamicCache						= new ModelCache();
 	private boolean							dynamicDayTime						= false;
 	public Array<GameObject>				dynamicModelInstances				= new Array<>();
-//	GaussianBlurEffect						effect1;
+	// GaussianBlurEffect effect1;
 //	BloomEffect								effect2;
 	private boolean							enableDepthOfField					= true;
 	public Environment						environment							= new Environment();
@@ -126,6 +128,7 @@ public class RenderEngine {
 	private Cubemap							environmentNightCubemap;
 	private float							fixedDayTime						= 10;
 	private Fog								fog									= new Fog(Color.BLACK, 15f, 30f, 0.5f);
+	private BitmapFont						font;
 	public GameShaderProviderInterface		gameShaderProvider;
 	public TimeGraph						gpuGraph;
 	private Matrix4							identityMatrix						= new Matrix4();
@@ -175,7 +178,7 @@ public class RenderEngine {
 	private final Array<RenderableProvider>	visibleStaticRenderableProviders	= new Array<>();
 	private Water							water								= new Water();
 
-	public RenderEngine(final IContext context, final InputProcessor inputProcessor, MovingCamera camera) throws Exception {
+	public RenderEngine(final IContext context, final InputProcessor inputProcessor, MovingCamera camera, BitmapFont font, AtlasRegion atlasRegion) throws Exception {
 		logger.info(String.format("GL_VERSION = %s", Gdx.gl.glGetString(GL20.GL_VERSION)));
 		logger.info(String.format("GL_ES_VERSION_2_0 = %s", Gdx.gl.glGetString(GL20.GL_ES_VERSION_2_0)));
 		logger.info(String.format("GL_SHADING_LANGUAGE_VERSION = %s", Gdx.gl.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION)));
@@ -192,6 +195,8 @@ public class RenderEngine {
 		this.context = context;
 		this.inputProcessor = inputProcessor;
 		this.camera = camera;
+		this.font = font;
+		this.atlasRegion = atlasRegion;
 		create();
 	}
 
@@ -343,8 +348,8 @@ public class RenderEngine {
 	}
 
 	private void createGraphs() {
-		cpuGraph = new TimeGraph(new Color(1f, 0f, 0f, 1f), new Color(1f, 0, 0, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
-		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4);
+		cpuGraph = new TimeGraph(new Color(1f, 0f, 0f, 1f), new Color(1f, 0, 0, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4, font, atlasRegion);
+		gpuGraph = new TimeGraph(new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.6f), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 4, font, atlasRegion);
 	}
 
 	private GameObject createRay(final Ray ray, Float length) {
@@ -422,8 +427,6 @@ public class RenderEngine {
 	}
 
 	private void createShader() {
-		atlasManager = new AtlasManager();
-		atlasManager.init();
 		renderableSorter = new SceneRenderableSorter();
 		if (isPbr()) {
 			depthBatch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
@@ -562,7 +565,6 @@ public class RenderEngine {
 		batch2D.dispose();
 		batch.dispose();
 		depthBatch.dispose();
-		atlasManager.dispose();
 	}
 
 //	private void fboToScreen() {
@@ -581,10 +583,6 @@ public class RenderEngine {
 	}
 
 	public void end() {
-	}
-
-	public AtlasManager getAtlasManager() {
-		return atlasManager;
 	}
 
 	public MovingCamera getCamera() {
@@ -1093,8 +1091,8 @@ public class RenderEngine {
 			gpuGraph.update();
 		}
 		if (isShowGraphs()) {
-			cpuGraph.draw(batch2D, atlasManager);
-			gpuGraph.draw(batch2D, atlasManager);
+			cpuGraph.draw(batch2D);
+			gpuGraph.draw(batch2D);
 		}
 //		batch2D.setTransformMatrix(identityMatrix);// fix transformMatrix
 	}

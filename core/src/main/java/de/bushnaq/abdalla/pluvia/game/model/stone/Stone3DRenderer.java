@@ -29,6 +29,7 @@ public class Stone3DRenderer extends ObjectRenderer {
 	private static final float		TRADER_SIZE_Y				= 1f;
 	private static final float		TRADER_SIZE_Z				= 1f;
 	private static final float		VANISHING_LIGHT_INTENSITY	= 1000;
+	private BitmapFont				font;
 	private GameObject				instance;
 	private float					lightIntensity				= 0f;
 	private boolean					lightIsOne					= false;
@@ -46,6 +47,7 @@ public class Stone3DRenderer extends ObjectRenderer {
 			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.stone[stone.getType()].scene.model), stone);
 			gameEngine.renderEngine.addDynamic(instance);
 			instance.update();
+			font = gameEngine.getAtlasManager().modelFont;
 		}
 	}
 
@@ -60,8 +62,8 @@ public class Stone3DRenderer extends ObjectRenderer {
 	}
 
 	@Override
-	public void renderText(final RenderEngine sceneManager, final int index, final boolean selected) {
-		if (sceneManager.isDebugMode()) {
+	public void renderText(final RenderEngine renderEngine, final int index, final boolean selected) {
+		if (renderEngine.isDebugMode()) {
 			Color color;
 			if (selected) {
 				color = SELECTED_TRADER_NAME_COLOR;
@@ -69,18 +71,17 @@ public class Stone3DRenderer extends ObjectRenderer {
 				color = TRADER_NAME_COLOR;
 			}
 			float h = TRADER_SIZE_Y / 4;
-			renderTextOnFrontSide(sceneManager, 0, 0 + h, "" + stone.getType(), TRADER_SIZE_Y / 2, color);
+			renderTextOnFrontSide(renderEngine, 0, 0 + h, "" + stone.getType(), TRADER_SIZE_Y / 2, color);
 			h = TRADER_SIZE_Y / 8;
-			renderTextOnFrontSide(sceneManager, 0, 0 - 0 * h, stone.getCannotAttributesAsString(), TRADER_SIZE_Y / 8, color);
-			renderTextOnFrontSide(sceneManager, 0, 0 - 1 * h, stone.getCanAttributesAsString(), TRADER_SIZE_Y / 8, color);
-			renderTextOnFrontSide(sceneManager, 0, 0 - 2 * h, stone.getGlueStatusAsString(), TRADER_SIZE_Y / 8, color);
-			renderTextOnFrontSide(sceneManager, 0, 0 - 3 * h, stone.getDoingStatusAsString(), TRADER_SIZE_Y / 8, color);
+			renderTextOnFrontSide(renderEngine, 0, 0 - 0 * h, stone.getCannotAttributesAsString(), TRADER_SIZE_Y / 8, color);
+			renderTextOnFrontSide(renderEngine, 0, 0 - 1 * h, stone.getCanAttributesAsString(), TRADER_SIZE_Y / 8, color);
+			renderTextOnFrontSide(renderEngine, 0, 0 - 2 * h, stone.getGlueStatusAsString(), TRADER_SIZE_Y / 8, color);
+			renderTextOnFrontSide(renderEngine, 0, 0 - 3 * h, stone.getDoingStatusAsString(), TRADER_SIZE_Y / 8, color);
 		}
 	}
 
-	private void renderTextOnFrontSide(final RenderEngine sceneManager, final float dx, final float dy, final String text, final float size, final Color color) {
-		final PolygonSpriteBatch	batch	= sceneManager.batch2D;
-		final BitmapFont			font	= sceneManager.getAtlasManager().modelFont;
+	private void renderTextOnFrontSide(final RenderEngine renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
+		final PolygonSpriteBatch batch = renderEngine.batch2D;
 		{
 			final Matrix4		m			= new Matrix4();
 			final float			fontSize	= font.getLineHeight();

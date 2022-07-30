@@ -78,6 +78,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private static final int		TOUCH_DELTA_X				= 32;
 	private static final int		TOUCH_DELTA_Y				= 32;
 	private AboutDialog				aboutDialog;
+	private AtlasManager			atlasManager;
 	private AudioManager			audioManager;
 	private MyCameraInputController	camController;
 	private MovingCamera			camera;
@@ -137,7 +138,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			}
 			createCamera();
 			createInputProcessor(this);
-			renderEngine = new RenderEngine(context, this, camera);
+			atlasManager = new AtlasManager();
+			atlasManager.init();
+			renderEngine = new RenderEngine(context, this, camera, atlasManager.smallFont, atlasManager.systemTextureRegion);
 			modelManager.create(renderEngine.isPbr());
 			audioManager = new AudioManager(context);
 			createStage();
@@ -214,6 +217,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			disposeStage();
 			audioManager.dispose();
 			renderEngine.dispose();
+			atlasManager.dispose();
 			disposeInputProcessor();
 			if (profiler.isEnabled()) {
 				profiler.disable();
@@ -245,6 +249,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	public AboutDialog getAboutDialog() {
 		return aboutDialog;
+	}
+
+	public AtlasManager getAtlasManager() {
+		return atlasManager;
 	}
 
 	public AudioManager getAudioManager() {

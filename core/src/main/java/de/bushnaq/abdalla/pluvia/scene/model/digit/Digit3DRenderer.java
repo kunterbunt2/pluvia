@@ -19,6 +19,7 @@ public class Digit3DRenderer extends ObjectRenderer {
 	private static final float	TRADER_SIZE_X		= 0.5f;
 	private static final float	TRADER_SIZE_Y		= 0.5f;
 	private static final float	TRADER_SIZE_Z		= 0.5f;
+	private BitmapFont			font;
 	private GameObject			instance;
 	private Digit				stone;
 	private final Vector3		translation			= new Vector3();				// intermediate value
@@ -38,6 +39,7 @@ public class Digit3DRenderer extends ObjectRenderer {
 			instance.instance.transform.setToTranslation(translation);
 			instance.instance.transform.scale(0.5f, 0.5f, 0.5f);
 			instance.update();
+			font = gameEngine.getAtlasManager().aeroFont;
 		}
 	}
 
@@ -47,43 +49,42 @@ public class Digit3DRenderer extends ObjectRenderer {
 //	}
 
 	@Override
-	public void renderText(final RenderEngine sceneManager, final int index, final boolean selected) {
+	public void renderText(final RenderEngine renderEngine, final int index, final boolean selected) {
 		Color color = DIGIT_COLOR;
 		switch (stone.getDigitType()) {
 		case score: {
-			renderTextOnFrontSide(sceneManager, 0, 0, "" + stone.getDigit(), TRADER_SIZE_Y, color);
+			renderTextOnFrontSide(renderEngine, 0, 0, "" + stone.getDigit(), TRADER_SIZE_Y, color);
 			if (stone.getDigitPosition() == 0) {
-				renderTextOnTopSide(sceneManager, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Score", TRADER_SIZE_Y, color);
+				renderTextOnTopSide(renderEngine, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Score", TRADER_SIZE_Y, color);
 			}
 		}
 			break;
 		case steps: {
-			renderTextOnFrontSide(sceneManager, 0, 0, "" + stone.getDigit(), TRADER_SIZE_Y, color);
+			renderTextOnFrontSide(renderEngine, 0, 0, "" + stone.getDigit(), TRADER_SIZE_Y, color);
 			if (stone.getDigitPosition() == 0) {
-				renderTextOnTopSide(sceneManager, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Steps", TRADER_SIZE_Y, color);
+				renderTextOnTopSide(renderEngine, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Steps", TRADER_SIZE_Y, color);
 			}
 		}
 			break;
 		case name: {
 			if (stone.getDigitPosition() == 0) {
-				renderTextOnFrontSide(sceneManager, -TRADER_SIZE_X / 2 + (4f * TRADER_SIZE_X) / 2.0f, 0, stone.getText(), TRADER_SIZE_Y, color);
-				renderTextOnTopSide(sceneManager, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Game", TRADER_SIZE_Y, color);
+				renderTextOnFrontSide(renderEngine, -TRADER_SIZE_X / 2 + (4f * TRADER_SIZE_X) / 2.0f, 0, stone.getText(), TRADER_SIZE_Y, color);
+				renderTextOnTopSide(renderEngine, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Game", TRADER_SIZE_Y, color);
 			}
 		}
 			break;
 		case seed: {
-			renderTextOnFrontSide(sceneManager, 0, 0, "" + stone.getDigit(), TRADER_SIZE_Y, color);
+			renderTextOnFrontSide(renderEngine, 0, 0, "" + stone.getDigit(), TRADER_SIZE_Y, color);
 			if (stone.getDigitPosition() == 0) {
-				renderTextOnTopSide(sceneManager, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Level", TRADER_SIZE_Y, color);
+				renderTextOnTopSide(renderEngine, -TRADER_SIZE_X / 2 + (5f * TRADER_SIZE_X) / 2.0f, 0, 0, "Level", TRADER_SIZE_Y, color);
 			}
 		}
 			break;
 		}
 	}
 
-	private void renderTextOnFrontSide(final RenderEngine sceneManager, final float dx, final float dy, final String text, final float size, final Color color) {
-		final PolygonSpriteBatch	batch	= sceneManager.batch2D;
-		final BitmapFont			font	= sceneManager.getAtlasManager().aeroFont;
+	private void renderTextOnFrontSide(final RenderEngine renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
+		final PolygonSpriteBatch batch = renderEngine.batch2D;
 		{
 			final Matrix4		m			= new Matrix4();
 			final float			fontSize	= font.getLineHeight();
@@ -105,9 +106,8 @@ public class Digit3DRenderer extends ObjectRenderer {
 		}
 	}
 
-	private void renderTextOnTopSide(final RenderEngine sceneManager, final float dx, final float dy, final float dz, final String text, final float size, final Color color) {
-		final PolygonSpriteBatch	batch	= sceneManager.batch2D;
-		final BitmapFont			font	= sceneManager.getAtlasManager().aeroFont;
+	private void renderTextOnTopSide(final RenderEngine renderEngine, final float dx, final float dy, final float dz, final String text, final float size, final Color color) {
+		final PolygonSpriteBatch batch = renderEngine.batch2D;
 		{
 			final Matrix4		m			= new Matrix4();
 			final float			fontSize	= font.getLineHeight();
