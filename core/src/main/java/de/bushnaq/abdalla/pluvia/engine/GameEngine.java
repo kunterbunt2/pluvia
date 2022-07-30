@@ -8,7 +8,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cubemap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.profiling.GLErrorListener;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
@@ -42,7 +45,12 @@ import de.bushnaq.abdalla.pluvia.ui.MessageDialog;
 import de.bushnaq.abdalla.pluvia.ui.OptionsDialog;
 import de.bushnaq.abdalla.pluvia.ui.PauseDialog;
 import de.bushnaq.abdalla.pluvia.ui.ScoreDialog;
+import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
+import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
+import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
+import net.mgsx.gltf.scene3d.scene.SceneSkybox;
+import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 
 /**
  * Project dependent 3d class that generates all objects Instantiates the Render3DMaster class
@@ -80,6 +88,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	private AboutDialog				aboutDialog;
 	private AtlasManager			atlasManager;
 	private AudioManager			audioManager;
+	private Texture					brdfLUT;
 	private MyCameraInputController	camController;
 	private MovingCamera			camera;
 	private float					centerXD;
@@ -88,7 +97,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	public Context					context;
 	private IContextFactory			contextFactory;
 	private GameObject				cube						= null;
+	private Cubemap					diffuseCubemap;
 	boolean							enableProfiling				= true;
+	private Cubemap					environmentDayCubemap;
+	private Cubemap					environmentNightCubemap;
 	private boolean					followMode;
 	private InfoDialog				info;
 	private final InputMultiplexer	inputMultiplexer			= new InputMultiplexer();
@@ -101,10 +113,12 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	public ModelManager				modelManager;
 	private OptionsDialog			optionsDialog;
 	private PauseDialog				pauseDialog;
+	private boolean					pbr;
 	private GLProfiler				profiler;
 	public RenderEngine				renderEngine;
 	private ScoreDialog				scoreDialog;
 	private boolean					showFps;
+	private Cubemap					specularCubemap;
 	private Stage					stage;
 	private StringBuilder			stringBuilder;
 	private boolean					takeScreenShot;
@@ -125,6 +139,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 				evaluateConfiguation();
 			}
 			showFps = context.getShowFpsProperty();
+			pbr = context.getPbrModeProperty();
 			profiler = new GLProfiler(Gdx.graphics);
 			profiler.setListener(GLErrorListener.LOGGING_LISTENER);// ---enable exception throwing in case of error
 			profiler.setListener(new MyGLErrorListener());
@@ -141,6 +156,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			atlasManager = new AtlasManager();
 			atlasManager.init();
 			renderEngine = new RenderEngine(context, this, camera, atlasManager.smallFont, atlasManager.systemTextureRegion);
+			createEnvironment();
 			modelManager.create(renderEngine.isPbr());
 			audioManager = new AudioManager(context);
 			createStage();
@@ -166,6 +182,23 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		camera.update();
 		camera.setDirty(true);
 
+	}
+
+	private void createEnvironment() {
+		// setup IBL (image based lighting)
+		if (isPbr()) {
+//			setupImageBasedLightingByFaceNames("ruins", "jpg", "png", "jpg", 10);
+			setupImageBasedLightingByFaceNames("clouds", "jpg", "jpg", "jpg", 10);
+//			setupImageBasedLightingByFaceNames("moonless_golf_2k", "jpg", "jpg", "jpg", 10);
+			// setup skybox
+			renderEngine.setDaySkyBox(new SceneSkybox(environmentDayCubemap));
+			renderEngine.setNightSkyBox(new SceneSkybox(environmentNightCubemap));
+			renderEngine.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
+			renderEngine.environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
+			renderEngine.environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
+			renderEngine.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 0f));
+		} else {
+		}
 	}
 
 	private void createInputProcessor(final InputProcessor inputProcessor) throws Exception {
@@ -216,6 +249,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		try {
 			disposeStage();
 			audioManager.dispose();
+			disposeEnvironment();
 			renderEngine.dispose();
 			atlasManager.dispose();
 			disposeInputProcessor();
@@ -224,6 +258,16 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			}
 		} catch (final Exception e) {
 			logger.error(e.getMessage(), e);
+		}
+	}
+
+	private void disposeEnvironment() {
+		if (isPbr()) {
+			diffuseCubemap.dispose();
+			environmentNightCubemap.dispose();
+			environmentDayCubemap.dispose();
+			specularCubemap.dispose();
+			brdfLUT.dispose();
 		}
 	}
 
@@ -267,6 +311,14 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		return inputMultiplexer;
 	}
 
+	public MainDialog getMainDialog() {
+		return mainDialog;
+	}
+
+	public int getMaxFramesPerSecond() {
+		return maxFramesPerSecond;
+	}
+
 //	private void exit() {
 //		Gdx.app.exit();
 //	}
@@ -280,14 +332,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 //		printWriter.close();
 //	}
 
-	public MainDialog getMainDialog() {
-		return mainDialog;
-	}
-
-	public int getMaxFramesPerSecond() {
-		return maxFramesPerSecond;
-	}
-
 	public MessageDialog getMessageDialog() {
 		return messageDialog;
 	}
@@ -298,6 +342,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
 	public ScoreDialog getScoreDialog() {
 		return scoreDialog;
+	}
+
+	public boolean isPbr() {
+		return pbr;
 	}
 
 	@Override
@@ -647,6 +695,45 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 	@Override
 	public void setCamera(final float x, final float z, final boolean setDirty) throws Exception {
 		renderEngine.setCameraTo(x, z, setDirty);
+	}
+
+	// private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
+//	diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/diffuse/diffuse_", "." + diffuseExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
+//	environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environment/environment_", "." + environmentExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
+////	environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension, EnvironmentUtil.FACE_NAMES_FULL);
+//	specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/specular/specular_", "_", "." + specularExtension, specularIterations, EnvironmentUtil.FACE_NAMES_NEG_POS);
+//	brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
+//
+//	// // setup quick IBL (image based lighting)
+//	// DirectionalLightEx light = new DirectionalLightEx();
+//	// light.direction.set(1, -3, 1).nor();
+//	// light.color.set(Color.WHITE);
+//	// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
+//	// environmentCubemap = iblBuilder.buildEnvMap(1024);
+//	// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
+//	// specularCubemap = iblBuilder.buildRadianceMap(10);
+//	// iblBuilder.dispose();
+//}
+	private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
+		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/diffuse/diffuse_", "_0." + diffuseExtension,
+				EnvironmentUtil.FACE_NAMES_FULL);
+		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentDay/environment_", "_0." + environmentExtension,
+				EnvironmentUtil.FACE_NAMES_FULL);
+		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension,
+				EnvironmentUtil.FACE_NAMES_FULL);
+		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/specular/specular_", "_", "." + specularExtension,
+				specularIterations, EnvironmentUtil.FACE_NAMES_FULL);
+		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
+
+		// // setup quick IBL (image based lighting)
+		// DirectionalLightEx light = new DirectionalLightEx();
+		// light.direction.set(1, -3, 1).nor();
+		// light.color.set(Color.WHITE);
+		// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
+		// environmentCubemap = iblBuilder.buildEnvMap(1024);
+		// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
+		// specularCubemap = iblBuilder.buildRadianceMap(10);
+		// iblBuilder.dispose();
 	}
 
 	public void toggleDebugmode() {

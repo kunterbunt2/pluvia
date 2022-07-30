@@ -8,11 +8,9 @@ import java.util.zip.Deflater;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
@@ -65,12 +63,9 @@ import de.bushnaq.abdalla.engine.shader.mirror.Mirror;
 import de.bushnaq.abdalla.engine.shader.water.Water;
 import de.bushnaq.abdalla.engine.util.logger.Logger;
 import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
-import de.bushnaq.abdalla.pluvia.engine.AtlasManager;
 import net.mgsx.gltf.scene3d.attributes.FogAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
-import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
-import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
 import net.mgsx.gltf.scene3d.lights.PointLightEx;
 import net.mgsx.gltf.scene3d.lights.SpotLightEx;
@@ -82,12 +77,11 @@ import net.mgsx.gltf.scene3d.shaders.PBRCommon;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.EnvironmentCache;
-import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 
 /**
  * Project independent 3d class that renders everything
  *
- * @author abdal
+ * @author kunterbunt
  *
  */
 public class RenderEngine {
@@ -105,7 +99,6 @@ public class RenderEngine {
 	private AtlasRegion						atlasRegion;
 	private ModelBatch						batch;
 	public PolygonSpriteBatch				batch2D;
-	private Texture							brdfLUT;
 	private MovingCamera					camera;
 	private GameObject						cameraCube;
 	private final EnvironmentCache			computedEnvironement				= new EnvironmentCache();
@@ -116,7 +109,6 @@ public class RenderEngine {
 	private boolean							debugMode							= false;
 	private ModelBatch						depthBatch;
 	private GameObject						depthOfFieldMeter;
-	private Cubemap							diffuseCubemap;
 	private final ModelCache				dynamicCache						= new ModelCache();
 	private boolean							dynamicDayTime						= false;
 	public Array<GameObject>				dynamicModelInstances				= new Array<>();
@@ -124,8 +116,6 @@ public class RenderEngine {
 //	BloomEffect								effect2;
 	private boolean							enableDepthOfField					= true;
 	public Environment						environment							= new Environment();
-	private Cubemap							environmentDayCubemap;
-	private Cubemap							environmentNightCubemap;
 	private float							fixedDayTime						= 10;
 	private Fog								fog									= new Fog(Color.BLACK, 15f, 30f, 0.5f);
 	private BitmapFont						font;
@@ -136,7 +126,7 @@ public class RenderEngine {
 	private Logger							logger								= LoggerFactory.getLogger(this.getClass());
 	private GameObject						lookatCube;
 	private Mirror							mirror								= new Mirror();
-	private SceneSkybox						nightSkyBox;
+	public SceneSkybox						nightSkyBox;
 	private float							northDirectionDegree				= 90;
 	private boolean							pbr;
 	private final PointLightsAttribute		pointLights							= new PointLightsAttribute();
@@ -154,7 +144,6 @@ public class RenderEngine {
 	private final Vector3					shadowLightDirection				= new Vector3();
 	// OrthographicCamera debugCamera;
 	private boolean							skyBox								= false;
-	private Cubemap							specularCubemap;
 	private final int						speed								= 5;																	// speed of time
 	private final SpotLightsAttribute		spotLights							= new SpotLightsAttribute();
 	private Stage							stage;
@@ -307,19 +296,19 @@ public class RenderEngine {
 		shadowLight.intensity = 1.0f;
 		environment.add(shadowLight);
 		// setup IBL (image based lighting)
-		if (isPbr()) {
-//			setupImageBasedLightingByFaceNames("ruins", "jpg", "png", "jpg", 10);
-			setupImageBasedLightingByFaceNames("clouds", "jpg", "jpg", "jpg", 10);
-//			setupImageBasedLightingByFaceNames("moonless_golf_2k", "jpg", "jpg", "jpg", 10);
-			// setup skybox
-			daySkyBox = new SceneSkybox(environmentDayCubemap);
-			nightSkyBox = new SceneSkybox(environmentNightCubemap);
-			environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
-			environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
-			environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
-			environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 0f));
-		} else {
-		}
+//		if (isPbr()) {
+////			setupImageBasedLightingByFaceNames("ruins", "jpg", "png", "jpg", 10);
+//			setupImageBasedLightingByFaceNames("clouds", "jpg", "jpg", "jpg", 10);
+////			setupImageBasedLightingByFaceNames("moonless_golf_2k", "jpg", "jpg", "jpg", 10);
+//			// setup skybox
+//			daySkyBox = new SceneSkybox(environmentDayCubemap);
+//			nightSkyBox = new SceneSkybox(environmentNightCubemap);
+//			environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
+//			environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
+//			environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
+//			environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 0f));
+//		} else {
+//		}
 		final float lum = 0.0f;
 		ambientLight = new ColorAttribute(ColorAttribute.AmbientLight, lum, lum, lum, 1.0f);
 		environment.set(ambientLight);
@@ -374,6 +363,31 @@ public class RenderEngine {
 		// System.out.println("created ray");
 	}
 
+	private void createRayCube() {
+		if (isPbr()) {
+			final Attribute		color			= new PBRColorAttribute(PBRColorAttribute.BaseColorFactor, Color.WHITE);
+			final Attribute		metallic		= PBRFloatAttribute.createMetallic(0.5f);
+			final Attribute		roughness		= PBRFloatAttribute.createRoughness(0.5f);
+			final Attribute		occlusion		= PBRFloatAttribute.createOcclusionStrength(1.0f);
+			final Material		material		= new Material(metallic, roughness, color, occlusion);
+			final ModelBuilder	modelBuilder	= new ModelBuilder();
+			rayCube = modelBuilder.createBox(1.0f, 1.0f, 1.0f, material, Usage.Position | Usage.Normal);
+		}
+	}
+
+	private void createShader() {
+		renderableSorter = new SceneRenderableSorter();
+		if (isPbr()) {
+			depthBatch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
+		} else {
+			depthBatch = new ModelBatch(new DepthShaderProvider());
+		}
+		// oceanBatch = new ModelBatch(new OceanShaderProvider());
+		batch = new ModelBatch(createShaderProvider(), renderableSorter);
+		// batch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
+		batch2D = new CustomizedSpriteBatch(1000, ShaderCompatibilityHelper.mustUse32CShader() ? GL32CMacIssueHandler.createSpriteBatchShader() : null);
+	}
+
 //	private void createDepthOfFieldMeter() {
 //		if (isDebugMode()) {
 //
@@ -413,31 +427,6 @@ public class RenderEngine {
 //			}
 //		}
 //	}
-
-	private void createRayCube() {
-		if (isPbr()) {
-			final Attribute		color			= new PBRColorAttribute(PBRColorAttribute.BaseColorFactor, Color.WHITE);
-			final Attribute		metallic		= PBRFloatAttribute.createMetallic(0.5f);
-			final Attribute		roughness		= PBRFloatAttribute.createRoughness(0.5f);
-			final Attribute		occlusion		= PBRFloatAttribute.createOcclusionStrength(1.0f);
-			final Material		material		= new Material(metallic, roughness, color, occlusion);
-			final ModelBuilder	modelBuilder	= new ModelBuilder();
-			rayCube = modelBuilder.createBox(1.0f, 1.0f, 1.0f, material, Usage.Position | Usage.Normal);
-		}
-	}
-
-	private void createShader() {
-		renderableSorter = new SceneRenderableSorter();
-		if (isPbr()) {
-			depthBatch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
-		} else {
-			depthBatch = new ModelBatch(new DepthShaderProvider());
-		}
-		// oceanBatch = new ModelBatch(new OceanShaderProvider());
-		batch = new ModelBatch(createShaderProvider(), renderableSorter);
-		// batch = new ModelBatch(PBRShaderProvider.createDefaultDepth(0));
-		batch2D = new CustomizedSpriteBatch(1000, ShaderCompatibilityHelper.mustUse32CShader() ? GL32CMacIssueHandler.createSpriteBatchShader() : null);
-	}
 
 	private ShaderProvider createShaderProvider() {
 		if (isPbr()) {
@@ -503,6 +492,26 @@ public class RenderEngine {
 		}
 	}
 
+	public void dispose() throws Exception {
+		staticCache.dispose();
+		dynamicCache.dispose();
+//		vfxManager.dispose();
+		disposeGraphs();
+		disposeStage();
+		disposeEnvironment();
+		disposeShader();
+		disposeFrameBuffer();
+	}
+
+	private void disposeEnvironment() {
+		if (isPbr()) {
+			nightSkyBox.dispose();
+			daySkyBox.dispose();
+		}
+		shadowLight.dispose();
+		environment.clear();
+	}
+
 //	private void createLookatCube() {
 //		if (isDebugMode()) {
 //			if (lookatCube == null) {
@@ -524,31 +533,6 @@ public class RenderEngine {
 //		}
 //	}
 
-	public void dispose() throws Exception {
-		staticCache.dispose();
-		dynamicCache.dispose();
-//		vfxManager.dispose();
-		disposeGraphs();
-		disposeStage();
-		disposeEnvironment();
-		disposeShader();
-		disposeFrameBuffer();
-	}
-
-	private void disposeEnvironment() {
-		if (isPbr()) {
-			diffuseCubemap.dispose();
-			environmentNightCubemap.dispose();
-			environmentDayCubemap.dispose();
-			specularCubemap.dispose();
-			brdfLUT.dispose();
-			nightSkyBox.dispose();
-			daySkyBox.dispose();
-		}
-		shadowLight.dispose();
-		environment.clear();
-	}
-
 	private void disposeFrameBuffer() {
 //		postFbo.dispose();
 		mirror.dispose();
@@ -567,6 +551,13 @@ public class RenderEngine {
 		depthBatch.dispose();
 	}
 
+	private void disposeStage() {
+		stage.dispose();
+	}
+
+	public void end() {
+	}
+
 //	private void fboToScreen() {
 //		clearViewport();
 //		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
@@ -577,13 +568,6 @@ public class RenderEngine {
 //		batch2D.end();
 //		batch2D.enableBlending();
 //	}
-
-	private void disposeStage() {
-		stage.dispose();
-	}
-
-	public void end() {
-	}
 
 	public MovingCamera getCamera() {
 		return camera;
@@ -1143,6 +1127,10 @@ public class RenderEngine {
 		this.currentDayTime = currentDayTime;
 	}
 
+	public void setDaySkyBox(SceneSkybox daySkyBox) {
+		this.daySkyBox = daySkyBox;
+	}
+
 	public void setDebugMode(boolean debugMode) {
 		this.debugMode = debugMode;
 	}
@@ -1157,6 +1145,10 @@ public class RenderEngine {
 
 	public void setFixedDayTime(float fixedDayTime) {
 		this.fixedDayTime = fixedDayTime;
+	}
+
+	public void setNightSkyBox(SceneSkybox nightSkyBox) {
+		this.nightSkyBox = nightSkyBox;
 	}
 
 //	private void updateFog() {
@@ -1194,45 +1186,6 @@ public class RenderEngine {
 
 	public void setSkyBox(boolean skyBox) {
 		this.skyBox = skyBox;
-	}
-
-	// private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
-//		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/diffuse/diffuse_", "." + diffuseExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
-//		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environment/environment_", "." + environmentExtension, EnvironmentUtil.FACE_NAMES_NEG_POS);
-////		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension, EnvironmentUtil.FACE_NAMES_FULL);
-//		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), "textures/" + name + "/specular/specular_", "_", "." + specularExtension, specularIterations, EnvironmentUtil.FACE_NAMES_NEG_POS);
-//		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
-//
-//		// // setup quick IBL (image based lighting)
-//		// DirectionalLightEx light = new DirectionalLightEx();
-//		// light.direction.set(1, -3, 1).nor();
-//		// light.color.set(Color.WHITE);
-//		// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
-//		// environmentCubemap = iblBuilder.buildEnvMap(1024);
-//		// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
-//		// specularCubemap = iblBuilder.buildRadianceMap(10);
-//		// iblBuilder.dispose();
-//	}
-	private void setupImageBasedLightingByFaceNames(final String name, final String diffuseExtension, final String environmentExtension, final String specularExtension, final int specularIterations) {
-		diffuseCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/diffuse/diffuse_", "_0." + diffuseExtension,
-				EnvironmentUtil.FACE_NAMES_FULL);
-		environmentDayCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentDay/environment_", "_0." + environmentExtension,
-				EnvironmentUtil.FACE_NAMES_FULL);
-		environmentNightCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/environmentNight/environment_", "_0." + environmentExtension,
-				EnvironmentUtil.FACE_NAMES_FULL);
-		specularCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(), AtlasManager.getAssetsFolderName() + "/textures/" + name + "/specular/specular_", "_", "." + specularExtension,
-				specularIterations, EnvironmentUtil.FACE_NAMES_FULL);
-		brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
-
-		// // setup quick IBL (image based lighting)
-		// DirectionalLightEx light = new DirectionalLightEx();
-		// light.direction.set(1, -3, 1).nor();
-		// light.color.set(Color.WHITE);
-		// IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
-		// environmentCubemap = iblBuilder.buildEnvMap(1024);
-		// diffuseCubemap = iblBuilder.buildIrradianceMap(256);
-		// specularCubemap = iblBuilder.buildRadianceMap(10);
-		// iblBuilder.dispose();
 	}
 
 //	public void toggleShowGraphs() {
