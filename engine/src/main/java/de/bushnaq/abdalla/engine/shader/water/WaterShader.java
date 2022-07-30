@@ -18,11 +18,8 @@ public class WaterShader extends DefaultShader {
 	private static Plane		clippingPlane;
 	private static final String	DUDV_MAP_FILE_NAME			= "shader/texture/waterDUDV.png";
 	private static final String	NORMAL_MAP_FILE_NAME		= "shader/texture/normal.png";
-//	private static FrameBuffer	waterReflectionFbo;
-//	private static FrameBuffer	waterRefractionFbo;
 	private float				moveFactor					= 0f;
 	private final Texture		normalMap;
-//	private float				tiling;
 	private final int			u_clippingPlane				= register("u_clippingPlane");
 	private final int			u_depthMap					= register("u_depthMap");
 	private final int			u_dudvMapTexture			= register("u_dudvMapTexture");
@@ -33,15 +30,11 @@ public class WaterShader extends DefaultShader {
 	private final int			u_refractiveMultiplicator	= register("u_refractiveMultiplicator");
 	private final int			u_tiling					= register("u_tiling");
 	private final int			u_waveStrength				= register("u_waveStrength");
-	// private float waveSpeed = 0.03f;
-//	private float				waveStrength			= 0.01f;
 	private Water				water;
 	private final Texture		waterDuDv;
 
 	public WaterShader(final Renderable renderable, final Config config, final String prefix, final Water water) {
 		super(renderable, config, prefix);
-//		WaterShader.waterRefractionFbo = waterRefractionFbo;
-//		WaterShader.waterReflectionFbo = waterReflectionFbo;
 		this.water = water;
 		// GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f);
 		waterDuDv = new Texture(Gdx.files.internal(DUDV_MAP_FILE_NAME));
@@ -91,17 +84,5 @@ public class WaterShader extends DefaultShader {
 	public void setClippingPlane(final Plane clippingPlane) {
 		WaterShader.clippingPlane = clippingPlane;
 	}
-
-//	public void setTiling(final float tiling) {
-//		this.tiling = tiling;
-//	}
-//
-//	public void setWaveSpeed(final float waveSpeed) {
-//		this.waveSpeed = waveSpeed;
-//	}
-//
-//	public void setWaveStrength(final float waveStrength) {
-//		this.waveStrength = waveStrength;
-//	}
 
 }

@@ -19,11 +19,6 @@ public class Mirror {
 	public Mirror() {
 
 	}
-//	public Mirror(boolean present, float reflectivity/* , float waveSpeed, float waveStrength */) {
-//		this.present = present;
-//		this.reflectivity = reflectivity;
-//	}
-
 	public void createFrameBuffer() {
 		{
 			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
