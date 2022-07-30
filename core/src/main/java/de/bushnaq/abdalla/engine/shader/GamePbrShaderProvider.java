@@ -16,6 +16,10 @@ import net.mgsx.gltf.scene3d.shaders.PBRShader;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class GamePbrShaderProvider extends PBRShaderProvider implements GameShaderProviderInterface {
 
 	public static GamePbrShaderProvider createDefault(final PBRShaderConfig config, final Water water, final Mirror mirror) {

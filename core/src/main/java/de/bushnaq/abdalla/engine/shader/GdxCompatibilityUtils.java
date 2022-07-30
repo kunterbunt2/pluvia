@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.glutils.VertexBufferObject;
 import com.badlogic.gdx.graphics.glutils.VertexBufferObjectWithVAO;
 import com.badlogic.gdx.graphics.glutils.VertexData;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class GdxCompatibilityUtils {
 	public static VertexData createVertexBuffer(final boolean isStatic, final int numVertices, final VertexAttributes attributes) {
 		if (Gdx.gl30 != null)

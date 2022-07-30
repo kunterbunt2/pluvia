@@ -16,6 +16,10 @@ import com.kotcrab.vis.ui.VisUI.SkinScale;
 
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class AtlasManager {
 	private static String assetsFolderName;
 

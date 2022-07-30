@@ -16,6 +16,10 @@ import com.badlogic.gdx.math.Matrix4;
 
 import de.bushnaq.abdalla.engine.GameObject;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MeshMerger {
 
 	public static Mesh copyMesh(final Mesh meshToCopy, final boolean isStatic, final boolean removeDuplicates, final int[] usage) {

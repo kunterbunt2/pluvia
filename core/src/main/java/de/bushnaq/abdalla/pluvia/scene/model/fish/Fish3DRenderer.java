@@ -16,6 +16,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Fish3DRenderer extends ObjectRenderer {
 	private static final float		FISH_X_SIZE				= 1f;
 	private static final float		FISH_Y_SIZE				= 1f;

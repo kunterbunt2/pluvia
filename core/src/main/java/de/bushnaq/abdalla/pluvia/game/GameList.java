@@ -6,7 +6,8 @@ package de.bushnaq.abdalla.pluvia.game;
 import java.util.LinkedList;
 
 /**
- * @author bushnaq TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
+ * @author kunterbunt
+ *
  */
 public class GameList extends LinkedList<Game> {
 	protected int				SelectedGame	= 0;

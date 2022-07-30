@@ -13,6 +13,10 @@ import com.kotcrab.vis.ui.widget.VisSlider;
 import de.bushnaq.abdalla.pluvia.desktop.IApplicationProperties;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class GraphicsQualityOptions {
 	private GameEngine				gameEngine;
 	private VisLabel				graphicsQualityLabel;

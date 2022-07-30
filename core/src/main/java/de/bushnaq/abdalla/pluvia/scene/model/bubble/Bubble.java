@@ -11,7 +11,7 @@ import de.bushnaq.abdalla.pluvia.scene.model.fish.Fish;
 import de.bushnaq.abdalla.pluvia.util.TimeUnit;
 
 /**
- * @author bushnaq TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
+ * @author kunterbunt
  */
 public class Bubble extends Fish {
 	Vector3	positionDelta	= new Vector3((float) Math.random() * 3, (float) Math.random() * 3, (float) Math.random() * 3);

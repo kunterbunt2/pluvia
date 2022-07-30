@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.Plane;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class WaterShader extends DefaultShader {
 	private static Plane		clippingPlane;
 	private static final String	DUDV_MAP_FILE_NAME			= "shader/texture/waterDUDV.png";

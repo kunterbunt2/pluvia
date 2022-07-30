@@ -1,4 +1,5 @@
 //water.vs.glsl
+//@author kunterbunt
 #ifdef GL_ES
 	#extension GL_APPLE_clip_distance : require
 	#define LOWP lowp

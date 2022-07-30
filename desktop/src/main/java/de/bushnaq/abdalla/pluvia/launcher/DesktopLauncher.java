@@ -15,6 +15,10 @@ import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.util.MavenPropertiesProvider;
 
+/**
+ * @author kunterbunt
+ * 
+ */
 public class DesktopLauncher implements ApplicationListener {
 
 	public static void main(final String[] args) throws Exception {

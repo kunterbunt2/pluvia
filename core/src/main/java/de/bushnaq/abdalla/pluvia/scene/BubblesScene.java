@@ -11,6 +11,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.engine.ModelManager;
 import de.bushnaq.abdalla.pluvia.scene.model.bubble.Bubble;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class BubblesScene extends AbstractScene {
 
 	public BubblesScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {

@@ -32,6 +32,10 @@ import de.bushnaq.abdalla.pluvia.game.LevelManager;
 //	up, down
 //}
 
+/**
+ * @author kunterbunt
+ *
+ */
 public abstract class AbstractDialog {
 	protected static final int		BUTTON_WIDTH		= 150;
 	protected static final int		DIALOG_WIDTH		= 150;

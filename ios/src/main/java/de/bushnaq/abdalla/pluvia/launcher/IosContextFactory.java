@@ -3,6 +3,10 @@ package de.bushnaq.abdalla.pluvia.launcher;
 import de.bushnaq.abdalla.engine.IContextFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 
+/**
+ * @author kunterbunt
+ * 
+ */
 public class IosContextFactory implements IContextFactory {
 	private Context context;
 

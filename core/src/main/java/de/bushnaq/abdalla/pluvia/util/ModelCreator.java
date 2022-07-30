@@ -11,6 +11,10 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class ModelCreator {
 	public Model createBox(final Material material) {
 		final ModelBuilder builder = new ModelBuilder();

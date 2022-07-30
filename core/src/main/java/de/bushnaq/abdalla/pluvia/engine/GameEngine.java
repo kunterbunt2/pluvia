@@ -55,7 +55,7 @@ import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 /**
  * Project dependent 3d class that generates all objects Instantiates the Render3DMaster class
  *
- * @author abdal
+ * @author kunterbunt
  *
  */
 public class GameEngine implements ScreenListener, ApplicationListener, InputProcessor {

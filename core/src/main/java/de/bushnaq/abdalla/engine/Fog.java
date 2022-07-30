@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 
 import net.mgsx.gltf.scene3d.attributes.FogAttribute;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Fog {
 	private float			beginDistance	= 15;
 	private Color			color			= Color.BLACK;

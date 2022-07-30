@@ -2,6 +2,10 @@ package de.bushnaq.abdalla.engine;
 
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public abstract class ObjectRenderer {
 	public void create(final float x, final float y, final float z, final GameEngine gameEngine) {
 	}

@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Mirror {
 	private boolean		present			= false;
 	private FrameBuffer	reflectionFbo;

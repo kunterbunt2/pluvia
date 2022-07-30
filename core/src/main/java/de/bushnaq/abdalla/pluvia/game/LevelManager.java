@@ -28,6 +28,10 @@ import de.bushnaq.abdalla.pluvia.scene.model.digit.Digit;
 import de.bushnaq.abdalla.pluvia.scene.model.digit.DigitType;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class LevelManager extends Level implements Serializable {
 	private static final String	INVALID_LEVEL_RECORDING_DETECTED	= "Invalid Level Recording Detected";
 	private static final String	RESETTING_LEVEL						= "\n\nResetting level...";

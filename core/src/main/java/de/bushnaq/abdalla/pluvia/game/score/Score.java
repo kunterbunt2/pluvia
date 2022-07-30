@@ -11,6 +11,10 @@ import de.bushnaq.abdalla.pluvia.game.GameDataObject;
 import de.bushnaq.abdalla.pluvia.game.Level;
 import de.bushnaq.abdalla.pluvia.game.recording.Recording;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Score implements Comparable<Score> {
 	private static final String	INVALID_SCORE_DETECTED	= "Invalid Score Detected";
 	private static final String	RESETTING_HIGH_SCORE	= "\n\nResetting high score...";

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class ModelList<T extends Renderable> extends ArrayList<T> {
 	public void destroy(GameEngine gameEngine) {
 		for (T t : this) {

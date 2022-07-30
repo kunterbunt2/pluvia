@@ -31,6 +31,10 @@ import com.crashinvaders.vfx.gl.VfxGLUtils;
 
 import de.bushnaq.abdalla.engine.camera.MovingCamera;
 
+/**
+ * @author kunterbunt
+ * 
+ */
 public class DepthOfFieldEffect extends ShaderVfxEffect implements ChainVfxEffect {
 
 	private static final String	Texture0			= "u_sourceTexture";

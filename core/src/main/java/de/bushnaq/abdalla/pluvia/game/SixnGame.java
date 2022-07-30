@@ -7,6 +7,7 @@ package de.bushnaq.abdalla.pluvia.game;
  *
  * 13 rows of 5 columns, 8 different stones, with up to 3 stones that can fall at the same time and 5 rows already have fallen
  *
+ * @author kunterbunt
  *
  */
 public class SixnGame extends Game {

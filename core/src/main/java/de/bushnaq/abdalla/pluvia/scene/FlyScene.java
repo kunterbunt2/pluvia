@@ -11,6 +11,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.engine.ModelManager;
 import de.bushnaq.abdalla.pluvia.scene.model.fly.Fly;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class FlyScene extends AbstractScene {
 
 	public FlyScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {

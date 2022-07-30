@@ -1,5 +1,9 @@
 package de.bushnaq.abdalla.pluvia.scene;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class TwinBuilding {
 	float	chanceHorizontal	= 0.2f;
 	float	chanceVertical		= 0.2f;

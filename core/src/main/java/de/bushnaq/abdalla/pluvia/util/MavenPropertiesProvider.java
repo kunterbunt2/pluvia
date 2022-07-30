@@ -3,6 +3,10 @@ package de.bushnaq.abdalla.pluvia.util;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MavenPropertiesProvider {
 	private static final MavenPropertiesProvider	INSTANCE	= new MavenPropertiesProvider();// ---initialize the static field
 	static ResourceBundle							rb;

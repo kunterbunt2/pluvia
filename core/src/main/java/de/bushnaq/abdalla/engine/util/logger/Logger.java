@@ -2,6 +2,10 @@ package de.bushnaq.abdalla.engine.util.logger;
 
 import com.badlogic.gdx.Gdx;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Logger {
 	private static final String	CAUSE_CAPTION	= "Caused by: ";
 

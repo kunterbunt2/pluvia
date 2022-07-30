@@ -7,6 +7,10 @@ import com.badlogic.gdx.math.Plane;
 
 import net.mgsx.gltf.scene3d.shaders.PBRShader;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MyPBRShader extends PBRShader {
 	private static Plane	clippingPlane;
 	public final int		u_clippingPlane	= register("u_clippingPlane");

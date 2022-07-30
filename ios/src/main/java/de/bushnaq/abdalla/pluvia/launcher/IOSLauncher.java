@@ -15,6 +15,10 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ * 
+ */
 public class IOSLauncher extends IOSApplication.Delegate {
 	public static void main(String[] argv) throws IOException {
 		System.out.println("start-1");

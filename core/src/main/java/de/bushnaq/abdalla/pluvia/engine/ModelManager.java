@@ -21,7 +21,7 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 /**
  * Loads models and textures, instantiates the SceneManager class
  *
- * @author abdal
+ * @author kunterbunt
  *
  */
 public class ModelManager {

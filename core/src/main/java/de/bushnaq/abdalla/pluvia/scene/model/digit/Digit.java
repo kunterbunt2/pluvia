@@ -1,6 +1,3 @@
-/*
- * Created on 10.07.2004 TODO To change the template for this generated file go to Window - Preferences - Java - Code Style - Code Templates
- */
 package de.bushnaq.abdalla.pluvia.scene.model.digit;
 
 import java.util.List;
@@ -10,6 +7,10 @@ import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.Level;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Digit extends Renderable {
 	private char				digit	= 0;
 	private int					digitPosition;

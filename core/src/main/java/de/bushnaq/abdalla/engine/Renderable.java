@@ -1,5 +1,9 @@
 package de.bushnaq.abdalla.engine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Renderable {
 
 	public ObjectRenderer renderer3D;

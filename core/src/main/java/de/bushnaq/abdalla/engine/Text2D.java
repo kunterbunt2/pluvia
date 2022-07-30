@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.utils.Align;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Text2D {
 	private Color	color;
 	BitmapFont		font;

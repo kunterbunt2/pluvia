@@ -16,6 +16,10 @@ import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.Level;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class ScoreList extends TreeSet<Score> {
 	private long	changed;											// last time anything changed
 	private Logger	logger	= LoggerFactory.getLogger(this.getClass());

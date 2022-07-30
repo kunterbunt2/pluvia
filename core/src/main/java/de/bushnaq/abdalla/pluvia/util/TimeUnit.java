@@ -13,7 +13,7 @@ class RcTimeStruct {
 }
 
 /**
- * @author abdalla Keeps the number accurate to the second decimal
+ * @author kuterbunt
  */
 public class TimeUnit {
 	private static final int	DAY_INDEX			= 3;

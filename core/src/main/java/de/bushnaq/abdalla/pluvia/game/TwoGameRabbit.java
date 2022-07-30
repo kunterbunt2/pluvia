@@ -7,6 +7,7 @@ package de.bushnaq.abdalla.pluvia.game;
  *
  * 9 rows of 4 columns, 8 different stones, with up to 2 stones that can fall at the same time
  *
+ * @author kunterbunt
  *
  */
 public class TwoGameRabbit extends Game {

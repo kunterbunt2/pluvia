@@ -1,5 +1,9 @@
 package de.bushnaq.abdalla.pluvia.game;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class StoneDataObject {
 
 	public int	score	= 0;

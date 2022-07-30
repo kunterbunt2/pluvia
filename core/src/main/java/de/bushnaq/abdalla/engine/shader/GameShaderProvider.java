@@ -14,6 +14,10 @@ import de.bushnaq.abdalla.engine.shader.mirror.MirrorShader;
 import de.bushnaq.abdalla.engine.shader.water.Water;
 import de.bushnaq.abdalla.engine.shader.water.WaterShader;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class GameShaderProvider extends DefaultShaderProvider implements GameShaderProviderInterface {
 
 	public static GameShaderProvider createDefault(final Config config, final Water water, final Mirror mirror) {

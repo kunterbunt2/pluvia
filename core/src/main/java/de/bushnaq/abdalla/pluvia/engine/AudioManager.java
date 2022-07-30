@@ -8,6 +8,10 @@ import com.badlogic.gdx.audio.Sound;
 
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class AudioManager {
 	public static final String	DROP	= "drop";
 	public static final String	SCORE	= "score";

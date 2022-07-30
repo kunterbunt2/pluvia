@@ -3,7 +3,7 @@ package de.bushnaq.abdalla.pluvia.game.recording;
 /**
  * Recording frame records all actions of the user for later playback
  *
- * @author abdal
+ * @author kunterbunt
  *
  */
 

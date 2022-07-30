@@ -10,7 +10,7 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.scene.model.fish.Fish;
 
 /**
- * @author bushnaq TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
+ * @author kunterbunt
  */
 public class Turtle extends Fish {
 

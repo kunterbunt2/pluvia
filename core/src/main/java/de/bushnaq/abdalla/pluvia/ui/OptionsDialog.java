@@ -18,6 +18,10 @@ import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneAdapter;
 
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class OptionsDialog extends AbstractDialog {
 
 	private class TestTab extends Tab {

@@ -16,6 +16,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Bubble3DRenderer extends ObjectRenderer {
 	private static final float		NORMAL_LIGHT_INTENSITY	= 1f;
 	private static final float		SIZE_X					= 1.0f;

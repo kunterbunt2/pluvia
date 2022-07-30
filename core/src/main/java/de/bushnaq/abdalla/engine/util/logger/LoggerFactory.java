@@ -1,5 +1,9 @@
 package de.bushnaq.abdalla.engine.util.logger;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class LoggerFactory {
 
 	public static Logger getLogger(Class<?> class1) {

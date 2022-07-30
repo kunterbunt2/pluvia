@@ -1,5 +1,9 @@
 package de.bushnaq.abdalla.pluvia.game;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class GameDataObject {
 	private String				name;
 	private StoneDataObject[][]	patch			= null;

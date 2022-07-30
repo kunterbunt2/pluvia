@@ -23,6 +23,10 @@ import de.bushnaq.abdalla.pluvia.scene.model.turtle.Turtle;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public abstract class AbstractScene {
 	protected static final float	CITY_SIZE	= 3;
 	private static final float		WATER_X		= 100;

@@ -9,6 +9,7 @@ import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
  *
  * 13 rows of 5 columns, 8 different stones, with up to 3 stones that can fall at the same time
  *
+ * @author kunterbunt
  *
  */
 public class FourGameDragon extends Game {

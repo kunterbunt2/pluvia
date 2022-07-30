@@ -16,6 +16,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Turtle3DRenderer extends ObjectRenderer {
 	private static Color			DIAMON_BLUE_COLOR		= new Color(0x006ab6ff);
 	private static Color			GRAY_COLOR				= new Color(0x404853ff);

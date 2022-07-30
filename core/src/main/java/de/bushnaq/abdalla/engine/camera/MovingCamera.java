@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MovingCamera extends PerspectiveCamera {
 	boolean			dirty		= false;
 	public Vector3	lookat		= new Vector3(0f, 0f, 0f);

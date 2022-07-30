@@ -2,6 +2,10 @@ package de.bushnaq.abdalla.pluvia.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class LabelData {
 //	List<GraphChart>	graphCharts	= new ArrayList<>();
 	Label	nameLabel;

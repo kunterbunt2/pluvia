@@ -1,6 +1,3 @@
-/*
- * Created on 10.07.2004 TODO To change the template for this generated file go to Window - Preferences - Java - Code Style - Code Templates
- */
 package de.bushnaq.abdalla.pluvia.scene.model.rain;
 
 import com.badlogic.gdx.math.Vector3;
@@ -11,7 +8,7 @@ import de.bushnaq.abdalla.pluvia.scene.model.fish.Fish;
 import de.bushnaq.abdalla.pluvia.util.TimeUnit;
 
 /**
- * @author bushnaq TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
+ * @author kunterbunt
  */
 public class Rain extends Fish {
 //	int		pause	= 0;

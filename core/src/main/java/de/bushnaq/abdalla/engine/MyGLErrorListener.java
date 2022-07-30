@@ -5,6 +5,10 @@ import static com.badlogic.gdx.graphics.profiling.GLInterceptor.resolveErrorNumb
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.profiling.GLErrorListener;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MyGLErrorListener implements GLErrorListener {
 
 	public MyGLErrorListener() {

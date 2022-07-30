@@ -13,6 +13,10 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MessageDialog extends AbstractDialog {
 	VisLabel	textArea;
 	VisLabel	titleLabel;

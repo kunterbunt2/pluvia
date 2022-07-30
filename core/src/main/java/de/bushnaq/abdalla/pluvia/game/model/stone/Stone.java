@@ -8,7 +8,7 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.util.RcBoolean;
 
 /**
- * @author bushnaq TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
+ * @author kunterbunt
  */
 public class Stone extends Renderable implements Comparable<Stone> {
 	private RcBoolean	canDrop			= new RcBoolean(false);

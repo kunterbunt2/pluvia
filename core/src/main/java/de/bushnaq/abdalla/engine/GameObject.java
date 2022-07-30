@@ -6,6 +6,10 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import net.mgsx.gltf.scene3d.animation.AnimationControllerHack;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class GameObject {
 
 	public BoundingBox				boundingBox				= new BoundingBox();

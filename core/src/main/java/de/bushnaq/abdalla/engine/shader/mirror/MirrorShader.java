@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.Plane;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MirrorShader extends DefaultShader {
 	private static Plane	clippingPlane;
 //	private final int			u_refractionTexture		= register("u_refractionTexture");

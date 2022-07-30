@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class NightFishScene extends AbstractScene {
 
 	public NightFishScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {

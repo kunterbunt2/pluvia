@@ -11,6 +11,10 @@ import com.badlogic.gdx.Gdx;
 import de.bushnaq.abdalla.engine.util.logger.Logger;
 import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public abstract class ApplicationProperties implements IApplicationProperties {
 	private static final String		PLUVIA_AMBIENT_AUDIO			= "pluvia.ambientAudio";
 	private static final String		PLUVIA_AMBIENT_AUDIO_VOLUMEN	= "pluvia.ambientAudioVolumen";

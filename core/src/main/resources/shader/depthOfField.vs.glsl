@@ -1,4 +1,5 @@
 //depthOfField.vs.glsl
+//@author kunterbunt
 #if __VERSION__ >= 130
 out vec4 fragColor;
 #define attribute in

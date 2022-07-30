@@ -22,6 +22,10 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.bushnaq.abdalla.pluvia.engine.AtlasManager;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MainDialog extends AbstractDialog {
 	protected static final int	DIALOG_HEIGHT	= 150 * 4;
 	private VisLabel			descriptionLabel;

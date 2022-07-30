@@ -12,6 +12,10 @@ import com.kotcrab.vis.ui.widget.VisSlider;
 
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class AudioOptions {
 	private VisCheckBox	ambientAudioCheckBox;
 	private VisLabel	ambientAudioVolumenLabel;

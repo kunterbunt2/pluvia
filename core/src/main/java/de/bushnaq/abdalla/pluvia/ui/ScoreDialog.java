@@ -22,6 +22,10 @@ import de.bushnaq.abdalla.pluvia.game.score.Score;
 import de.bushnaq.abdalla.pluvia.game.score.ScoreList;
 import de.bushnaq.abdalla.pluvia.util.TimeUnit;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class ScoreDialog extends AbstractDialog {
 	Map<VisTextButton, Score>	buttonToScoreMap	= new HashMap<>();
 	private long				changed;

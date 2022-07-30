@@ -13,6 +13,10 @@ import de.bushnaq.abdalla.engine.RenderEngine;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Digit3DRenderer extends ObjectRenderer {
 	private static final Color	DIGIT_COLOR			= new Color(0f, 0f, 0f, 0.5f);
 	private static final float	MINIMUM_DISTANCE	= 0.01f;

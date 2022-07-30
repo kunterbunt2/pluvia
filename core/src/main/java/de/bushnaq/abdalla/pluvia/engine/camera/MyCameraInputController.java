@@ -9,6 +9,10 @@ import de.bushnaq.abdalla.engine.camera.MovingCamera;
 import de.bushnaq.abdalla.engine.util.logger.Logger;
 import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MyCameraInputController extends CameraInputController {
 
 	private final Logger	logger	= LoggerFactory.getLogger(this.getClass());

@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
 
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Water {
 	private boolean		present					= false;
 	private FrameBuffer	reflectionFbo;

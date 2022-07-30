@@ -27,6 +27,10 @@ import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.util.TimeStatistic;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class InfoDialog {
 	private static final String		VARIABLE_LABEL	= "variableLabel";
 	private final Batch				batch;

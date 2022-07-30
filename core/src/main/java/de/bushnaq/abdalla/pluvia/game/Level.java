@@ -24,6 +24,10 @@ import de.bushnaq.abdalla.pluvia.game.recording.Recording;
 import de.bushnaq.abdalla.pluvia.util.PersistentRandomGenerator;
 import de.bushnaq.abdalla.pluvia.util.RcBoolean;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public abstract class Level {
 	public int					animationPhase			= 0;
 	Set<Stone>					droppingStones			= new HashSet<>();

@@ -19,6 +19,10 @@ package de.bushnaq.abdalla.engine.shader;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class GameSettings {
 
 	public static final float	CAMERA_FAR				= 20f;

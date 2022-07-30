@@ -5,6 +5,10 @@ package de.bushnaq.abdalla.pluvia.game;
 
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Game implements Cloneable {
 	public float		cameraZPosition;
 	protected String	description;

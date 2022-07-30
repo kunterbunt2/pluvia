@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.VertexData;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class FullScreenRenderImpl implements FullScreenRender, Disposable {
 	private final IndexData		indexData;
 	private final VertexData	vertexData;

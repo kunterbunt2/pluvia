@@ -11,6 +11,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.engine.ModelManager;
 import de.bushnaq.abdalla.pluvia.scene.model.rain.Rain;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class RainScene extends AbstractScene {
 
 	public RainScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {

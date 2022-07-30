@@ -12,6 +12,10 @@ import de.bushnaq.abdalla.pluvia.game.GamePhase;
 import de.bushnaq.abdalla.pluvia.game.LevelManager;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Recording {
 	private static final String	NOT_EXPECTED_SCORE											= "Recording playback does not result in expected score. Recording is not genuine.";
 	private static final String	RECORDING_IS_TRYING_TO_ACCESS_A_STONE_THAT_DOES_NOT_EXIST	= "Recording is trying to access a stone that does not exist. Recording is not genuine.";

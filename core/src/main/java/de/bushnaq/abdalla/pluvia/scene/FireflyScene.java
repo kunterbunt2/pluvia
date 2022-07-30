@@ -11,6 +11,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.engine.ModelManager;
 import de.bushnaq.abdalla.pluvia.scene.model.firefly.Firefly;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class FireflyScene extends AbstractScene {
 
 	public FireflyScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {

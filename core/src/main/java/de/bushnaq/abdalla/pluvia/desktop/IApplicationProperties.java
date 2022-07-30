@@ -1,5 +1,9 @@
 package de.bushnaq.abdalla.pluvia.desktop;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public interface IApplicationProperties {
 
 	int MAX_GRAPHICS_QUALITY = 4;

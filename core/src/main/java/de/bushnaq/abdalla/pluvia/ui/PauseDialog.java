@@ -12,6 +12,10 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class PauseDialog extends AbstractDialog {
 
 	public PauseDialog(GameEngine gameEngine, final Batch batch, final InputMultiplexer inputMultiplexer) throws Exception {

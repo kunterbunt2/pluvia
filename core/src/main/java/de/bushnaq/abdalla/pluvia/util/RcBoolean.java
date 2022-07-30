@@ -12,6 +12,10 @@
  * -------------------------------------------------------------------------*/
 package de.bushnaq.abdalla.pluvia.util;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class RcBoolean {
 	private boolean booleanValue;
 

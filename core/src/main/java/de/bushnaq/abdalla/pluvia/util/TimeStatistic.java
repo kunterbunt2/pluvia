@@ -1,5 +1,9 @@
 package de.bushnaq.abdalla.pluvia.util;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class TimeStatistic {
 	public long		averageTime	= 0;
 	private long	count		= 0;

@@ -21,6 +21,10 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class Stone3DRenderer extends ObjectRenderer {
 	private static final float		NORMAL_LIGHT_INTENSITY		= 10f;
 	private static final Color		SELECTED_TRADER_NAME_COLOR	= Color.BLACK;

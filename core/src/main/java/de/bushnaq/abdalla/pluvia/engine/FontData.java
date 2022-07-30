@@ -2,6 +2,10 @@ package de.bushnaq.abdalla.pluvia.engine;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class FontData {
 	public String		file;
 	public BitmapFont	font;

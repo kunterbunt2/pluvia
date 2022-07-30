@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * A random generator that can be resumed later
  *
- * @author abdal
+ * @author kunterbunt
  *
  */
 public class PersistentRandomGenerator {

@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.Plane;
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class MyShader extends DefaultShader {
 	private static Plane	clippingPlane;
 	public final int		u_clippingPlane	= register("u_clippingPlane");

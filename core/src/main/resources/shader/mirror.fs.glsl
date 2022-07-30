@@ -1,4 +1,5 @@
 //mirror.fs.glsl
+//@author kunterbunt
 #ifdef GL_ES
 	#define LOWP lowp
 	#define MED mediump

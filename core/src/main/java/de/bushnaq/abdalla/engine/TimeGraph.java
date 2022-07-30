@@ -18,6 +18,10 @@ class Frame {
 	long delta;
 }
 
+/**
+ * @author kunterbunt
+ *
+ */
 public class TimeGraph extends Array<Frame> {
 	private static final long	FACTOR		= 100000L;
 	private long				absolute	= 0;
