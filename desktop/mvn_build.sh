@@ -1,7 +1,9 @@
 #!/bin/bash
 
 mvn -version
-cd ../core
+cd ..
+mvn clean install
+cd core
 mvn clean install
 cd ../desktop
 mvn clean install
