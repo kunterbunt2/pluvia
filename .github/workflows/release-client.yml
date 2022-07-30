@@ -53,7 +53,9 @@ jobs:
             TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
          run: |
            mvn install --batch-mode --update-snapshots package
-           cd core
+           cd engine
+           mvn install --batch-mode --update-snapshots package
+           cd ../core
            mvn install --batch-mode --update-snapshots package
            cd ../desktop
            mvn install --batch-mode --update-snapshots package
@@ -83,7 +85,9 @@ jobs:
             TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
          run: |
            mvn install --batch-mode --update-snapshots package
-           cd core
+           cd engine
+           mvn install --batch-mode --update-snapshots package
+           cd ../core
            mvn install --batch-mode --update-snapshots package
            cd ../desktop
            mvn install --batch-mode --update-snapshots package
@@ -122,7 +126,9 @@ jobs:
             TAG_NAME: ${{ needs.create-release-job.outputs.output2 }}
          run: |
            mvn install --batch-mode --update-snapshots package
-           cd core
+           cd engine
+           mvn install --batch-mode --update-snapshots package
+           cd ../core
            mvn install --batch-mode --update-snapshots package
            cd ../desktop
            mvn install --batch-mode --update-snapshots package
