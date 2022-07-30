@@ -135,7 +135,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 		try {
 			if (context == null)// ios
 			{
-				context = contextFactory.create();
+				context = (Context) contextFactory.create();
 				evaluateConfiguation();
 			}
 			showFps = context.getShowFpsProperty();
@@ -155,7 +155,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 			createInputProcessor(this);
 			atlasManager = new AtlasManager();
 			atlasManager.init();
-			renderEngine = new RenderEngine(context, this, camera, atlasManager.smallFont, atlasManager.systemTextureRegion);
+			renderEngine = new RenderEngine<GameEngine>(context, this, camera, atlasManager.smallFont, atlasManager.systemTextureRegion);
 			createEnvironment();
 			modelManager.create(renderEngine.isPbr());
 			audioManager = new AudioManager(context);

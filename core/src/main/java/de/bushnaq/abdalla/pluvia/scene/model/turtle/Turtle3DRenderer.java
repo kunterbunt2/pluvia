@@ -20,7 +20,7 @@ import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
  * @author kunterbunt
  *
  */
-public class Turtle3DRenderer extends ObjectRenderer {
+public class Turtle3DRenderer extends ObjectRenderer<GameEngine> {
 	private static Color			DIAMON_BLUE_COLOR		= new Color(0x006ab6ff);
 	private static Color			GRAY_COLOR				= new Color(0x404853ff);
 	private static final float		NORMAL_LIGHT_INTENSITY	= 2f;

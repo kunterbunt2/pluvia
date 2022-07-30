@@ -84,7 +84,7 @@ import net.mgsx.gltf.scene3d.utils.EnvironmentCache;
  * @author kunterbunt
  *
  */
-public class RenderEngine {
+public class RenderEngine<T> {
 	private static final float				DAY_AMBIENT_INTENSITY_B				= 1f;
 	private static final float				DAY_AMBIENT_INTENSITY_G				= 1f;
 	private static final float				DAY_AMBIENT_INTENSITY_R				= 1f;
@@ -152,7 +152,7 @@ public class RenderEngine {
 	private int								staticCacheDirtyCount				= 0;
 	public final Array<GameObject>			staticModelInstances				= new Array<>();
 	private Set<Text2D>						text2DList							= new HashSet<>();
-	private Set<ObjectRenderer>				text3DList							= new HashSet<>();
+	private Set<ObjectRenderer<T>>				text3DList							= new HashSet<>();
 	private float							timeOfDay							= 8;																	// 24h time
 	private final boolean					useDynamicCache						= false;
 	private final boolean					useStaticCache						= true;
@@ -189,7 +189,7 @@ public class RenderEngine {
 		create();
 	}
 
-	public void add(ObjectRenderer renderer) {
+	public void add(ObjectRenderer<T> renderer) {
 		text3DList.add(renderer);
 	}
 
@@ -768,7 +768,7 @@ public class RenderEngine {
 //		}
 	}
 
-	public void remove(ObjectRenderer renderer) {
+	public void remove(ObjectRenderer<T> renderer) {
 		text3DList.remove(renderer);
 	}
 
@@ -950,7 +950,7 @@ public class RenderEngine {
 		batch2D.begin();
 		batch2D.enableBlending();
 		batch2D.setProjectionMatrix(camera.combined);
-		for (final ObjectRenderer renderer : text3DList) {
+		for (final ObjectRenderer<T> renderer : text3DList) {
 			renderer.renderText(this, 0, false);
 		}
 //		for (final Stone stone : context.stoneList) {

@@ -20,7 +20,7 @@ import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
  * @author kunterbunt
  *
  */
-public class Bubble3DRenderer extends ObjectRenderer {
+public class Bubble3DRenderer extends ObjectRenderer<GameEngine> {
 	private static final float		NORMAL_LIGHT_INTENSITY	= 1f;
 	private static final float		SIZE_X					= 1.0f;
 	private static final float		SIZE_Y					= 1.0f;

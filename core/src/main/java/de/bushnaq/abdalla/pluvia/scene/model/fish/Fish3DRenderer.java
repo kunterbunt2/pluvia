@@ -20,7 +20,7 @@ import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
  * @author kunterbunt
  *
  */
-public class Fish3DRenderer extends ObjectRenderer {
+public class Fish3DRenderer extends ObjectRenderer<GameEngine> {
 	private static final float		FISH_X_SIZE				= 1f;
 	private static final float		FISH_Y_SIZE				= 1f;
 	private static final float		FISH_Z_SIZE				= 1f;

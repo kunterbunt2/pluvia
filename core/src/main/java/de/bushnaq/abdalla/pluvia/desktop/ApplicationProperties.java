@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import com.badlogic.gdx.Gdx;
 
+import de.bushnaq.abdalla.engine.IApplicationProperties;
 import de.bushnaq.abdalla.engine.util.logger.Logger;
 import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 

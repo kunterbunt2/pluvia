@@ -10,7 +10,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisSlider;
 
-import de.bushnaq.abdalla.pluvia.desktop.IApplicationProperties;
+import de.bushnaq.abdalla.engine.IApplicationProperties;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
 /**

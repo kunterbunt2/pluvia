@@ -1,11 +1,11 @@
 package de.bushnaq.abdalla.engine;
 
-import de.bushnaq.abdalla.pluvia.desktop.Context;
+import de.bushnaq.abdalla.engine.IContext;
 
 /**
  * @author kunterbunt
  *
  */
 public interface IContextFactory {
-	Context create();
+	IContext create();
 }
