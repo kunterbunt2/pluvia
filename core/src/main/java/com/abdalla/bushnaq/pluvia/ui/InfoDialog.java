@@ -116,7 +116,7 @@ public class InfoDialog {
 		this.visible = visible;
 	}
 
-	private void update(final Context universe) {
+	private void update() {
 		clearUnmatchedSizeAndType(6, Context.class);
 		window.getTitleLabel().setText("Statistics");
 		window.pack();
@@ -124,7 +124,7 @@ public class InfoDialog {
 		labelIndex = 0;
 	}
 
-	private void update(final Context universe, final GLProfiler profiler) {
+	private void update(final GLProfiler profiler) {
 		if (profiler != null && profiler.isEnabled() && debugTimer.getTime() > 1000) {
 			int size = 10;
 			if (renderEngine != null)
@@ -182,12 +182,12 @@ public class InfoDialog {
 		}
 	}
 
-	public void update(final Context universe, final Object selected, final RenderEngine renderEngine) throws Exception {
+	public void update(final Object selected, final RenderEngine renderEngine) throws Exception {
 		this.renderEngine = renderEngine;
 		if (GLProfiler.class.isInstance(selected)) {
-			update(universe, (GLProfiler) selected);
+			update((GLProfiler) selected);
 		} else {
-			update(universe);
+			update();
 		}
 		if (debugTimer.getTime() > 1000) {
 			debugTimer.restart();

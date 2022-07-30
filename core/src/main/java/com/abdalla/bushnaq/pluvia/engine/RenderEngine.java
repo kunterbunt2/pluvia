@@ -343,7 +343,7 @@ public class RenderEngine {
 	}
 
 	private void createFrameBuffer() {
-		water.createFrameBuffer(context);
+		water.createFrameBuffer();
 		getMirror().createFrameBuffer();
 //		{
 //			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -697,10 +697,6 @@ public class RenderEngine {
 		return timeOfDay;
 	}
 
-	public Context getUniverse() {
-		return context;
-	}
-
 	public Water getWater() {
 		return water;
 	}
@@ -1006,10 +1002,10 @@ public class RenderEngine {
 		batch2D.begin();
 		batch2D.enableBlending();
 		batch2D.setProjectionMatrix(camera.combined);
-		for (final Stone stone : getUniverse().stoneList) {
+		for (final Stone stone : context.stoneList) {
 			stone.get3DRenderer().renderText(this, 0, false);
 		}
-		for (final Digit digit : getUniverse().digitList) {
+		for (final Digit digit : context.digitList) {
 			digit.get3DRenderer().renderText(this, 0, false);
 		}
 		batch2D.end();
@@ -1153,7 +1149,7 @@ public class RenderEngine {
 
 	protected void renderStage() throws Exception {
 		if (getInfo().isVisible()) {
-			getInfo().update(getUniverse(), getUniverse().selected, this);
+			getInfo().update(context.selected, this);
 			getInfo().act(Gdx.graphics.getDeltaTime());
 			getInfo().draw();
 		}

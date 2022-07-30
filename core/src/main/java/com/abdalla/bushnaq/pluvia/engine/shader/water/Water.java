@@ -22,14 +22,7 @@ public class Water {
 
 	}
 
-//	public Water(boolean present, float tiling, float waveSpeed, float waveStrength) {
-//		this.present = present;
-//		this.tiling = tiling;
-//		this.waveSpeed = waveSpeed;
-//		this.waveStrength = waveStrength;
-//	}
-
-	public void createFrameBuffer(Context context) {
+	public void createFrameBuffer() {
 		{
 			final FrameBufferBuilder frameBufferBuilder = new FrameBufferBuilder(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			frameBufferBuilder.addColorTextureAttachment(GL30.GL_RGBA8, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
