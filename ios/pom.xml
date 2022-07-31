@@ -50,6 +50,11 @@
 			<artifactId>gdx-backend-robovm</artifactId>
 			<version>${libgdxVersion}</version>
 		</dependency>
+		<dependency>
+			<groupId>pl.mk5.gdx-fireapp</groupId>
+			<artifactId>gdx-fireapp-core</artifactId>
+			<version>${gdxFireappVersion}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

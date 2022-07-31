@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
+import pl.mk5.gdx.fireapp.GdxFIRApp;
 
 /**
  * @author kunterbunt
@@ -66,6 +67,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
 //		        config.useHaptics = false;
 //				final Context context = new Context();
 			final GameEngine gameEngine = new GameEngine(new IosContextFactory());
+			GdxFIRApp.inst().configure();
 			return new IOSApplication(gameEngine, config);
 		} catch (Exception e) {
 			e.printStackTrace();

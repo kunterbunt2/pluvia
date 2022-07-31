@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>744370370902-0t94aahlu9i5gv0737k5s3r978baa3e0.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.744370370902-0t94aahlu9i5gv0737k5s3r978baa3e0</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBN7MbK8RUSXqo_AolCnDXXC7Jojhq9bKw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>744370370902</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>de.bushnaq.abdalla.pluvia</string>
+	<key>PROJECT_ID</key>
+	<string>pluvia-b05b8</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pluvia-b05b8.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:744370370902:ios:ddcec69c0c31080d593ef7</string>
+</dict>
+</plist>

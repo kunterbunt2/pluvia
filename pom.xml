@@ -17,6 +17,7 @@
 		<client.version>1.0.0</client.version>
 		<exec.maven.plugin.version>1.6.0</exec.maven.plugin.version>
 		<roboVMVersion>2.3.16</roboVMVersion>
+		<gdxFireappVersion>3.3.0</gdxFireappVersion>
 	</properties>
 
 	<dependencies>
