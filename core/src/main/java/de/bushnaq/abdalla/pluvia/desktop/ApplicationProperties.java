@@ -262,7 +262,7 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 	}
 
 	@Override
-	public void SetGraphicsQuality(int value) {
+	public void setGraphicsQuality(int value) {
 		properties.setProperty(PLUVIA_GRAPHICS_QUALITY, "" + value);
 //		updateGrphicsQuality();
 	}

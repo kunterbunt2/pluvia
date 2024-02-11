@@ -210,7 +210,7 @@ public class GraphicsQualityOptions {
 	}
 
 	public void save() {
-		gameEngine.context.SetGraphicsQuality((int) graphicsQualitySlider.getValue());
+		gameEngine.context.setGraphicsQuality((int) graphicsQualitySlider.getValue());
 		if (isCustomMode()) {
 			gameEngine.context.setMaxPointLights((int) maxPointLightsSlider.getValue());
 			gameEngine.context.setMaxSceneObjects((int) maxSceneObjectsSlider.getValue());
