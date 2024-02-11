@@ -3,6 +3,7 @@
  */
 package de.bushnaq.abdalla.pluvia.game.model.stone;
 
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.util.RcBoolean;
@@ -33,12 +34,12 @@ public class Stone extends Renderable implements Comparable<Stone> {
 	public int			y				= 0;
 	public int			z				= 0;
 
-	public Stone(GameEngine gameEngine, int x, int y, int aType) {
+	public Stone(RenderEngine3D<GameEngine> renderEngine, int x, int y, int aType) {
 		set3DRenderer(new Stone3DRenderer(this));
 		type = aType;
 		this.x = x;
 		this.y = y;
-		get3DRenderer().create(gameEngine);
+		get3DRenderer().create(renderEngine);
 	}
 
 	public boolean clearCommandAttributes() {

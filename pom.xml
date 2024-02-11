@@ -13,11 +13,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.libraray.path>${env.JAVA_HOME}\bin</java.libraray.path>
 		<module.version>${project.version}</module.version>
-		<libgdxVersion>1.11.0</libgdxVersion>
+		<libgdxVersion>1.12.1</libgdxVersion>
 		<client.version>1.0.0</client.version>
 		<exec.maven.plugin.version>1.6.0</exec.maven.plugin.version>
 		<roboVMVersion>2.3.16</roboVMVersion>
+		<!--
 		<gdxFireappVersion>3.3.0</gdxFireappVersion>
+		-->
+		<source.level>17</source.level>
+		<target.level>17</target.level>
 	</properties>
 
 	<dependencies>
@@ -36,7 +40,7 @@
 		<dependency>
 			<groupId>com.github.mgsx-dev.gdx-gltf</groupId>
 			<artifactId>gltf</artifactId>
-			<version>master-SNAPSHOT</version>
+			<version>2.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.kotcrab.vis</groupId>
@@ -92,7 +96,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.12.1</version>
 				<configuration>
 					<source>${source.level}</source>
 					<target>${target.level}</target>

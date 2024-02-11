@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.engine.ObjectRenderer;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
@@ -39,11 +40,11 @@ public class Fish3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void create(final GameEngine gameEngine) {
+	public void create(final RenderEngine3D<GameEngine> renderEngine) {
 		if (instance == null) {
-			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.fishCube[fish.getType()]), null);
+			instance = new GameObject(new ModelInstanceHack(renderEngine.getGameEngine().modelManager.fishCube[fish.getType()]), null);
 //			poiInstance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.fishCubePbr[0]), fish);
-			gameEngine.renderEngine.addDynamic(instance);
+			renderEngine.addDynamic(instance);
 //			gameEngine.renderEngine.addDynamic(poiInstance);
 			instance.update();
 //			poiInstance.update();
@@ -51,10 +52,10 @@ public class Fish3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void destroy(final GameEngine gameEngine) {
-		gameEngine.renderEngine.removeDynamic(instance);
+	public void destroy(final RenderEngine3D<GameEngine> renderEngine) {
+		renderEngine.removeDynamic(instance);
 		for (PointLight pl : pointLight) {
-			gameEngine.renderEngine.remove(pl, true);
+			renderEngine.remove(pl, true);
 		}
 	}
 
@@ -77,11 +78,11 @@ public class Fish3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 	}
 
-	private void turnLightOn(final GameEngine gameEngine) {
+	private void turnLightOn(final RenderEngine3D<GameEngine> renderEngine) {
 		if (!lightIsOne) {
 			lightIntensity = 0f;
 			Color color;
-			if (gameEngine.renderEngine.isPbr()) {
+			if (renderEngine.isPbr()) {
 				Material			material	= instance.instance.model.materials.get(0);
 				Attribute			attribute	= material.get(PBRColorAttribute.BaseColorFactor);
 				PBRColorAttribute	a			= (PBRColorAttribute) attribute;
@@ -95,15 +96,15 @@ public class Fish3DRenderer extends ObjectRenderer<GameEngine> {
 
 			final PointLight light = new PointLight().set(color, 0f, 0f, 0f, lightIntensity);
 			pointLight.add(light);
-			gameEngine.renderEngine.add(light, true);
+			renderEngine.add(light, true);
 			lightIsOne = true;
 		}
 
 	}
 
 	@Override
-	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		fish.calculateEngineSpeed(gameEngine.context.isEnableTime());
+	public void update(final float x, final float y, final float z, final RenderEngine3D<GameEngine> renderEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
+		fish.calculateEngineSpeed(renderEngine.getGameEngine().context.isEnableTime());
 		if (fish.position != null)
 			fish.speed.set(fish.poi.x - fish.position.x, 0, fish.poi.z - fish.position.z);
 		else
@@ -121,7 +122,7 @@ public class Fish3DRenderer extends ObjectRenderer<GameEngine> {
 		for (PointLight pl : pointLight) {
 			pl.setPosition(translation);
 		}
-		turnLightOn(gameEngine);
+		turnLightOn(renderEngine);
 		tuneLightIntensity();
 		{
 			instance.instance.transform.setToTranslation(translation);

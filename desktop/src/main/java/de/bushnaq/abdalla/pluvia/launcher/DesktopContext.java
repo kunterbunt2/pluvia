@@ -33,6 +33,11 @@ public class DesktopContext extends Context {
 	}
 
 	@Override
+	public float getWaterLevel() {
+		return 0.2f;
+	}
+
+	@Override
 	public int getMonitorProperty() {
 		final Monitor[]	monitors	= Lwjgl3ApplicationConfiguration.getMonitors();
 		int				monitor		= readIntegerProperty(PLUVIA_MONITOR, 0, 0, monitors.length);
@@ -73,7 +78,7 @@ public class DesktopContext extends Context {
 
 	@Override
 	public boolean isFullscreenModeSupported() {
-		return true;
+		return false;
 	}
 
 	@Override

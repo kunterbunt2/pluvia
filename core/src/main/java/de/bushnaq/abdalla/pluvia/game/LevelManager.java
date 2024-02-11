@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Model;
 
 import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
 import de.bushnaq.abdalla.pluvia.scene.AbstractScene;
@@ -36,38 +37,38 @@ public class LevelManager extends Level implements Serializable {
 	private static final String	INVALID_LEVEL_RECORDING_DETECTED	= "Invalid Level Recording Detected";
 	private static final String	RESETTING_LEVEL						= "\n\nResetting level...";
 	private static final long	serialVersionUID					= 1L;
-	private GameEngine			gameEngine;
+	private RenderEngine3D<GameEngine>			renderEngine;
 	int							index								= 0;
 	private Color				infoColor;
 	final List<GameObject>		renderModelInstances				= new ArrayList<>();
 	Map<String, AbstractScene>	sceneList							= new HashMap<>();
 //	protected Font				TextFont							= new Font("SansSerif", Font.BOLD, 14);
 
-	public LevelManager(GameEngine gameEngine, Game game) {
+	public LevelManager(RenderEngine3D<GameEngine> renderEngine, Game game) {
 		super(game);
-		this.gameEngine = gameEngine;
-		sceneList.put(GameName.Bird.name(), new BubblesScene(gameEngine, renderModelInstances));
-		sceneList.put(GameName.Rabbit.name(), new FireflyScene(gameEngine, renderModelInstances));
-		sceneList.put(GameName.Turtle.name(), new TurtlesScene(gameEngine, renderModelInstances));
-		sceneList.put(GameName.Dragon.name(), new NightFishScene(gameEngine, renderModelInstances));
-		sceneList.put(GameName.FIVE.name(), new FlyScene(gameEngine, renderModelInstances));
-		sceneList.put(GameName.SIX.name(), new DeepSeaScene(gameEngine, renderModelInstances));
-		sceneList.put(GameName.UI.name(), new RainScene(gameEngine, renderModelInstances));
+		this.renderEngine = renderEngine;
+		sceneList.put(GameName.Bird.name(), new BubblesScene(renderEngine, renderModelInstances));
+		sceneList.put(GameName.Rabbit.name(), new FireflyScene(renderEngine, renderModelInstances));
+		sceneList.put(GameName.Turtle.name(), new TurtlesScene(renderEngine, renderModelInstances));
+		sceneList.put(GameName.Dragon.name(), new NightFishScene(renderEngine, renderModelInstances));
+		sceneList.put(GameName.FIVE.name(), new FlyScene(renderEngine, renderModelInstances));
+		sceneList.put(GameName.SIX.name(), new DeepSeaScene(renderEngine, renderModelInstances));
+		sceneList.put(GameName.UI.name(), new RainScene(renderEngine, renderModelInstances));
 	}
 
 	private void addToEngine() {
 		for (GameObject uberModel : renderModelInstances) {
-			gameEngine.renderEngine.addStatic(uberModel);
+			renderEngine.addStatic(uberModel);
 		}
 	}
 
 	@Override
 	public void createLevelBackground() {
-		if (gameEngine != null) {
+		if (renderEngine != null) {
 			float	cubeSize	= 0.5f;
 			float	dx			= ((float) nrOfColumns) / 2;
 			float	dy			= (nrOfRows);
-			Model	model		= gameEngine.modelManager.levelCube;
+			Model	model		= renderEngine.getGameEngine().modelManager.levelCube;
 			// level back
 			int		count		= 0;
 			if (game.nrOfRows != 0) {
@@ -104,14 +105,14 @@ public class LevelManager extends Level implements Serializable {
 				// game name
 				int position = 0;
 				for (float x = -0.75f + nrOfColumns / 2 - 0.5f - 1f; x <= nrOfColumns / 2 + .75f - 1.5f; x += 0.5f) {
-					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.name));
+					renderEngine.getGameEngine().context.digitList.add(new Digit(renderModelInstances, renderEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.name));
 					position++;
 					count++;
 				}
 				// game seed
 				position = 0;
 				for (float x = nrOfColumns / 2 + .75f - 1.5f + 0.5f; x <= -0.75f + nrOfColumns / 2 + 1.5f + 1f - 0.5f; x += 0.5f) {
-					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.seed));
+					renderEngine.getGameEngine().context.digitList.add(new Digit(renderModelInstances, renderEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.seed));
 					position++;
 					count++;
 				}
@@ -125,26 +126,26 @@ public class LevelManager extends Level implements Serializable {
 				// score
 				position = 0;
 				for (float x = -0.75f - 2.5f; x <= -1.25; x += 0.5f) {
-					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.score));
+					renderEngine.getGameEngine().context.digitList.add(new Digit(renderModelInstances, renderEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.score));
 					position++;
 					count++;
 				}
 				// steps
 				position = 0;
 				for (float x = nrOfColumns + 0.25f; x <= nrOfColumns + 0.5 + 2f; x += 0.5f) {
-					gameEngine.context.digitList.add(new Digit(renderModelInstances, gameEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.steps));
+					renderEngine.getGameEngine().context.digitList.add(new Digit(renderModelInstances, renderEngine, x - dx, -(nrOfRows - dy) + 0.25f - 0.5f, -0.25f, position, DigitType.steps));
 					position++;
 					count++;
 				}
 			}
-			for (Digit digit : gameEngine.context.digitList) {
-				gameEngine.renderEngine.add(digit.get3DRenderer());
+			for (Digit digit : renderEngine.getGameEngine().context.digitList) {
+				renderEngine.addStatic(digit.get3DRenderer());
 			}
-			for (Stone stone : gameEngine.context.stoneList) {
-				gameEngine.renderEngine.add(stone.get3DRenderer());
+			for (Stone stone : renderEngine.getGameEngine().context.stoneList) {
+				renderEngine.addStatic(stone.get3DRenderer());
 			}
 			// logger.info(String.format("count=%d", count));
-			gameEngine.renderEngine.removeAllEffects();
+			renderEngine.removeAllEffects();
 			sceneList.get(game.name).create();
 			infoColor = sceneList.get(game.name).getInfoColor();
 			addToEngine();
@@ -153,10 +154,10 @@ public class LevelManager extends Level implements Serializable {
 
 	@Override
 	protected Stone createStone(int x, int y, int type) {
-		Stone stone = new Stone(gameEngine, x, y, type);
-		if (gameEngine != null) {
-			gameEngine.context.stoneList.add(stone);
-			gameEngine.renderEngine.add(stone.get3DRenderer());
+		Stone stone = new Stone(renderEngine, x, y, type);
+		if (renderEngine != null) {
+			renderEngine.getGameEngine().context.stoneList.add(stone);
+			renderEngine.addStatic(stone.get3DRenderer());
 		}
 		return stone;
 	}
@@ -166,19 +167,19 @@ public class LevelManager extends Level implements Serializable {
 	}
 
 	public void destroyLevelBackground() {
-		if (gameEngine != null) {
-			gameEngine.renderEngine.removeAllText2D();
-			gameEngine.renderEngine.removeAllText3D();
+		if (renderEngine != null) {
+			renderEngine.removeAllText2D();
+			renderEngine.removeAllStaticText3D();
 			for (GameObject go : renderModelInstances) {
-				gameEngine.renderEngine.removeStatic(go);
+				renderEngine.removeStatic(go);
 			}
-			gameEngine.context.fishList.destroy(gameEngine);
-			gameEngine.context.fireflyList.destroy(gameEngine);
-			gameEngine.context.flyList.destroy(gameEngine);
-			gameEngine.context.rainList.destroy(gameEngine);
-			gameEngine.context.bubbleList.destroy(gameEngine);
-			gameEngine.context.turtleList.destroy(gameEngine);
-			gameEngine.context.digitList.destroy(gameEngine);
+			renderEngine.getGameEngine().context.fishList.destroy(renderEngine);
+			renderEngine.getGameEngine().context.fireflyList.destroy(renderEngine);
+			renderEngine.getGameEngine().context.flyList.destroy(renderEngine);
+			renderEngine.getGameEngine().context.rainList.destroy(renderEngine);
+			renderEngine.getGameEngine().context.bubbleList.destroy(renderEngine);
+			renderEngine.getGameEngine().context.turtleList.destroy(renderEngine);
+			renderEngine.getGameEngine().context.digitList.destroy(renderEngine);
 		}
 	}
 
@@ -196,33 +197,33 @@ public class LevelManager extends Level implements Serializable {
 
 	@Override
 	protected boolean isEnableTime() {
-		if (gameEngine != null)
-			return gameEngine.context.isEnableTime();
+		if (renderEngine != null)
+			return renderEngine.getGameEngine().context.isEnableTime();
 		else
 			return true;
 	}
 
 	@Override
 	public void playSound(String tag) {
-		if (gameEngine != null)
-			gameEngine.getAudioManager().play(tag);
+		if (renderEngine != null)
+			renderEngine.getGameEngine().getAudioManager().play(tag);
 	}
 
 	@Override
 	protected void removeStone(Stone stone) {
-		if (gameEngine != null) {
-			stone.get3DRenderer().destroy(gameEngine);
-			gameEngine.context.stoneList.remove(stone);
-			gameEngine.renderEngine.remove(stone.get3DRenderer());
+		if (renderEngine != null) {
+			stone.get3DRenderer().destroy(renderEngine);
+			renderEngine.getGameEngine().context.stoneList.remove(stone);
+			renderEngine.removeStatic(stone.get3DRenderer());
 		}
 	}
 
 	public boolean testValidity() {
-		return getRecording().testValidity(INVALID_LEVEL_RECORDING_DETECTED, RESETTING_LEVEL, gameEngine, (Game) gameEngine.context.game.clone());
+		return getRecording().testValidity(INVALID_LEVEL_RECORDING_DETECTED, RESETTING_LEVEL, renderEngine.getGameEngine(), (Game) renderEngine.getGameEngine().context.game.clone());
 	}
 
 	public void updateFps() {
-		if (gameEngine.context.isEnableTime()) {
+		if (renderEngine.getGameEngine().context.isEnableTime()) {
 			maxAnimaltionPhase = Math.max(1, Gdx.graphics.getFramesPerSecond() / 10);
 		}
 	}

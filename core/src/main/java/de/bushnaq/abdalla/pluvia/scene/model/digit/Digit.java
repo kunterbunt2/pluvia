@@ -3,6 +3,7 @@ package de.bushnaq.abdalla.pluvia.scene.model.digit;
 import java.util.List;
 
 import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.Level;
@@ -21,7 +22,7 @@ public class Digit extends Renderable {
 	float						y		= 0;
 	float						z		= 0;
 
-	public Digit(List<GameObject> renderModelInstances, GameEngine gameEngine, float x, float y, float z, int digitPosition, DigitType digitType) {
+	public Digit(List<GameObject> renderModelInstances, RenderEngine3D<GameEngine> renderEngine, float x, float y, float z, int digitPosition, DigitType digitType) {
 		this.renderModelInstances = renderModelInstances;
 		set3DRenderer(new Digit3DRenderer(this));
 		this.x = x;
@@ -29,7 +30,7 @@ public class Digit extends Renderable {
 		this.z = z;
 		this.digitPosition = digitPosition;
 		this.digitType = digitType;
-		get3DRenderer().create(gameEngine);
+		get3DRenderer().create(renderEngine);
 	}
 
 	public char getDigit() {

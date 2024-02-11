@@ -1,5 +1,6 @@
 package de.bushnaq.abdalla.pluvia.desktop;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 
 	@Override
 	public boolean getFullscreenModeProperty() {
-		return true;// readBooleanProperty(PLUVIA_FULLSCREEN_MODE, true);
+		return readBooleanProperty(PLUVIA_FULLSCREEN_MODE, true);
 	}
 
 	@Override
@@ -152,7 +153,8 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 
 	private void read() {
 		try {
-			InputStream inStream = Gdx.files.external(propertyFileName).read();
+//			InputStream inStream = Gdx.files.external(propertyFileName).read();
+			InputStream inStream = new FileInputStream(propertyFileName);
 			properties.load(inStream);
 			inStream.close();
 		} catch (Exception e) {

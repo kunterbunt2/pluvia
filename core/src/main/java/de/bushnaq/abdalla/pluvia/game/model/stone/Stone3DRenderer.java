@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.engine.ObjectRenderer;
-import de.bushnaq.abdalla.engine.RenderEngine;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
@@ -34,7 +34,7 @@ public class Stone3DRenderer extends ObjectRenderer<GameEngine> {
 	private static final float		TRADER_SIZE_Z				= 1f;
 	private static final float		VANISHING_LIGHT_INTENSITY	= 1000;
 	private BitmapFont				font;
-	private GameObject				instance;
+	private GameObject<GameEngine>				instance;
 	private float					lightIntensity				= 0f;
 	private boolean					lightIsOne					= false;
 	private final List<PointLight>	pointLight					= new ArrayList<>();
@@ -46,27 +46,27 @@ public class Stone3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void create(final GameEngine gameEngine) {
-		if (instance == null && gameEngine != null) {
-			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.stone[stone.getType()].scene.model), stone);
-			gameEngine.renderEngine.addDynamic(instance);
+	public void create(final RenderEngine3D<GameEngine> renderEngine) {
+		if (instance == null && renderEngine != null) {
+			instance = new GameObject<GameEngine>(new ModelInstanceHack(renderEngine.getGameEngine().modelManager.stone[stone.getType()].scene.model), stone);
+			renderEngine.addDynamic(instance);
 			instance.update();
-			font = gameEngine.getAtlasManager().modelFont;
+			font = renderEngine.getGameEngine().getAtlasManager().modelFont;
 		}
 	}
 
 	@Override
-	public void destroy(final GameEngine gameEngine) {
-		if (gameEngine != null) {
-			gameEngine.renderEngine.removeDynamic(instance);
+	public void destroy(final RenderEngine3D<GameEngine> renderEngine) {
+		if (renderEngine != null) {
+			renderEngine.removeDynamic(instance);
 			for (PointLight pl : pointLight) {
-				gameEngine.renderEngine.remove(pl, true);
+				renderEngine.remove(pl, true);
 			}
 		}
 	}
 
 	@Override
-	public void renderText(final RenderEngine renderEngine, final int index, final boolean selected) {
+	public void renderText(final RenderEngine3D<GameEngine> renderEngine, final int index, final boolean selected) {
 		if (renderEngine.isDebugMode()) {
 			Color color;
 			if (selected) {
@@ -84,7 +84,7 @@ public class Stone3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 	}
 
-	private void renderTextOnFrontSide(final RenderEngine renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
+	private void renderTextOnFrontSide(final RenderEngine3D<GameEngine> renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
 		final PolygonSpriteBatch batch = renderEngine.batch2D;
 		{
 			final Matrix4		m			= new Matrix4();
@@ -156,8 +156,8 @@ public class Stone3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		float fraction = (float) (gameEngine.context.levelManager.animationPhase) / ((float) gameEngine.context.levelManager.maxAnimaltionPhase);
+	public void update(final float x, final float y, final float z, final RenderEngine3D<GameEngine> renderEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
+		float fraction = (float) (renderEngine.getGameEngine().context.levelManager.animationPhase) / ((float) renderEngine.getGameEngine().context.levelManager.maxAnimaltionPhase);
 		if (stone.isVanishing()) {
 			stone.setTx(x);
 			stone.setTy(y);

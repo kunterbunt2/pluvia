@@ -22,7 +22,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
-import de.bushnaq.abdalla.engine.RenderEngine;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.util.TimeStatistic;
@@ -38,7 +38,7 @@ public class InfoDialog {
 	private final InputMultiplexer	inputMultiplexer;
 	private int						labelIndex		= 0;
 	private final List<LabelData>	labels			= new ArrayList<>();
-	private RenderEngine			renderEngine;
+	private RenderEngine3D<GameEngine> renderEngine;
 	private float					screenHeight	= 0;
 	private Stage					stage;
 	private final StringBuilder		stringBuilder	= new StringBuilder();
@@ -188,7 +188,7 @@ public class InfoDialog {
 		}
 	}
 
-	public void update(final Object selected, final RenderEngine renderEngine) throws Exception {
+	public void update(final Object selected, final RenderEngine3D<GameEngine> renderEngine) throws Exception {
 		this.renderEngine = renderEngine;
 		if (GLProfiler.class.isInstance(selected)) {
 			update((GLProfiler) selected);

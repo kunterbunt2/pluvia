@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 
 import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
 /**
@@ -13,8 +14,8 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
  */
 public class NightFishScene extends AbstractScene {
 
-	public NightFishScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {
-		super(gameEngine, renderModelInstances);
+	public NightFishScene(RenderEngine3D<GameEngine> renderEngine, List<GameObject> renderModelInstances) {
+		super(renderEngine, renderModelInstances);
 	}
 
 	@Override
@@ -22,24 +23,25 @@ public class NightFishScene extends AbstractScene {
 		super.create();
 		logo.setColor(getInfoColor());
 		version.setColor(getInfoColor());
-		gameEngine.renderEngine.setSkyBox(false);
-		gameEngine.renderEngine.setShadowEnabled(true);
+		renderEngine.setSkyBox(false);
+		renderEngine.setShadowEnabled(true);
 		// time
-		gameEngine.renderEngine.setAlwaysDay(true);
-		gameEngine.renderEngine.setDynamicDayTime(false);
-		gameEngine.renderEngine.setFixedDayTime(8);
+		renderEngine.setAlwaysDay(true);
+		renderEngine.setDynamicDayTime(false);
+		renderEngine.setFixedDayTime(8);
 		// fog
-		gameEngine.renderEngine.getFog().setBeginDistance(20f);
-		gameEngine.renderEngine.getFog().setFullDistance(50f);
-		gameEngine.renderEngine.getFog().setColor(Color.BLACK);
+		renderEngine.getFog().setBeginDistance(20f);
+		renderEngine.getFog().setFullDistance(50f);
+		renderEngine.getFog().setColor(Color.BLACK);
 		// water
-		gameEngine.renderEngine.getWater().setPresent(true);
-		gameEngine.renderEngine.getWater().setWaveStrength(0.05f);
-		gameEngine.renderEngine.getWater().setRefractiveMultiplicator(1f);
+		renderEngine.getWater().setPresent(true);
+		renderEngine.getWater().setWaveStrength(0.05f);
+		renderEngine.getWater().setWaveSpeed(0.01f);
+		renderEngine.getWater().setRefractiveMultiplicator(4f);
 		createWater();
 		// mirror
-		gameEngine.renderEngine.getMirror().setPresent(false);
-		createCity(gameEngine, 0, 0, -CITY_SIZE * 5, false, 2f);
+		renderEngine.getMirror().setPresent(false);
+		createCity(renderEngine, 0, 0, -CITY_SIZE * 5, false, 2f);
 		createFish(1.0f, 0.2f);
 	}
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.engine.ObjectRenderer;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
@@ -46,19 +47,19 @@ public class Rain3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void create(final GameEngine gameEngine) {
+	public void create(final RenderEngine3D<GameEngine> renderEngine) {
 		if (instance == null) {
-			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.rainModel[rain.getType()].scene.model), null);
-			gameEngine.renderEngine.addDynamic(instance);
+			instance = new GameObject(new ModelInstanceHack(renderEngine.getGameEngine().modelManager.rainModel[rain.getType()].scene.model), null);
+			renderEngine.addDynamic(instance);
 			instance.update();
 		}
 	}
 
 	@Override
-	public void destroy(final GameEngine gameEngine) {
-		gameEngine.renderEngine.removeDynamic(instance);
+	public void destroy(final RenderEngine3D<GameEngine> renderEngine) {
+		renderEngine.removeDynamic(instance);
 		for (PointLight pl : pointLight) {
-			gameEngine.renderEngine.remove(pl, true);
+			renderEngine.remove(pl, true);
 		}
 	}
 
@@ -72,16 +73,16 @@ public class Rain3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 	}
 
-	private void turnLightOff(final GameEngine gameEngine) {
+	private void turnLightOff(final RenderEngine3D<GameEngine> renderEngine) {
 		if (lightIsOne) {
 			for (PointLight pl : pointLight) {
-				gameEngine.renderEngine.remove(pl, true);
+				renderEngine.remove(pl, true);
 			}
 			lightIsOne = false;
 		}
 	}
 
-	private void turnLightOn(final GameEngine gameEngine) {
+	private void turnLightOn(final RenderEngine3D<GameEngine> renderEngine) {
 		if (!lightIsOne) {
 			lightIntensity = 0f;
 			Color[]				colors	= new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD,
@@ -101,14 +102,14 @@ public class Rain3DRenderer extends ObjectRenderer<GameEngine> {
 
 			final PointLight	light	= new PointLight().set(colors[rain.getType()], 0f, 0f, 0f, lightIntensity);
 			pointLight.add(light);
-			gameEngine.renderEngine.add(light, true);
+			renderEngine.add(light, true);
 			lightIsOne = true;
 		}
 
 	}
 
 	@Override
-	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
+	public void update(final float x, final float y, final float z, final RenderEngine3D<GameEngine> renderEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
 //		rain.calculateEngineSpeed();
 //		if (rain.position != null)
 //			rain.speed.set(rain.poi.x - rain.position.x, 0, rain.poi.z - rain.position.z);

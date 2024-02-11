@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.engine.ObjectRenderer;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
@@ -45,19 +46,19 @@ public class Firefly3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void create(final GameEngine gameEngine) {
+	public void create(final RenderEngine3D<GameEngine> renderEngine) {
 		if (instance == null) {
-			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.firelyModel[firefly.getType()].scene.model), null);
-			gameEngine.renderEngine.addDynamic(instance);
+			instance = new GameObject(new ModelInstanceHack(renderEngine.getGameEngine().modelManager.firelyModel[firefly.getType()].scene.model), null);
+			renderEngine.addDynamic(instance);
 			instance.update();
 		}
 	}
 
 	@Override
-	public void destroy(final GameEngine gameEngine) {
-		gameEngine.renderEngine.removeDynamic(instance);
+	public void destroy(final RenderEngine3D<GameEngine> renderEngine) {
+		renderEngine.removeDynamic(instance);
 		for (PointLight pl : pointLight) {
-			gameEngine.renderEngine.remove(pl, true);
+			renderEngine.remove(pl, true);
 		}
 	}
 
@@ -71,16 +72,16 @@ public class Firefly3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 	}
 
-	private void turnLightOff(final GameEngine gameEngine) {
+	private void turnLightOff(final RenderEngine3D<GameEngine> renderEngine) {
 		if (lightIsOne) {
 			for (PointLight pl : pointLight) {
-				gameEngine.renderEngine.remove(pl, true);
+				renderEngine.remove(pl, true);
 			}
 			lightIsOne = false;
 		}
 	}
 
-	private void turnLightOn(final GameEngine gameEngine) {
+	private void turnLightOn(final RenderEngine3D<GameEngine> renderEngine) {
 		if (!lightIsOne) {
 			lightIntensity = 0f;
 			Color[]				colors	= new Color[] { Color.WHITE, POST_GREEN_COLOR, SCARLET_COLOR, DIAMON_BLUE_COLOR, GRAY_COLOR, Color.CORAL, Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.GOLD,
@@ -100,15 +101,15 @@ public class Firefly3DRenderer extends ObjectRenderer<GameEngine> {
 
 			final PointLight	light	= new PointLight().set(colors[firefly.getType()], 0f, 0f, 0f, lightIntensity);
 			pointLight.add(light);
-			gameEngine.renderEngine.add(light, true);
+			renderEngine.add(light, true);
 			lightIsOne = true;
 		}
 
 	}
 
 	@Override
-	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		firefly.calculateEngineSpeed(gameEngine.context.isEnableTime());
+	public void update(final float x, final float y, final float z, final RenderEngine3D<GameEngine> renderEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
+		firefly.calculateEngineSpeed(renderEngine.getGameEngine().context.isEnableTime());
 		if (firefly.position != null)
 			firefly.speed.set(firefly.poi.x - firefly.position.x, 0, firefly.poi.z - firefly.position.z);
 		else
@@ -128,7 +129,7 @@ public class Firefly3DRenderer extends ObjectRenderer<GameEngine> {
 		lightDelta.rotate(Vector3.X, (float) Math.random());
 		lightDelta.rotate(Vector3.Z, (float) Math.random());
 
-		if (gameEngine.context.isEnableTime()) {
+		if (renderEngine.getGameEngine().context.isEnableTime()) {
 			firefly.rotation.x += .2f;
 			firefly.rotation.y += .2f;
 			firefly.rotation.z += .2f;
@@ -139,7 +140,7 @@ public class Firefly3DRenderer extends ObjectRenderer<GameEngine> {
 		for (PointLight pl : pointLight) {
 			pl.setPosition(lightPosition);
 		}
-		turnLightOn(gameEngine);
+		turnLightOn(renderEngine);
 		tuneLightIntensity();
 		{
 

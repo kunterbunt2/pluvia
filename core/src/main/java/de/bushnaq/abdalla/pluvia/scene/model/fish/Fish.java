@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.engine.Renderable;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.util.TimeUnit;
@@ -32,7 +33,7 @@ public class Fish extends Renderable {
 	protected Fish() {
 	}
 
-	public Fish(GameEngine gameEngine, int type, float size, BoundingBox cage) {
+	public Fish(RenderEngine3D<GameEngine> renderEngine, int type, float size, BoundingBox cage) {
 		this.gameEngine = gameEngine;
 		set3DRenderer(new Fish3DRenderer(this));
 		this.type = type;
@@ -41,7 +42,7 @@ public class Fish extends Renderable {
 		position = new Vector3(0, 0, 0);
 		choseStartingPoint(gameEngine);
 		position.set(poi);
-		get3DRenderer().create(gameEngine);
+		get3DRenderer().create(renderEngine);
 		choseStartingPoint(gameEngine);
 		currentMaxEngineSpeed = minSpeed;
 	}

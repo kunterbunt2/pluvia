@@ -3,6 +3,7 @@ package de.bushnaq.abdalla.pluvia.scene.model.fly;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.scene.model.fish.Fish;
 import de.bushnaq.abdalla.pluvia.util.TimeUnit;
@@ -14,7 +15,7 @@ public class Fly extends Fish {
 	int		pause	= 0;
 	float	radius	= 5f;
 
-	public Fly(GameEngine gameEngine, int type, float size, BoundingBox cage) {
+	public Fly(RenderEngine3D<GameEngine> renderEngine, int type, float size, BoundingBox cage) {
 		super();
 		this.gameEngine = gameEngine;
 		set3DRenderer(new Fly3DRenderer(this));
@@ -24,7 +25,7 @@ public class Fly extends Fish {
 		position = new Vector3(0, 0, 0);
 		choseStartingPoint(gameEngine);
 		position.set(poi);
-		get3DRenderer().create(gameEngine);
+		get3DRenderer().create(renderEngine);
 		choseStartingPoint(gameEngine);
 		setMaxSpeed(0.2f);
 		setMinSpeed(0.02f);

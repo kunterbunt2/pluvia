@@ -50,6 +50,7 @@ public class ModelManager {
 	public SceneAsset			stone[]							= new SceneAsset[MAX_NUMBER_OF_STONE_MODELS];	// for stones
 	public SceneAsset			turtleCube[]					= new SceneAsset[MAX_NUMBER_OF_TURTLE_MODELS];	// for turtles
 	public Model				water;																			// water square
+	public SceneAsset cube;
 
 	public ModelManager() {
 	}
@@ -72,6 +73,9 @@ public class ModelManager {
 		createMirrorModel(modelBuilder);
 		createSquareModel(isPbr, modelBuilder);
 		createBackPlateModel(isPbr, modelBuilder);
+		{
+			cube = new GLBLoader().load(Gdx.files.internal(String.format(AtlasManager.getAssetsFolderName() + "/models/turtle.glb")));
+		}
 	}
 
 	private void createBackPlateModel(boolean isPbr, final ModelBuilder modelBuilder) {

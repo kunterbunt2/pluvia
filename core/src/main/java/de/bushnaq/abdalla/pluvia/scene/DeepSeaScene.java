@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 
 import de.bushnaq.abdalla.engine.GameObject;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 
 /**
@@ -12,8 +13,8 @@ import de.bushnaq.abdalla.pluvia.engine.GameEngine;
  *
  */
 public class DeepSeaScene extends AbstractScene {
-	public DeepSeaScene(GameEngine gameEngine, List<GameObject> renderModelInstances) {
-		super(gameEngine, renderModelInstances);
+	public DeepSeaScene(RenderEngine3D<GameEngine> renderEngine, List<GameObject> renderModelInstances) {
+		super(renderEngine, renderModelInstances);
 	}
 
 	@Override
@@ -21,11 +22,11 @@ public class DeepSeaScene extends AbstractScene {
 		super.create();
 		logo.setColor(getInfoColor());
 		version.setColor(getInfoColor());
-		gameEngine.renderEngine.setShadowEnabled(false);
-		gameEngine.renderEngine.getFog().setColor(Color.BLUE);
-		gameEngine.renderEngine.getFog().setBeginDistance(13f);
-		gameEngine.renderEngine.getFog().setFullDistance(25f);
-		gameEngine.renderEngine.getWater().setPresent(false);
+		renderEngine.setShadowEnabled(false);
+		renderEngine.getFog().setColor(Color.BLUE);
+		renderEngine.getFog().setBeginDistance(13f);
+		renderEngine.getFog().setFullDistance(25f);
+		renderEngine.getWater().setPresent(false);
 //		createCity(gameEngine, 0, 0, -CITY_SIZE * 5);
 		createFish(0.1f, 3f);
 //		createFirefly();

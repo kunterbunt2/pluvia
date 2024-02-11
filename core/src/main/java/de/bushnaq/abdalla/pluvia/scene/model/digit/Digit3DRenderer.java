@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.engine.ObjectRenderer;
-import de.bushnaq.abdalla.engine.RenderEngine;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 
@@ -33,9 +33,9 @@ public class Digit3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void create(final GameEngine gameEngine) {
+	public void create(final RenderEngine3D<GameEngine> renderEngine) {
 		if (instance == null) {
-			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.levelCube), null);
+			instance = new GameObject(new ModelInstanceHack(renderEngine.getGameEngine().modelManager.levelCube), null);
 			stone.getRenderModelInstances().add(instance);
 			translation.x = stone.x;
 			translation.y = -stone.y;
@@ -43,7 +43,7 @@ public class Digit3DRenderer extends ObjectRenderer<GameEngine> {
 			instance.instance.transform.setToTranslation(translation);
 			instance.instance.transform.scale(0.5f, 0.5f, 0.5f);
 			instance.update();
-			font = gameEngine.getAtlasManager().aeroFont;
+			font =renderEngine.getGameEngine().getAtlasManager().aeroFont;
 		}
 	}
 
@@ -53,7 +53,7 @@ public class Digit3DRenderer extends ObjectRenderer<GameEngine> {
 //	}
 
 	@Override
-	public void renderText(final RenderEngine renderEngine, final int index, final boolean selected) {
+	public void renderText(final RenderEngine3D<GameEngine> renderEngine, final int index, final boolean selected) {
 		Color color = DIGIT_COLOR;
 		switch (stone.getDigitType()) {
 		case score: {
@@ -87,7 +87,7 @@ public class Digit3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 	}
 
-	private void renderTextOnFrontSide(final RenderEngine renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
+	private void renderTextOnFrontSide(final RenderEngine3D<GameEngine> renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
 		final PolygonSpriteBatch batch = renderEngine.batch2D;
 		{
 			final Matrix4		m			= new Matrix4();
@@ -110,7 +110,7 @@ public class Digit3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 	}
 
-	private void renderTextOnTopSide(final RenderEngine renderEngine, final float dx, final float dy, final float dz, final String text, final float size, final Color color) {
+	private void renderTextOnTopSide(final RenderEngine3D<GameEngine> renderEngine, final float dx, final float dy, final float dz, final String text, final float size, final Color color) {
 		final PolygonSpriteBatch batch = renderEngine.batch2D;
 		{
 			final Matrix4		m			= new Matrix4();

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.engine.ObjectRenderer;
+import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
@@ -46,19 +47,19 @@ public class Turtle3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	@Override
-	public void create(final GameEngine gameEngine) {
+	public void create(final RenderEngine3D<GameEngine> renderEngine) {
 		if (instance == null) {
-			instance = new GameObject(new ModelInstanceHack(gameEngine.modelManager.turtleCube[turtle.getType()].scene.model), null);
-			gameEngine.renderEngine.addDynamic(instance);
+			instance = new GameObject(new ModelInstanceHack(renderEngine.getGameEngine().modelManager.turtleCube[turtle.getType()].scene.model), null);
+			renderEngine.addDynamic(instance);
 			instance.update();
 		}
 	}
 
 	@Override
-	public void destroy(final GameEngine gameEngine) {
-		gameEngine.renderEngine.removeDynamic(instance);
+	public void destroy(final RenderEngine3D<GameEngine> renderEngine) {
+		renderEngine.removeDynamic(instance);
 		for (PointLight pl : pointLight) {
-			gameEngine.renderEngine.remove(pl, true);
+			renderEngine.remove(pl, true);
 		}
 	}
 
@@ -72,20 +73,20 @@ public class Turtle3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 	}
 
-	private void turnLightOff(final GameEngine gameEngine) {
+	private void turnLightOff(final RenderEngine3D<GameEngine> renderEngine) {
 		if (lightIsOne) {
 			for (PointLight pl : pointLight) {
-				gameEngine.renderEngine.remove(pl, true);
+				renderEngine.remove(pl, true);
 			}
 			lightIsOne = false;
 		}
 	}
 
-	private void turnLightOn(final GameEngine gameEngine) {
+	private void turnLightOn(final RenderEngine3D<GameEngine> renderEngine) {
 		if (!lightIsOne) {
 			lightIntensity = 0f;
 			Color color;
-			if (gameEngine.renderEngine.isPbr()) {
+			if (renderEngine.isPbr()) {
 				Material			material	= instance.instance.model.materials.get(0);
 				Attribute			attribute	= material.get(PBRColorAttribute.BaseColorFactor);
 				PBRColorAttribute	a			= (PBRColorAttribute) attribute;
@@ -100,15 +101,15 @@ public class Turtle3DRenderer extends ObjectRenderer<GameEngine> {
 			color = colors[(int) (colors.length * Math.random())];
 			final PointLight light = new PointLight().set(color, 0f, 0f, 0f, lightIntensity);
 			pointLight.add(light);
-			gameEngine.renderEngine.add(light, true);
+			renderEngine.add(light, true);
 			lightIsOne = true;
 		}
 
 	}
 
 	@Override
-	public void update(final float x, final float y, final float z, final GameEngine gameEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
-		turtle.calculateEngineSpeed(gameEngine.context.isEnableTime());
+	public void update(final float x, final float y, final float z, final RenderEngine3D<GameEngine> renderEngine, final long currentTime, final float timeOfDay, final int index, final boolean selected) throws Exception {
+		turtle.calculateEngineSpeed(renderEngine.getGameEngine().context.isEnableTime());
 		if (turtle.position != null)
 			turtle.speed.set(turtle.poi.x - turtle.position.x, 0, turtle.poi.z - turtle.position.z);
 		else
@@ -126,7 +127,7 @@ public class Turtle3DRenderer extends ObjectRenderer<GameEngine> {
 		for (PointLight pl : pointLight) {
 			pl.setPosition(translation);
 		}
-		turnLightOn(gameEngine);
+		turnLightOn(renderEngine);
 		tuneLightIntensity();
 		{
 			instance.instance.transform.setToTranslation(translation);
@@ -140,4 +141,5 @@ public class Turtle3DRenderer extends ObjectRenderer<GameEngine> {
 		}
 
 	}
+
 }

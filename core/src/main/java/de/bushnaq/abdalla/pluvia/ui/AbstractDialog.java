@@ -92,7 +92,7 @@ public abstract class AbstractDialog {
 		if (getGameEngine().context.levelManager != null)
 			getGameEngine().context.levelManager.disposeLevel();
 		getGameEngine().context.selectGame(gameIndex);
-		getGameEngine().context.levelManager = new LevelManager(getGameEngine(), getGameEngine().context.game);
+		getGameEngine().context.levelManager = new LevelManager(getGameEngine().renderEngine, getGameEngine().context.game);
 //		universe.GameThread.clearLevel();
 		if (resume) {
 			if (!getGameEngine().context.levelManager.readFromDisk()) {
