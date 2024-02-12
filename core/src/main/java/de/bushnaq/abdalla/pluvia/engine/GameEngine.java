@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.profiling.GLErrorListener;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -157,6 +158,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
             renderEngine = new RenderEngine3D<GameEngine>(context, this, this, camera, null, atlasManager.smallFont, atlasManager.systemTextureRegion);
             renderEngine.setSceneBoxMin(new Vector3(-20, -50, -30));
             renderEngine.setSceneBoxMax(new Vector3(20, 20, 2));
+            renderEngine.getDepthOfFieldEffect().setFocusDistance(new Vector2(0f,10f));
             createEnvironment();
             modelManager.create(renderEngine.isPbr());
             audioManager = new AudioManager(context);
@@ -545,6 +547,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
         renderEngine.cpuGraph.end();
         renderEngine.gpuGraph.begin();
         renderEngine.render(currentTime, deltaTime, takeScreenShot);
+        renderEngine.postProcessRender();
         renderEngine.gpuGraph.end();
         renderStage();
         renderEngine.handleQueuedScreenshot(takeScreenShot);
