@@ -547,9 +547,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
         renderEngine.cpuGraph.end();
         renderEngine.gpuGraph.begin();
         renderEngine.render(currentTime, deltaTime, takeScreenShot);
-        renderEngine.postProcessRender();
-        renderEngine.gpuGraph.end();
+//        renderEngine.postProcessRender();
         renderStage();
+        renderEngine.gpuGraph.end();
         renderEngine.handleQueuedScreenshot(takeScreenShot);
         takeScreenShot = false;
         if (!context.levelManager.isTilt()) {
