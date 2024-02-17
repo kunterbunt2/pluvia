@@ -85,7 +85,7 @@ public class Stone3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	private void renderTextOnFrontSide(final RenderEngine3D<GameEngine> renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
-		final PolygonSpriteBatch batch = renderEngine.batch2D;
+		final PolygonSpriteBatch batch = renderEngine.renderEngine2D.batch;
 		{
 			final Matrix4		m			= new Matrix4();
 			final float			fontSize	= font.getLineHeight();

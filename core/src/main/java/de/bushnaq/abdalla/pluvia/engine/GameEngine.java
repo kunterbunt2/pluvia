@@ -155,7 +155,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
             createInputProcessor(this);
             atlasManager = new AtlasManager();
             atlasManager.init();
-            renderEngine = new RenderEngine3D<GameEngine>(context, this, this, camera, null, atlasManager.smallFont, atlasManager.systemTextureRegion);
+            renderEngine = new RenderEngine3D<GameEngine>(context, this, camera, null, atlasManager.smallFont, atlasManager.systemTextureRegion);
             renderEngine.setSceneBoxMin(new Vector3(-20, -50, -30));
             renderEngine.setSceneBoxMax(new Vector3(20, 20, 2));
             renderEngine.getDepthOfFieldEffect().setFocusDistance(new Vector2(0f,10f));
@@ -237,7 +237,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
     private void createStage() throws Exception {
         final int height = 12 * 2;
-        stage = new Stage(new ScreenViewport(), renderEngine.batch2D);
+        stage = new Stage(new ScreenViewport(), renderEngine.renderEngine2D.batch);
 //		font = new BitmapFont();
         labels.clear();
         for (int i = 0; i < 8; i++) {
@@ -247,13 +247,13 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
             labels.add(label);
         }
         stringBuilder = new StringBuilder();
-        info = new InfoDialog(renderEngine.batch2D, getInputMultiplexer());
-        mainDialog = new MainDialog(this, renderEngine.batch2D, getInputMultiplexer());
-        aboutDialog = new AboutDialog(this, renderEngine.batch2D, getInputMultiplexer());
-        pauseDialog = new PauseDialog(this, renderEngine.batch2D, getInputMultiplexer());
-        messageDialog = new MessageDialog(this, renderEngine.batch2D, getInputMultiplexer());
-        optionsDialog = new OptionsDialog(this, renderEngine.batch2D, getInputMultiplexer());
-        scoreDialog = new ScoreDialog(this, renderEngine.batch2D, getInputMultiplexer());
+        info = new InfoDialog(renderEngine.renderEngine2D.batch, getInputMultiplexer());
+        mainDialog = new MainDialog(this, renderEngine.renderEngine2D.batch, getInputMultiplexer());
+        aboutDialog = new AboutDialog(this, renderEngine.renderEngine2D.batch, getInputMultiplexer());
+        pauseDialog = new PauseDialog(this, renderEngine.renderEngine2D.batch, getInputMultiplexer());
+        messageDialog = new MessageDialog(this, renderEngine.renderEngine2D.batch, getInputMultiplexer());
+        optionsDialog = new OptionsDialog(this, renderEngine.renderEngine2D.batch, getInputMultiplexer());
+        scoreDialog = new ScoreDialog(this, renderEngine.renderEngine2D.batch, getInputMultiplexer());
         mainDialog.setVisible(true);
     }
 
