@@ -21,10 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
-import de.bushnaq.abdalla.engine.GameObject;
-import de.bushnaq.abdalla.engine.IContextFactory;
-import de.bushnaq.abdalla.engine.MyGLErrorListener;
-import de.bushnaq.abdalla.engine.RenderEngine3D;
+import de.bushnaq.abdalla.engine.*;
 import de.bushnaq.abdalla.engine.camera.MovingCamera;
 import de.bushnaq.abdalla.engine.util.logger.Logger;
 import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
@@ -58,7 +55,12 @@ import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
  *
  * @author kunterbunt
  */
-public class GameEngine implements ScreenListener, ApplicationListener, InputProcessor {
+public class GameEngine implements ScreenListener, ApplicationListener, InputProcessor, RenderEngineExtension {
+    @Override
+    public void render2Dxz() {
+
+    }
+
     class DemoString {
         BitmapFont font;
         String text;
