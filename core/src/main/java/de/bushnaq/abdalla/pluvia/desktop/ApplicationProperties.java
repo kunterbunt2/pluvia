@@ -10,8 +10,8 @@ import java.util.Properties;
 import com.badlogic.gdx.Gdx;
 
 import de.bushnaq.abdalla.engine.IApplicationProperties;
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kunterbunt
@@ -37,9 +37,9 @@ public abstract class ApplicationProperties implements IApplicationProperties {
 	Map<String, Boolean>			booleanPropertiesMap			= new HashMap<>();
 	Map<String, Integer>			integerPropertiesMap			= new HashMap<>();
 //	private boolean					debugMode;																	// debug mode is allowed
-	private Logger					logger							= LoggerFactory.getLogger(this.getClass());
+	private Logger logger                     = LoggerFactory.getLogger(this.getClass());
 //	private int						maxSceneObjects;
-	public int						predefinedMaxPointLights[]		= { 0, 5, 10, 20 };
+	public  int    predefinedMaxPointLights[] = { 0, 5, 10, 20 };
 	public int						predefinedMaxSceneObjects[]		= { 0, 25, 50, 100 };
 	public int						predefinedMssaSamples[]			= { 0, 4, 8, 16 };
 	public int						predefinedShadowMapSize[]		= { 1024, 2048, 4096, 8192 };

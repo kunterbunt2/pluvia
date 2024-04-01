@@ -15,14 +15,14 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import de.bushnaq.abdalla.engine.GameObject;
 import de.bushnaq.abdalla.engine.RenderEngine3D;
 import de.bushnaq.abdalla.engine.Text2D;
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.engine.ModelManager;
 import de.bushnaq.abdalla.pluvia.scene.model.fish.Fish;
 import de.bushnaq.abdalla.pluvia.scene.model.turtle.Turtle;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kunterbunt
@@ -34,9 +34,9 @@ public abstract class AbstractScene {
 	private static final float		WATER_Y		= 0;
 	private static final float		WATER_Z		= 50;
 	protected RenderEngine3D<GameEngine>			renderEngine;
-	protected int					index		= 0;
-	protected Logger				logger		= LoggerFactory.getLogger(this.getClass());
-	protected Text2D				logo;
+	protected int    index  = 0;
+	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+	protected Text2D logo;
 	protected Random				rand;
 	protected List<GameObject>		renderModelInstances;
 	protected Text2D				version;

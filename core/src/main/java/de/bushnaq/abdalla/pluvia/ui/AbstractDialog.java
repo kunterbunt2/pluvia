@@ -22,11 +22,11 @@ import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.LevelManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //enum BlurMode {
 //	up, down
@@ -45,12 +45,12 @@ public abstract class AbstractDialog {
 	private VisDialog				dialog;
 	private GameEngine				gameEngine;
 	private final InputMultiplexer	inputMultiplexer;
-	private List<InputProcessor>	inputProcessorCache	= new ArrayList<>();
+	private   List<InputProcessor> inputProcessorCache = new ArrayList<>();
 	// private float blurAmount = 1f;
 //	private int						blurPasses			= 1;
 //	private BlurMode				blurMode			= BlurMode.up;
-	final Logger					logger				= LoggerFactory.getLogger(this.getClass());
-	protected boolean				modal				= false;
+	final     Logger               logger              = LoggerFactory.getLogger(this.getClass());
+	protected boolean              modal               = false;
 	private AbstractDialog			parent;
 	private Stage					stage;
 	private VisTable				table				= new VisTable(true);

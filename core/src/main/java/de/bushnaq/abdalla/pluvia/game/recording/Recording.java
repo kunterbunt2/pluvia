@@ -3,14 +3,14 @@ package de.bushnaq.abdalla.pluvia.game.recording;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.Game;
 import de.bushnaq.abdalla.pluvia.game.GameDataObject;
 import de.bushnaq.abdalla.pluvia.game.GamePhase;
 import de.bushnaq.abdalla.pluvia.game.LevelManager;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kunterbunt
@@ -23,9 +23,9 @@ public class Recording {
 	private static final String	RECORDING_TOO_LONG											= "Recording not fully played back, but game is already exited. Recording is not genuine.";
 	private static final String	STONE_CANNOT_MOVE_LEFT										= "Recording is trying to move a stone to the left, but it cannot move. Recording is not genuine.";
 	private static final String	STONE_CANNOT_MOVE_TO_THE_RIGHT								= "Recording is trying to move a stone to the right, but it cannot move. Recording is not genuine.";
-	private GameDataObject		gdo															= new GameDataObject();
-	private Logger				logger														= LoggerFactory.getLogger(this.getClass());
-	private List<Frame>			recording													= new ArrayList<>();
+	private GameDataObject gdo       = new GameDataObject();
+	private Logger         logger    = LoggerFactory.getLogger(this.getClass());
+	private List<Frame>    recording = new ArrayList<>();
 
 	public Recording() {
 

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.util.PersistentRandomGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestPersistentRandomGenerator {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());

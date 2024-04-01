@@ -88,7 +88,7 @@ public class Digit3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	private void renderTextOnFrontSide(final RenderEngine3D<GameEngine> renderEngine, final float dx, final float dy, final String text, final float size, final Color color) {
-		final PolygonSpriteBatch batch = renderEngine.renderEngine2D.batch;
+		final PolygonSpriteBatch batch = renderEngine.renderEngine25D.batch;
 		{
 			final Matrix4		m			= new Matrix4();
 			final float			fontSize	= font.getLineHeight();
@@ -111,7 +111,7 @@ public class Digit3DRenderer extends ObjectRenderer<GameEngine> {
 	}
 
 	private void renderTextOnTopSide(final RenderEngine3D<GameEngine> renderEngine, final float dx, final float dy, final float dz, final String text, final float size, final Color color) {
-		final PolygonSpriteBatch batch = renderEngine.renderEngine2D.batch;
+		final PolygonSpriteBatch batch = renderEngine.renderEngine25D.batch;
 		{
 			final Matrix4		m			= new Matrix4();
 			final float			fontSize	= font.getLineHeight();

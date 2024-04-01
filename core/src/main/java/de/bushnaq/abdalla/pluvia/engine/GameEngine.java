@@ -23,8 +23,6 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 
 import de.bushnaq.abdalla.engine.*;
 import de.bushnaq.abdalla.engine.camera.MovingCamera;
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.camera.MyCameraInputController;
 import de.bushnaq.abdalla.pluvia.game.Game;
@@ -49,6 +47,8 @@ import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.model.ModelInstanceHack;
 import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Project dependent 3d class that generates all objects Instantiates the Render3DMaster class
@@ -108,8 +108,8 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
     private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
     private boolean isUpdateContext;
     private final List<VisLabel> labels = new ArrayList<>();
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private MainDialog mainDialog;
+    private final Logger         logger = LoggerFactory.getLogger(this.getClass());
+    private       MainDialog     mainDialog;
     private int maxFramesPerSecond;
     private MessageDialog messageDialog;
     public ModelManager modelManager;
@@ -157,7 +157,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
             createInputProcessor(this);
             atlasManager = new AtlasManager();
             atlasManager.init();
-            renderEngine = new RenderEngine3D<GameEngine>(context, this, camera, null, atlasManager.smallFont, atlasManager.systemTextureRegion);
+            renderEngine = new RenderEngine3D<GameEngine>(context, this, camera, null, atlasManager.smallFont, atlasManager.smallFont, atlasManager.systemTextureRegion);
             renderEngine.setSceneBoxMin(new Vector3(-20, -50, -30));
             renderEngine.setSceneBoxMax(new Vector3(20, 20, 2));
             renderEngine.getDepthOfFieldEffect().setFocusDistance(new Vector2(0f,10f));

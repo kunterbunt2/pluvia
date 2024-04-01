@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.AudioManager;
 import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
@@ -23,6 +21,8 @@ import de.bushnaq.abdalla.pluvia.game.recording.Interaction;
 import de.bushnaq.abdalla.pluvia.game.recording.Recording;
 import de.bushnaq.abdalla.pluvia.util.PersistentRandomGenerator;
 import de.bushnaq.abdalla.pluvia.util.RcBoolean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kunterbunt
@@ -33,9 +33,9 @@ public abstract class Level {
 	Set<Stone>					droppingStones			= new HashSet<>();
 	Set<Stone>					droppingStonesBuffer	= new HashSet<>();
 	protected Game				game					= null;
-	public GamePhase			gamePhase				= GamePhase.waiting;
-	protected Logger			logger					= LoggerFactory.getLogger(this.getClass());
-	public int					maxAnimaltionPhase		= 12;
+	public    GamePhase gamePhase          = GamePhase.waiting;
+	protected Logger    logger             = LoggerFactory.getLogger(this.getClass());
+	public    int       maxAnimaltionPhase = 12;
 	public int					nrOfColumns				= 0;										// number of columns
 	protected int				nrOfFallenRows			= 0;
 	protected int				nrOfFallingStones		= 0;										// Number of stones that can drop simultanuously from top

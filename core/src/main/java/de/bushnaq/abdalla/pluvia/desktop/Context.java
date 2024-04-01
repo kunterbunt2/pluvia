@@ -9,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import de.bushnaq.abdalla.engine.IContext;
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
 import de.bushnaq.abdalla.pluvia.engine.GameEngine;
 import de.bushnaq.abdalla.pluvia.game.Game;
 import de.bushnaq.abdalla.pluvia.game.GameList;
@@ -26,6 +24,8 @@ import de.bushnaq.abdalla.pluvia.scene.model.fly.Fly;
 import de.bushnaq.abdalla.pluvia.scene.model.rain.Rain;
 import de.bushnaq.abdalla.pluvia.scene.model.turtle.Turtle;
 import de.bushnaq.abdalla.pluvia.util.MavenPropertiesProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kunterbunt
@@ -33,8 +33,8 @@ import de.bushnaq.abdalla.pluvia.util.MavenPropertiesProvider;
 public abstract class Context extends ApplicationProperties implements IContext {
 	private static String	appFolderName		= "app";
 	private static String	configFolderName	= "app/config";
-	private static String	homeFolderName;
-	protected static Logger	logger				= LoggerFactory.getLogger(Context.class);
+	private static   String homeFolderName;
+	protected static Logger logger = LoggerFactory.getLogger(Context.class);
 
 	protected static String cleanupPath(String path) {
 		try {

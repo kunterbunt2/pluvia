@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 
 import de.bushnaq.abdalla.engine.camera.MovingCamera;
-import de.bushnaq.abdalla.engine.util.logger.Logger;
-import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author kunterbunt
@@ -15,8 +15,8 @@ import de.bushnaq.abdalla.engine.util.logger.LoggerFactory;
  */
 public class MyCameraInputController extends CameraInputController {
 
-	private final Logger	logger	= LoggerFactory.getLogger(this.getClass());
-	private final Vector3	tmpV1	= new Vector3();
+	private final Logger  logger = LoggerFactory.getLogger(this.getClass());
+	private final Vector3 tmpV1  = new Vector3();
 //	private final Vector3	tmpV2	= new Vector3();
 
 	public MyCameraInputController(final Camera camera) throws Exception {
