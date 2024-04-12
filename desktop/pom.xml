@@ -22,38 +22,35 @@
 			<artifactId>pluvia-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl -->
+		<!--
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-backend-lwjgl3</artifactId>
 			<version>${libgdxVersion}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-platform -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-platform</artifactId>
 			<classifier>natives-desktop</classifier>
 			<version>${libgdxVersion}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-freetype-platform</artifactId>
 			<classifier>natives-desktop</classifier>
 			<version>${libgdxVersion}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.crashinvaders.vfx/gdx-vfx-core -->
 		<dependency>
 			<groupId>com.crashinvaders.vfx</groupId>
 			<artifactId>gdx-vfx-core</artifactId>
 			<version>0.5.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.crashinvaders.vfx/gdx-vfx-effects -->
 		<dependency>
 			<groupId>com.crashinvaders.vfx</groupId>
 			<artifactId>gdx-vfx-effects</artifactId>
 			<version>0.5.0</version>
 		</dependency>
+		-->
 	</dependencies>
 
 	<build>

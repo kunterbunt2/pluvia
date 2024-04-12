@@ -61,6 +61,11 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
 
     }
 
+    @Override
+    public boolean updateEnvironment(float timeOfDay) {
+        return false;
+    }
+
     class DemoString {
         BitmapFont font;
         String text;
