@@ -621,7 +621,8 @@ public abstract class Level {
 		if (!game.name.equals(GameName.UI.name())) {
 			try {
 				{
-					File			recordingFile	= Gdx.files.external(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)).file();
+					File			recordingFile	= new File(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name));
+//					File			recordingFile	= Gdx.files.external(String.format(Context.getConfigFolderName() + "/%s.yaml", game.name)).file();
 					ObjectMapper	mapper			= new ObjectMapper(new YAMLFactory());
 					recording = mapper.readValue(recordingFile, getRecording().getClass());
 					update(getRecording().getGdo());

@@ -108,7 +108,6 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
     boolean enableProfiling = true;
     private Cubemap environmentDayCubemap;
     private Cubemap environmentNightCubemap;
-    private boolean followMode;
     private InfoDialog info;
     private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
     private boolean isUpdateContext;
@@ -165,7 +164,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
             renderEngine = new RenderEngine3D<GameEngine>(context, this, camera, null, atlasManager.smallFont, atlasManager.smallFont, atlasManager.systemTextureRegion);
             renderEngine.setSceneBoxMin(new Vector3(-20, -50, -30));
             renderEngine.setSceneBoxMax(new Vector3(20, 20, 2));
-            renderEngine.getDepthOfFieldEffect().setFocusDistance(new Vector2(0f,10f));
+            renderEngine.getDepthOfFieldEffect().setFocalDepth(10f);
             createEnvironment();
             modelManager.create(renderEngine.isPbr());
             audioManager = new AudioManager(context);
@@ -383,20 +382,10 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
                     centerXD = SCROLL_SPEED;
                 }
                 return true;
-            case Input.Keys.Q:
-                if (context.isDebugMode()) {
-                    centerYD = SCROLL_SPEED;
-                }
-                return true;
             case Input.Keys.W:
             case Input.Keys.UP:
                 if (context.isDebugMode()) {
                     centerZD = -SCROLL_SPEED;
-                }
-                return true;
-            case Input.Keys.E:
-                if (context.isDebugMode()) {
-                    centerYD = -SCROLL_SPEED;
                 }
                 return true;
             case Input.Keys.S:
@@ -405,6 +394,21 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
                     centerZD = SCROLL_SPEED;
                 }
                 return true;
+            case Input.Keys.E:
+                if (context.isDebugMode()) {
+                    centerYD = -SCROLL_SPEED;
+                }
+                return true;
+            case Input.Keys.Q:
+                if (context.isDebugMode()) {
+                    centerYD = SCROLL_SPEED;
+                }
+                return true;
+
+
+            case Input.Keys.SPACE:
+                context.levelManager.nextRound();
+                break;
             case Input.Keys.ESCAPE:
                 togglePause();
                 return true;
@@ -413,53 +417,48 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
                     queueScreenshot();
                 }
                 return true;
-//		case Input.Keys.NUM_1:
-//			renderEngine.setAlwaysDay(!renderEngine.isAlwaysDay());
-//			return true;
-//		case Input.Keys.V:
-//			vsyncEnabled = !vsyncEnabled;
-//			Gdx.graphics.setVSync(vsyncEnabled);
-//			return true;
+
+            case Input.Keys.F1:
+                renderEngine.setGammaCorrected(!renderEngine.isGammaCorrected());
+                if (renderEngine.isGammaCorrected()) logger.info("gamma correction on");
+                else logger.info("gamma correction off");
+                return true;
+            case Input.Keys.F2:
+                renderEngine.getDepthOfFieldEffect().setEnabled(!renderEngine.getDepthOfFieldEffect().isEnabled());
+                if (renderEngine.getDepthOfFieldEffect().isEnabled()) logger.info("depth of field on");
+                else logger.info("depth of field off");
+                return true;
+            case Input.Keys.F3:
+                renderEngine.setRenderBokeh(!renderEngine.isRenderBokeh());
+                if (renderEngine.isRenderBokeh()) logger.info("render bokeh on");
+                else logger.info("render bokeh off");
+                return true;
+            case Input.Keys.F4:
+                renderEngine.getSsaoEffect().setEnabled(!renderEngine.getSsaoEffect().isEnabled());
+                renderEngine.getSsaoComboneEffect().setEnabled(!renderEngine.getSsaoComboneEffect().isEnabled());
+                if (renderEngine.getSsaoEffect().isEnabled()) logger.info("ssao on");
+                else logger.info("ssao off");
+                return true;
+
+            case Input.Keys.F5:
+                renderEngine.setAlwaysDay(!renderEngine.isAlwaysDay());
+                return true;
+
             case Input.Keys.I:
                 if (context.isDebugMode()) {
                     info.setVisible(!info.isVisible());
                 }
                 return true;
-//		case Input.Keys.N:
-//			break;
-            case Input.Keys.SPACE:
-                context.levelManager.nextRound();
-                break;
-//		case Input.Keys.TAB:
-//			try {
-//				context.setSelected(profiler, false);
-//			} catch (final Exception e) {
-//				logger.error(e.getMessage(), e);
-//			}
-//			return true;
-//		case Input.Keys.NUM_1:
-//		case Input.Keys.NUM_2:
-//		case Input.Keys.NUM_3:
-//		case Input.Keys.NUM_4:
-//		case Input.Keys.NUM_5:
-//		case Input.Keys.NUM_6:
-//			createGame(keycode - Input.Keys.NUM_1);
-//			return true;
 
-//		case Input.Keys.NUM_2:
-//			if (launchMode == LaunchMode.demo)
-//				launchMode = LaunchMode.normal;
-//			return true;
-            case Input.Keys.F5:
-                if (context.isDebugMode())
-                    toggleDebugmode();
+            case Input.Keys.F9:
+                renderEngine.setShowGraphs(!renderEngine.isShowGraphs());
+                if (renderEngine.isShowGraphs()) logger.info("graphs are on");
+                else logger.info("graphs are off");
                 return true;
-//		case Input.Keys.F6:
-//			if (context.isShowGraphs())
-//				renderEngine.toggleShowGraphs();
-//			return true;
-            case Input.Keys.F:
-                followMode = !followMode;
+            case Input.Keys.F10:
+                renderEngine.setDebugMode(!renderEngine.isDebugMode());
+                if (renderEngine.isDebugMode()) logger.info("debug mode on");
+                else logger.info("debug mode off");
                 return true;
         }
         return false;

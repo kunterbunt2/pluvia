@@ -1,7 +1,9 @@
 package de.bushnaq.abdalla.pluvia.desktop;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -53,11 +55,7 @@ public abstract class Context extends ApplicationProperties implements IContext 
 		return configFolderName;
 	}
 
-	public static String getHomeFolderName() {
-		return homeFolderName;
-	}
-
-	public static OperatingSystem getOeratingSystemType() {
+	public static OperatingSystem getOperatingSystemType() {
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.contains("win")) {
 			return OperatingSystem.windows;
@@ -74,7 +72,7 @@ public abstract class Context extends ApplicationProperties implements IContext 
 	}
 
 	public static boolean isIos() {
-		return getOeratingSystemType().equals(OperatingSystem.ios) || getOeratingSystemType().equals(OperatingSystem.iosSimulator);
+		return getOperatingSystemType().equals(OperatingSystem.ios) || getOperatingSystemType().equals(OperatingSystem.iosSimulator);
 	}
 
 	public static boolean isRunningInEclipse() {
@@ -112,8 +110,9 @@ public abstract class Context extends ApplicationProperties implements IContext 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		homeFolderName = ".pluvia";
-		operatingSystem = getOeratingSystemType();
+		homeFolderName   = "app";
+		operatingSystem = getOperatingSystemType();
+		configFolderName = homeFolderName + "/config";
 		switch (operatingSystem) {
 		case windows:
 		default:
@@ -121,12 +120,10 @@ public abstract class Context extends ApplicationProperties implements IContext 
 				logger.info("Detected 'Windows' system and we are running inside of 'Eclipse'.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
 				appFolderName = installationFolder + "/app";
-				configFolderName = homeFolderName + "/config";
 			} else {
 				logger.info("Detected 'Windows' system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../..");
 				appFolderName = installationFolder + "/app";
-				configFolderName = homeFolderName + "/config";
 			}
 			break;
 		case linux:
@@ -134,12 +131,10 @@ public abstract class Context extends ApplicationProperties implements IContext 
 				logger.info("Detected 'Linux' system and we are running inside of 'Eclipse'.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
 				appFolderName = installationFolder + "/app";
-				configFolderName = homeFolderName + "/config";
 			} else {
 				logger.info("Detected 'Linux' system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../../bin");
 				appFolderName = cleanupPath(installationFolder + "/../lib/app");
-				configFolderName = homeFolderName + "/config";
 			}
 			break;
 		case osx:
@@ -147,12 +142,10 @@ public abstract class Context extends ApplicationProperties implements IContext 
 				logger.info("Detected 'macOS' system and we are running inside of 'Eclipse'.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../..");
 				appFolderName = installationFolder + "/app";
-				configFolderName = homeFolderName + "/config";
 			} else {
 				logger.info("Detected 'macOS' system.");
 				installationFolder = cleanupPath(getInstallationFolder() + "/../../MacOS");
 				appFolderName = cleanupPath(installationFolder + "/../app");
-				configFolderName = homeFolderName + "/config";
 			}
 			break;
 		case iosSimulator: {
@@ -160,7 +153,6 @@ public abstract class Context extends ApplicationProperties implements IContext 
 			homeFolderName = ".";
 			installationFolder = ".";
 			appFolderName = installationFolder;
-			configFolderName = getHomeFolderName() + "/config";
 		}
 			break;
 		case ios: {
@@ -168,7 +160,6 @@ public abstract class Context extends ApplicationProperties implements IContext 
 			homeFolderName = ".";
 			installationFolder = ".";
 			appFolderName = installationFolder;
-			configFolderName = homeFolderName + "/config";
 		}
 			break;
 
@@ -276,7 +267,7 @@ public abstract class Context extends ApplicationProperties implements IContext 
 	public void readScoreFromDisk(GameEngine gameEngine) {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		try {
-			File file = Gdx.files.external(Context.getConfigFolderName() + "/score.yaml").file();
+			File        file= new File(Context.getConfigFolderName() + "/score.yaml");
 			scoreList = mapper.readValue(file, ScoreList.class);
 			if (!scoreList.testValidity(gameEngine)) {
 				logger.error("invalid score file");

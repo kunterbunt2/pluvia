@@ -53,17 +53,17 @@ public class DesktopLauncher implements ApplicationListener {
 		config.setForegroundFPS(foregroundFPS);
 		config.setResizable(true);
 //		config.useOpenGL3(true, 3, 2);
-		config.setOpenGLEmulation(GLEmulation.GL30, 3, 2);
+		config.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL32, 3, 2);
 
 //		if (Context.getOeratingSystemType() == OperatingSystem.osx)
 		{
-			ShaderProgram.prependVertexCode = "#version 150\n"//
+			ShaderProgram.prependVertexCode = "#version 330\n"//
 					+ "#define GLSL3\n"//
 					+ "#ifdef GLSL3\n"//
 					+ "#define attribute in\n"//
 					+ "#define varying out\n"//
 					+ "#endif\n";//
-			ShaderProgram.prependFragmentCode = "#version 150\n"//
+			ShaderProgram.prependFragmentCode = "#version 330\n"//
 					+ "#define GLSL3\n"//
 					+ "#ifdef GLSL3\n"//
 					+ "#define textureCube texture\n"//
