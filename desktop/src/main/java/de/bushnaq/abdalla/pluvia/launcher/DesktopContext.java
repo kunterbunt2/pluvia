@@ -33,16 +33,6 @@ public class DesktopContext extends Context {
 	}
 
 	@Override
-	public float getMirrorLevel() {
-		return 0;
-	}
-
-	@Override
-	public float getWaterLevel() {
-		return 0f;
-	}
-
-	@Override
 	public int getMonitorProperty() {
 		final Monitor[]	monitors	= Lwjgl3ApplicationConfiguration.getMonitors();
 		int				monitor		= readIntegerProperty(ApplicationProperties.GAME_MONITOR, 0, 0, monitors.length);

@@ -3,6 +3,8 @@
  */
 package de.bushnaq.abdalla.pluvia.game;
 
+import de.bushnaq.abdalla.pluvia.game.model.stone.Stone;
+
 /**
  *
  * 9 rows of 4 columns, 6 different stones, with up to 3 stones that can fall at the same time
