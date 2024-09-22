@@ -23,7 +23,7 @@ public class NightFishScene extends AbstractScene {
 		super.create();
 		logo.setColor(getInfoColor());
 		version.setColor(getInfoColor());
-		renderEngine.setSkyBox(false);
+		renderEngine.setSkyBox(true);
 		renderEngine.setShadowEnabled(true);
 		// time
 		renderEngine.setAlwaysDay(true);
@@ -37,7 +37,8 @@ public class NightFishScene extends AbstractScene {
 		renderEngine.getWater().setPresent(true);
 		renderEngine.getWater().setWaveStrength(0.05f);
 		renderEngine.getWater().setWaveSpeed(0.01f);
-		renderEngine.getWater().setRefractiveMultiplicator(4f);
+		renderEngine.getWater().setTiling(4f);
+		renderEngine.getWater().setRefractiveMultiplicator(2f);
 		createWater();
 		// mirror
 		renderEngine.getMirror().setPresent(false);

@@ -76,20 +76,20 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
         }
     }
 
-    public static final Color FACTORY_COLOR = Color.DARK_GRAY;                            // 0xff000000;
-    public static final float FACTORY_HEIGHT = 1.2f;
-    public static final float FACTORY_WIDTH = 2.4f;
+//    public static final Color FACTORY_COLOR = Color.DARK_GRAY;                            // 0xff000000;
+//    public static final float FACTORY_HEIGHT = 1.2f;
+//    public static final float FACTORY_WIDTH = 2.4f;
     public static final int FONT_SIZE = 9;
-    public static final Color NOT_PRODUCING_FACTORY_COLOR = Color.RED;                                // 0xffFF0000;
-    public static final int RAYS_NUM = 128;
+//    public static final Color NOT_PRODUCING_FACTORY_COLOR = Color.RED;                                // 0xffFF0000;
+//    public static final int RAYS_NUM = 128;
     private static final float SCROLL_SPEED = 0.2f;
-    public static final Color SELECTED_PLANET_COLOR = Color.BLUE;
-    public static final Color SELECTED_TRADER_COLOR = Color.RED;                                // 0xffff0000;
-    public static final float SIM_HEIGHT = 0.3f;
-    public static final float SIM_WIDTH = 0.3f;
-    public static final float SOOM_SPEED = 8.0f * 10;
-    public static final float SPACE_BETWEEN_OBJECTS = 0.05f;
-    public static final Color TEXT_COLOR = Color.WHITE;                                // 0xffffffff;
+//    public static final Color SELECTED_PLANET_COLOR = Color.BLUE;
+//    public static final Color SELECTED_TRADER_COLOR = Color.RED;                                // 0xffff0000;
+//    public static final float SIM_HEIGHT = 0.3f;
+//    public static final float SIM_WIDTH = 0.3f;
+//    public static final float SOOM_SPEED = 8.0f * 10;
+//    public static final float SPACE_BETWEEN_OBJECTS = 0.05f;
+//    public static final Color TEXT_COLOR = Color.WHITE;                                // 0xffffffff;
     private static final int TOUCH_DELTA_X = 32;
     private static final int TOUCH_DELTA_Y = 32;
     private AboutDialog aboutDialog;
@@ -114,7 +114,7 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
     private final List<VisLabel> labels = new ArrayList<>();
     private final Logger         logger = LoggerFactory.getLogger(this.getClass());
     private       MainDialog     mainDialog;
-    private int maxFramesPerSecond;
+//    private int maxFramesPerSecond;
     private MessageDialog messageDialog;
     public ModelManager modelManager;
     private OptionsDialog optionsDialog;
@@ -334,9 +334,9 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
         return mainDialog;
     }
 
-    public int getMaxFramesPerSecond() {
-        return maxFramesPerSecond;
-    }
+//    public int getMaxFramesPerSecond() {
+//        return maxFramesPerSecond;
+//    }
 
 //	private void exit() {
 //		Gdx.app.exit();
