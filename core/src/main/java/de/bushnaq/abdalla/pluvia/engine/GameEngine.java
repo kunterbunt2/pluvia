@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
 import de.bushnaq.abdalla.engine.*;
+import de.bushnaq.abdalla.engine.audio.AudioEngine;
 import de.bushnaq.abdalla.engine.camera.MovingCamera;
 import de.bushnaq.abdalla.pluvia.desktop.Context;
 import de.bushnaq.abdalla.pluvia.engine.camera.MyCameraInputController;
@@ -55,7 +56,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author kunterbunt
  */
-public class GameEngine implements ScreenListener, ApplicationListener, InputProcessor, RenderEngineExtension {
+public class GameEngine implements ScreenListener, ApplicationListener, InputProcessor, IGameEngine {
     @Override
     public void render2Dxz() {
 
@@ -322,8 +323,23 @@ public class GameEngine implements ScreenListener, ApplicationListener, InputPro
         return audioManager;
     }
 
+    @Override
+    public AudioEngine getAudioEngine() {
+        return null;
+    }
+
     public MyCameraInputController getCamController() {
         return camController;
+    }
+
+    @Override
+    public MovingCamera getCamera() {
+        return camera;
+    }
+
+    @Override
+    public RenderEngine3D<?> getRenderEngine() {
+        return renderEngine;
     }
 
     public InputMultiplexer getInputMultiplexer() {
